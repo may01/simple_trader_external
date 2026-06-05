@@ -29,44 +29,57 @@ All orders use Binance margin account (`create_margin_order`, `get_margin_order`
 **trade(trade_type: str, price: float, amount: float, force: bool = False) -> tuple[str, dict]**
 - Validates amount via `is_invalid_amount()`
 - Rounds amount and price to 2 decimal places
+- Resolves symbol internally via `self.get_pair_name()`
 - Creates margin order (LIMIT, GTC)
 - Returns `(STATUS_SUCCESS, {"order_id": id})` or `(STATUS_FAIL, {})`
 - Weight: +6
 
 **order_info(order_id: str) -> tuple[str, dict]**
-- Queries `get_margin_order()`
-- Maps Binance status → internal status string: `"new"`, `"partially_filled"`, `"filled"`, `"canceled"`, `"pending_cancel"`, `"rejected"`, `"expired"`
-- Returns `(status, {"status": s, "start_amount": float, "left_amount": float, "rate": float})`
+- Resolves symbol internally via `self.get_pair_name()`
+- Queries `get_margin_order(symbol, order_id)`
+- Returns Binance status string directly (no mapping) — values are `Client.ORDER_STATUS_*` constants: `"NEW"`, `"PARTIALLY_FILLED"`, `"FILLED"`, `"CANCELED"`, `"PENDING_CANCEL"`, `"REJECTED"`, `"EXPIRED"`
+- Returns `(STATUS_SUCCESS, {"status": s, "start_amount": float, "left_amount": float, "rate": float})` on success, `(STATUS_FAIL, {})` on exception
 - Weight: +10
 
 **cancel_order(order_id: str) -> tuple[str, dict]**
-- Calls `cancel_margin_order()`
-- If status == PENDING_CANCEL: polls `order_info()` up to 10 times with 2-second sleep until CANCELED
-- Returns `(STATUS_SUCCESS/FAIL, response_dict)`
+- Resolves symbol internally via `self.get_pair_name()`
+- Calls `cancel_margin_order(symbol, order_id)`
+- If status == `"PENDING_CANCEL"`: polls `order_info()` up to 10 times with 2-second sleep until `"CANCELED"`
+- Returns `(STATUS_SUCCESS, {"status": s, "start_amount": float, "left_amount": float, "rate": float})` mirroring `order_info` — final state after cancellation confirmed
+- Returns `(STATUS_FAIL, {})` on exception
 - Weight: +10
 
 **depth(quantity: int) -> tuple[pd.DataFrame, pd.DataFrame]**
-- Returns `(asks_df, bids_df)` each with cumulative sum column
+- Resolves symbol internally via `self.get_pair_name()`
+- Returns `(asks_df, bids_df)`, each with columns `["price", "quantity", "cumulative"]`, sorted by price, all `float64`
 - Weight: +5 (<100), +25 (<500), +50 (<1000), +250 (<5000)
 
 **is_invalid_amount(amount: float, price: float) -> bool**
+- Resolves symbol internally via `self.get_pair_name()`
 - Queries symbol info for LOT_SIZE and MIN_NOTIONAL filters
 - Returns True if invalid: amount < 2×MINIMUM_ORDER_SIZE OR amount×price < 2×MINIMUM_NOTIONAL
 
 **funds(coin: str, asset_type: str = "free") -> tuple[str, float]**
 - Queries margin account balance for specific coin
 - `asset_type`: `"free"` or `"locked"`
+- Coin not found in margin account → `(STATUS_SUCCESS, 0.0)`
+- API exception → `(STATUS_FAIL, 0.0)`
 
-**get_aviable_loan(coin: str) -> tuple[str, float]**  
-**borrow(coin: str, amount: float) -> tuple[str, object]**  
+**get_aviable_loan(coin: str) -> tuple[str, float]**
+- Returns `(STATUS_SUCCESS, available_amount)` or `(STATUS_FAIL, 0.0)`
+
+**borrow(coin: str, amount: float) -> tuple[str, float]**
+- Returns `(STATUS_SUCCESS, borrowed_amount)` or `(STATUS_FAIL, 0.0)`
+
 **repay(coin: str, amount: float) -> tuple[str, float]**
-- Standard margin borrow/repay operations
+- Returns `(STATUS_SUCCESS, repaid_amount)` or `(STATUS_FAIL, 0.0)`
 
 ---
 
 ## Key Constraints
 
 - All order methods use margin API — NOT spot API
+- `trade_type` values are `TRADE_BUY = "TRADE_BUY"` / `TRADE_SELL = "TRADE_SELL"` — `Stock_Binance` maps these to Binance API's `"BUY"` / `"SELL"` internally
 - Price formatted to 2 decimal places (hardcoded for USDT base pairs)
 - `is_invalid_amount()` checks `2×minimum` to ensure both entry and exit can meet minimums
 - `cancel_order()` must handle PENDING_CANCEL with retry loop — Binance cancellation is not instant
@@ -80,7 +93,7 @@ All orders use Binance margin account (`create_margin_order`, `get_margin_order`
 
 ```bash
 # Test order validation only (no real order placed)
-docker compose run --rm trader python3 -c "
+docker compose run --rm live python3 -c "
 from stocks_holder import do_stock_init, stock_holder as stock
 do_stock_init('binance')
 # is_invalid_amount with tiny amount should return True

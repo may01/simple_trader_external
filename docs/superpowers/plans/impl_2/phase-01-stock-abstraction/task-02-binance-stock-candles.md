@@ -27,14 +27,14 @@ Implement `Stock_Binance.__init__()` and `get_candles_history()`. This is the ca
 ## Interface
 
 **Constructor:**
-- `__init__(key: str = "", secret: str = "")` — reads `BINANCE_API_KEY`, `BINANCE_API_SECRET` from env; sets `fee` from `EXCHANGE_FEE` env var (fail loudly if absent); initializes `BinanceClient`; sets `was_init = True`
+- `__init__()` — reads `BINANCE_API_KEY`, `BINANCE_API_SECRET`, `PAIR`, `EXCHANGE_FEE` from env (exception if any absent); splits `PAIR` on `"_"` into `coin`/`coin_base` (e.g., `"link_usdt"` → `coin="link"`, `coin_base="usdt"`); calls `super().__init__(key, secret, coin, coin_base)`; initializes `BinanceClient`; sets `self.fee`; sets `was_init = True`
 
 **Key method:**
 - `get_candles_history(time_list: list[int], coin: str, time_point: int = 0) -> dict[int, pd.DataFrame]`
 
 **Internal helpers:**
 - `_fetch_klines(interval: str, lookback: str) -> pd.DataFrame` — single Binance API call + DataFrame construction
-- `_resample_to_tf(base_df: pd.DataFrame, source_interval_min: int, target_interval_min: int) -> pd.DataFrame` — OHLCV resampling
+- `_resample_to_tf` — inherited from `StockInterface`; do not re-implement
 
 ---
 
@@ -66,8 +66,8 @@ Four base Binance intervals fetched (hardcoded lookback periods):
 ## Key Constraints
 
 - `fee` must be read from `EXCHANGE_FEE` env var — NO hardcoded fallback. Missing env var = constructor exception
-- `coin_base` is set to `"usdt"` and `coin` to pair's coin part from `PAIR` env var
-- `get_pair_name()` returns `(coin + coin_base).upper()` — e.g., `"LINKUSDT"`
+- `PAIR` env var format is `coin_coinbase` (e.g., `"link_usdt"`, `"btc_busd"`) — split on `"_"` gives `coin` and `coin_base`; system supports any base currency
+- `get_pair_name()` returns `(coin + coin_base).upper()` — e.g., `"LINKUSDT"`, `"BTCBUSD"`
 - Returns dict keyed by integer minutes — `{1: df, 5: df, 15: df, 60: df, 240: df, 1440: df}`
 - All price/volume columns must be `float64`
 
@@ -77,7 +77,7 @@ Four base Binance intervals fetched (hardcoded lookback periods):
 
 ```bash
 # Requires BINANCE_API_KEY and BINANCE_API_SECRET in host env
-docker compose run --rm trader python3 -c "
+docker compose run --rm live python3 -c "
 from stocks_holder import do_stock_init, stock_holder as stock
 do_stock_init('binance')
 result = stock.item.get_candles_history([1, 5, 15], 'link')

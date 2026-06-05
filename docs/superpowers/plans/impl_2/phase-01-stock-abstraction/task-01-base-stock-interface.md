@@ -27,8 +27,11 @@ Define the abstract `StockInterface` base class with all method signatures, defa
 
 ## Interface
 
+**Constructor:**
+- `__init__(key: str = "", secret: str = "", coin: str = "", coin_base: str = "")` — stores all four as instance attributes; sets `was_init = False`, `weight = 0`, `weight_set_time = 0.0`, `overflow_weight = 5000`, `overflow_weight_time = 60`; does NOT set `fee` — accessing `fee` before `do_stock_init()` raises `AttributeError` (intentional); concrete `__init__` calls `super().__init__()` then overrides with env-sourced values
+
 **Class attributes:**
-- `stock_name: str` — exchange identifier (e.g., `"binance"`)
+- `stock_name: str` — exchange identifier; defined as a class-level constant on each concrete class (e.g., `Stock_Binance.stock_name = "binance"`, `Stock_Mock.stock_name = "mock"`); not set in `StockInterface.__init__`
 - `key: str`, `secret: str` — API credentials (empty in base)
 - `coin: str`, `coin_base: str` — current pair parts (e.g., `"link"`, `"usdt"`)
 - `fee: float` — trading fee (must be set by concrete `__init__`, never has a default value)
@@ -42,14 +45,17 @@ Define the abstract `StockInterface` base class with all method signatures, defa
 - `order_info(order_id: str) -> tuple[str, dict]`
 - `cancel_order(order_id: str) -> tuple[str, dict]`
 - `depth(quantity: int) -> tuple[pd.DataFrame, pd.DataFrame]`
-- `info() -> object`
+- `info() -> dict` — exchange metadata for current pair (symbol filters, precision, min/max order sizes); `Stock_Binance` calls `get_symbol_info(get_pair_name())`; base returns `{}`
 - `is_invalid_amount(amount: float, price: float) -> bool`
 - `funds(coin: str, asset_type: str = "free") -> tuple[str, float]`
 - `get_aviable_loan(coin: str) -> tuple[str, float]`
-- `borrow(coin: str, amount: float) -> tuple[str, object]`
+- `borrow(coin: str, amount: float) -> tuple[str, float]`
 - `repay(coin: str, amount: float) -> tuple[str, float]`
 - `get_pair_name() -> str`
 - `set_operation_sleep() -> None` — rate-limit backoff
+
+**Protected helpers (implemented in base, not overridden by concrete classes):**
+- `_resample_to_tf(base_df: pd.DataFrame, source_interval_min: int, target_interval_min: int) -> pd.DataFrame` — OHLCV resampling using `{'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last', 'volume': 'sum'}`; shared by all exchange implementations
 
 ---
 
@@ -65,9 +71,9 @@ Define the abstract `StockInterface` base class with all method signatures, defa
 ## Verification
 
 ```bash
-docker compose run --rm trainer python3 -c "
+docker compose run --rm simulate python3 -c "
 from stocks.base_stock import StockInterface
-s = StockInterface('', '', '')
+s = StockInterface('', '', '', '')
 result = s.get_candles_history([1, 5], 'link')
 assert isinstance(result, dict)
 assert s.was_init == False

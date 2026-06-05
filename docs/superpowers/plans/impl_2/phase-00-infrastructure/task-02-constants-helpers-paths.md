@@ -65,12 +65,12 @@ Key constant groups to define:
 - `LI_ACTIVE`, `LI_TYPE`, `LI_HAD_CONTACT`
 
 **Trade types:**
-- `TRADE_BUY`
-- `TRADE_SELL`
+- `TRADE_BUY = "TRADE_BUY"`
+- `TRADE_SELL = "TRADE_SELL"`
 
 **Status codes:**
-- `STATUS_SUCCESS`
-- `STATUS_FAIL`
+- `STATUS_SUCCESS = "STATUS_SUCCESS"`
+- `STATUS_FAIL = "STATUS_FAIL"`
 
 ---
 
