@@ -8,7 +8,7 @@
 
 ## Goal
 
-Create single Docker image (`pybtctr2`) and single `docker-compose.yml` with one named service per execution path. Each service has its command hardcoded — no `SCRIPT_TYPE`/`RUN_TYPE` env var dispatch. `env_file` paths are configurable via variables with defaults in `.env`. Code is volume-mounted, not baked in — rebuild only when Python deps change.
+Create single Docker image (`simple_trader`) and single `docker-compose.yml` with one named service per execution path. Each service has its command hardcoded — no `SCRIPT_TYPE`/`RUN_TYPE` env var dispatch. `env_file` paths are configurable via variables with defaults in `.env`. Code is volume-mounted, not baked in — rebuild only when Python deps change.
 
 ---
 
@@ -22,13 +22,28 @@ All execution paths (data collection, training, live trading, visualization) run
 
 ## Files
 
+**Infrastructure:**
 - Create: `Dockerfile`
 - Create: `docker-compose.yml` (all paths — single file)
 - Create: `.env` (env_file path defaults)
-- Create: `configs/train_dataset.env` (template)
-- Create: `configs/long_dataset.env` (template)
-- Create: `configs/live.env` (template)
+- Create: `configs/functional_dataset.env` (template — 1-day smoke test dataset)
+- Create: `configs/train_dataset.env` (template — 2-week standard training)
+- Create: `configs/validate_dataset.env` (template — 2-week out-of-sample validation)
+- Create: `configs/long_dataset.env` (template — 4-month extended backtest)
+- Create: `configs/nn_train_dataset.env` (template — 3-year full NN weight training)
+- Create: `configs/live.env` (template — live trading + paper-trade gate)
 - Create: `requirements.txt`
+
+**Entry-point stubs** (replaced by real implementations in later phases):
+- Create: `trainer.py` (stub — accepts `sys.argv[1]` mode, prints and exits)
+- Create: `trader.py` (stub — prints and exits)
+- Create: `grabers/__init__.py` (empty package marker)
+- Create: `grabers/grab_binance.py` (stub — prints and exits)
+- Create: `view_full.py` (stub — prints and exits)
+- Create: `view_online_point.py` (stub — prints and exits)
+- Create: `view_onlineB.py` (stub — prints and exits)
+- Create: `output/.gitkeep` (logs directory, excluded from git via .gitignore)
+- Create: `scripts/vol_creation.sh` (volume creation helper — path configurable via env)
 
 ---
 
@@ -37,6 +52,7 @@ All execution paths (data collection, training, live trading, visualization) run
 - Base: `python:3.11-slim`
 - Install TA-Lib C library from source (required for `ta-lib` Python package)
 - Install all Python deps from `requirements.txt`
+- CUDA/cuDNN provided via pip (`tensorflow[and-cuda]` in requirements.txt — TF 2.13+ bundles CUDA wheels); no NVIDIA base image needed. GPU access requires `--gpus all` at runtime (Docker NVIDIA Container Toolkit on host).
 - `WORKDIR /code`
 - No `CMD` — every service defines its own `command:`
 - Source code mounted at `/code` via volume — NOT copied into image
@@ -46,15 +62,29 @@ All execution paths (data collection, training, live trading, visualization) run
 ## `.env` — env_file Path Defaults
 
 ```env
+FUNCTIONAL_ENV=configs/functional_dataset.env
 TRAIN_ENV=configs/train_dataset.env
+VALIDATE_ENV=configs/validate_dataset.env
 LONG_ENV=configs/long_dataset.env
+NN_TRAIN_ENV=configs/nn_train_dataset.env
 LIVE_ENV=configs/live.env
 ```
 
 Docker Compose loads `.env` automatically. Override at invocation time:
 ```bash
-TRAIN_ENV=configs/my_custom.env docker compose run --rm simulate
+# Run simulation on 4-month dataset
+TRAIN_ENV=configs/long_dataset.env docker compose run --rm simulate
+
+# Run simulation on functional (1-day) dataset
+TRAIN_ENV=configs/functional_dataset.env docker compose run --rm simulate
 ```
+
+Each `configs/*.env` file must set `ROOT_FOLDER` to tell `helpers.root_folder()` which mount to use:
+
+| env file | `ROOT_FOLDER` value | `root_folder()` resolves to |
+|---|---|---|
+| functional/train/validate/live | `short` | `/trader_data/...` |
+| long/nn_train | `long` | `/trader_data_long/...` |
 
 ---
 
@@ -63,108 +93,109 @@ TRAIN_ENV=configs/my_custom.env docker compose run --rm simulate
 ```yaml
 services:
 
-  # Path A — Data Collection
+  # Path A — Data Collection (any dataset via TRAIN_ENV override)
   graber:
-    image: pybtctr2
+    image: simple_trader
     build: .
     command: python3 grabers/grab_binance.py
     env_file: ${TRAIN_ENV:-configs/train_dataset.env}
     volumes:
       - .:/code
-      - pybtctr_vol:/trader_data
+      - simple_trader_vol:/trader_data
+      - simple_trader_vol_long:/trader_data_long
     environment:
       - BINANCE_API_KEY=${BINANCE_API_KEY}
       - BINANCE_API_SECRET=${BINANCE_API_SECRET}
 
-  # Path B — OHLC Generation
-  ohlc:
-    image: pybtctr2
+  # Path B — OHLC Generation (any dataset via TRAIN_ENV override)
+  ohlc_gen:
+    image: simple_trader
     command: python3 trainer.py generate_full_ohlc
     env_file: ${TRAIN_ENV:-configs/train_dataset.env}
     volumes:
       - .:/code
-      - pybtctr_vol:/trader_data
+      - simple_trader_vol:/trader_data
+      - simple_trader_vol_long:/trader_data_long
 
-  # Path C — Simulation (standard 2-week dataset)
+  # Path C — Simulation (any dataset)
+  # Dataset selected by TRAIN_ENV override. ROOT_FOLDER in env file controls which
+  # mount path helpers.root_folder() uses: "short" → /trader_data, "long" → /trader_data_long.
+  # Both volumes always mounted so any dataset is reachable without changing the service.
   simulate:
-    image: pybtctr2
+    image: simple_trader
     command: python3 trainer.py simulate
     env_file: ${TRAIN_ENV:-configs/train_dataset.env}
     volumes:
       - .:/code
-      - pybtctr_vol:/trader_data
+      - simple_trader_vol:/trader_data
+      - simple_trader_vol_long:/trader_data_long
 
-  # Path C-long — Simulation (4-month dataset)
-  simulate-long:
-    image: pybtctr2
-    command: python3 trainer.py simulate
-    env_file: ${LONG_ENV:-configs/long_dataset.env}
-    volumes:
-      - .:/code
-      - alexandria_pybtctr_vol:/trader_data
-
-  # Path D1 — Group NN data
-  group-nn:
-    image: pybtctr2
+  # Path D1 — Prepare NN data (any dataset via NN_TRAIN_ENV override)
+  # Batches co-located with source dataset — ROOT_FOLDER in env file selects the mount.
+  # Default: 3-year dataset (simple_trader_vol_long). Override to smaller dataset if needed.
+  prepare-nn-data:
+    image: simple_trader
     command: python3 trainer.py group_nn
-    env_file: ${TRAIN_ENV:-configs/train_dataset.env}
+    env_file: ${NN_TRAIN_ENV:-configs/nn_train_dataset.env}
     volumes:
       - .:/code
-      - pybtctr_vol:/trader_data
-      - pybtctr_vol_local:/trader_data_local
+      - simple_trader_vol:/trader_data
+      - simple_trader_vol_long:/trader_data_long
 
-  # Path D2 — Train NN model
+  # Path D2 — Train NN model (any dataset via NN_TRAIN_ENV override)
+  # Reads batches from /trader_data (ROOT_FOLDER in env selects which vol's data)
+  # Writes model weights to /trader_data_long (always simple_trader_vol_long)
+  # Weights are reused by simulate-nn, simulate, and live.
   nn-train:
-    image: pybtctr2
+    image: simple_trader
     command: python3 trainer.py nn_train
-    env_file: ${TRAIN_ENV:-configs/train_dataset.env}
+    env_file: ${NN_TRAIN_ENV:-configs/nn_train_dataset.env}
     volumes:
       - .:/code
-      - pybtctr_vol:/trader_data
-      - pybtctr_vol_local:/trader_data_local
+      - simple_trader_vol:/trader_data
+      - simple_trader_vol_long:/trader_data_long
     environment:
       - NN_CLS=${NN_CLS}
       - NN_TGT=${NN_TGT}
       - NN_TYPE=${NN_TYPE}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   # Path D3 — NN-enhanced simulation
+  # Reads simulation data from /trader_data (small dataset)
+  # Reads model weights from /trader_data_long (always simple_trader_vol_long)
   simulate-nn:
-    image: pybtctr2
+    image: simple_trader
     command: python3 trainer.py simulate_nn
     env_file: ${TRAIN_ENV:-configs/train_dataset.env}
     volumes:
       - .:/code
-      - pybtctr_vol:/trader_data
+      - simple_trader_vol:/trader_data
+      - simple_trader_vol_long:/trader_data_long
 
   # Path E — Live Trading
   live:
-    image: pybtctr2
-    command: python3 pybtctr.py
+    image: simple_trader
+    command: python3 trader.py
     env_file: ${LIVE_ENV:-configs/live.env}
     ports:
       - "8050:8050"
     volumes:
       - .:/code
-      - pybtctr_vol:/trader_data
+      - simple_trader_vol:/trader_data
+      - simple_trader_vol_long:/trader_data_long
     environment:
       - BINANCE_API_KEY=${BINANCE_API_KEY}
       - BINANCE_API_SECRET=${BINANCE_API_SECRET}
 
-  # Path F1 — Full data viewer (long dataset)
-  view-full:
-    image: pybtctr2
-    command: python3 view_full.py none
-    env_file: ${LONG_ENV:-configs/long_dataset.env}
-    ports:
-      - "8080:8080"
-      - "8090:8090"
-    volumes:
-      - .:/code
-      - alexandria_pybtctr_vol:/trader_data
-
-  # Path F2 — Simulation results viewer
+  # Path F2 — Simulation results viewer (any dataset via LIVE_ENV override)
   view-sim:
-    image: pybtctr2
+    image: simple_trader
     command: python3 view_online_point.py none
     env_file: ${LIVE_ENV:-configs/live.env}
     ports:
@@ -172,31 +203,42 @@ services:
       - "8090:8090"
     volumes:
       - .:/code
-      - pybtctr_vol:/trader_data
+      - simple_trader_vol:/trader_data
+      - simple_trader_vol_long:/trader_data_long
     environment:
       - BINANCE_API_KEY=${BINANCE_API_KEY}
       - BINANCE_API_SECRET=${BINANCE_API_SECRET}
 
+  # Path F1 — Full data viewer (long dataset)
+  view-full:
+    image: simple_trader
+    command: python3 view_full.py none
+    env_file: ${LONG_ENV:-configs/long_dataset.env}
+    ports:
+      - "8080:8080"
+      - "8090:8090"
+    volumes:
+      - .:/code
+      - simple_trader_vol_long:/trader_data_long
+
   # Path F3 — Live trading dashboard
   view-live:
-    image: pybtctr2
+    image: simple_trader
     command: python3 view_onlineB.py none
     env_file: ${LIVE_ENV:-configs/live.env}
     ports:
       - "8070:8070"
     volumes:
       - .:/code
-      - pybtctr_vol:/trader_data
+      - simple_trader_vol:/trader_data
     environment:
       - BINANCE_API_KEY=${BINANCE_API_KEY}
       - BINANCE_API_SECRET=${BINANCE_API_SECRET}
 
 volumes:
-  pybtctr_vol:
+  simple_trader_vol:
     external: true
-  alexandria_pybtctr_vol:
-    external: true
-  pybtctr_vol_local:
+  simple_trader_vol_long:
     external: true
 ```
 
@@ -206,31 +248,78 @@ volumes:
 
 | Service | Path | Command | env_file var | Volume |
 |---------|------|---------|--------------|--------|
-| `graber` | A | `python3 grabers/grab_binance.py` | `TRAIN_ENV` | pybtctr_vol |
-| `ohlc` | B | `python3 trainer.py generate_full_ohlc` | `TRAIN_ENV` | pybtctr_vol |
-| `simulate` | C | `python3 trainer.py simulate` | `TRAIN_ENV` | pybtctr_vol |
-| `simulate-long` | C-long | `python3 trainer.py simulate` | `LONG_ENV` | alexandria_pybtctr_vol |
-| `group-nn` | D1 | `python3 trainer.py group_nn` | `TRAIN_ENV` | pybtctr_vol + pybtctr_vol_local |
-| `nn-train` | D2 | `python3 trainer.py nn_train` | `TRAIN_ENV` | pybtctr_vol + pybtctr_vol_local |
-| `simulate-nn` | D3 | `python3 trainer.py simulate_nn` | `TRAIN_ENV` | pybtctr_vol |
-| `live` | E | `python3 pybtctr.py` | `LIVE_ENV` | pybtctr_vol |
-| `view-full` | F1 | `python3 view_full.py none` | `LONG_ENV` | alexandria_pybtctr_vol |
-| `view-sim` | F2 | `python3 view_online_point.py none` | `LIVE_ENV` | pybtctr_vol |
-| `view-live` | F3 | `python3 view_onlineB.py none` | `LIVE_ENV` | pybtctr_vol |
+| `graber` | A | `python3 grabers/grab_binance.py` | `TRAIN_ENV` (override for any dataset) | simple_trader_vol:/trader_data + simple_trader_vol_long:/trader_data_long |
+| `ohlc_gen` | B | `python3 trainer.py generate_full_ohlc` | `TRAIN_ENV` (override for any dataset) | simple_trader_vol:/trader_data + simple_trader_vol_long:/trader_data_long |
+| `simulate` | C | `python3 trainer.py simulate` | `TRAIN_ENV` (override for any dataset) | simple_trader_vol:/trader_data + simple_trader_vol_long:/trader_data_long |
+| `prepare-nn-data` | D1 | `python3 trainer.py group_nn` | `NN_TRAIN_ENV` (override for any dataset) | simple_trader_vol:/trader_data + simple_trader_vol_long:/trader_data_long |
+| `nn-train` | D2 | `python3 trainer.py nn_train` | `NN_TRAIN_ENV` (override for any dataset) | simple_trader_vol:/trader_data + simple_trader_vol_long:/trader_data_long |
+| `simulate-nn` | D3 | `python3 trainer.py simulate_nn` | `TRAIN_ENV` | simple_trader_vol:/trader_data + simple_trader_vol_long:/trader_data_long |
+| `live` | E | `python3 trader.py` | `LIVE_ENV` | simple_trader_vol:/trader_data + simple_trader_vol_long:/trader_data_long |
+| `view-full` | F1 | `python3 view_full.py none` | `LONG_ENV` | simple_trader_vol_long:/trader_data_long |
+| `view-sim` | F2 | `python3 view_online_point.py none` | `LIVE_ENV` (override for any dataset) | simple_trader_vol:/trader_data + simple_trader_vol_long:/trader_data_long |
+| `view-live` | F3 | `python3 view_onlineB.py none` | `LIVE_ENV` | simple_trader_vol |
 
 ---
 
 ## Volumes
 
-Three external volumes must be pre-created by operator before first run:
+Two external volumes must be pre-created before first run using `scripts/vol_creation.sh`:
 
-| Volume | Mount | Used by |
-|--------|-------|---------|
-| `pybtctr_vol` | `/trader_data` | All standard paths |
-| `alexandria_pybtctr_vol` | `/trader_data` | Long dataset path (simulate-long, view-full) |
-| `pybtctr_vol_local` | `/trader_data_local` | NN local training (group-nn, nn-train) |
+```bash
+# Docker-managed storage (default)
+./scripts/vol_creation.sh
 
-All declared `external: true` in compose file.
+# Bind to specific host path (external disk, NFS, etc.)
+VOL_PATH=/mnt/data ./scripts/vol_creation.sh
+```
+
+### `scripts/vol_creation.sh`
+
+```bash
+#!/bin/bash
+# Create Docker volumes for simple_trader.
+# Usage:
+#   ./scripts/vol_creation.sh                         # Docker-managed location
+#   VOL_PATH=/mnt/data ./scripts/vol_creation.sh      # Bind to specific host path
+
+set -e
+
+if [ -n "$VOL_PATH" ]; then
+    mkdir -p "$VOL_PATH/simple_trader_vol" "$VOL_PATH/simple_trader_vol_long"
+    docker volume create --driver local \
+        --opt type=none --opt o=bind \
+        --opt device="$VOL_PATH/simple_trader_vol" \
+        simple_trader_vol
+    docker volume create --driver local \
+        --opt type=none --opt o=bind \
+        --opt device="$VOL_PATH/simple_trader_vol_long" \
+        simple_trader_vol_long
+else
+    docker volume create simple_trader_vol
+    docker volume create simple_trader_vol_long
+fi
+
+echo "Volumes created:"
+docker volume ls --filter name=simple_trader
+```
+
+| Volume | Mount | Contents |
+|--------|-------|----------|
+| `simple_trader_vol` | `/trader_data` | Small datasets: functional (1-day), train (2-week), validate (2-week), live reference |
+| `simple_trader_vol_long` | `/trader_data_long` | Large datasets (4-month, 3-year), NN grouped batches, NN model weights |
+
+Both declared `external: true` in compose file.
+
+### NN path contract (constraint on helpers.py)
+
+| Function | Returns | Rule |
+|----------|---------|------|
+| `nn_folder()` | `/trader_data/{DATA_ROOT}/{DATA_SET_NAME}_{PAIR}/shared/nn_data/` | Grouped batches live on whichever volume is mounted at `/trader_data` — always co-located with the source dataset |
+| `nn_weights_folder()` | `/trader_data_long/{DATA_ROOT}/{PAIR}/nn_weights/` | Model weights always read from `simple_trader_vol_long` at `/trader_data_long` — weights trained on 3-year dataset are shared by all consumers |
+
+**Weight reuse rule:** `simulate-nn`, `simulate`, and `live` all read weights from `/trader_data_long` regardless of which small dataset they're running against. Only `nn-train` writes to `/trader_data_long`.
+
+`simulate-nn` is the only service that mounts both volumes simultaneously (small dataset at `/trader_data`, weights at `/trader_data_long`).
 
 ---
 
@@ -249,21 +338,64 @@ All declared `external: true` in compose file.
 
 ---
 
+## Stub Content
+
+All stubs follow the same pattern — print service name + received args, exit 0:
+
+```python
+# trainer.py
+import sys
+mode = sys.argv[1] if len(sys.argv) > 1 else "none"
+print(f"[stub] trainer mode={mode}")
+```
+
+```python
+# trader.py
+print("[stub] trader")
+```
+
+```python
+# grabers/grab_binance.py
+print("[stub] grab_binance")
+```
+
+```python
+# view_full.py / view_online_point.py / view_onlineB.py
+import sys
+print(f"[stub] {__file__} args={sys.argv[1:]}")
+```
+
+---
+
 ## Verification
 
 ```bash
-# Create volumes
-docker volume create pybtctr_vol
-docker volume create alexandria_pybtctr_vol
+# One-time setup
+./scripts/vol_creation.sh
 
 # Build image
 docker compose build
 
-# Verify container starts without error
-docker compose run --rm graber python3 -c "print('container ok')"
+# Verify every service starts and exits cleanly using stubs
+docker compose run --rm graber
+docker compose run --rm ohlc_gen
+docker compose run --rm simulate
+docker compose run --rm prepare-nn-data
+docker compose run --rm nn-train
+docker compose run --rm simulate-nn
+docker compose run --rm live
+docker compose run --rm view-sim
+docker compose run --rm view-full
+docker compose run --rm view-live
+
+# Verify ROOT_FOLDER routing — long dataset reads from /trader_data_long
+TRAIN_ENV=configs/long_dataset.env docker compose run --rm simulate \
+  python3 -c "import os; print(os.environ.get('ROOT_FOLDER', 'NOT SET'))"
+# expected output: long
 
 # Verify env_file override works
-TRAIN_ENV=configs/custom.env docker compose run --rm simulate python3 -c "import os; print(os.environ.get('DATA_SET_NAME', 'NOT SET'))"
+TRAIN_ENV=configs/functional_dataset.env docker compose run --rm simulate \
+  python3 -c "import os; print(os.environ.get('DATA_SET_NAME', 'NOT SET'))"
 ```
 
 ---

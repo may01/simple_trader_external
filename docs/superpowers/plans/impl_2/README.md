@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task.
 
-**Goal:** Implement the full pybtctr2 cryptocurrency trading bot — live trading, backtesting, NN pipeline, and visualization — from infrastructure through frontend.
+**Goal:** Implement the full simple_trader cryptocurrency trading bot — live trading, backtesting, NN pipeline, and visualization — from infrastructure through frontend.
 
 **Architecture:** Bottom-up, layer-first. Docker entry points defined first. Each layer exposes a typed interface before either side is implemented. No layer reaches into internals of another. Integration boundary must be GREEN in Docker before proceeding to next phase.
 
