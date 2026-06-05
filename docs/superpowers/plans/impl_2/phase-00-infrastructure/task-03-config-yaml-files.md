@@ -60,6 +60,8 @@ fields:
   ...
 ```
 
+`library` is optional — omit for computed/derived fields (those with non-empty `depends_on`). `config_loader.py` treats absent `library` as `None` and skips talib dispatch for that field.
+
 ### Required Field Groups
 
 | Group | Fields |
@@ -69,11 +71,11 @@ fields:
 | volatility | `atr_14`, `natr_14`, `atr_ma`, `bb_upper`, `bb_middle`, `bb_lower`, `bb_fast_upper`, `bb_fast_lower`, `bb_wide_upper`, `bb_wide_lower` |
 | oscillators | `cci_14`, `cci_ma`, `sar` |
 | volume | `vol_ma`, `vol_buy_ma`, `vol_sell_ma` |
-| price_derivatives | `close_diff_prc`, `close_diff_prc_rm`, `close_diff_prc_rm_mean_above`, `close_diff_prc_rm_mean_below` |
+| price_derivatives | `close_diff_prc`, `close_diff_prc_rm`, `close_diff_prc_rm_mean_above`, `close_diff_prc_rm_mean_below`, `high_diff_prc`, `high_diff_prc_rm`, `high_diff_prc_rm_mean_above`, `high_diff_prc_rm_mean_below`, `low_diff_prc`, `low_diff_prc_rm`, `low_diff_prc_rm_mean_above`, `low_diff_prc_rm_mean_below` |
 | classification | `move_class`, `zone_class`, `over_low`, `over_high` (applies_to: [15, 60, 240, 1440]) |
 | targets | `tgt_long`, `sl_long`, `tgt_short`, `sl_short`, `ZB`, `ZS` (applies_to: [15, 60, 240, 1440]) |
 | trend_flags | `trend_up`, `trend_down` |
-| nn_features | `nn_rsi_ma8_norm_mean`, `nn_close_diff_atr_ma` (applies_to: [1, 5, 15]) |
+| nn_features | `nn_rsi_ma8_norm_mean`, `nn_close_diff_atr_ma` |
 
 ---
 
@@ -90,15 +92,14 @@ fields:
 - `indicators_config.yaml` must declare fields in dependency order OR `config_loader.py` must topologically sort by `depends_on`
 - `applies_to: all` expands to full `CANDLES` list at load time
 - `classification` and `targets` groups apply ONLY to `[15, 60, 240, 1440]` — NOT to 1-min or 5-min
-- `nn_features` apply to `[1, 5, 15]` only
-- `sar` field: applies to all TFs but must be computed AFTER `ema_*` fields (dependency)
+
 
 ---
 
 ## Verification
 
 ```bash
-docker compose run --rm trainer python3 -c "
+docker compose run --rm simulate python3 -c "
 from config_loader import load_candles_config, load_indicators_config
 candles = load_candles_config()
 assert candles == [1, 5, 15, 60, 240, 1440], f'Got {candles}'
