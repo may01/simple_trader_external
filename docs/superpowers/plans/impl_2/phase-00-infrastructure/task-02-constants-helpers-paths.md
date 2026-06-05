@@ -78,14 +78,16 @@ Key constant groups to define:
 
 Path functions all read `os.environ['PAIR']` internally — no `pair` parameter:
 
-- `root_folder() -> str` — returns base data path based on `ROOT_FOLDER` env var (`local` → `/trader_data`, `remote` → `/trader_data`)
-- `data_folder() -> str` — `{root_folder()}/{DATA_ROOT}/{PAIR}/{DATA_SET_NAME}/`
-- `shared_folder() -> str` — `{root_folder()}/{DATA_ROOT}/{PAIR}/shared/`
-- `stats_folder() -> str` — path to `stats/` directory for pair
-- `nn_folder_remote() -> str` — remote NN model/data path
-- `nn_folder_local() -> str` — local fast-storage NN path (optional `pybtctr_vol_local`)
-- `graber_data_path() -> str` — full path to `graber_data.pkl`
-- `wide_df_path() -> str` — full path to `df_with_indicators.pkl`
+- `root_folder() -> str` — mount point only: `ROOT_FOLDER` env var `short` → `/trader_data`, `long` → `/trader_data_long`
+- `dataset_folder() -> str` — `{root_folder()}/{DATA_ROOT}/{DATA_SET_NAME}_{PAIR}/` — full path to this dataset's directory
+- `data_folder() -> str` — `{dataset_folder()}/data/`
+- `shared_folder() -> str` — `{dataset_folder()}/shared/`
+- `stats_folder() -> str` — `stats/{DATA_ROOT}/{PAIR}/` — in-repo, version-controlled; NOT on Docker volume
+- `nn_folder() -> str` — `{shared_folder()}/nn_data/` — grouped batches co-located with source dataset
+- `nn_weights_folder() -> str` — `/trader_data_long/{DATA_ROOT}/{PAIR}/nn_weights/` — ALWAYS on `simple_trader_vol_long`; hardcoded, not affected by ROOT_FOLDER
+- `action_folder() -> str` — `{shared_folder()}/actions/` — per-timestamp action pkl files
+- `graber_data_path() -> str` — `{dataset_folder()}/graber_data.pkl`
+- `wide_df_path() -> str` — `{dataset_folder()}/df_with_indicators.pkl`
 - `position_json_path() -> str` — `manual_setup/{PAIR}/position.json`
 
 ---
@@ -94,6 +96,7 @@ Path functions all read `os.environ['PAIR']` internally — no `pair` parameter:
 
 - `log(message: str) -> None` — standard operation log with timestamp
 - `log_error(message: str) -> None` — error log with traceback context
+- `log_warning(message: str) -> None` — warning log with traceback context
 - `log_revenue(revenue_pct: float, revenue_abs: float, details: dict) -> None` — P&L accounting log
 - `log_stock(operation: str, weight: int) -> None` — API weight tracking log
 
@@ -112,12 +115,29 @@ Path functions all read `os.environ['PAIR']` internally — no `pair` parameter:
 ## Verification
 
 ```bash
-docker compose run --rm trainer python3 -c "
-from constants import STRATEGY_ACTION_OPEN_LONG, POSITION_STATE_WAIT
-from helpers import root_folder, data_folder
-import os; os.environ['PAIR'] = 'link_usdt'; os.environ['ROOT_FOLDER'] = 'local'
-print(data_folder())
+# Verify constants import cleanly
+docker compose run --rm simulate python3 -c "
+from constants import STRATEGY_ACTION_OPEN_LONG, STRATEGY_ACTION_CLOSE_LONG, POSITION_STATE_WAIT
+from constants import LEVEL_TYPE_LONG_SUPPORT, LEVEL_TYPE_AUTO_SUPPORT, LI_NAME, TRADE_BUY
+print('constants ok')
 "
+
+# Verify path helpers resolve correctly for short dataset
+TRAIN_ENV=configs/train_dataset.env docker compose run --rm simulate python3 -c "
+from helpers import root_folder, dataset_folder, data_folder, shared_folder, nn_weights_folder
+print('root_folder:', root_folder())
+print('dataset_folder:', dataset_folder())
+print('data_folder:', data_folder())
+print('nn_weights_folder:', nn_weights_folder())
+"
+# expected: root_folder=/trader_data, dataset_folder=/trader_data/{DATA_ROOT}/{DATA_SET_NAME}_{PAIR}
+
+# Verify ROOT_FOLDER routing — long dataset reads from /trader_data_long
+TRAIN_ENV=configs/long_dataset.env docker compose run --rm simulate python3 -c "
+from helpers import root_folder
+print('root_folder:', root_folder())
+"
+# expected: root_folder=/trader_data_long
 ```
 
 ---
