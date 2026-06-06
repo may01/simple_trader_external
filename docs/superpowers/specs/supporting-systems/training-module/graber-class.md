@@ -75,11 +75,13 @@ The existing `grabers/grab_binance.py` entry-point script is preserved as a thin
 
    | Output column | Source field |
    |---------------|--------------|
+   | `open_time` | `open_time` (Timestamp; also becomes the index) |
    | `o` | `open` (float) |
    | `h` | `high` (float) |
    | `l` | `low` (float) |
    | `c` | `close` (float) |
    | `v` | `volume` (float) |
+   | `close_time` | `close_time` (Timestamp) |
    | `taker_base_vol` | `taker_buy_base` (float) |
 
    Index: 1-min `DatetimeIndex` (UTC) built from `open_time`.
@@ -88,7 +90,7 @@ The existing `grabers/grab_binance.py` entry-point script is preserved as a thin
 6. **Persist.** Write to `_output_path` via temp-file + atomic rename.
 7. **Return** the DataFrame written.
 
-**Return:** `pd.DataFrame` indexed by 1-min `DatetimeIndex`, columns `[o, h, l, c, v, taker_base_vol]`.
+**Return:** `pd.DataFrame` indexed by 1-min `DatetimeIndex`, columns `[open_time, o, h, l, c, v, close_time, taker_base_vol]`.
 
 **Preconditions:**
 - `BINANCE_API_KEY` and `BINANCE_API_SECRET` are set.
@@ -151,13 +153,15 @@ df_with_indicators.pkl
 `graber_data.pkl` matches the schema documented in Data Module v2.0 §10 (`graber_data.pkl` row).
 
 ```
-index (DatetimeIndex, 1-min UTC)
+index (DatetimeIndex, 1-min UTC, from open_time)
 columns:
+  open_time        Timestamp candle open time (also the index)
   o                float64   open price
   h                float64   high price
   l                float64   low price
   c                float64   close price
   v                float64   volume (base asset)
+  close_time       Timestamp candle close time
   taker_base_vol   float64   taker buy volume (base asset)
 ```
 

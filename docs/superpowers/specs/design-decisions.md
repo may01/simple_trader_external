@@ -122,6 +122,28 @@ Why: Using the same range as training would not validate generalization.
 Decision: **Remove** `LEVEL_TYPE_SHORT_1_RESISTANCE=10` and `LEVEL_TYPE_SHORT_2_RESISTANCE=11` (unused). **Rename** `AUTO_TARGET_SUPPORT` → `AUTO_SUPPORT` and `AUTO_TARGET_RESISTANCE` → `AUTO_RESISTANCE`.
 Why: Shorter, cleaner names; removing unused types reduces confusion.
 
+**#29 — `cur_time`/`timer` type: `int` (Unix seconds) or `float`?**
+Decision: **`float`** everywhere — `cur_time: float`, `timer: float`. Canonical.
+Why: Matches the convention already established in phase-06 task-02 (`open_time: float`), phase-06 task-04/phase-08/phase-10 (`close_by_time(cur_time: float)`), and phase-05's own typed interface + verification script (passes `1000.0`). phase-03 task-08 (`Levels.get_active_levels`, `get_level_value`, `is_price_near_level`, etc. — all typed `cur_time: int`) is the stale outlier; those signatures should be updated to `float` to match.
+
+**#30 — `SignalChain.check()`: log fired signal pre-increment, or next-awaited signal post-increment?**
+Decision: Log **before** incrementing `cur_pos` — `action.add_multiply_action(self.signals[self.cur_pos].get_marker_pos(data_point), "SF: C %s S %d" % (self.name, self.cur_pos))`, *then* `self.cur_pos += 1; self.timer = cur_time`. The logged index/marker describes the signal that just fired, not the one now being awaited. `get_marker_pos(data_point)` is part of `BaseSignal`'s surface that `SignalChain` calls (phase-05 task-01 omitted it from its interface list — must be added back).
+Why: Matches the underlying SignalChain spec's actual code exactly. phase-05 task-01's prose ("increment, then log") read as post-increment, which would log the wrong signal's marker and a confusing "now waiting on signal N" index instead of "signal N just fired".
+
+**#31 — `completed()`: log "CPLTD: {name}" on completion, or pure stateless bool test?**
+Decision: **Log it.** When `notify=True` and `cur_pos == len(signals)`: `action.add_multiply_action(self.signals[-1].get_marker_pos(data_point), "CPLTD: %s" % self.name)`, then return `True`. `notify=False` → no log, just the bool.
+Why: Matches underlying spec. Distinct human-visible "whole pattern completed" marker, separate from the per-signal "SF: C..." progress logs added in #30 — needed to visually distinguish "signal N fired" from "entire chain fired" on charts/logs. phase-05 task-01's bare-bool wording was an under-specification, not a deliberate simplification.
+
+**#32 — phase-05 verification scripts crash: `notify=True` default + `action=None`?**
+Decision: Pass `notify=False` explicitly when constructing test chains in verification scripts (`SignalChain(..., notify=False)`). `action=None` stays valid input for logging-free test runs.
+Why: With #30/#31 confirming `notify=True` triggers `action.add_multiply_action(...)`, the original task-01/task-02 verification scripts construct chains with `notify` defaulting `True` and pass `action=None` → `AttributeError: 'NoneType' object has no attribute 'add_multiply_action'`, crashing on the very first signal fire. `notify=False` is the documented path for "high-frequency test chains" — applying it here is consistent and keeps the scripts runnable as-is. Fixed directly in task-01-signal-chain.md and task-02-signal-manager.md.
+
+**#28 — `levels` param passed into signals: `Levels` instance, raw level dicts, or precomputed shape?**
+Decision: A new type alias `SignalLevels = Dict[int, List[float]]` — `{level_type: [interpolated_price, ...]}`. Plain dict, no class, no helper methods. Produced by a new method `Levels.to_signal_levels(data_point) -> SignalLevels`, which internally calls `get_active_levels()` + `get_level_value()` to interpolate every active level of every type once per tick. `Strategy.check()` calls `to_signal_levels()` once per tick and threads the result through `SignalManager.check()` → `SignalChain.check()` → `signal.check()`.
+Why: phase-04/phase-05 plan drafts disagreed on the shape — task-01-base-signal.md and the SignalChain verification script type it as plain `dict` (and pass `{}`), while task-03-crossover-level-signals.md line 61 calls `levels.get_level_value(...)`, which only exists on the `Levels` class. Precomputing once per tick keeps signals dumb (plain float comparisons, no interpolation, no `cur_time` needed inside `check()`) and avoids passing the heavyweight `Levels` loader (file I/O, full level list) down into every signal.
+
+`to_signal_levels()` **replaces** `get_levels_dict()` (phase-03 task-08) and `get_level_values()` (phase-04 task-03 — itself a stale alias of the same method). Both names are retired; `to_signal_levels()` is the single canonical conversion from loaded levels to the dict signals consume.
+
 ---
 
 ## Cross-cutting
