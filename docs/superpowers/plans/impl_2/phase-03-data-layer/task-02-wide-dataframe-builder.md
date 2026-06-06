@@ -72,7 +72,7 @@ For each `tf` in `CANDLES = [1, 5, 15, 60, 240, 1440]`:
 
 ```bash
 docker compose run --rm trainer python3 -c "
-import os; os.environ['PAIR']='link_usdt'; os.environ['ROOT_FOLDER']='local'
+import os; os.environ['PAIR']='link_usdt'; os.environ['ROOT_FOLDER']='short'
 from data import get_stock_data
 df = get_stock_data('link_usdt')
 # Check 5-min candle at a boundary

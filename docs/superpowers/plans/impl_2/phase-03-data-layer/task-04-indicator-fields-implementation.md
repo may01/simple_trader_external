@@ -81,7 +81,7 @@ Each field is a self-contained class reading prior columns from `data_point.get_
 ## Key Constraints
 
 - All fields read ONLY `{tf}_*` prefixed columns from `data_point.get_df(tf)` — never raw column names like `"close"`
-- `classification` and `targets` fields require `stats/rsi_classification.json` and `stats/diff_stats.pkl` to be present — loaded via `DataAttributes` (Task 10)
+- `classification` and `targets` fields require `stats/rsi_classification.json` and `stats/diff_stats.pkl` to be present — loaded via `DataAttributes` (Task 07)
 - TA-Lib functions require float64 arrays — cast explicitly before calling
 - `SARField` — TA-Lib SAR has issues with very short series; handle `len(df) < 2` edge case
 - Forward-looking target fields (`tgt_long`, `tgt_short`) — ONLY valid for offline wide DataFrame generation. These read `df.loc[ts + N]` → must NEVER be computed in the live path
@@ -95,7 +95,7 @@ docker compose run --rm trainer python3 -c "
 from indicators import Indicators
 from data import WideDataPoint, get_stock_data, build_indicator_input
 import os
-os.environ['PAIR'] = 'link_usdt'; os.environ['ROOT_FOLDER'] = 'local'
+os.environ['PAIR'] = 'link_usdt'; os.environ['ROOT_FOLDER'] = 'short'
 df = get_stock_data('link_usdt')
 ts = df[df['5_is_closed']].index[50]
 from data import WideDataPoint

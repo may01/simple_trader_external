@@ -71,7 +71,7 @@ from data import WideDataPoint, get_stock_data
 import pandas as pd, os
 
 os.environ['PAIR'] = 'link_usdt'
-os.environ['ROOT_FOLDER'] = 'local'
+os.environ['ROOT_FOLDER'] = 'short'
 df = get_stock_data('link_usdt')
 
 # Test build_indicator_input at a boundary

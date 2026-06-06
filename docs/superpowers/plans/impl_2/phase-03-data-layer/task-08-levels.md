@@ -68,7 +68,7 @@ Level activation: `LI_TIME1 <= cur_time <= LI_TIME2` and `LI_ACTIVE == True`.
 
 - Level activation times are Unix SECONDS — `DATA_START`/`DATA_END` env vars are milliseconds; divide by 1000 when comparing
 - `LEVEL_TYPE_SHORT_1_RESISTANCE` and `LEVEL_TYPE_SHORT_2_RESISTANCE` do NOT exist — removed per design-decisions.md #16
-- `AUTO_SUPPORT` = 6, `AUTO_RESISTANCE` = 7 (renamed from `AUTO_TARGET_*`)
+- `LEVEL_TYPE_AUTO_SUPPORT` = 6, `LEVEL_TYPE_AUTO_RESISTANCE` = 7 (renamed from `LEVEL_TYPE_AUTO_TARGET_*`)
 - `get_level_value()` uses linear interpolation — valid for `TIME1 <= cur_time <= TIME2`; extrapolates beyond if needed
 - Levels file may be empty or absent — return empty list, do not raise
 - `get_levels_dict()` is called fresh each tick in `Strategy.check()` — not cached

@@ -28,7 +28,7 @@ Implement `LiveData` — the live-path data orchestrator. Called every tick by R
 
 **LiveData class:**
 - `__init__()` — loads `CANDLES` from config; reads `PAIR` from env
-- `build_candles(time_point: int = 0) -> None` — fetches from `stock.item.get_candles_history(CANDLES, coin, time_point)`, calls `Indicators.compute(ohlc[tf], tf)` for each TF, stores in `self.ohlc`
+- `build_candles(time_point: int = 0) -> None` — fetches from `stock.item.get_candles_history(CANDLES, coin, time_point)`, which returns plain-named columns (`open`, `high`, `low`, `close`, `volume`, ...; see phase-01 task-02). For each TF: rename columns to `{tf}_{col}` (`open`→`{tf}_open`, etc.) and add `{tf}_is_closed = True` for every row (candles from `get_candles_history` are always fully-closed historical candles — unlike the wide DataFrame's partial-candle rows). Then wrap `{tf: ohlc[tf]}` in a `LiveDataPoint` and call `Indicators.compute(point, tf)` (per task-03's `compute(data_point: DataPoint, tf: int)` signature — writes results back via `point.get_df(tf)`, which is the same `ohlc[tf]` DataFrame, mutated in place); stores in `self.ohlc`
 - `get_data_point() -> LiveDataPoint` — wraps current `self.ohlc` in `LiveDataPoint`
 - `get_depth_data(quantity: int) -> tuple[pd.DataFrame, pd.DataFrame]` — calls `stock.item.depth(quantity)`
 - `ohlc: dict[int, pd.DataFrame]` — current per-TF enriched DataFrames
@@ -43,6 +43,7 @@ Implement `LiveData` — the live-path data orchestrator. Called every tick by R
 - `data.item` is a TRUE module-level singleton — only one instance exists per process
 - `build_candles()` has NO return value — callers use `get_data_point()` separately
 - After `build_candles()`, `self.ohlc[tf]` contains enriched DataFrame with all `{tf}_*` indicator columns
+- `get_candles_history()` returns plain-named OHLCV columns (phase-01 task-02) — `build_candles()` is the ONLY place that renames them to `{tf}_{col}` and synthesizes `{tf}_is_closed`; no other module does this for the live path
 - `Indicators.compute()` is called per TF, in order of `CANDLES` list — no parallelism in live path
 - `data.item` uses `stock.item` — `do_stock_init()` must be called before first `build_candles()` call
 - No `FullData` singleton: `FullData` instantiated per run, not at module level

@@ -61,7 +61,7 @@ Implement `SimulationData` — loads `df_with_indicators.pkl` once at init, then
 ```bash
 docker compose run --rm trainer python3 -c "
 import os
-os.environ['PAIR'] = 'link_usdt'; os.environ['ROOT_FOLDER'] = 'local'
+os.environ['PAIR'] = 'link_usdt'; os.environ['ROOT_FOLDER'] = 'short'
 from data import SimulationData
 
 sim = SimulationData('link_usdt', begin_ts=1693526400, end_ts=1693612800, step_min=1)

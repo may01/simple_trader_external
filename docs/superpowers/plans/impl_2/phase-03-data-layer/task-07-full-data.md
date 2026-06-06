@@ -83,7 +83,7 @@ Implement `FullData` (read interface over wide DataFrame exposing per-TF closed-
 ```bash
 docker compose run --rm trainer python3 -c "
 import os
-os.environ['PAIR'] = 'link_usdt'; os.environ['ROOT_FOLDER'] = 'local'
+os.environ['PAIR'] = 'link_usdt'; os.environ['ROOT_FOLDER'] = 'short'
 import pandas as pd
 from helpers import wide_df_path
 from data import FullData
