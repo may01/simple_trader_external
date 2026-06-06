@@ -1,7 +1,7 @@
 # Task 03: Crossover and Level Signals
 
 **Phase:** 04 — Signal Library  
-**Depends on:** Task 02 (atomic signals), Phase 03 Task 08 (Levels)  
+**Depends on:** Task 02 (atomic signals), Phase 03 Task 08 (Levels), design-decisions.md #28 (`SignalLevels` shape + `to_signal_levels()`)  
 **Produces:** `signals_lib/common.py` — crossover signals and level proximity signals
 
 ---
@@ -38,27 +38,28 @@ Implement crossover signals (indicator crosses value or another indicator) and l
 ## Level-Based Signals to Implement
 
 **`Near_Level_Signal(tf: int, indi_1: str, level_type: int, buffer: float)`**
-- Checks if `indi_1` is within `buffer` distance of any active level of `level_type`
-- `check()`: for each active level of `level_type` in `levels`: if `abs(price - level_value) <= buffer` → True
-- `get_data()` returns `{"cur_level_name": name, "level_val": value}` for the matched level
+- Checks if `indi_1` is within `buffer` distance of any pre-interpolated price for `level_type`
+- `check()`: for each `level_val` in `levels.get(level_type, [])`: if `abs(price - level_val) <= buffer` → True
+- `get_data()` returns `{"level_val": level_val}` for the matched price — no level name available (see Key Constraints)
 
 **`Near_Price_Level_Signal(tf: int, indi_1: str, level_type: int, buffer: float, buffer_indi: str)`**
-- Like `Near_Level_Signal` but buffer scaled by `data_point.get(buffer_indi, tf)` value
+- Same as `Near_Level_Signal` but buffer is dynamic: `effective_buffer = buffer × data_point.get(buffer_indi, tf, self.shift)` (here `buffer` is a coefficient/multiplier, typically a fraction; `buffer_indi` is usually `"atr_14"`)
+- Delegates to an internal `Near_Level_Signal` instance on each tick; `set_shift()` propagates to the inner instance
 
 **`Over_Level_Signal(tf: int, indi_1: str, level_type: int)`**
-- `check()` returns True if `indi_1 > level_value` for any active level of `level_type`
+- `check()` returns True if `indi_1 > level_val` for any `level_val` in `levels.get(level_type, [])`
 
 **`Under_Level_Signal(tf: int, indi_1: str, level_type: int)`**
-- `check()` returns True if `indi_1 < level_value` for any active level of `level_type`
+- `check()` returns True if `indi_1 < level_val` for any `level_val` in `levels.get(level_type, [])`
 
 ---
 
 ## Key Constraints
 
 - Crossover signals: if either current or previous value is NaN → return False
-- Level signals receive `levels` dict from `Strategy.get_level_values()` — this dict may be empty if no levels of that type are active; return False in that case
-- `Near_Level_Signal.get_data()` populates `cur_level_name` and `level_val` — strategy uses these for stop-loss positioning
-- Level values are linearly interpolated at current time — use `levels.get_level_value(level_dict, cur_time)` where `cur_time` is passed via `action.cur_time` or computed from data_point
+- Level signals receive `levels: SignalLevels` — a plain `Dict[int, List[float]]` mapping `level_type` → pre-interpolated prices, built fresh each tick by `Levels.to_signal_levels(data_point)` (design-decisions.md #28). This **replaces** the retired `get_levels_dict()` (phase-03 task-08) / `get_level_values()` / `levels.get_level_value(level_dict, cur_time)` path — signals never call `get_level_value` or pass `cur_time`, they only do plain float comparisons against `levels.get(level_type, [])`
+- `levels.get(level_type, [])` may be `[]` if no levels of that type are active — return False in that case
+- `Near_Level_Signal.get_data()` populates `level_val` only — `SignalLevels` carries interpolated floats, not level identities, so `cur_level_name` cannot be reported (strategy must locate the matching level by value if it needs the name)
 
 ---
 

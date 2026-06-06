@@ -42,12 +42,13 @@ Levels are static per pair (loaded once per process). They're slope lines define
 **Levels class:**
 - `__init__(thread_num: int = 0)` — loads `shared/{pair}/levels.txt`, parses level definitions
 - `load(thread_num: int = 0) -> list[dict]` — static method; returns list of level dicts
-- `get_active_levels(level_type: int, cur_time: int) -> list[dict]` — returns active levels of given type
-- `get_level_value(level_dict: dict, cur_time: int) -> float` — linear interpolation between TIME1/VAL1 and TIME2/VAL2
-- `is_price_near_level(price: float, level: dict, atr: float, cur_time: int) -> bool` — price within `atr` distance of level
-- `is_price_over_level(price: float, level: dict, cur_time: int) -> bool`
-- `is_price_under_level(price: float, level: dict, cur_time: int) -> bool`
-- `get_levels_dict(data_point, ema_cols: list[str]) -> dict` — builds the levels dict consumed by Strategy (includes EMA levels, BB levels, and hand-drawn levels)
+- `get_active_levels(level_type: int, cur_time: float) -> list[dict]` — returns active levels of given type (`cur_time` is float, not int — matches phase-05/06 convention)
+- `get_level_value(level_dict: dict, cur_time: float) -> float` — linear interpolation between TIME1/VAL1 and TIME2/VAL2
+- `is_price_near_level(price: float, level: dict, atr: float, cur_time: float) -> bool` — price within `atr` distance of level
+- `is_price_over_level(price: float, level: dict, cur_time: float) -> bool`
+- `is_price_under_level(price: float, level: dict, cur_time: float) -> bool`
+- `to_signal_levels(data_point) -> dict[int, list[float]]` — **replaces** `get_levels_dict()` (design-decisions.md #28). Calls `get_active_levels()` + `get_level_value()` for every active level of every `LEVEL_TYPE_*` constant, once per tick, and returns `{level_type: [interpolated_price, ...]}`. Called once per tick in `Strategy.check()` and passed down through `SignalManager` → `SignalChain` → `signal.check()` as the `levels: SignalLevels` parameter
+- `get_levels_dict(data_point, ema_cols: list[str]) -> dict` — **RETIRED** (replaced by `to_signal_levels()`). Do not implement; kept here for reference only
 
 ---
 
@@ -71,7 +72,7 @@ Level activation: `LI_TIME1 <= cur_time <= LI_TIME2` and `LI_ACTIVE == True`.
 - `LEVEL_TYPE_AUTO_SUPPORT` = 6, `LEVEL_TYPE_AUTO_RESISTANCE` = 7 (renamed from `LEVEL_TYPE_AUTO_TARGET_*`)
 - `get_level_value()` uses linear interpolation — valid for `TIME1 <= cur_time <= TIME2`; extrapolates beyond if needed
 - Levels file may be empty or absent — return empty list, do not raise
-- `get_levels_dict()` is called fresh each tick in `Strategy.check()` — not cached
+- `to_signal_levels()` is called fresh each tick in `Strategy.check()` — not cached (replaces the retired `get_levels_dict()` call)
 
 ---
 

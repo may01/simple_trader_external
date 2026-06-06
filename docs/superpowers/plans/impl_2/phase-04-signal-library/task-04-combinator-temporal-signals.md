@@ -37,8 +37,9 @@ Implement combinator signals (logical composition) and temporal signals (history
 ## Temporal Signals
 
 **`History_Signal(signal: BaseSignal, history: int)`**
-- Evaluates `signal` at a historical offset: calls `signal.set_shift(history)` then `signal.check()`
-- After check, restores original shift (or permanently sets — TBD by implementation)
+- Evaluates `signal` at a historical offset relative to the wrapper's own shift: calls `signal.set_shift(self.history + self.shift)` then `signal.check(...)`
+- Does **not** restore the child's shift afterward, and does **not** use the normal recursive `set_shift()` propagation path — it overrides the child's shift directly each time it checks (per `operations-signals.md`: "overrides the child's shift directly... the child signal's shift is always `history` relative to the caller's shift context"). No TBD: restoration is moot since `set_shift` is always called again before the next `check()`
+- All `Cross_*_Signal` implementations build on `History_Signal` internally (per spec)
 - Example: `History_Signal(Greater_Signal(15, "rsi_14", 50), 1)` checks if RSI was above 50 one candle ago
 
 **`Continuous_Signal(signal: BaseSignal, history: int, multiply: int = 1)`**
@@ -67,9 +68,12 @@ Implement combinator signals (logical composition) and temporal signals (history
 - Returns True every `fire_each` calls
 - Useful for periodic evaluation
 
-**`DataValue_Signal(name: str, value: float, value_set: str)`**
-- Wraps a comparison with metadata binding
-- `get_data()` returns `{name: value}` when chain completes
+**`DataValue_Signal(data_name: str, value, value_set: bool)`**
+- Metadata-injection wrapper, not a comparison: `check()` simply returns `self.value_set` (the armed/fired flag — note the constraint, fixing the plan's `value_set: str` typo to `bool`)
+- `set_value(val)` — arms the signal: sets `self.value = val`, `self.value_set = True`
+- `get_data()` returns `{self.data_name: self.value}` once armed/fired
+- Usage pattern: construct disarmed (`DataValue_Signal("cur_level_name", None, False)`), call `set_value("Support_1")` elsewhere when the bound value is known, then add to chain — `check()` then fires and `get_data()` exports the bound value
+- **Footgun (per spec, carry into implementation):** breaks when wrapped inside `And_Signal`/`Or_Signal` — those combinators don't propagate child `get_data()` to the chain (only `SignalChain.get_action()` aggregates `s.get_data()` across its top-level `signals` list). Only place `DataValue_Signal` directly in a chain, not nested inside a combinator, if its metadata must reach `get_action()`
 
 ---
 

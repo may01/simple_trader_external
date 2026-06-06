@@ -51,10 +51,12 @@ Implement all atomic comparison signal types: value comparisons, difference comp
 - `check()` returns `(data_point.get(indi_1, tf, shift) - data_point.get(indi_2, tf, shift)) < val`
 
 **`Diff_LessIndi_Signal(tf: int, indi_1: str, indi_2: str, indi_dist: str)`**
-- `check()` returns `(indi_1 - indi_2) < data_point.get(indi_dist, tf, shift)`
+- `check()` returns `(indi_1 - indi_2) > 0 AND (indi_1 - indi_2) < data_point.get(indi_dist, tf, self.shift)`
+- i.e. `indi_1 > indi_2` (diff positive) AND the gap is less than the threshold indicator — prevents firing on negative diffs (per `common-signals.md`)
 
 **`Diff_GreaterIndi_Signal(tf_1: int, indi_1: str, tf_2: int, indi_2: str, tf_dist: int, indi_dist: str)`**
-- Cross-timeframe difference check: `(get(indi_1, tf_1) - get(indi_2, tf_2)) > get(indi_dist, tf_dist)`
+- Cross-timeframe: `(get(indi_1, tf_1) - get(indi_2, tf_2)) > 0 AND (get(indi_1, tf_1) - get(indi_2, tf_2)) > get(indi_dist, tf_dist)`
+- i.e. diff positive AND greater than the threshold — `shift` (i.e., `self.shift`) applied uniformly to all three lookups
 
 ---
 
@@ -79,7 +81,7 @@ df = pd.DataFrame({'5_rsi_14': [30.0, 45.0, 50.0], '5_close': [20.0, 21.0, 22.0]
 pt = LiveDataPoint({5: df})
 
 sig = Less_Signal(5, 'rsi_14', 'close')
-assert sig.check(pt, {}, None) == True  # 50 < 22? No... adjust values
+assert sig.check(pt, {}, None) == False  # 50 < 22 is False
 sig2 = Greater_Val_Signal(5, 'rsi_14', 40.0)
 assert sig2.check(pt, {}, None) == True  # 50 > 40
 
