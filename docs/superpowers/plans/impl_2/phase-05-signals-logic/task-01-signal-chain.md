@@ -39,8 +39,8 @@ Attributes:
 
 Methods:
 - `add(signal: BaseSignal) -> None` — appends signal to `self.signals`
-- `check(data_point, levels, cur_time: float, action) -> None` — if `cur_pos < len(signals)`: call `signals[cur_pos].check()`; if True: increment `cur_pos`, set `timer = cur_time`, log via action; then check if next signal's `reset()` returns True → if so, call `self.reset()`
-- `completed(data_point, action) -> bool` — returns `cur_pos == len(signals)`
+- `check(data_point, levels, cur_time: float, action) -> None` — if `cur_pos < len(signals)`: call `signals[cur_pos].check()`; if True: log fired signal via action (see #30), then increment `cur_pos` and set `timer = cur_time`; then check if new `signals[cur_pos]`'s `reset()` returns True → if so, call `self.reset(action)`
+- `completed(data_point, action) -> bool` — if `cur_pos == len(signals)`: log completion via action when `notify=True` (see #31), return `True`; else return `False`
 - `get_action(price: float, action) -> list` — returns `[result_action, tf, price, data_dict]` where `data_dict` merges `{"position_time": tf}` with `s.get_data()` from all signals
 - `reset(action) -> None` — resets `cur_pos = 0`, `timer = 0`
 
@@ -67,7 +67,8 @@ Only `signals[cur_pos]` is evaluated each tick — signals before `cur_pos` are 
 - After incrementing `cur_pos`, immediately check if new `signals[cur_pos].reset()` is True — chain may need to abort before next tick
 - `timer` is set to `cur_time` (Unix seconds) whenever `cur_pos` advances — available for timeout logic
 - `get_action()` merges `get_data()` from ALL signals (not just the last) — this collects level names, prices, etc. from any signal in the chain
-- `notify=True` logs via `action.add_multiply_action(marker_pos, "SF: C {name} S {pos}")` — `notify=False` suppresses all logging (use for high-frequency test chains)
+- `notify=True` logs progress via `action.add_multiply_action(signals[cur_pos].get_marker_pos(data_point), "SF: C {name} S {cur_pos}")` BEFORE incrementing `cur_pos` (#30), and logs completion via `action.add_multiply_action(signals[-1].get_marker_pos(data_point), "CPLTD: {name}")` from `completed()` (#31) — `notify=False` suppresses both
+- `get_marker_pos(data_point) -> float` is a `BaseSignal` method `SignalChain` calls for both of the above logs (default: `data_point.get("close", 1, 1)`)
 - `result_action` must be a valid `STRATEGY_ACTION_*` constant
 
 ---
@@ -82,7 +83,7 @@ from constants import STRATEGY_ACTION_OPEN_LONG
 from data import LiveDataPoint
 import pandas as pd
 
-chain = SignalChain('test_chain', STRATEGY_ACTION_OPEN_LONG, tf=15)
+chain = SignalChain('test_chain', STRATEGY_ACTION_OPEN_LONG, tf=15, notify=False)
 chain.add(Greater_Val_Signal(15, 'rsi_14', 40))  # must fire first
 chain.add(Greater_Val_Signal(15, 'rsi_14', 50))  # then this
 

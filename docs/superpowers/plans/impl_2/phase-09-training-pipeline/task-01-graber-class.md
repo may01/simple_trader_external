@@ -52,7 +52,7 @@ Attributes:
 
 - Incremental fetch: only request candles after last saved timestamp — avoid re-fetching existing data
 - Atomic save: write to `output_path + ".tmp"` then `os.rename()` — prevent partial writes
-- Column schema matches Phase 02 grab_binance output: `open_time, open, high, low, close, volume, close_time` at minimum
+- Column schema matches Phase 02 grab_binance output: `open_time, o, h, l, c, v, close_time, taker_base_vol` (short aliases — see Phase 02 task-01-graber.md and design-decisions.md; NOT `open/high/low/close/volume`)
 - `end_date` comparison uses UTC timestamps — no timezone ambiguity
 - Raises clear exception if `stock.get_candles_history()` returns empty result for non-empty date range
 

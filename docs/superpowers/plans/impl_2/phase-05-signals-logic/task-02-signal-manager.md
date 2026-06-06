@@ -80,9 +80,9 @@ from data import LiveDataPoint
 import pandas as pd
 
 mgr = SignalManager()
-chain1 = SignalChain('long', STRATEGY_ACTION_OPEN_LONG, tf=15)
+chain1 = SignalChain('long', STRATEGY_ACTION_OPEN_LONG, tf=15, notify=False)
 chain1.add(Greater_Val_Signal(15, 'rsi_14', 50))
-chain2 = SignalChain('short', STRATEGY_ACTION_OPEN_SHORT, tf=15)
+chain2 = SignalChain('short', STRATEGY_ACTION_OPEN_SHORT, tf=15, notify=False)
 chain2.add(Greater_Val_Signal(15, 'rsi_14', 70))
 mgr.add_chain(chain1)
 mgr.add_chain(chain2)
