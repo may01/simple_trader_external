@@ -76,7 +76,7 @@ Attributes:
 - `persist_path` write is always atomic (`.tmp` → rename)
 - `buy_id` / `sell_id` initialized to empty string `""` — never None (avoids None checks everywhere)
 - `load()` must call `position.from_dict()` — Position reconstructed from same JSON
-- After `clear()`, `position.posImpl` is reset to neutral `BasePosition` — next cycle starts fresh
+- After `clear()`, `position.posImpl` is `None` — next cycle starts fresh
 - Margin loan (`set_loan`) only relevant for SHORT positions — for LONG positions, loan fields remain at defaults
 
 ---

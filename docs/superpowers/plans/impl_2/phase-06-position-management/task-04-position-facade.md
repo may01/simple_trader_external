@@ -29,7 +29,7 @@ Implement `Position` — the facade that orchestrates `BasePosition`-derived cla
 **`Position(thread_num: int = 0, fee: float = 0.0)`**
 
 Attributes:
-- `posImpl: BasePosition` — current concrete implementation; starts as neutral `BasePosition`
+- `posImpl: BasePosition | None` — current concrete implementation; `None` when no position is open
 - `fee: float` — injected, used when creating LongPosition/ShortPosition
 - `thread_num: int`
 - `full_position: float = 10000.0`
@@ -54,7 +54,7 @@ Attributes:
 - Delegates to `posImpl.record_exit_fill(coin_amount, price)`
 
 `finalize() -> tuple[float, float]`
-- Delegates to `posImpl.finalize()`; resets `posImpl` to neutral `BasePosition` after
+- Delegates to `posImpl.finalize()`; sets `posImpl = None` after
 
 `get_action() -> int`
 - Returns `posImpl.get_action()`
@@ -66,7 +66,7 @@ Attributes:
 - Returns `posImpl.get_target()`
 
 `is_opened() -> bool`
-- Returns `posImpl.position_type != POSITION_TYPE_UNKNOWN`
+- Returns `self.posImpl is not None`
 
 `is_stop_loss_triggered(cur_price: float) -> bool`
 - Delegates to `posImpl.is_stop_loss_triggered(cur_price)`
@@ -90,7 +90,8 @@ Attributes:
 - `Position` does NOT own order IDs (`buy_id`, `sell_id`), margin loans (`set_loan`, `get_loan`), or JSON persistence (`save_position`, `load_position`) — those belong to `LiveOrderTracker` in Phase 10
 - `fee` passed to `Position` must come from `stock.item.fee` after `do_stock_init()` — never default to 0.0 silently in production
 - `full_position` set via `position.full_position = X` before first `open()` call — Robot sets this at init
-- After `finalize()`, `posImpl` is reset to a neutral state — next `open()` call creates a new `LongPosition`/`ShortPosition`
+- After `finalize()`, `posImpl = None` — next `open()` call creates a new `LongPosition`/`ShortPosition`
+- All delegation methods (`close`, `record_entry_fill`, etc.) are no-ops when `posImpl is None`; `get_action()` returns `STRATEGY_ACTION_NOTHING`, `get_state()` returns `POSITION_STATE_WAIT`, `get_target()` returns `0.0`
 - `from_dict()` must determine position type (Long vs Short) from the serialized data and reconstruct correctly for crash recovery
 
 ---
