@@ -1,7 +1,7 @@
 # Task 03: Trainer Orchestrator
 
 **Phase:** 09 — Training Pipeline  
-**Depends on:** Task 02 (DataPreparer), Phase 08 (SimulationOrchestrator, PerformanceAnalyzer), Phase 11 (NNModel)  
+**Depends on:** Task 02 (DataPreparer), Phase 08 (SimulationOrchestrator, PerformanceAnalyzer), Phase 11 Tasks 01-04 (NNOrchestrator)  
 **Produces:** `training/trainer.py` — thin orchestrator dispatching RUN_TYPE-based pipeline execution
 
 ---
@@ -39,7 +39,8 @@ Attributes:
   - `"prepare_data"` → `_run_prepare_data()`
   - `"simulate"` → `_run_simulate()`
   - `"train_nn"` → `_run_train_nn()`
-  - `"full"` → `_run_grab_data()` → `_run_prepare_data()` → `_run_simulate()` → `_run_train_nn()`
+  - `"simulate_nn"` → `_run_simulate_nn()`
+  - `"full"` → `_run_grab_data()` → `_run_prepare_data()` → `_run_simulate()` → `_run_train_nn()` → `_run_simulate_nn()` → `_run_prepare_data()`
   - Unknown → raise `ValueError`
 
 **`_run_grab_data() -> None`**
@@ -54,13 +55,22 @@ Attributes:
 - Instantiates `SimulationOrchestrator` with configured strategy factory
 - Calls `orch.run(simulation_data)`
 - Instantiates `PerformanceAnalyzer(results)`, calls `analyze()`
-- Writes performance metrics to metadata
+- After each worker completes: atomically writes `shared/training_state.pkl` with `phase="simulate"`, cumulative `revenue_history`, `win_rate`, `total_trades` (for TrainingDashboard)
+- Writes final performance metrics to metadata
 
 **`_run_train_nn() -> None`**
-- Loads `df_with_indicators.pkl`
-- Instantiates `NNModel`, calls `train(df, data_attributes)`
-- Saves model weights via `CheckpointManager`
-- Writes training metrics to metadata
+- Loads `(df, data_attributes)` tuple from `df_with_indicators.pkl`
+- Instantiates `NNOrchestrator(checkpoint_dir, feature_cols)` from config
+- Defines `epoch_callback(tf_str, epoch, metrics)` — atomically writes `shared/training_state.pkl` with `phase="nn_train"`, `tf`, cumulative `loss_history`, `val_loss_history` (for TrainingDashboard)
+- Calls `orchestrator.train(df, data_attributes, tfs, epoch_callback=epoch_callback)`
+- Writes final training metrics to metadata
+
+**`_run_simulate_nn() -> None`**
+- Loads `(df, data_attributes)` tuple from `df_with_indicators.pkl`
+- Instantiates `NNOrchestrator` from config
+- Calls `orchestrator.run_inference(df, data_attributes, tfs)` → NN-columns-only DataFrame
+- Saves result to `df_with_nn.pkl` atomically
+- Writes inference stats (row count, TFs covered) to metadata
 
 **`_save_metadata(path: str) -> None`**
 - Writes `self.metadata` as JSON to `path`

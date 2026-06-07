@@ -27,8 +27,8 @@ Implement `LiveData` — the live-path data orchestrator. Called every tick by R
 ## Interface
 
 **LiveData class:**
-- `__init__()` — loads `CANDLES` from config; reads `PAIR` from env
-- `build_candles(time_point: int = 0) -> None` — fetches from `stock.item.get_candles_history(CANDLES, coin, time_point)`, which returns plain-named columns (`open`, `high`, `low`, `close`, `volume`, ...; see phase-01 task-02). For each TF: rename columns to `{tf}_{col}` (`open`→`{tf}_open`, etc.) and add `{tf}_is_closed = True` for every row (candles from `get_candles_history` are always fully-closed historical candles — unlike the wide DataFrame's partial-candle rows). Then wrap `{tf: ohlc[tf]}` in a `LiveDataPoint` and call `Indicators.compute(point, tf)` (per task-03's `compute(data_point: DataPoint, tf: int)` signature — writes results back via `point.get_df(tf)`, which is the same `ohlc[tf]` DataFrame, mutated in place); stores in `self.ohlc`
+- `__init__(nn_predictor=None)` — loads `CANDLES` from config; reads `PAIR` from env; stores optional `NNPredictor` instance
+- `build_candles(time_point: int = 0) -> None` — fetches from `stock.item.get_candles_history(CANDLES, coin, time_point)`, which returns plain-named columns (`open`, `high`, `low`, `close`, `volume`, ...; see phase-01 task-02). For each TF: rename columns to `{tf}_{col}` (`open`→`{tf}_open`, etc.) and add `{tf}_is_closed = True` for every row (candles from `get_candles_history` are always fully-closed historical candles — unlike the wide DataFrame's partial-candle rows). Then wrap `{tf: ohlc[tf]}` in a `LiveDataPoint` and call `Indicators.compute(point, tf)` (per task-03's `compute(data_point: DataPoint, tf: int)` signature — writes results back via `point.get_df(tf)`, which is the same `ohlc[tf]` DataFrame, mutated in place). After all TFs: if `self.nn_predictor` is set, calls `nn_predictor.compute(point, tf)` for each TF to append `{tf}_nn_prob_*` columns; stores in `self.ohlc`
 - `get_data_point() -> LiveDataPoint` — wraps current `self.ohlc` in `LiveDataPoint`
 - `get_depth_data(quantity: int) -> tuple[pd.DataFrame, pd.DataFrame]` — calls `stock.item.depth(quantity)`
 - `ohlc: dict[int, pd.DataFrame]` — current per-TF enriched DataFrames
@@ -48,6 +48,8 @@ Implement `LiveData` — the live-path data orchestrator. Called every tick by R
 - `data.item` uses `stock.item` — `do_stock_init()` must be called before first `build_candles()` call
 - No `FullData` singleton: `FullData` instantiated per run, not at module level
 - Live path does NOT compute forward-looking `future_target` columns — those are offline only
+- `nn_predictor` is optional — if absent (no checkpoint), `nn_prob_*` columns simply absent from `LiveDataPoint`; signals using them must handle NaN
+- `NNPredictor.compute()` called AFTER all `Indicators.compute()` calls — NN features must already be populated
 
 ---
 

@@ -86,17 +86,15 @@ Top-level section alongside `fields`:
 ```yaml
 nn:
   feature_cols:
-    - "15_rsi_14"
-    - "15_cci_14"
-    - "15_close_diff_prc"
-    - "60_rsi_14"
-    - "60_cci_14"
-    - "240_rsi_14"
-  confidence_threshold: 0.6
+    - "15_nn_rsi_ma8_norm_mean"
+    - "15_nn_close_diff_atr_ma"
+    - "60_nn_rsi_ma8_norm_mean"
+    - "60_nn_close_diff_atr_ma"
+    - "240_nn_rsi_ma8_norm_mean"
   checkpoint_dir: "checkpoints/"
 ```
 
-`feature_cols` lists exact `{tf}_{field_name}` column names used as NN input. Must reference valid indicator fields defined in the `fields` section.
+`feature_cols` lists exact `{tf}_{field_name}` column names used as NN input. Must reference fields from the `nn_features` group in `indicators_config.yaml`. Confidence threshold is a signal-level concern — defined per signal, not in this config.
 
 ---
 
@@ -104,7 +102,7 @@ nn:
 
 - `load_candles_config(path: str = "configs/candles_config.yaml") -> list[int]` — returns `[1, 5, 15, 60, 240, 1440]`
 - `load_indicators_config(path: str = "configs/indicators_config.yaml") -> list[IndicatorFieldConfig]` — returns list of field descriptors sorted in dependency order
-- `load_nn_config(path: str = "configs/indicators_config.yaml") -> dict` — returns `nn` section as dict with keys `feature_cols`, `confidence_threshold`, `checkpoint_dir`
+- `load_nn_config(path: str = "configs/indicators_config.yaml") -> dict` — returns `nn` section as dict with keys `feature_cols`, `checkpoint_dir`
 - `CANDLES: list[int]` — module-level constant, loaded once at import
 
 ---

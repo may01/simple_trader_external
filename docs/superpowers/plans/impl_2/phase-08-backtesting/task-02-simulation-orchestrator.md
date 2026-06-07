@@ -27,12 +27,12 @@ Single simulation run loops through every `data_point` in `SimulationData`, call
 
 ## Interface
 
-**`SimulationOrchestrator(strategy_factory: Callable[[], StrategyManager], fee: float, num_workers: int = 4)`**
+**`SimulationOrchestrator(strategy_factory: Callable[[], StrategyManager], fee: float)`**
 
 Attributes:
 - `strategy_factory: Callable` — zero-arg factory returning configured `StrategyManager`; called once per worker
 - `fee: float`
-- `num_workers: int`
+- `num_workers: int` — read from `NUM_WORKERS` env var, default 4
 
 **`run(simulation_data: SimulationData) -> list[dict]`**
 - Splits `simulation_data` into `num_workers` segments by row index
@@ -73,7 +73,7 @@ def factory():
     sm.register(ExampleStrategyLong(fee=0.001))
     return sm
 
-orch = SimulationOrchestrator(strategy_factory=factory, fee=0.001, num_workers=1)
+orch = SimulationOrchestrator(strategy_factory=factory, fee=0.001)
 print('orchestrator ok')
 "
 ```

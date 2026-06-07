@@ -30,7 +30,7 @@ NN predicts future price direction (up/down/neutral) for a given TF and horizon.
 **`NNModel(input_size: int, hidden_size: int = 128, num_classes: int = 3)`**
 
 Attributes:
-- `model` — underlying neural network (framework: PyTorch or Keras — framework determined by existing project dependencies)
+- `model` — underlying `torch.nn.Module` instance
 - `input_size: int`
 - `hidden_size: int`
 - `num_classes: int` — typically 3: up / neutral / down
@@ -38,11 +38,14 @@ Attributes:
 
 **`build() -> None`**
 - Constructs network layers: `input → hidden → relu → hidden → softmax`
-- Call once before `train()` or `load_model()`
+- Safe to call multiple times — no-op if already built
+- Called automatically by `train()` if not yet built; explicit call optional (useful for logging layer shapes before training)
 
-**`train(X: np.ndarray, y: np.ndarray, epochs: int = 100, lr: float = 0.001) -> dict`**
+**`train(X: np.ndarray, y: np.ndarray, epochs: int = 100, lr: float = 0.001, epoch_callback: Callable[[int, dict], None] = None) -> dict`**
+- Calls `build()` if not already built
 - Trains model on normalized feature matrix `X` and labels `y`
-- Returns training metrics dict: `{loss, accuracy, val_loss, val_accuracy}`
+- After each epoch: if `epoch_callback` is set, calls `epoch_callback(epoch_num, {loss, accuracy, val_loss, val_accuracy})`
+- Returns final training metrics dict: `{loss, accuracy, val_loss, val_accuracy}`
 - Sets `is_trained = True` on completion
 
 **`run(features: np.ndarray) -> np.ndarray`**
@@ -66,8 +69,9 @@ Attributes:
 - Input features must be normalized (mean=0, std=1) using `DataAttributes` before passing to `run()`
 - `run()` raises `RuntimeError` if `is_trained == False`
 - Training uses 80/20 train/validation split internally — caller does not split
-- Model weights saved in framework-native format (`.pt` for PyTorch, `.h5` for Keras)
+- Framework: PyTorch — `torch.nn.Sequential` MLP, weights saved as `.pt` via `torch.save` / `torch.load`
 - `num_classes=3` is the default; binary classification (`num_classes=2`) also supported
+- Dependencies: `torch`, `numpy` — no Keras/TensorFlow
 
 ---
 

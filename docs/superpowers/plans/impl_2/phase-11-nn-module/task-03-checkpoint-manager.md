@@ -14,7 +14,7 @@ Implement `CheckpointManager` — saves and loads `NNModel` weights with version
 
 ## Context
 
-Training runs produce multiple model versions. `CheckpointManager` tracks best model by validation accuracy, saves intermediate checkpoints, and provides `load_best()` for inference loading. Used by `Trainer._run_train_nn()` and by `NNPredictor.load()`.
+Training runs produce multiple model versions. `CheckpointManager` tracks best model by validation accuracy, saves intermediate checkpoints, and provides `load_best()` for inference loading. Used by `Trainer._run_train_nn()` (via `NNOrchestrator`) and by `NNPredictor.load()` (live path startup).
 
 ---
 
