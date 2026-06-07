@@ -33,8 +33,7 @@ These strategies exist solely to confirm the plumbing works: that signal chains 
 - Add both chains to `self.signals`
 
 **`check_conditions(data_point, position_state, action_msg) -> bool`:**
-- Returns False when `position_state` is `POSITION_STATE_WAIT_SAFETY_BUY` or `POSITION_STATE_WAIT_BUY` — already entering, skip
-- Returns True otherwise
+- Always returns True — position rejects incompatible actions
 
 **`get_open_price()`, `get_close_price()`, `get_stop_loss_price()`:**
 - All delegate to base class defaults
@@ -48,8 +47,7 @@ These strategies exist solely to confirm the plumbing works: that signal chains 
 - `SignalChain("short_exit", STRATEGY_ACTION_CLOSE_SHORT, tf=15)` with `Cross_Up_Val_Signal(15, "cci_14", -100)` — CLOSE_SHORT when CCI crosses above -100
 
 **`check_conditions(data_point, position_state, action_msg) -> bool`:**
-- Returns False when `position_state` is `POSITION_STATE_WAIT_SAFETY_SELL` or `POSITION_STATE_WAIT_SELL`
-- Returns True otherwise
+- Always returns True — position rejects incompatible actions
 
 **Price methods:** Delegate to base class defaults.
 
@@ -60,7 +58,7 @@ These strategies exist solely to confirm the plumbing works: that signal chains 
 - These are NOT production strategies — do not optimize signal thresholds
 - Both strategies operate on `tf=15` — 15-minute candle signals
 - Signal chains are single-step (one signal per chain) — intentionally minimal for pipeline validation
-- `check_conditions()` gates prevent duplicate open orders while position is already entering
+- `check_conditions()` always returns True — incompatible action rejection is the position's responsibility
 - Base class default prices are sufficient — no override needed
 
 ---

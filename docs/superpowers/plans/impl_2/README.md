@@ -102,3 +102,22 @@ Frontend (Phase 12)                ← Dash dashboards
 - Active TFs: `[1, 5, 15, 60, 240, 1440]` from `candles_config.yaml` — not hardcoded
 - Indicator registry from `indicators_config.yaml` — no field names hardcoded in `Indicators`
 - `do_stock_init()` must be called once at process startup before any `stock.item` access
+
+---
+
+## Unresolved — Resolve After First Implementation
+
+These decisions are deferred until the core pipeline is working end-to-end.
+
+### NN target labeling (`{tf}_target_direction`)
+
+**Problem:** `NNOrchestrator.train()` needs a supervised label per closed candle — what direction did price move over the next N candles? The label column name, class encoding, labeling logic (threshold, horizon), and which component computes it are all undecided.
+
+**Affects:** `DataPreparer._compute_nn_targets()` (removed from first impl), `NNOrchestrator.train()` (marked UNRESOLVED), `indicators_config.yaml` `nn` section (horizon/threshold params not yet added).
+
+**Questions to resolve:**
+1. Class encoding: `{0=up, 1=neutral, 2=down}` or different?
+2. Horizon: fixed N candles, or derived from existing `tgt_long`/`tgt_short` target fields?
+3. Threshold: absolute price delta %, or ATR-relative?
+4. Column name: `{tf}_target_direction` or other?
+5. Who computes: `DataPreparer` (at prep time) or `NNOrchestrator` (at train time from raw price)?

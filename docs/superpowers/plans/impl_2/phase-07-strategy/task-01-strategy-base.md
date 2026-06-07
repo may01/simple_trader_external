@@ -32,24 +32,22 @@ Each strategy registers its own `SignalManager` with signal chains tuned for its
 Attributes:
 - `signals: SignalManager` — holds all signal chains for this strategy; initialized in `register_signals()`
 - `fee: float` — injected; used for price buffer calculations
-- `state: int = STRATEGY_STATE_WAIT` — internal strategy state
 
 **Abstract methods (must override):**
 - `register_signals() -> None` — build and register signal chains into `self.signals`
 - `check_conditions(data_point, position_state: int, action_msg) -> bool` — returns True if strategy should run this tick; gates on position state or market conditions
-- `process_actions(actions_list: list, position_state: int) -> list` — reserved for future action post-processing; default returns `actions_list` unchanged
 
 **Template method (final — do not override):**
-- `check(data_point, position_state: int, position_target: float, action_msg) -> tuple[int, float, float, float, int]` — calls: `get_level_values()` → `signals.check()` → `select_final_action()` → `get_open/close/stop_loss_price()` → returns `(action, open_price, close_price, stop_price, tf)`
+- `check(data_point, position_state: int, cur_time: float, action_msg) -> tuple[int, float, float, float, int]` — calls: `get_level_values()` → `signals.check(data_point, levels, cur_time, action_msg)` → `select_final_action()` → `get_open/close/stop_loss_price()` → returns `(action, open_price, close_price, stop_price, tf)`
 
 **Overridable price methods (with defaults):**
 - `get_open_price(data_point, tf: int) -> float` — default: current 1-min close `data_point.get("close", 1, 0)`
 - `get_close_price(data_point, tf: int, action: int) -> float` — default: `open_price * (1 + 0.008)` for long, `open_price * (1 - 0.008)` for short (+0.8% target)
-- `get_stop_loss_price(data_point, tf: int, action: int) -> float` — default: SAR ± 0.3×ATR
+- `get_stop_loss_price(data_point, tf: int, action: int) -> float` — default: `data_point.get("sar", tf, 0) - 0.3 * data_point.get("atr_14", tf, 0)` for long; `data_point.get("sar", tf, 0) + 0.3 * data_point.get("atr_14", tf, 0)` for short
 
 **Internal helpers:**
-- `get_level_values(data_point) -> dict` — builds levels dict: EMAs (EMA_50, EMA_100), BBU/BBM per timeframe, plus hand-drawn levels; passed to `signals.check()`
-- `select_final_action(actions_list: list, position_state: int) -> tuple[int, int, int, int]` — picks single action from list; returns `(final_action, open_tf, close_tf, stop_tf)`
+- `get_level_values(data_point) -> dict` — builds levels dict from hand-drawn and auto-detected support/resistance level objects (phase-03 task-08 format); passed to `signals.check()`; signals needing EMA/BB values read them directly from `data_point`
+- `select_final_action(actions_list: list, position_state: int) -> tuple[int, int]` — picks single action from list; returns `(final_action, tf)` where `tf` is the timeframe of the winning action
 
 ---
 
@@ -70,8 +68,8 @@ Priority rules:
 | open_price | current 1-min `close` |
 | close_price (long) | `open_price * 1.008` (+0.8%) |
 | close_price (short) | `open_price * 0.992` (-0.8%) |
-| stop_loss (long) | `sar - 0.3 * atr_14` |
-| stop_loss (short) | `sar + 0.3 * atr_14` |
+| stop_loss (long) | `data_point.get("sar", tf, 0) - 0.3 * data_point.get("atr_14", tf, 0)` |
+| stop_loss (short) | `data_point.get("sar", tf, 0) + 0.3 * data_point.get("atr_14", tf, 0)` |
 
 ---
 
@@ -80,7 +78,7 @@ Priority rules:
 - `fee` injected — NO default value in constructor
 - `register_signals()` called in `__init__()` after `self.signals = SignalManager()`
 - `get_level_values()` called fresh every tick — levels not cached between ticks
-- Current implementation: `get_level_values()` only populates `SHORT_1_RESISTANCE` and `SHORT_2_RESISTANCE` type levels (long support/resistance entries commented out)
+- Current implementation: `get_level_values()` only populates `LEVEL_TYPE_AUTO_RESISTANCE` and `LEVEL_TYPE_SHORT_RESISTANCE` levels (long support/resistance entries commented out)
 - Trend filtering is a SIGNAL concern: use `BoolValue_Signal("trend_up", tf)` in chains — no `trend_tf` attribute on Strategy
 - `check_conditions()` returning False skips signal evaluation for this tick (strategy-level gate)
 

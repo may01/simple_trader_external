@@ -14,7 +14,7 @@ Implement `StrategyManager` — aggregates per-tick actions from all registered 
 
 ## Context
 
-Robot calls `strategy_manager.check(data_point, position_state, position_target, action_msg)` once per tick. Each registered strategy's `check()` fires; results are collected and conflict-resolved. Priority order: `DO_STOP_LOSS > CLOSE > MOVE_STOP_LOSS > OPEN`. Multiple competing OPEN signals from different strategies → NOTHING. NN predictor output optionally filters OPEN actions.
+Robot calls `strategy_manager.check(data_point, position_state, action_msg)` once per tick. Each registered strategy's `check()` fires; results are collected and conflict-resolved. Priority order: `DO_STOP_LOSS > CLOSE > MOVE_STOP_LOSS > OPEN`. Multiple competing OPEN signals from different strategies → NOTHING. NN outputs are precomputed as indicator columns in the data layer — signal chains access them via `data_point.get()` like any other indicator.
 
 ---
 
@@ -26,18 +26,17 @@ Robot calls `strategy_manager.check(data_point, position_state, position_target,
 
 ## Interface
 
-**`StrategyManager(fee: float, robot_actions_test: bool = False)`**
+**`StrategyManager(fee: float)`**
 
 Attributes:
 - `strategies: list[Strategy]` — registered strategy instances
 - `fee: float`
-- `robot_actions_test: bool` — when True, skip NN filter (used in simulation/testing)
 
 **`register(strategy: Strategy) -> None`**
 - Appends strategy to `self.strategies`
 
-**`check(data_point, position_state: int, position_target: float, action_msg) -> tuple[int, float, float, float, int]`**
-- Calls `strategy.check(data_point, position_state, position_target, action_msg)` for each registered strategy
+**`check(data_point, position_state: int, cur_time: float, action_msg) -> tuple[int, float, float, float, int]`**
+- Calls `strategy.check(data_point, position_state, cur_time, action_msg)` for each registered strategy
 - Collects all returned `(action, open_price, close_price, stop_price, tf)` tuples where `action != STRATEGY_ACTION_NOTHING`
 - Applies conflict resolution (see below)
 - Returns resolved tuple or `(STRATEGY_ACTION_NOTHING, 0, 0, 0, 0)` if no action
@@ -56,6 +55,7 @@ Attributes:
 |----------|-----------|
 | Any DO_STOP_LOSS present | Return DO_STOP_LOSS immediately |
 | CLOSE + OPEN both present | Return CLOSE (close takes priority) |
+| CLOSE + MOVE_STOP_LOSS both present | Return CLOSE (close takes priority) |
 | Multiple CLOSE signals | Return first CLOSE |
 | Multiple OPEN signals (different strategies) | Return NOTHING |
 | Single OPEN signal | Return it |
@@ -67,10 +67,9 @@ Attributes:
 ## Key Constraints
 
 - Strategies evaluated in registration order — order matters for tie-breaking
-- `robot_actions_test=True` disables NN predictor filter entirely; used by `TrainRobot`
-- NN integration: if predictor available and `robot_actions_test=False`, OPEN actions filtered by predictor confidence threshold before returning
 - `check()` must NOT store state between ticks — stateless aggregation only
 - If `strategies` is empty, returns NOTHING immediately
+- NN outputs available as indicator columns in `data_point` — signal chains use `BoolValue_Signal` or threshold signals on `nn_*` fields directly
 
 ---
 
@@ -82,7 +81,7 @@ from strategies.strategy_manager import StrategyManager
 from strategies.example_strategy_long import ExampleStrategyLong
 from constants import POSITION_STATE_WAIT
 
-sm = StrategyManager(fee=0.001, robot_actions_test=True)
+sm = StrategyManager(fee=0.001)
 sm.register(ExampleStrategyLong(fee=0.001))
 print('strategy_manager ok, strategies:', len(sm.strategies))
 "
