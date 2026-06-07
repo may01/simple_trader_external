@@ -14,13 +14,14 @@ Implement `TrainingDashboard` — renders training pipeline progress: loss curve
 
 ## Context
 
-Called by `Trainer._run_train_nn()` and `Trainer._run_simulate()` to provide visual feedback during long training runs. Uses matplotlib's interactive mode for incremental updates — not a web dashboard. Separate process or subprocess may render while training runs in main process.
+Runs as a **separate process** alongside `Trainer`. `Trainer._run_train_nn()` writes epoch metrics to `shared/training_state.pkl` after each epoch; `Trainer._run_simulate()` writes simulation results after each worker completes. `TrainingDashboard` polls the shared file via `dcc.Interval` and re-renders charts as data arrives.
 
 ---
 
 ## Files
 
 - Create: `frontend/training_dashboard.py`
+- Create: `view_training.py` — entry point: instantiates `TrainingDashboard`, calls `run()`
 
 ---
 
@@ -28,47 +29,49 @@ Called by `Trainer._run_train_nn()` and `Trainer._run_simulate()` to provide vis
 
 **`TrainingDashboard()`**
 
-Attributes:
-- `renderer: ChartRenderer`
-- `loss_history: list[float]`
-- `val_loss_history: list[float]`
-- `trade_pnl_history: list[float]`
-- `win_rate_history: list[float]`
+**`run(state_path: str = "shared/training_state.pkl") -> None`**
+- Starts Dash app with `dcc.Interval` polling `state_path` every 2000ms
+- Blocking — call from dedicated process
 
-**`view_online_point(metrics: dict) -> None`**
-- Appends `metrics['loss']`, `metrics['val_loss']` to histories
-- Re-renders loss subplot with updated histories
-- Calls `plt.pause(0.01)` for interactive update
+**`_update_charts(state: dict) -> list[go.Figure]`**
+- `state` keys: `phase: "nn_train"|"simulate"`, `loss_history: list[float]`, `val_loss_history: list[float]`, `revenue_history: list[tuple]`, `win_rate: float|None`, `total_trades: int`
+- Returns updated Plotly figures
 
-**`view_simulation_result(result: dict) -> None`**
-- Renders `PerformanceAnalyzer` output:
-  - P&L distribution histogram
-  - Cumulative revenue curve
-  - Win rate trend
-
-**`show_final(performance: dict) -> None`**
-- Renders final training summary: all metrics at once, no live updates
-- Calls `renderer.show()` (blocking)
+**State dict schema** (written by Trainer):
+```python
+# During _run_train_nn() — appended after each epoch:
+{
+    "phase": "nn_train",
+    "loss_history": [...],
+    "val_loss_history": [...]
+}
+# During _run_simulate() — updated after each worker:
+{
+    "phase": "simulate",
+    "revenue_history": [(pct, abs), ...],
+    "win_rate": float,
+    "total_trades": int
+}
+```
 
 ---
 
 ## Key Constraints
 
-- `plt.ion()` called at construction for interactive mode
-- `view_online_point()` non-blocking — never hangs training loop
-- Histograms use `matplotlib.pyplot.hist()` — no seaborn dependency
-- `TrainingDashboard` created in main process — not spawned as subprocess
-- Thread safety: `view_online_point()` must be called from main thread only (matplotlib GUI constraint)
+- `TrainingDashboard` runs in **separate process** from Trainer — Trainer never imports `frontend.*`
+- Trainer writes `shared/training_state.pkl` atomically (write to `.tmp` then rename) after each epoch/worker
+- Dash app polls file via `dcc.Interval(interval=2000)` — 2s refresh (training slower than live trading)
+- Missing or unreadable state file → show empty charts, no crash
+- Histograms use `plotly.graph_objects.Histogram` — no matplotlib/seaborn dependency
 
 ---
 
 ## Verification
 
 ```bash
-docker compose run --rm viewer python3 -c "
+docker compose -f docker-compose-view.yml run --rm viewer python3 -c "
 from frontend.training_dashboard import TrainingDashboard
 td = TrainingDashboard()
-td.view_online_point({'loss': 0.5, 'val_loss': 0.6})
 print('training_dashboard ok')
 "
 ```

@@ -14,7 +14,7 @@ Implement `ChartRenderer` — base class providing shared chart layout, OHLCV ca
 
 ## Context
 
-All visualization classes (`DataViewer`, `TrainingDashboard`, `LiveDashboard`) inherit from `ChartRenderer` or compose it. Uses matplotlib (or plotly if project standard) for rendering. `ChartRenderer` draws OHLCV and indicator subplots; subclasses add domain-specific overlays (levels, signals, trades).
+All visualization classes (`DataViewer`, `TrainingDashboard`, `LiveDashboard`) compose `ChartRenderer` to build Plotly figures. `ChartRenderer` is a pure figure factory — it builds and returns `go.Figure` objects. It has no Dash app; dashboards own the app and pass figures to `dcc.Graph`. `DataViewer` calls `fig.show()` directly (opens browser).
 
 ---
 
@@ -27,56 +27,52 @@ All visualization classes (`DataViewer`, `TrainingDashboard`, `LiveDashboard`) i
 
 ## Interface
 
-**`ChartRenderer(title: str = "", figsize: tuple = (20, 12))`**
+**`ChartRenderer(title: str = "")`**
 
 Attributes:
-- `fig` — matplotlib Figure
-- `axes: dict[str, Axes]` — named subplot axes: `"price"`, `"volume"`, `"rsi"`, etc.
 - `title: str`
 
-**`setup_layout(subplots: list[str]) -> None`**
-- Creates Figure with named subplots stacked vertically
-- Price subplot takes majority of vertical space
+**`create_figure(subplots: list[str]) -> go.Figure`**
+- Calls `make_subplots(rows=len(subplots), ...)` — `"price"` row gets 60% of vertical space, others share remainder
+- Returns configured `go.Figure`; caller stores it
+- `subplots` order maps to row numbers: `subplot_rows: dict[str, int]` stored on the returned figure via `fig._subplot_rows` attribute
 
-**`draw_candles(times: list, opens: list, highs: list, lows: list, closes: list) -> None`**
-- Renders OHLCV candlestick chart on `axes["price"]`
-- Green candles for up, red for down
+**`draw_candles(fig: go.Figure, times: list, opens: list, highs: list, lows: list, closes: list) -> None`**
+- Adds `go.Candlestick` trace to row `fig._subplot_rows["price"]`
+- Green/red candle colors via `increasing_line_color` / `decreasing_line_color`
 
-**`draw_line(ax_name: str, times: list, values: list, label: str, color: str = "blue", linewidth: float = 1.0) -> None`**
-- Draws line series on named subplot axis
+**`draw_line(fig: go.Figure, subplot: str, times: list, values: list, label: str, color: str = "blue") -> None`**
+- Adds `go.Scatter(mode="lines")` to row `fig._subplot_rows[subplot]`
 
-**`draw_marker(time, price: float, marker: str, color: str, label: str = "") -> None`**
-- Places marker on price axis (used for signal/trade entry/exit markers)
+**`draw_marker(fig: go.Figure, times: list, prices: list, marker_symbol: str, color: str, label: str = "") -> None`**
+- Adds `go.Scatter(mode="markers")` to price row
 
-**`draw_level(price: float, label: str, color: str = "gray", linestyle: str = "--") -> None`**
-- Draws horizontal level line across price axis
+**`draw_level(fig: go.Figure, price: float, label: str, color: str = "gray") -> None`**
+- Calls `fig.add_hline(y=price, ...)` on price row
 
-**`show() -> None`**
-- Calls `plt.tight_layout()`, `plt.show()`
-
-**`save(path: str) -> None`**
-- Saves figure to `path` as PNG
+**`save(fig: go.Figure, path: str) -> None`**
+- Calls `fig.write_image(path)` — saves as PNG (requires `kaleido`)
 
 ---
 
 ## Key Constraints
 
-- `axes` dict keyed by string name — subclasses use `self.axes["price"]` not index
-- All draw methods are additive — call in any order, render on `show()`/`save()`
-- Thread safety: `ChartRenderer` not thread-safe; create one instance per render thread
-- `draw_candles()` does not clear existing canvas — call `setup_layout()` first on each new render
-- Matplotlib is primary rendering library; do not mix with plotly in same class
+- All draw methods are additive and stateless — pass `fig` in, add traces, return nothing
+- `fig._subplot_rows` is a plain `dict[str, int]` set by `create_figure()` — callers must not mutate it
+- `create_figure()` called once per render cycle; pass resulting `fig` to all draw methods
+- `save()` requires `kaleido` package — add to viewer image requirements
+- No matplotlib imports anywhere in `frontend/` — Plotly only
 
 ---
 
 ## Verification
 
 ```bash
-docker compose run --rm viewer python3 -c "
+docker compose -f docker-compose-view.yml run --rm viewer python3 -c "
 from frontend.chart_renderer import ChartRenderer
 cr = ChartRenderer(title='Test')
-cr.setup_layout(['price', 'volume'])
-print('chart_renderer ok, axes:', list(cr.axes.keys()))
+fig = cr.create_figure(['price', 'volume'])
+print('chart_renderer ok, subplot rows:', fig._subplot_rows)
 "
 ```
 

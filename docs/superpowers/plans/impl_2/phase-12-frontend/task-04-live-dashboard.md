@@ -1,26 +1,27 @@
 # Task 04: LiveDashboard
 
 **Phase:** 12 — Frontend  
-**Depends on:** Task 01 (ChartRenderer), Phase 03 Task 05 (LiveData), Phase 06 (Position facade)  
+**Depends on:** Task 01 (ChartRenderer)  
 **Produces:** `frontend/live_dashboard.py` — real-time live trading visualization
 
 ---
 
 ## Goal
 
-Implement `LiveDashboard` — renders live trading state: streaming price candles, current position, stop-loss level, signal markers, and running P&L. `view_onlineB()` called per tick from Robot.
+Implement `LiveDashboard` — renders live trading state: streaming price candles, current position, stop-loss level, trade markers, and running P&L. Reads shared pickle written by Robot; runs as a separate Dash process.
 
 ---
 
 ## Context
 
-Execution path F (viewer). Robot calls `view_onlineB(data_point, position)` on each tick to keep dashboard current. Dashboard maintains rolling window of N candles. Displays entry/exit markers when trades execute. Runs in separate process from Robot to avoid blocking polling loop.
+Execution path F (viewer). Robot writes a state snapshot dict to a shared pickle file (`shared/live_state.pkl`) on each tick. `LiveDashboard` runs in a **separate process** from Robot — it polls the shared file via `dcc.Interval` to update charts. Dashboard maintains rolling window of N candles. Displays entry/exit markers when trades execute.
 
 ---
 
 ## Files
 
 - Create: `frontend/live_dashboard.py`
+- Create: `view_online_point.py` — entry point: instantiates `LiveDashboard`, calls `run()`
 
 ---
 
@@ -35,42 +36,45 @@ Attributes:
 - `candle_buffer: deque` — rolling buffer of OHLCV dicts
 - `trade_markers: list[dict]` — entry/exit events to draw
 
-**`view_onlineB(data_point, position: Position) -> None`**
-- Extracts OHLCV from `data_point.get(col, tf, 0)` for price/open/high/low/close/volume
-- Appends to `candle_buffer` (pops oldest if over `window_size`)
-- Re-renders: candles + indicators + current stop-loss level + position state overlay
-- Calls `plt.pause(0.01)` for non-blocking update
+**`run(state_path: str = "shared/live_state.pkl") -> None`**
+- Starts Dash app with `dcc.Interval` polling `state_path` every 1000ms
+- On each interval: reads pickle, calls `_update_charts(state)`
+- Blocking — call from dedicated process
 
-**`add_trade_marker(event_type: str, time, price: float) -> None`**
-- `event_type`: `"buy"`, `"sell"`, `"stop_loss"`
-- Appends to `trade_markers`; drawn on next `view_onlineB()` call
+**`_update_charts(state: dict) -> list[go.Figure]`**
+- `state` keys: `candles: list[dict]` (OHLCV dicts), `position: dict`, `trade_markers: list[dict]`, `revenue_history: list[tuple]`
+- Returns updated Plotly figures for all chart components
 
-**`clear_markers() -> None`**
-- Clears `trade_markers` list
-
-**`show_pnl_summary(revenue_history: list[tuple]) -> None`**
-- Renders running P&L subplot using `revenue_history` from Robot
+**State dict schema** (written by Robot):
+```python
+{
+    "candles": [{"time": ..., "open": ..., "high": ..., "low": ..., "close": ..., "volume": ...}, ...],
+    "position": {"is_open": bool, "direction": str, "stop_loss": float | None},
+    "trade_markers": [{"type": "buy"|"sell"|"stop_loss", "time": ..., "price": float}],
+    "revenue_history": [(revenue_pct, revenue_abs), ...]
+}
+```
 
 ---
 
 ## Key Constraints
 
-- `candle_buffer` is `collections.deque(maxlen=window_size)` — O(1) append/pop
-- `view_onlineB()` must complete in < 100ms — no heavy computation inside
-- Stop-loss level drawn as horizontal line from `position.posImpl.price_stop_loss` — only when position open
-- `plt.ion()` called at construction
-- `LiveDashboard` runs in same process as Robot — non-blocking updates mandatory
-- Position state overlay: color-coded background (green=long open, red=short open, gray=flat)
+- `LiveDashboard` runs in **separate process** from Robot — Robot never imports `frontend.*`
+- Robot writes `shared/live_state.pkl` atomically (write to `.tmp` then rename) each tick
+- Dash app polls file via `dcc.Interval(interval=1000)` — 1s refresh
+- Stop-loss drawn from `state["position"]["stop_loss"]` — only when `is_open=True`
+- Position overlay: background shape color (green=long, red=short, gray=flat) via Plotly `fig.add_vrect()`
+- Candle window capped at `window_size` — LiveDashboard trims `state["candles"]` list on read
 
 ---
 
 ## Verification
 
 ```bash
-docker compose run --rm viewer python3 -c "
+docker compose -f docker-compose-view.yml run --rm viewer python3 -c "
 from frontend.live_dashboard import LiveDashboard
 ld = LiveDashboard(window_size=100, tf=15)
-print('live_dashboard ok, buffer maxlen:', ld.candle_buffer.maxlen)
+print('live_dashboard ok')
 "
 ```
 

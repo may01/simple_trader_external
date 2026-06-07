@@ -35,16 +35,16 @@ Attributes:
 
 **`view_full(start_idx: int = 0, end_idx: int = None, indicators: list[str] = None) -> None`**
 - Builds subset of `full_data` from `start_idx` to `end_idx`
-- Calls `renderer.setup_layout(["price", "volume"] + indicator_subplots)`
-- Draws candles from `{tf}_open/high/low/close` columns
-- Draws each indicator in `indicators` list as line on appropriate subplot
-- Calls `renderer.show()`
+- Calls `renderer.create_figure(["price", "volume"] + indicator_subplots)` → `fig`
+- Draws candles from `{tf}_open/high/low/close` columns via `renderer.draw_candles(fig, ...)`
+- Draws each indicator via `renderer.draw_line(fig, ...)`
+- Calls `fig.show()` (opens browser)
 
 **`view_full_levels(start_idx: int = 0, end_idx: int = None, levels: Levels = None) -> None`**
-- Same as `view_full()` plus: calls `renderer.draw_level()` for each level in `levels.get_all()`
+- Same as `view_full()` plus: for each `LEVEL_TYPE_*` constant, calls `levels.get_active_levels(level_type, cur_time)` where `cur_time` is the Unix timestamp of the last row in the slice; calls `renderer.draw_level(fig, ...)` for each returned level
 
 **`save_chart(path: str, start_idx: int = 0, end_idx: int = None) -> None`**
-- Renders and saves to `path` without `show()`
+- Builds fig same as `view_full()`, calls `renderer.save(fig, path)` without `fig.show()`
 
 ---
 
@@ -61,7 +61,7 @@ Attributes:
 ## Verification
 
 ```bash
-docker compose run --rm viewer python3 -c "
+docker compose -f docker-compose-view.yml run --rm viewer python3 -c "
 from frontend.data_viewer import DataViewer
 print('data_viewer importable')
 "
