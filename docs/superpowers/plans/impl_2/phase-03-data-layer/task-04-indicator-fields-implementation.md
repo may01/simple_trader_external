@@ -81,7 +81,9 @@ Each field is a self-contained class reading prior columns from `data_point.get_
 ## Key Constraints
 
 - All fields read ONLY `{tf}_*` prefixed columns from `data_point.get_df(tf)` — never raw column names like `"close"`
-- `classification` and `targets` fields require `stats/rsi_classification.json` and `stats/diff_stats.pkl` to be present — loaded via `DataAttributes` (Task 07)
+- `classification` and `targets` fields require `stats/rsi_classification.json` and `stats/diff_stats.pkl` to exist — loaded via `DataAttributes` (Task 07); these stats are produced by `DataPreparer._compute_base_attributes()` before the class-indicator pass runs (see Phase 09 Task 02 two-pass pipeline)
+- Groups `["momentum","trend","volatility","oscillators","volume","price_derivatives","trend_flags","nn_features"]` are **base indicators** — no stats dependency, computed in pass 1
+- Groups `["classification","targets"]` are **class indicators** — require base attributes, computed in pass 2
 - TA-Lib functions require float64 arrays — cast explicitly before calling
 - `SARField` — TA-Lib SAR has issues with very short series; handle `len(df) < 2` edge case
 - Forward-looking target fields (`tgt_long`, `tgt_short`) — ONLY valid for offline wide DataFrame generation. These read `df.loc[ts + N]` → must NEVER be computed in the live path

@@ -44,10 +44,11 @@ Attributes:
   - Unknown → raise `ValueError`
 
 **`_run_grab_data() -> None`**
-- Instantiates `Graber`, calls `ensure_data()` for configured symbol and date range
+- Instantiates `Graber`, calls `ensure_data(symbol, start_ms, end_ms)` where `symbol` is built from `PAIR` env var and `start_ms`/`end_ms` read from `DATA_START`/`DATA_END` env vars (already ms)
 
 **`_run_prepare_data() -> None`**
-- Instantiates `DataPreparer`, calls `prepare(raw_data_path)`
+- Instantiates `DataPreparer(config_path, wide_df_path(), data_attributes_path(), nn_output_path=nn_output_path)`
+- Calls `prepare(graber_data_path())`
 - Writes preparation stats to metadata
 
 **`_run_simulate() -> None`**
@@ -55,18 +56,20 @@ Attributes:
 - Instantiates `SimulationOrchestrator` with configured strategy factory
 - Calls `orch.run(simulation_data)`
 - Instantiates `PerformanceAnalyzer(results)`, calls `analyze()`
-- After each worker completes: atomically writes `shared/training_state.pkl` with `phase="simulate"`, cumulative `revenue_history`, `win_rate`, `total_trades` (for TrainingDashboard)
+- After all workers complete: atomically writes `shared_folder()/training_state.pkl` with `phase="simulate"`, `revenue_history`, `win_rate`, `total_trades` (for TrainingDashboard)
 - Writes final performance metrics to metadata
 
 **`_run_train_nn() -> None`**
-- Loads `(df, data_attributes)` tuple from `df_with_indicators.pkl`
+- Loads `df` from `df_with_indicators.pkl` (plain DataFrame via `wide_df_path()`)
+- Loads `data_attributes` via `DataAttributes.load(data_attributes_path())`
 - Instantiates `NNOrchestrator(checkpoint_dir, feature_cols)` from config
-- Defines `epoch_callback(tf_str, epoch, metrics)` — atomically writes `shared/training_state.pkl` with `phase="nn_train"`, `tf`, cumulative `loss_history`, `val_loss_history` (for TrainingDashboard)
+- Defines `epoch_callback(tf_str, epoch, metrics)` — atomically writes `shared_folder()/training_state.pkl` with `phase="nn_train"`, `tf`, cumulative `loss_history`, `val_loss_history` (for TrainingDashboard)
 - Calls `orchestrator.train(df, data_attributes, tfs, epoch_callback=epoch_callback)`
 - Writes final training metrics to metadata
 
 **`_run_simulate_nn() -> None`**
-- Loads `(df, data_attributes)` tuple from `df_with_indicators.pkl`
+- Loads `df` from `df_with_indicators.pkl` (plain DataFrame via `wide_df_path()`)
+- Loads `data_attributes` via `DataAttributes.load(data_attributes_path())`
 - Instantiates `NNOrchestrator` from config
 - Calls `orchestrator.run_inference(df, data_attributes, tfs)` → NN-columns-only DataFrame
 - Saves result to `df_with_nn.pkl` atomically

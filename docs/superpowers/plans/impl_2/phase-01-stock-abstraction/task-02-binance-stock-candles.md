@@ -29,8 +29,9 @@ Implement `Stock_Binance.__init__()` and `get_candles_history()`. This is the ca
 **Constructor:**
 - `__init__()` — reads `BINANCE_API_KEY`, `BINANCE_API_SECRET`, `PAIR`, `EXCHANGE_FEE` from env (exception if any absent); splits `PAIR` on `"_"` into `coin`/`coin_base` (e.g., `"link_usdt"` → `coin="link"`, `coin_base="usdt"`); calls `super().__init__(key, secret, coin, coin_base)`; initializes `BinanceClient`; sets `self.fee`; sets `was_init = True`
 
-**Key method:**
+**Key methods:**
 - `get_candles_history(time_list: list[int], coin: str, time_point: int = 0) -> dict[int, pd.DataFrame]`
+- `get_candles_range(symbol: str, start_ms: int, end_ms: int) -> pd.DataFrame` — fetches 1-min klines from `start_ms` to `end_ms` (Unix ms) in 30-day chunks via `BinanceClient.get_historical_klines()`; returns DataFrame with columns `open_time, o, h, l, c, v, close_time, taker_base_vol`; same chunking and atomic-merge logic as `grab_binance.py`; `symbol` is Binance format (e.g. `"LINKUSDT"`)
 
 **Internal helpers:**
 - `_fetch_klines(interval: str, lookback: str) -> pd.DataFrame` — single Binance API call + DataFrame construction

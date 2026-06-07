@@ -28,40 +28,48 @@ Order management is the most complex Robot concern: place order → track ID →
 
 **`_open_position(data_point, strategy_action: int, open_prices: list, close_prices: list, stop_price: float, tf: int) -> None`**
 - Calls `position.open(...)` — if returns False (already open), skip
-- Places entry order via `stock.trade(action, symbol, amount, price)`
+- Maps `strategy_action` to `trade_type`: `STRATEGY_ACTION_OPEN_LONG` → `TRADE_BUY`; `STRATEGY_ACTION_OPEN_SHORT` → `TRADE_SELL`
+- Places entry order via `_place_valid_order(trade_type, price, amount)`
 - Calls `tracker.set_buy_order(order_id)` (long) or `tracker.set_sell_order(order_id)` (short)
 
 **`_close_position(data_point, strategy_action: int, close_prices: list, stop_price: float, tf: int) -> None`**
 - Calls `position.close(...)`
 - Cancels existing open order if present (`tracker.cancel_buy()` or `tracker.cancel_sell()`)
-- Places exit order via `stock.trade()`
+- Maps `strategy_action` to `trade_type`: `STRATEGY_ACTION_CLOSE_LONG` → `TRADE_SELL`; `STRATEGY_ACTION_CLOSE_SHORT` → `TRADE_BUY`
+- Places exit order via `_place_valid_order(trade_type, price, amount)`
 - Calls `tracker.set_sell_order()` (long exit) or `tracker.set_buy_order()` (short exit)
 
 **`_stop_loss(data_point) -> None`**
-- Cancels all open orders
-- Places market close order at current price
-- Calls `position.record_exit_fill()` when fill confirmed
-- Calls `_do_finalize_action()`
+- Cancels all open orders (`tracker.cancel_buy()`, `tracker.cancel_sell()` if IDs set)
+- Places LIMIT close order at current price (all orders are LIMIT GTC per Phase 01 stock interface)
+- Maps position direction to correct `trade_type` (`TRADE_SELL` for long, `TRADE_BUY` for short)
+- Calls `tracker.set_sell_order()` (long) or `tracker.set_buy_order()` (short) with new order ID
+- Fill processed by `_process_executed_orders()` on next tick(s); calls `_do_finalize_action()` on fill
 
 **`_process_executed_orders(data_point) -> None`**
 - Called from `wait()` each tick
 - Checks `tracker.buy_id` and `tracker.sell_id` for fills via `tracker.check_fill()`
+- `check_fill()` returns `(status, fill_dict)`; skip processing if `status != STATUS_SUCCESS`
+- Fill dict: `{"status": str, "start_amount": float, "left_amount": float, "rate": float}`
+- `coin_amount = fill["start_amount"] - fill["left_amount"]`; `price = fill["rate"]`
+- Status `"FILLED"` or `"PARTIALLY_FILLED"` (left_amount > 0) both trigger `record_entry_fill` / `record_exit_fill`
 - On entry fill: calls `position.record_entry_fill(coin_amount, price)`
-- On exit fill: calls `position.record_exit_fill(coin_amount, price)`, then `_do_finalize_action()`
+- On exit fill: calls `position.record_exit_fill(coin_amount, price)`, then `_do_finalize_action()` only when `fill["left_amount"] == 0` (fully filled)
 
-**`_place_valid_order(action: int, symbol: str, amount: float, price: float) -> str`**
+**`_place_valid_order(trade_type: str, price: float, amount: float) -> str`**
 - Validates price is reasonable (within 4×fee of current price — uses `position.check_stop_open()` logic)
-- Calls `stock.trade(action, symbol, amount, price)`
-- Returns order ID
+- Calls `stock.trade(trade_type, price, amount)` — symbol resolved internally by stock
+- Returns order ID extracted from `result_dict["order_id"]`; returns `""` on `STATUS_FAIL`
 
 **`_do_finalize_action() -> None`**
 - Calls `position.finalize()` → `(revenue_pct, revenue_abs)`
 - Calls `tracker.clear()`
 - Logs trade result
 
-**`_stop_loss_cancel_actions() -> None`**
-- If `position.is_stop_loss_triggered(cur_price)`: calls `_stop_loss()`
-- If `position.close_by_time(cur_time)`: calls `_close_position()` at current price
+**`_stop_loss_cancel_actions(data_point) -> None`**
+- `cur_price = data_point.cur_price('close')`; `cur_time = data_point.timestamp`
+- If `position.is_stop_loss_triggered(cur_price)`: calls `_stop_loss(data_point)`
+- If `position.close_by_time(cur_time)`: calls `_close_position(data_point, ...)` at `cur_price`
 
 ---
 
@@ -70,8 +78,8 @@ Order management is the most complex Robot concern: place order → track ID →
 - All `stock.trade()` calls wrapped in try/except — failed order placement logs error, does NOT crash Robot
 - Partial fills: `record_entry_fill()` may be called multiple times — `Position` accumulates partial fills
 - `_place_valid_order()` checks `check_stop_open()` before placing — stale price cancels order attempt
-- Entry order placed as LIMIT, stop-loss as MARKET
-- Margin loan: for SHORT, `stock.margin_borrow()` called before sell; `stock.margin_repay()` called after buy-back fill
+- All orders placed as LIMIT GTC — stock interface supports LIMIT only (Phase 01)
+- Margin loan: for SHORT, `stock.borrow(coin, amount)` called before sell; `stock.repay(coin, amount)` called after buy-back fill
 
 ---
 

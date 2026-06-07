@@ -33,18 +33,20 @@ Attributes:
 - `stock: StockInterface` — BinanceStock or mock; provides `get_candles_history()`
 - `output_path: str` — path to `graber_data.pkl`
 
-**`ensure_data(symbol: str, start_date: str, end_date: str) -> None`**
-- If `output_path` exists: loads existing data, checks last timestamp
-- If data covers `start_date` to `end_date`: return (no-op)
-- If data is partial or missing: fetches missing range via `stock.get_candles_history()`
+**`ensure_data(symbol: str, start_ms: int, end_ms: int) -> None`**
+- `symbol`: Binance format (e.g. `"LINKUSDT"`)
+- `start_ms` / `end_ms`: Unix milliseconds — matches `DATA_START` / `DATA_END` env vars
+- If `output_path` exists: loads existing data, checks first/last `open_time` timestamp
+- If data covers `start_ms` to `end_ms`: return (no-op)
+- If data is partial or missing: fetches missing range via `stock.get_candles_range(symbol, start_ms, end_ms)`
 - Saves result atomically (write to `.tmp`, then rename)
 
 **`load() -> pd.DataFrame`**
 - Loads and returns DataFrame from `output_path`
 - Raises `FileNotFoundError` if not present
 
-**`is_current(end_date: str) -> bool`**
-- Returns True if last row timestamp >= `end_date`
+**`is_current(end_ms: int) -> bool`**
+- Returns True if last row `open_time` timestamp (as Unix ms) >= `end_ms`
 
 ---
 
@@ -53,7 +55,8 @@ Attributes:
 - Incremental fetch: only request candles after last saved timestamp — avoid re-fetching existing data
 - Atomic save: write to `output_path + ".tmp"` then `os.rename()` — prevent partial writes
 - Column schema matches Phase 02 grab_binance output: `open_time, o, h, l, c, v, close_time, taker_base_vol` (short aliases — see Phase 02 task-01-graber.md and design-decisions.md; NOT `open/high/low/close/volume`)
-- `end_date` comparison uses UTC timestamps — no timezone ambiguity
+- All timestamps compared as Unix milliseconds — no timezone ambiguity
+- `start_ms` / `end_ms` from `DATA_START` / `DATA_END` env vars (already ms — no conversion needed at this level)
 - Raises clear exception if `stock.get_candles_history()` returns empty result for non-empty date range
 
 ---

@@ -88,6 +88,7 @@ Path functions all read `os.environ['PAIR']` internally — no `pair` parameter:
 - `action_folder() -> str` — `{shared_folder()}/actions/` — per-timestamp action pkl files
 - `graber_data_path() -> str` — `{dataset_folder()}/graber_data.pkl`
 - `wide_df_path() -> str` — `{dataset_folder()}/df_with_indicators.pkl`
+- `data_attributes_path() -> str` — `{dataset_folder()}/data_attributes.pkl`
 - `position_json_path() -> str` — `manual_setup/{PAIR}/position.json`
 
 ---

@@ -38,11 +38,11 @@ Attributes:
 - `check_conditions(data_point, position_state: int, action_msg) -> bool` — returns True if strategy should run this tick; gates on position state or market conditions
 
 **Template method (final — do not override):**
-- `check(data_point, position_state: int, cur_time: float, action_msg) -> tuple[int, float, float, float, int]` — calls: `get_level_values()` → `signals.check(data_point, levels, cur_time, action_msg)` → `select_final_action()` → `get_open/close/stop_loss_price()` → returns `(action, open_price, close_price, stop_price, tf)`
+- `check(data_point, position_state: int, cur_time: float, action_msg) -> tuple[int, list[float], list[float], float, int]` — calls: `get_level_values()` → `signals.check(data_point, levels, cur_time, action_msg)` → `select_final_action()` → `get_open/close/stop_loss_price()` → returns `(action, open_prices, close_prices, stop_price, tf)`
 
 **Overridable price methods (with defaults):**
-- `get_open_price(data_point, tf: int) -> float` — default: current 1-min close `data_point.get("close", 1, 0)`
-- `get_close_price(data_point, tf: int, action: int) -> float` — default: `open_price * (1 + 0.008)` for long, `open_price * (1 - 0.008)` for short (+0.8% target)
+- `get_open_prices(data_point, tf: int) -> list[float]` — default: `[data_point.get("close", 1, 0)]` (single entry target at current 1-min close)
+- `get_close_prices(data_point, tf: int, action: int) -> list[float]` — default: `[open_prices[0] * (1 + 0.008)]` for long, `[open_prices[0] * (1 - 0.008)]` for short (+0.8% target; single exit target)
 - `get_stop_loss_price(data_point, tf: int, action: int) -> float` — default: `data_point.get("sar", tf, 0) - 0.3 * data_point.get("atr_14", tf, 0)` for long; `data_point.get("sar", tf, 0) + 0.3 * data_point.get("atr_14", tf, 0)` for short
 
 **Internal helpers:**
@@ -65,9 +65,9 @@ Priority rules:
 
 | Price | Default Formula |
 |-------|----------------|
-| open_price | current 1-min `close` |
-| close_price (long) | `open_price * 1.008` (+0.8%) |
-| close_price (short) | `open_price * 0.992` (-0.8%) |
+| open_prices | `[current 1-min close]` — single entry target |
+| close_prices (long) | `[open_prices[0] * 1.008]` (+0.8%) — single exit target |
+| close_prices (short) | `[open_prices[0] * 0.992]` (-0.8%) — single exit target |
 | stop_loss (long) | `data_point.get("sar", tf, 0) - 0.3 * data_point.get("atr_14", tf, 0)` |
 | stop_loss (short) | `data_point.get("sar", tf, 0) + 0.3 * data_point.get("atr_14", tf, 0)` |
 

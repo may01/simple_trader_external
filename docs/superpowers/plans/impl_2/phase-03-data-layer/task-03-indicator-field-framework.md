@@ -28,6 +28,7 @@ All enrichment logic lives in `IndicatorField` subclasses — never in `LiveData
 
 **IndicatorField (abstract base):**
 - `name: str` — output column suffix (e.g., `"rsi_14"`) — output column becomes `{tf}_{name}`
+- `group: str` — config group name (e.g., `"momentum"`, `"classification"`, `"targets"`); used by `Indicators.compute_group()` to select pass
 - `dependencies: list[str]` — names of other fields that must be computed first
 - `applies_to: list[int]` — TFs this field is valid for (`[]` = all CANDLES)
 - `params: dict` — field-specific parameters from config
@@ -35,8 +36,9 @@ All enrichment logic lives in `IndicatorField` subclasses — never in `LiveData
 
 **Indicators (static orchestrator):**
 - `_registry: list[IndicatorField]` — class variable, loaded from config at first use
-- `_sorted_fields(tf: int) -> list[IndicatorField]` — returns fields applicable to `tf` in dependency order
-- `compute(data_point: DataPoint, tf: int) -> None` — runs all applicable fields in order, writes each result back via `data_point.get_df(tf)[f"{tf}_{field.name}"] = series`
+- `_sorted_fields(tf: int, groups: list[str] = None) -> list[IndicatorField]` — returns fields applicable to `tf` in dependency order; if `groups` provided, filters to only fields whose config group is in `groups`
+- `compute(data_point: DataPoint, tf: int) -> None` — runs ALL applicable fields; shorthand for `compute_group(..., groups=None)`
+- `compute_group(data_point: DataPoint, tf: int, groups: list[str]) -> None` — runs only fields belonging to specified config groups, in dependency order; used by `DataPreparer` to separate base-indicator pass from class-indicator pass
 
 **build_indicator_input(df: pd.DataFrame, ts: pd.Timestamp, tf: int) -> pd.DataFrame:**
 - Returns the indicator input series at timestamp `ts` for timeframe `tf`

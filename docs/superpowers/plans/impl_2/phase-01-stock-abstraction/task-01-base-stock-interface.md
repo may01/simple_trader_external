@@ -41,6 +41,7 @@ Define the abstract `StockInterface` base class with all method signatures, defa
 
 **Abstract methods (all print "INIT STOCK" and return empty/default):**
 - `get_candles_history(time_list: list[int], coin: str, time_point: int = 0) -> dict[int, pd.DataFrame]`
+- `get_candles_range(symbol: str, start_ms: int, end_ms: int) -> pd.DataFrame` — batch date-range history fetch; returns 1-min OHLCV DataFrame with same column schema as `graber_data.pkl` (`open_time`, `o`, `h`, `l`, `c`, `v`, `close_time`, `taker_base_vol`); used by `Graber` and `LiveDataCollector`; `Stock_Binance` implements via `BinanceClient.get_historical_klines()` in 30-day chunks (same logic as `grab_binance.py`); base returns empty DataFrame
 - `trade(trade_type: str, price: float, amount: float, force: bool = False) -> tuple[str, dict]`
 - `order_info(order_id: str) -> tuple[str, dict]`
 - `cancel_order(order_id: str) -> tuple[str, dict]`

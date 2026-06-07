@@ -35,13 +35,13 @@ Attributes:
 **`register(strategy: Strategy) -> None`**
 - Appends strategy to `self.strategies`
 
-**`check(data_point, position_state: int, cur_time: float, action_msg) -> tuple[int, float, float, float, int]`**
+**`check(data_point, position_state: int, cur_time: float, action_msg) -> tuple[int, list[float], list[float], float, int]`**
 - Calls `strategy.check(data_point, position_state, cur_time, action_msg)` for each registered strategy
-- Collects all returned `(action, open_price, close_price, stop_price, tf)` tuples where `action != STRATEGY_ACTION_NOTHING`
+- Collects all returned `(action, open_prices, close_prices, stop_price, tf)` tuples where `action != STRATEGY_ACTION_NOTHING`
 - Applies conflict resolution (see below)
-- Returns resolved tuple or `(STRATEGY_ACTION_NOTHING, 0, 0, 0, 0)` if no action
+- Returns resolved tuple or `(STRATEGY_ACTION_NOTHING, [], [], 0.0, 0)` if no action
 
-**`_resolve(results: list[tuple]) -> tuple[int, float, float, float, int]`**
+**`_resolve(results: list[tuple]) -> tuple[int, list[float], list[float], float, int]`**
 - Priority: DO_STOP_LOSS (highest) → CLOSE_LONG / CLOSE_SHORT → MOVE_STOP_LOSS_* → OPEN_LONG / OPEN_SHORT
 - Multiple CLOSE from different strategies: take first (or any — they share same position)
 - Multiple OPEN from different strategies: return NOTHING (conflict — no consensus)

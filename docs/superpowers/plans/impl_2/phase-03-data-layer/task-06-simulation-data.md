@@ -33,6 +33,7 @@ Implement `SimulationData` — loads `df_with_indicators.pkl` once at init, then
 - `is_end() -> bool` — returns `self._cur_idx >= len(self._timestamps)`
 - `steps: int` (property) — total replay length = `len(self._timestamps)`
 - `current_ts: pd.Timestamp` (property) — timestamp at current position
+- `split(n: int) -> list[SimulationData]` — divides `self._timestamps` into `n` equal slices; returns `n` new `SimulationData` instances sharing the same `_df` (no re-load); last slice absorbs remainder rows
 
 ---
 
@@ -50,6 +51,7 @@ Implement `SimulationData` — loads `df_with_indicators.pkl` once at init, then
 - `df_with_indicators.pkl` loaded ONCE at `__init__` — never reloaded during simulation
 - `get()` is O(1) — `df.loc[ts]` row lookup, no computation
 - `SimulationData` is NOT a singleton — instantiated per simulation run (one per worker process in parallel backtest)
+- `split(n)` returns instances that share the parent's `_df` reference — no copy, no re-load; each instance has its own `_timestamps` slice and `_cur_idx = 0`
 - `begin_ts` / `end_ts` are Unix seconds (DATA_START / DATA_END are ms → divide by 1000 when reading from env)
 - `step_min` from `TRAINER_TIME_STEP` env var — minimum 1 minute
 - `WideDataPoint` from `get()` shares reference to the full DataFrame — do not modify it

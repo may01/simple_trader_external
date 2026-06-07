@@ -44,14 +44,13 @@ Attributes:
 
 **`do() -> None`**
 - Gets current `data_point` from `live_data`
-- Gets `position_state`, `position_target`
-- Calls `strategy_manager.check(data_point, position_state, position_target, action_msg=None)`
+- Gets `position_state`, `cur_time = data_point.timestamp`
+- Calls `strategy_manager.check(data_point, position_state, cur_time, action_msg=None)`
 - Dispatches: OPEN → `_open_position()`, CLOSE → `_close_position()`, DO_STOP_LOSS → `_stop_loss()`, NOTHING → `wait()`
 
 **`wait(data_point) -> None`**
-- Checks for fills on open orders via `tracker.check_fill()`
-- Checks stop-loss trigger, close-by-time trigger
-- Updates stop-loss if strategy returns MOVE_STOP_LOSS action
+- Calls `_process_executed_orders(data_point)` — checks `tracker.buy_id`/`sell_id` for fills each tick
+- Calls `_stop_loss_cancel_actions(data_point)` — checks stop-loss trigger and close-by-time; places exit order if triggered
 
 **`stop() -> None`**
 - Sets `running = False`
@@ -64,7 +63,8 @@ Attributes:
 - Polling interval: 1 second minimum; matches `LiveData` update cadence
 - On crash recovery: `tracker.load()` called at start; if Position has open trade, resume `wait()` immediately
 - `position.full_position` set from config at Robot init — not per-trade
-- `strategy_manager` initialized with `robot_actions_test=False` for live path (NN filter active)
+- `strategy_manager` receives registered strategies from caller — strategies that use NN signals reference `nn_prob_*` columns in `data_point` like any other indicator; if no NN checkpoint is loaded those columns are NaN and signal chains handle it gracefully; the strategy list does not change based on NN availability
+- Integration test verifying real exchange operations (order placement, fill detection, margin borrow/repay) belongs in a separate task-04 in this phase
 
 ---
 

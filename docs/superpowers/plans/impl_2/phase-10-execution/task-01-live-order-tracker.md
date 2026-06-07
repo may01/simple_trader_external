@@ -55,8 +55,9 @@ Attributes:
 **`cancel_sell() -> None`**
 - Calls `stock.cancel_order(sell_id)`, clears `sell_id`, calls `save()`
 
-**`check_fill(order_id: str) -> dict`**
-- Calls `stock.order_info(order_id)` — returns fill status dict
+**`check_fill(order_id: str) -> tuple[str, dict]`**
+- Calls `stock.order_info(order_id)` — returns `(status, fill_dict)` unchanged
+- Callers must check `status == STATUS_SUCCESS` before reading dict; on `STATUS_FAIL` dict is `{}`
 
 **`save() -> None`**
 - Serializes `{buy_id, sell_id, loan_id, loan_amount}` + `position.to_dict()` to `persist_path` atomically
@@ -67,7 +68,7 @@ Attributes:
 - Returns True if loaded successfully, False if file absent
 
 **`clear() -> None`**
-- Resets all order IDs, clears `persist_path`, calls `position.finalize()`
+- Resets all order IDs (`buy_id = ""`, `sell_id = ""`, `loan_id = ""`, `loan_amount = 0.0`), deletes `persist_path` file if it exists
 
 ---
 
@@ -76,7 +77,7 @@ Attributes:
 - `persist_path` write is always atomic (`.tmp` → rename)
 - `buy_id` / `sell_id` initialized to empty string `""` — never None (avoids None checks everywhere)
 - `load()` must call `position.from_dict()` — Position reconstructed from same JSON
-- After `clear()`, `position.posImpl` is `None` — next cycle starts fresh
+- After `clear()`, tracker state is reset — `position.posImpl` is `None` because `_do_finalize_action()` already called `position.finalize()` before calling `tracker.clear()`
 - Margin loan (`set_loan`) only relevant for SHORT positions — for LONG positions, loan fields remain at defaults
 
 ---
@@ -87,13 +88,11 @@ Attributes:
 docker compose run --rm trader python3 -c "
 from robots.live_order_tracker import LiveOrderTracker
 from position.position import Position
-from stocks.stock_holder import StockHolder
-from constants import STOCK_MOCK
+from stocks_holder import do_stock_init, stock_holder as stock
 
-StockHolder.do_stock_init(STOCK_MOCK)
-stock = StockHolder.get_stock()
+do_stock_init('mock')
 pos = Position(fee=0.001)
-tracker = LiveOrderTracker(position=pos, stock=stock, persist_path='/tmp/test_tracker.json')
+tracker = LiveOrderTracker(position=pos, stock=stock.item, persist_path='/tmp/test_tracker.json')
 tracker.set_buy_order('order123')
 assert tracker.buy_id == 'order123'
 print('live_order_tracker ok')
