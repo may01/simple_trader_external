@@ -59,14 +59,34 @@ Each field is a self-contained class reading prior columns from `data_point.get_
 - `CloseDiffPrcRMMeanAboveField` / `BelowField` — mean of positive/negative values in rolling window
 
 ### Classification Group (applies_to: [15, 60, 240, 1440])
-- `MoveClassField` — classifies `rsi_ma8` vs `rsi_classification.json` thresholds → `{tf}_move_class`
-- `ZoneClassField` — zone classification → `{tf}_zone_class`
+
+All classification fields declare `resource_dependencies = ["rsi_classification.json"]`. If this file is absent, the field is skipped and its output column is NaN.
+
+- `MoveClassField` — classifies `rsi_ma8` vs thresholds loaded from `rsi_classification.json` → `{tf}_move_class`
+  - `resource_dependencies: ["rsi_classification.json"]`
+  - `dependencies: ["rsi_ma8"]`
+  - loads JSON once at construction via `DataAttributes.load_rsi_classification(STATS_DIR)`; raises `RuntimeError` if file exists but is malformed
+- `ZoneClassField` — zone classification using same thresholds → `{tf}_zone_class`
+  - `resource_dependencies: ["rsi_classification.json"]`
+  - `dependencies: ["move_class"]`
 - `OverLowField` / `OverHighField` — price above/below rolling thresholds → `{tf}_over_low`, `{tf}_over_high`
+  - `resource_dependencies: ["rsi_classification.json"]`
+  - `dependencies: ["zone_class"]`
 
 ### Targets Group (applies_to: [15, 60, 240, 1440])
+
+All target fields declare `resource_dependencies = ["diff_stats.pkl"]`. If this file is absent, the field is skipped and its output column is NaN.
+
 - `TgtLongField` / `SLLongField` — target and stop-loss levels for long → `{tf}_tgt_long`, `{tf}_sl_long`
+  - `resource_dependencies: ["diff_stats.pkl"]`
+  - `dependencies: []`
+  - loads `diff_stats.pkl` once at construction via `DataAttributes.load_diff_stats(STATS_DIR)`
 - `TgtShortField` / `SLShortField` — for short → `{tf}_tgt_short`, `{tf}_sl_short`
+  - `resource_dependencies: ["diff_stats.pkl"]`
+  - `dependencies: []`
 - `ZBField` / `ZSField` — zone buy/sell thresholds → `{tf}_ZB`, `{tf}_ZS`
+  - `resource_dependencies: ["diff_stats.pkl"]`
+  - `dependencies: ["tgt_long", "tgt_short"]`
 
 ### Trend Flags Group
 - `TrendUpField` — boolean: price above EMA-50 and EMA-50 rising → `{tf}_trend_up`
@@ -81,9 +101,10 @@ Each field is a self-contained class reading prior columns from `data_point.get_
 ## Key Constraints
 
 - All fields read ONLY `{tf}_*` prefixed columns from `data_point.get_df(tf)` — never raw column names like `"close"`
-- `classification` and `targets` fields require `stats/rsi_classification.json` and `stats/diff_stats.pkl` to exist — loaded via `DataAttributes` (Task 07); these stats are produced by `DataPreparer._compute_base_attributes()` before the class-indicator pass runs (see Phase 09 Task 02 two-pass pipeline)
-- Groups `["momentum","trend","volatility","oscillators","volume","price_derivatives","trend_flags","nn_features"]` are **base indicators** — no stats dependency, computed in pass 1
-- Groups `["classification","targets"]` are **class indicators** — require base attributes, computed in pass 2
+- `classification` and `targets` fields declare `resource_dependencies` (see field specs above); if those files are absent the orchestrator skips them gracefully (NaN output) — see Task 03 dependency resolution semantics
+- Stats files loaded at field **construction time** (not per-row) — store as instance attributes; `is_available()` checks `os.path.exists` on each path in `resource_dependencies`
+- Groups `["momentum","trend","volatility","oscillators","volume","price_derivatives","trend_flags","nn_features"]` are **base indicators** — `resource_dependencies = []`, computed in pass 1
+- Groups `["classification","targets"]` are **class indicators** — `resource_dependencies` non-empty, computed in pass 2 only after `DataPreparer._compute_base_attributes()` writes the stats files
 - TA-Lib functions require float64 arrays — cast explicitly before calling
 - `SARField` — TA-Lib SAR has issues with very short series; handle `len(df) < 2` edge case
 - Forward-looking target fields (`tgt_long`, `tgt_short`) — ONLY valid for offline wide DataFrame generation. These read `df.loc[ts + N]` → must NEVER be computed in the live path
