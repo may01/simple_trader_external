@@ -577,8 +577,19 @@ Fix 1 (build) → Fix 4 (entry wiring) → Fix 5a → Fix 5b (Path B green)
 | 2 | graber | ✅ PASS | — |
 | 3 | graber incremental | ✅ PASS | — |
 | 4 | entry-point wiring | ✅ FIXED for trainer.py (`fix-trainer-wiring` @ `e3f095c`); trader/view stubs → Fix 8 | Fix Task 4 — done (4.2 group_nn mapping still UNRESOLVED) |
-| 5 | prepare_data (B) | ❌ FAIL ×2 | Fix Tasks 5a, 5b |
-| 6 | simulate (C) | ❌ FAIL ×3 | Fix Task 6 |
-| 7 | NN pipeline (D) | ❌ FAIL ×3 | Fix Task 7 |
-| 8 | live + viewers (E/F) | ❌ FAIL | Fix Task 8 (plan tasks first) |
+| 5 | prepare_data (B) | 🔧 code fixed (`fix-data-contract` @ `6959dbe`, `fix-indicator-pass` @ `3a729fb`); Docker gate run in progress | Fix Tasks 5a, 5b — done |
+| 6 | simulate (C) | 🔧 code fixed (`fix-simulate-wiring` @ `e1a112d`); Docker gate pending prep output | Fix Task 6 — done |
+| 7 | NN pipeline (D) | 🔧 code fixed (`fix-nn-wiring` @ `dd14c66`); Docker gate pending prep output; NN target labeling still unresolved in plan | Fix Task 7 — done |
+| 8 | live + viewers (E/F) | ✅ wired + verified (`fix-entry-wiring` @ `023e35e`, `dc87094`): live paper loop polls cleanly; view-sim serves HTTP 200 via compose port map | Fix Task 8 — done (plan tasks task-05 added to phases 10/12) |
 | 9 | probes | ✅ PASS | keep green |
+
+### Fix round 2026-06-10 — additional bugs found while driving the fixes
+
+- `_run_train_nn` epoch callback was 2-param; orchestrator contract is `(tf_str, epoch, metrics)` — would have raised TypeError on first epoch. Fixed with Fix 7.
+- `Robot.do()` read nonexistent `live_data.data_point` (AttributeError swallowed every tick by the loop's crash guard) and never called `build_candles()` — live data would never refresh. Found by running the wired `live` service in paper mode; fixed per phase-03 task-05 contract (`dc87094`).
+- Dash dashboards bound `127.0.0.1:8050` — unreachable through compose port maps. Now `0.0.0.0:$DASH_PORT` (default 8080).
+- `view_online_point.py`/`view_training.py` were partially wired (module-level run with relative `shared/` state path that resolves nowhere in-container) — not pure stubs as originally reported.
+- yaml↔class indicator dependency drift in 7 fields (`vol_sell_ma`, 4 classification fields, `trend_up/down`) — topological sort reads only the yaml. Synced; regression test added.
+- Indicator pass runtime: ~30 min for the 2-week dataset (per-row designed algorithm, 44 fields × 6 TFs per 1-min row). Faster requires deciding whether EMA-family indicators may use full candle history instead of the designed 105-candle window — **plan-owner decision, unresolved**.
+- `StrategyManager.__init__(fee, robot_actions_test)` per design decision vs `(fee)` implemented — drift flagged, unresolved.
+- Paper mode: plan README's `IS_TRAIDER_TEST=1` does not exist; actual mechanism is `STOCK_TYPE=mock_binance`, now the trader.py default.
