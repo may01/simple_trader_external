@@ -577,9 +577,9 @@ Fix 1 (build) → Fix 4 (entry wiring) → Fix 5a → Fix 5b (Path B green)
 | 2 | graber | ✅ PASS | — |
 | 3 | graber incremental | ✅ PASS | — |
 | 4 | entry-point wiring | ✅ FIXED for trainer.py (`fix-trainer-wiring` @ `e3f095c`); trader/view stubs → Fix 8 | Fix Task 4 — done (4.2 group_nn mapping still UNRESOLVED) |
-| 5 | prepare_data (B) | 🔧 code fixed (`fix-data-contract` @ `6959dbe`, `fix-indicator-pass` @ `3a729fb`); Docker gate run in progress | Fix Tasks 5a, 5b — done |
-| 6 | simulate (C) | 🔧 code fixed (`fix-simulate-wiring` @ `e1a112d`); Docker gate pending prep output | Fix Task 6 — done |
-| 7 | NN pipeline (D) | 🔧 code fixed (`fix-nn-wiring` @ `dd14c66`); Docker gate pending prep output; NN target labeling still unresolved in plan | Fix Task 7 — done |
+| 5 | prepare_data (B) | ✅ GATE GREEN 2026-06-11: `compose run ohlc_gen` exit 0 in ~47 min; `df_with_indicators.pkl` 59 MB, 389 cols, values sane (99.7% non-NaN rsi) | Fix Tasks 5a, 5b — done |
+| 6 | simulate (C) | ✅ GATE GREEN: completes over 2-week dataset, metrics → `training_state.pkl`. Required follow-up fix `3a59604` (picklable strategy factory — closure crashed all ProcessPool workers silently) | Fix Task 6 — done |
+| 7 | NN pipeline (D) | ✅ wiring GREEN (CPU run): orchestrator constructed, df loaded, per-TF loop warns `Target column '{tf}_target_direction' not found — Skipping` — stops exactly at the plan's UNRESOLVED NN-labeling decision. Compose `nn-train` service itself needs an nvidia GPU (host has none) | Fix Task 7 — done |
 | 8 | live + viewers (E/F) | ✅ wired + verified (`fix-entry-wiring` @ `023e35e`, `dc87094`): live paper loop polls cleanly; view-sim serves HTTP 200 via compose port map | Fix Task 8 — done (plan tasks task-05 added to phases 10/12) |
 | 9 | probes | ✅ PASS | keep green |
 
@@ -593,3 +593,12 @@ Fix 1 (build) → Fix 4 (entry wiring) → Fix 5a → Fix 5b (Path B green)
 - Indicator pass runtime: ~30 min for the 2-week dataset (per-row designed algorithm, 44 fields × 6 TFs per 1-min row). Faster requires deciding whether EMA-family indicators may use full candle history instead of the designed 105-candle window — **plan-owner decision, unresolved**.
 - `StrategyManager.__init__(fee, robot_actions_test)` per design decision vs `(fee)` implemented — drift flagged, unresolved.
 - Paper mode: plan README's `IS_TRAIDER_TEST=1` does not exist; actual mechanism is `STOCK_TYPE=mock_binance`, now the trader.py default.
+
+### Round 3 (2026-06-11) — gate results on real data
+
+- Strategy factory closure unpicklable → all 4 ProcessPool simulation workers crashed, **silently absorbed into empty result dicts** by the orchestrator's crash guard. Fixed (`3a59604`); the silent-crash design itself is worth a plan review — a fully-crashed run is indistinguishable from a quiet market.
+- `total_trades: 0` over the 2-week window — verified legitimate (single-worker probe, 2881 ticks, zero swallowed errors; manual `StrategyManager.check` returns NOTHING). Example strategies may need looser trigger conditions or a different window; strategy question, not integration.
+- `nn-train`/`view-full` compose services point at datasets that were never grabbed (`3y_link_usdt`, `4m_link_usdt` on the long volume) — Path A for the long datasets is a prerequisite nobody ran; gates exercised against the 2-week dataset instead.
+- `view_full.py` renders clean over the real 389-column frame; `view-sim` dashboard serves HTTP 200 via compose port map with absent state file.
+- Frame-fragmentation perf pass (`f8a5e60`, `4926537`): wide-df build single-concat, write-back single setitem, intentional slice fragmentation silenced at the one loop that owns it. Pre-allocation tried and reverted — measured 17% slower under pandas CoW.
+- Prep runtime measured: ~47 min for 2 weeks (pre-defrag code). The escalated 105-window question remains the real lever.
