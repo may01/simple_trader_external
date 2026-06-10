@@ -638,6 +638,98 @@ def test_stock_holder_in_docker():
 
 ## Phase 02 — Data Acquisition
 
+### Task 00: Dataset Folder Initialization
+
+**Requirements**
+- `init_dataset_folders()` creates all required directories for the current dataset config.
+- Uses `helpers.py` path functions; reads env vars at call time (not at import).
+- All paths created with `exist_ok=True` — safe to call multiple times.
+- Covers: `dataset_folder()`, `data_folder()`, `shared_folder()`, `nn_folder()`, `action_folder()`, `nn_weights_folder()`, `stats_folder()`.
+
+**Acceptance Criteria**
+- All 7 required directories exist after one call.
+- Second call on already-created dirs raises no error.
+- Missing `ROOT_FOLDER` env var → raises `KeyError`.
+
+**Unit Tests** (`tests/unit/data_acquisition/test_init_folders.py`)
+
+```python
+import os, pytest
+from unittest.mock import patch
+from grabers.init_folders import init_dataset_folders
+
+def test_all_folders_created(tmp_path, monkeypatch):
+    monkeypatch.setenv("ROOT_FOLDER", "short")
+    monkeypatch.setenv("DATA_ROOT", "train")
+    monkeypatch.setenv("DATA_SET_NAME", "2w")
+    monkeypatch.setenv("PAIR", "link_usdt")
+    base = str(tmp_path)
+    dataset = f"{base}/train/2w_link_usdt"
+    with patch("helpers.root_folder", return_value=base), \
+         patch("helpers.nn_weights_folder", return_value=f"{base}_long/train/link_usdt/nn_weights"), \
+         patch("helpers.stats_folder", return_value=f"{base}/stats/train/link_usdt"):
+        init_dataset_folders()
+    assert os.path.isdir(f"{dataset}/data")
+    assert os.path.isdir(f"{dataset}/shared")
+    assert os.path.isdir(f"{dataset}/shared/nn_data")
+    assert os.path.isdir(f"{dataset}/shared/actions")
+    assert os.path.isdir(f"{base}_long/train/link_usdt/nn_weights")
+    assert os.path.isdir(f"{base}/stats/train/link_usdt")
+
+def test_idempotent(tmp_path, monkeypatch):
+    monkeypatch.setenv("ROOT_FOLDER", "short")
+    monkeypatch.setenv("DATA_ROOT", "train")
+    monkeypatch.setenv("DATA_SET_NAME", "2w")
+    monkeypatch.setenv("PAIR", "link_usdt")
+    base = str(tmp_path)
+    with patch("helpers.root_folder", return_value=base), \
+         patch("helpers.nn_weights_folder", return_value=f"{base}_long/train/link_usdt/nn_weights"), \
+         patch("helpers.stats_folder", return_value=f"{base}/stats/train/link_usdt"):
+        init_dataset_folders()
+        init_dataset_folders()  # must not raise
+
+def test_missing_root_folder_raises(monkeypatch):
+    monkeypatch.delenv("ROOT_FOLDER", raising=False)
+    monkeypatch.setenv("DATA_ROOT", "train")
+    monkeypatch.setenv("DATA_SET_NAME", "2w")
+    monkeypatch.setenv("PAIR", "link_usdt")
+    with pytest.raises(KeyError):
+        init_dataset_folders()
+```
+
+**Integration Tests** (`tests/integration/data_acquisition/test_init_folders.py`)
+
+```python
+import subprocess
+
+def test_folders_created_in_docker():
+    r = subprocess.run([
+        "docker", "compose", "run", "--rm", "graber", "python3", "-c",
+        "from grabers.init_folders import init_dataset_folders; init_dataset_folders(); "
+        "from helpers import data_folder, shared_folder, nn_folder, action_folder, nn_weights_folder; "
+        "import os; "
+        "assert os.path.isdir(data_folder()); "
+        "assert os.path.isdir(shared_folder()); "
+        "assert os.path.isdir(nn_folder()); "
+        "assert os.path.isdir(action_folder()); "
+        "assert os.path.isdir(nn_weights_folder()); "
+        "print('ok')"
+    ], capture_output=True, text=True, timeout=60)
+    assert r.returncode == 0
+    assert "ok" in r.stdout
+
+def test_init_folders_idempotent_in_docker():
+    r = subprocess.run([
+        "docker", "compose", "run", "--rm", "graber", "python3", "-c",
+        "from grabers.init_folders import init_dataset_folders; "
+        "init_dataset_folders(); init_dataset_folders(); print('ok')"
+    ], capture_output=True, text=True, timeout=60)
+    assert r.returncode == 0
+    assert "ok" in r.stdout
+```
+
+---
+
 ### Task 01: Graber — Raw Kline Collection
 
 **Requirements**

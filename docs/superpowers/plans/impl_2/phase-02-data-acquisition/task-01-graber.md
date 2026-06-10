@@ -1,7 +1,7 @@
 # Task 01: Graber — Raw Kline Collection
 
 **Phase:** 02 — Data Acquisition  
-**Depends on:** Phase 01 — convention-only (mirrors `Stock_Binance`'s credential-loading and kline-parsing conventions; no runtime import of `StockHolder`/`BinanceStock`, see Key Constraints)  
+**Depends on:** Phase 02 Task 00 (dataset folder initialization — `dataset_folder()` must exist before atomic save); Phase 01 — convention-only (mirrors `Stock_Binance`'s credential-loading and kline-parsing conventions; no runtime import of `StockHolder`/`BinanceStock`, see Key Constraints)  
 **Produces:** `grabers/grab_binance.py` — downloads Binance 1-min OHLCV and writes `graber_data.pkl`
 
 ---
