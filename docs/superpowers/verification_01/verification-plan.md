@@ -141,7 +141,9 @@ docker compose run --rm ohlc_gen     # → python3 trainer.py generate_full_ohlc
 
 **Expected:** the real pipeline executes.
 
-**Observed status: ❌ FAIL** — every entry point except the graber script is a phase-00 stub that was never replaced:
+**Observed status: ❌ FAIL → ✅ FIXED 2026-06-10 for `trainer.py` (branch `fix-trainer-wiring`, commit `e3f095c`)** — `trader.py` / `view_*.py` remain stubs (Fix Task 8 scope).
+
+Original failure — every entry point except the graber script was a phase-00 stub:
 
 ```
 [stub] trainer mode=generate_full_ohlc
@@ -156,7 +158,7 @@ The real orchestrator exists at `training/trainer.py` (class `Trainer`, dispatch
 **Files:**
 - Modify: `trainer.py` (root, currently 3-line stub)
 
-- [ ] **Step 4.1: Replace root `trainer.py`** — translate compose argv modes to Trainer RUN_TYPEs:
+- [x] **Step 4.1: Replace root `trainer.py`** — translate compose argv modes to Trainer RUN_TYPEs:
 
 ```python
 """trainer.py — CLI entry point. Maps compose argv mode to training.Trainer RUN_TYPE."""
@@ -195,20 +197,15 @@ if __name__ == "__main__":
 
 - [ ] **Step 4.2: Decide `group_nn` mapping** — `Trainer` has no NN-grouping run type. Either add a `group_nn` RUN_TYPE to `training/trainer.py` or fold it into `prepare_data` (step 6 of `DataPreparer.prepare` already merges `df_with_nn.pkl`). Tracked as unresolved in plan README; do not silently guess — raise with plan owner.
 
-- [ ] **Step 4.3: Re-run verification step** — after Fix Tasks 5–7 land (the wiring exposes the downstream bugs in order):
+- [x] **Step 4.3: Re-run verification step** — wiring itself verified 2026-06-10:
 
 ```bash
 docker compose run --rm ohlc_gen
 ```
 
-Expected: real pipeline output, no `[stub]` line.
+Observed: no `[stub]` line; real pipeline executes and stops at the known Fix-5a seam (`ValueError: graber_data.pkl is missing required columns: ['open_time']`) — exactly the expected gate state until Fix Task 5 lands. Probes: `python3 trainer.py bogus` and bare `python3 trainer.py` → usage line + exit 2.
 
-- [ ] **Step 4.4: Commit**
-
-```bash
-git add trainer.py
-git commit -m "feat: wire trainer.py CLI to training.Trainer RUN_TYPE dispatch"
-```
+- [x] **Step 4.4: Commit** — done: `e3f095c` on branch `fix-trainer-wiring` in `main/` (stacked on `fix-docker-build`).
 
 **Also unresolved:** `trader.py` and `view_*.py` stubs (phases 10/12 surfaces). Real modules exist (`robots/robot.py`, `frontend/*.py`) but wiring is unspecified by any plan task — the plan never contains a "replace stub X" task. Needs new plan tasks; out of scope for this fix list.
 
@@ -579,7 +576,7 @@ Fix 1 (build) → Fix 4 (entry wiring) → Fix 5a → Fix 5b (Path B green)
 | 1 | `docker compose build` | ✅ FIXED (`fix-docker-build` @ `501acab`) | Fix Task 1 — done |
 | 2 | graber | ✅ PASS | — |
 | 3 | graber incremental | ✅ PASS | — |
-| 4 | entry-point wiring | ❌ FAIL | Fix Task 4 |
+| 4 | entry-point wiring | ✅ FIXED for trainer.py (`fix-trainer-wiring` @ `e3f095c`); trader/view stubs → Fix 8 | Fix Task 4 — done (4.2 group_nn mapping still UNRESOLVED) |
 | 5 | prepare_data (B) | ❌ FAIL ×2 | Fix Tasks 5a, 5b |
 | 6 | simulate (C) | ❌ FAIL ×3 | Fix Task 6 |
 | 7 | NN pipeline (D) | ❌ FAIL ×3 | Fix Task 7 |
