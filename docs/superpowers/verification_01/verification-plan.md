@@ -22,7 +22,9 @@ docker compose build graber
 
 **Expected:** image `simple_trader` builds from a clean cache.
 
-**Observed status: ❌ FAIL**
+**Observed status: ❌ FAIL → ✅ FIXED 2026-06-10 (branch `fix-docker-build`, commit `501acab`)**
+
+Original failure:
 
 ```
 ERROR: Could not find a version that satisfies the requirement pandas-ta (from versions: none)
@@ -31,60 +33,63 @@ ERROR: No matching distribution found for pandas-ta
 
 `pandas-ta` no longer publishes for python 3.11 (Dockerfile base `python:3.11-slim`); current releases require ≥ 3.12. Secondary fragility: the TA-Lib C source download from sourceforge failed intermittently during verification.
 
+**Fix applied and verified:** Fix Task 1 below executed as written, plus one addition discovered at re-verification — compose services run entry scripts from subfolders (`python3 grabers/grab_binance.py`) which import top-level modules (`helpers`); without `PYTHONPATH=/code` they die with `ModuleNotFoundError: No module named 'helpers'`. Added `ENV PYTHONPATH=/code` to the Dockerfile (this also retro-corrects Verification Step 2: its original PASS relied on the harness exporting `PYTHONPATH` manually — through the real compose surface it failed until this fix). Verified post-fix: `docker compose build graber` → clean build (11.2 GB); `docker compose run --rm graber` → `No new data needed — existing range covers requested range`; `talib 0.6.8`, `tensorflow 2.21.0`, torch, pandas_ta, binance, dash all import inside the image.
+
 ### Fix Task 1: rebuild on python 3.12 with wheel-based TA-Lib and pinned requirements
 
 **Files:**
 - Modify: `Dockerfile`
 - Modify: `requirements.txt`
 
-- [ ] **Step 1.1: Replace Dockerfile** — drop the C-library source build entirely; the `ta-lib` 0.6.x PyPI wheel bundles the C library (verified: `import talib` → `0.6.8` on bare `python:3.12-slim`).
+- [x] **Step 1.1: Replace Dockerfile** — drop the C-library source build entirely; the `ta-lib` 0.6.x PyPI wheel bundles the C library (verified: `import talib` → `0.6.8` on bare `python:3.12-slim`). `ENV PYTHONPATH=/code` added at re-verification (see Observed status above).
 
 ```dockerfile
 FROM python:3.12-slim
 
 WORKDIR /code
 
-# Install Python dependencies (rebuild only when requirements.txt changes)
+# Entry scripts live in subfolders (grabers/...) but import top-level modules
+# (helpers, constants) — make /code importable regardless of script location.
+ENV PYTHONPATH=/code
+
+# Install Python dependencies (rebuild only when requirements.txt changes).
+# TA-Lib comes from the PyPI wheel (>=0.6 bundles the C library) — no source build.
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Source code is mounted at /code via volume — NOT copied into image
-# No CMD — every service defines its own command
+# No CMD — every service defines its own command:
 ```
 
-- [ ] **Step 1.2: Pin requirements.txt** (versions current as of 2026-06; the point is *pinning*, adjust patch numbers at fix time with `pip index versions <pkg>`):
+- [x] **Step 1.2: Pin requirements.txt** (exact versions resolved on python 3.12, 2026-06-10):
 
 ```
 pandas==3.0.3
 numpy==2.2.6
 ta-lib==0.6.8
 pandas-ta==0.4.71b0
-python-binance==1.0.29
-tensorflow[and-cuda]==2.19.*
-keras==3.*
-dash==3.*
-plotly==6.*
-kaleido==1.*
-pyyaml==6.*
-pytest==8.*
-pytest-mock==3.*
-torch==2.7.*
+python-binance==1.0.37
+tensorflow[and-cuda]==2.21.0
+keras==3.14.1
+dash==4.2.0
+plotly==6.8.0
+kaleido==1.3.0
+pyyaml==6.0.3
+pytest==9.0.3
+pytest-mock==3.15.1
+torch==2.12.0
 ```
 
-- [ ] **Step 1.3: Re-run verification step**
+- [x] **Step 1.3: Re-run verification step**
 
 ```bash
 docker compose build graber
+BINANCE_API_KEY= BINANCE_API_SECRET= docker compose run --rm graber
 ```
 
-Expected: `BUILD_OK` (clean build, no source compilation). Note: verified equivalent stack builds — `pandas numpy ta-lib pandas-ta python-binance dash plotly pyyaml` on `python:3.12-slim` built clean during this verification; full set incl. tensorflow/torch not yet exercised.
+Observed: clean build, full dependency set incl. tensorflow/torch (image 11.2 GB); graber service through real compose surface → `No new data needed — existing range covers requested range`.
 
-- [ ] **Step 1.4: Commit**
-
-```bash
-git add Dockerfile requirements.txt
-git commit -m "fix: unbuildable image — py3.12 base, ta-lib wheel, pinned requirements"
-```
+- [x] **Step 1.4: Commit** — done: `501acab` on branch `fix-docker-build` in `main/`.
 
 ---
 
@@ -571,7 +576,7 @@ Fix 1 (build) → Fix 4 (entry wiring) → Fix 5a → Fix 5b (Path B green)
 
 | Step | Surface | Status | Fix |
 |------|---------|--------|-----|
-| 1 | `docker compose build` | ❌ FAIL | Fix Task 1 |
+| 1 | `docker compose build` | ✅ FIXED (`fix-docker-build` @ `501acab`) | Fix Task 1 — done |
 | 2 | graber | ✅ PASS | — |
 | 3 | graber incremental | ✅ PASS | — |
 | 4 | entry-point wiring | ❌ FAIL | Fix Task 4 |
