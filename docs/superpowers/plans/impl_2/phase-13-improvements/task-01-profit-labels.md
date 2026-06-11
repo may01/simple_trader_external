@@ -12,6 +12,10 @@ Implement binary lookahead labels marking profitable long/short entry points. A 
 profitable long entry when, within the next `N * tf` minutes, price rises more than `M * tf_atr`
 before dropping more than `X * tf_atr` below entry. Short is the exact mirror.
 
+A second variant, **profit_strict**, adds a backward clean-entry condition (parameters `L`, `Y`):
+in the last `L * tf` minutes price never went below `entry − Y * tf_atr` (long; short mirrored).
+This restricts labels to bottoms instead of points already on the rising slope.
+
 Labels look into the future by construction — they are training/backtest targets, never features.
 
 ---
@@ -71,6 +75,21 @@ def profit_short(
 def add_profit_labels(
     wide_df: pd.DataFrame, tf: int, n: int, m: float, x: float, atr_period: int = 14,
 ) -> None: ...
+
+def profit_strict_long(
+    wide_df: pd.DataFrame, tf: int, n: int, m: float, x: float,
+    l: int, y: float, atr_period: int = 14,
+) -> pd.Series: ...
+
+def profit_strict_short(
+    wide_df: pd.DataFrame, tf: int, n: int, m: float, x: float,
+    l: int, y: float, atr_period: int = 14,
+) -> pd.Series: ...
+
+def add_profit_strict_labels(
+    wide_df: pd.DataFrame, tf: int, n: int, m: float, x: float,
+    l: int, y: float, atr_period: int = 14,
+) -> None: ...
 ```
 
 - `wide_df` — full-history wide DataFrame (1-minute DatetimeIndex, `{tf}_*` columns).
@@ -80,6 +99,9 @@ def add_profit_labels(
   - `{tf}_plong_n{N}_m{M}_x{X}`
   - `{tf}_pshort_n{N}_m{M}_x{X}`
   - number formatting: ints verbatim; floats with dot→`p` (e.g. `x=1.5` → `x1p5`).
+- `add_profit_strict_labels` appends:
+  - `{tf}_pslong_n{N}_m{M}_x{X}_l{L}_y{Y}`
+  - `{tf}_psshort_n{N}_m{M}_x{X}_l{L}_y{Y}`
 
 ---
 
@@ -95,6 +117,19 @@ def add_profit_labels(
    Strict `>` / `<` comparisons.
 6. NaN when: window extends past end of data (incomplete future), or ATR is NaN (warmup).
 
+### profit_strict — additional past condition
+
+`profit_strict_long` = `profit_long` AND a backward clean-entry condition. Purpose: label
+bottoms, not points already on the rising slope.
+
+7. Past window: the last `L * tf` 1-minute rows ending at the entry row **inclusive**
+   (entry minute's own wick counts).
+8. Condition (long): no row in the past window has `1_low < entry − y * atr` — the
+   stop-loss check mirrored into the past. Short: no row has `1_high > entry + y * atr`.
+9. Label 1 iff the forward profit condition (steps 3–5) holds AND the past condition holds;
+   otherwise 0.
+10. NaN additionally when fewer than `L * tf` rows of history exist before the entry row.
+
 ---
 
 ## Implementation
@@ -105,7 +140,9 @@ Two implementations, identical semantics:
   `np.lib.stride_tricks.sliding_window_view` over the `1_high` / `1_low` arrays (zero-copy
   view), rows picked at entry positions, compared against per-entry target/stop, first-touch
   index via `argmax` along the window axis. Entry rows processed in chunks (~10k) to cap peak
-  memory (tf=1440, N=10 → 14 400-wide windows).
+  memory (tf=1440, N=10 → 14 400-wide windows). Past condition of `profit_strict` needs no
+  windows: rolling min of `1_low` (max of `1_high` for short) over `L * tf` rows on the full
+  1-minute array, compared at entry rows — O(n), then AND with the forward label.
 - **B (reference, test file only):** naive per-entry Python loop walking 1-minute bars in
   order. Trivially auditable; used as the oracle.
 
@@ -138,9 +175,20 @@ Hand-built 1-minute price paths (deterministic, small):
 - Window truncated by end of data → NaN.
 - ATR warmup rows → NaN.
 - Short mirror of each case above.
-- Property test: A ≡ B exactly on random-walk data, long + short,
-  several `(tf, n, m, x)` combos including `tf=15` and `tf=60`.
-- Column naming: `add_profit_labels(..., x=1.5)` produces `15_plong_n4_m2_x1p5`.
+
+profit_strict cases:
+
+- Bottom: forward profitable, past window clean → 1.
+- Rising slope: forward profitable, but past window has dip below `entry − y*atr` → 0.
+- Dip exactly at window edge (`L*tf` rows back) counts; one row earlier does not.
+- Entry minute's own wick below threshold → 0 (inclusive window).
+- Fewer than `L*tf` rows of history → NaN even when forward window complete.
+- Short mirror of each strict case.
+
+- Property test: A ≡ B exactly on random-walk data, long + short, plain + strict,
+  several `(tf, n, m, x, l, y)` combos including `tf=15` and `tf=60`.
+- Column naming: `add_profit_labels(..., x=1.5)` produces `15_plong_n4_m2_x1p5`;
+  `add_profit_strict_labels(..., l=8, y=0.5)` produces `15_pslong_n4_m2_x1p5_l8_y0p5`.
 
 All RED before implementation starts; GREEN in Docker before task completion.
 
@@ -167,4 +215,4 @@ docker compose run --rm trainer python3 -m pytest tests/test_phase13_task01_prof
 
 ## Commit
 
-`feat: add lookahead profit labels (plong/pshort) for training targets`
+`feat: add lookahead profit labels (plong/pshort + strict variant) for training targets`
