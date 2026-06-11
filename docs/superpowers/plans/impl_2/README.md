@@ -27,6 +27,7 @@
 | 10 | `phase-10-execution/` | LiveOrderTracker, Robot polling loop + order management |
 | 11 | `phase-11-nn-module/` | NNModel, NNPredictor, CheckpointManager, NNOrchestrator |
 | 12 | `phase-12-frontend/` | ChartRenderer, DataViewer, TrainingDashboard, LiveDashboard |
+| 13 | `phase-13-improvements/` | Post-pipeline improvements: lookahead profit labels (training targets) |
 
 ---
 
