@@ -13,7 +13,8 @@ profitable long entry when, within the next `N * tf` minutes, price rises more t
 before dropping more than `X * tf_atr` below entry. Short is the exact mirror.
 
 A second variant, **profit_strict**, adds a backward clean-entry condition (parameters `L`, `Y`):
-in the last `L * tf` minutes price never went below `entry − Y * tf_atr` (long; short mirrored).
+in the last `L` minutes (`L` 1-minute candles, independent of tf) price never went below
+`entry − Y * tf_atr` (long; short mirrored).
 This restricts labels to bottoms instead of points already on the rising slope.
 
 Labels look into the future by construction — they are training/backtest targets, never features.
@@ -122,13 +123,13 @@ def add_profit_strict_labels(
 `profit_strict_long` = `profit_long` AND a backward clean-entry condition. Purpose: label
 bottoms, not points already on the rising slope.
 
-7. Past window: the last `L * tf` 1-minute rows ending at the entry row **inclusive**
+7. Past window: the last `L` 1-minute rows (not scaled by tf) ending at the entry row **inclusive**
    (entry minute's own wick counts).
 8. Condition (long): no row in the past window has `1_low < entry − y * atr` — the
    stop-loss check mirrored into the past. Short: no row has `1_high > entry + y * atr`.
 9. Label 1 iff the forward profit condition (steps 3–5) holds AND the past condition holds;
    otherwise 0.
-10. NaN additionally when fewer than `L * tf` rows of history exist before the entry row.
+10. NaN additionally when fewer than `L` rows of history exist up to the entry row.
 
 ---
 
@@ -141,7 +142,7 @@ Two implementations, identical semantics:
   view), rows picked at entry positions, compared against per-entry target/stop, first-touch
   index via `argmax` along the window axis. Entry rows processed in chunks (~10k) to cap peak
   memory (tf=1440, N=10 → 14 400-wide windows). Past condition of `profit_strict` needs no
-  windows: rolling min of `1_low` (max of `1_high` for short) over `L * tf` rows on the full
+  windows: rolling min of `1_low` (max of `1_high` for short) over `L` rows on the full
   1-minute array, compared at entry rows — O(n), then AND with the forward label.
 - **B (reference, test file only):** naive per-entry Python loop walking 1-minute bars in
   order. Trivially auditable; used as the oracle.
@@ -180,9 +181,9 @@ profit_strict cases:
 
 - Bottom: forward profitable, past window clean → 1.
 - Rising slope: forward profitable, but past window has dip below `entry − y*atr` → 0.
-- Dip exactly at window edge (`L*tf` rows back) counts; one row earlier does not.
+- Dip exactly at window edge (`L` rows back) counts; one row earlier does not.
 - Entry minute's own wick below threshold → 0 (inclusive window).
-- Fewer than `L*tf` rows of history → NaN even when forward window complete.
+- Fewer than `L` rows of history → NaN even when forward window complete.
 - Short mirror of each strict case.
 
 - Property test: A ≡ B exactly on random-walk data, long + short, plain + strict,
