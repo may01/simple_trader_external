@@ -59,12 +59,19 @@ It replaces the static `DataViewer.view_full()` → `fig.show()` flow for datase
 | cci | `cci_14`, `cci_14_ma_20` |
 | macd_12_26_9 | line + signal + histogram (bars) |
 | macd_5_13_9 | line + signal |
-| close_diff | `close_diff_prc` + `rm_20` + `mean_above`/`mean_below`, zero line |
+| adx | `adx_14` |
+| close_diff | `close_diff_prc` + `rm_20` + `rm_20_std_above`/`rm_20_std_below`, zero line |
 | high_diff | same pattern for high |
 | low_diff | same pattern for low |
 | rsi_diff | `rsi_ma8/12/24_diff`, zero line |
 
-Each oscillator's / derivative's moving-average lines draw on the same subplot as the source series. Trace visibility is toggled via the plotly legend.
+Each oscillator's / derivative's moving-average lines draw on the same subplot as the source series. Derivative bands are mean ± rolling std (the one-signed `*_mean_above/below` fields stay computed but are not drawn by default). Trace visibility is toggled via the plotly legend.
+
+### Figure layout
+
+- Row weights: price 0.60, every other row `1.5 × 0.40/(n−1)`; figure height 264 px/row — price row keeps constant pixel size, other rows 1.5× their pre-task-10 size
+- Rangeslider: disabled on all axes, slim one (`thickness=0.05`) on the bottom row only — never overlaps volume/RSI rows
+- Each candle plots at its period open timestamp and spans the full TF width
 
 ---
 
