@@ -120,7 +120,7 @@ After this change: `Position` class contains zero live-only state. Robot and Tra
 
 ### Problem
 
-**IC-3:** `get_close_price()` in Strategy computes exit target as a fixed percentage above/below entry (`+0.8%`). `get_stop_loss_price()` uses SAR ± 0.3×ATR. The v2.0 data layer computes `tgt_long`, `sl_long`, `tgt_short`, `sl_short` from `diff_stats.pkl` — statistically calibrated per-timeframe targets. These are available via `DataPoint.get("tgt_long", tf)` for tf ∈ {15, 60, 240, 1440}. They are currently unused.
+**IC-3:** `get_close_price()` in Strategy computes exit target as a fixed percentage above/below entry (`+0.8%`). `get_stop_loss_price()` uses SAR ± 0.3×ATR. The v2.0 data layer computes `tgt_long`, `sl_long`, `tgt_short`, `sl_short` from the previous candle's high/low and rolling diff_prc mean/std — statistically calibrated per-timeframe targets. These are available via `DataPoint.get("tgt_long", tf)` for tf ∈ {15, 60, 240, 1440}. They are currently unused.
 
 **IC-5:** `StrategyManager.trend_tf` and `price_check_tf` contain invalid timeframes (3, 30, 45, 120) not present in `CANDLES = [1, 5, 15, 60, 240, 1440]`. Any signal evaluation against these timeframes silently returns no data or stale data.
 

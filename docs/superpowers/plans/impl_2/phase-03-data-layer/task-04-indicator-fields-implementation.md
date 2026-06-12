@@ -75,18 +75,20 @@ All classification fields declare `resource_dependencies = ["rsi_classification.
 
 ### Targets Group (applies_to: [15, 60, 240, 1440])
 
-All target fields declare `resource_dependencies = ["diff_stats.pkl"]`. If this file is absent, the field is skipped and its output column is NaN.
+tgt/sl fields anchor to the previous closed candle's high/low and the rolling diff stats
+of the price_derivatives group (diff_prc values are percent — note the /100):
 
-- `TgtLongField` / `SLLongField` — target and stop-loss levels for long → `{tf}_tgt_long`, `{tf}_sl_long`
+- `TgtLongField` → `{tf}_tgt_long` = `prev_high × (1 + (high_diff_prc_rm_20 − high_diff_prc_rm_20_std_above)/100)`
+  - `dependencies: ["high_diff_prc_rm_20", "high_diff_prc_rm_20_std_above"]`, `resource_dependencies: []`
+- `SLLongField` → `{tf}_sl_long` = `prev_low × (1 + (low_diff_prc_rm_20 − low_diff_prc_rm_20_std_below)/100)`
+  - `dependencies: ["low_diff_prc_rm_20", "low_diff_prc_rm_20_std_below"]`, `resource_dependencies: []`
+- `TgtShortField` → `{tf}_tgt_short` = `prev_low × (1 + (low_diff_prc_rm_20 + low_diff_prc_rm_20_std_below)/100)`
+  - `dependencies: ["low_diff_prc_rm_20", "low_diff_prc_rm_20_std_below"]`, `resource_dependencies: []`
+- `SLShortField` → `{tf}_sl_short` = `prev_high × (1 + (high_diff_prc_rm_20 + high_diff_prc_rm_20_std_above)/100)`
+  - `dependencies: ["high_diff_prc_rm_20", "high_diff_prc_rm_20_std_above"]`, `resource_dependencies: []`
+- `ZBField` / `ZSField` — zone buy/sell → `{tf}_ZB`, `{tf}_ZS`
   - `resource_dependencies: ["diff_stats.pkl"]`
-  - `dependencies: []`
-  - loads `diff_stats.pkl` once at construction via `DataAttributes.load_diff_stats(STATS_DIR)`
-- `TgtShortField` / `SLShortField` — for short → `{tf}_tgt_short`, `{tf}_sl_short`
-  - `resource_dependencies: ["diff_stats.pkl"]`
-  - `dependencies: []`
-- `ZBField` / `ZSField` — zone buy/sell thresholds → `{tf}_ZB`, `{tf}_ZS`
-  - `resource_dependencies: ["diff_stats.pkl"]`
-  - `dependencies: ["tgt_long", "tgt_short"]`
+  - semantics PENDING a dedicated task (current threshold-compare output is degenerate)
 
 ### Trend Flags Group
 - `TrendUpField` — boolean: price above EMA-50 and EMA-50 rising → `{tf}_trend_up`
@@ -101,13 +103,13 @@ All target fields declare `resource_dependencies = ["diff_stats.pkl"]`. If this 
 ## Key Constraints
 
 - All fields read ONLY `{tf}_*` prefixed columns from `data_point.get_df(tf)` — never raw column names like `"close"`
-- `classification` and `targets` fields declare `resource_dependencies` (see field specs above); if those files are absent the orchestrator skips them gracefully (NaN output) — see Task 03 dependency resolution semantics
+- `classification` and `ZB`/`ZS` fields declare `resource_dependencies` (see field specs above); if those files are absent the orchestrator skips them gracefully (NaN output) — see Task 03 dependency resolution semantics. The four tgt/sl fields have no resource dependencies.
 - Stats files loaded at field **construction time** (not per-row) — store as instance attributes; `is_available()` checks `os.path.exists` on each path in `resource_dependencies`
 - Groups `["momentum","trend","volatility","oscillators","volume","price_derivatives","trend_flags","nn_features"]` are **base indicators** — `resource_dependencies = []`, computed in pass 1
 - Groups `["classification","targets"]` are **class indicators** — `resource_dependencies` non-empty, computed in pass 2 only after `DataPreparer._compute_base_attributes()` writes the stats files
 - TA-Lib functions require float64 arrays — cast explicitly before calling
 - `SARField` — TA-Lib SAR has issues with very short series; handle `len(df) < 2` edge case
-- Forward-looking target fields (`tgt_long`, `tgt_short`) — ONLY valid for offline wide DataFrame generation. These read `df.loc[ts + N]` → must NEVER be computed in the live path
+- Target fields (`tgt_long`, `sl_long`, `tgt_short`, `sl_short`) are backward-looking (previous candle + rolling stats of past diffs) — safe for the live path; lookahead profit labels live in `indicators/labels.py` (phase 13) instead
 
 ---
 

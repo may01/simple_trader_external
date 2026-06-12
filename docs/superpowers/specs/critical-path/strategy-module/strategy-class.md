@@ -408,7 +408,7 @@ def get_close_price(self, action, tf, cur_data, action_msg):
     
     Base Behavior (primary: data-layer targets; fallback: fixed %):
         - STRATEGY_ACTION_OPEN_LONG:
-            1. Try cur_data.get("tgt_long", tf) — statistically calibrated from diff_stats.pkl
+            1. Try cur_data.get("tgt_long", tf) — prev-candle high anchored to rolling diff stats
             2. Fallback: entry_price * 1.008
         - STRATEGY_ACTION_OPEN_SHORT:
             1. Try cur_data.get("tgt_short", tf)

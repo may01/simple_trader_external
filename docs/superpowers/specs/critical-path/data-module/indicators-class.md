@@ -290,16 +290,23 @@ Thresholds sourced from `DataAttributes.rsi_classification` (loaded from `stats/
 
 Only for timeframes in `{15, 60, 240, 1440}`.
 
+All `diff_prc` values are in percent, hence the `/100` in the formulas. Anchors are the
+previous closed candle's high/low (`shift(1)`); statistics are the same-tf rolling fields
+from the price_derivatives group (`*_diff_prc_rm_20`, `*_diff_prc_rm_20_std_above/below`).
+
 | Field name | Output column | Computation |
 |---|---|---|
-| `tgt_long` | `{tf}_tgt_long` | `high.shift(1) × (1 + diff_prc_rm_high − tgt_shift × high_diff_prc_rm_mean_below)` |
-| `sl_long` | `{tf}_sl_long` | `low.shift(1) × (1 + diff_prc_rm_low − sl_shift × low_diff_prc_rm_mean_below)` |
-| `tgt_short` | `{tf}_tgt_short` | `low.shift(1) × (1 + diff_prc_rm_low + tgt_shift × low_diff_prc_rm_mean_above)` |
-| `sl_short` | `{tf}_sl_short` | `high.shift(1) × (1 + diff_prc_rm_high + sl_shift × high_diff_prc_rm_mean_above)` |
-| `ZB` | `{tf}_ZB` | `(0.3/1.0) × tgt_long + (0.7/1.0) × sl_long` — probability-weighted buy zone |
-| `ZS` | `{tf}_ZS` | `(0.3/1.0) × tgt_short + (0.7/1.0) × sl_short` — probability-weighted sell zone |
+| `tgt_long` | `{tf}_tgt_long` | `high.shift(1) × (1 + (high_diff_prc_rm_20 − high_diff_prc_rm_20_std_above)/100)` |
+| `sl_long` | `{tf}_sl_long` | `low.shift(1) × (1 + (low_diff_prc_rm_20 − low_diff_prc_rm_20_std_below)/100)` |
+| `tgt_short` | `{tf}_tgt_short` | `low.shift(1) × (1 + (low_diff_prc_rm_20 + low_diff_prc_rm_20_std_below)/100)` |
+| `sl_short` | `{tf}_sl_short` | `high.shift(1) × (1 + (high_diff_prc_rm_20 + high_diff_prc_rm_20_std_above)/100)` |
+| `ZB` | `{tf}_ZB` | PENDING — current code compares close to a `zb_threshold` that is never produced (degenerate constant 1); intended semantics to be decided in a dedicated task |
+| `ZS` | `{tf}_ZS` | PENDING — mirror of `ZB` (degenerate constant 0) |
 
-`tgt_shift` / `sl_shift` values per class are sourced from `DataAttributes.diff_stats`.
+The four tgt/sl fields have no stats-file dependency (`resource_dependencies: []`); they
+depend on price_derivatives columns already present in the wide df (declared in
+`depends_on`). First row of a dataset is NaN (no previous candle). `diff_stats.pkl`
+remains only as the (unwired) input of ZB/ZS.
 
 ### 5.9 NN Features
 

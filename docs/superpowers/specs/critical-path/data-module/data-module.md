@@ -494,7 +494,7 @@ SimulationData(pair, begin_ts, end_ts, step_minutes)
 - **graber_data.pkl** — simulation/training path raw source
 - **stats/ files** (version-controlled, static per pair):
   - `rsi_classification.json` — RSI thresholds for classification
-  - `diff_stats.pkl` — price differential stats per class for targets/SL
+  - `diff_stats.pkl` — price differential stats per TF (mean/std of close pct_change); only ZB/ZS still reference it (pending task) — tgt/sl fields read rolling diff_prc columns instead
   - `level_stats.pkl` — level efficacy metrics
 
 ### Downstream (consumes this module)

@@ -84,7 +84,7 @@ Attributes:
 - `compute_nn_stats()` uses only closed-candle rows (`{tf}_is_closed=True`) for each feature column's TF; partial-candle rows excluded from mean/std calculation
 - `column_stats` covers only columns explicitly passed to `compute_nn_stats()` — not all DataFrame columns
 - `save()` / `load()` persist the entire `DataAttributes` instance (including `column_stats`) via pickle
-- Forward-looking target columns (`tgt_long`, `tgt_short`) must ONLY appear in `FullData` output — never in `LiveDataPoint`
+- Target columns (`tgt_long`, `sl_long`, `tgt_short`, `sl_short`) are backward-looking (prev candle + rolling diff stats) and live-safe; truly forward-looking labels (phase 13 `indicators/labels.py`) must ONLY appear in `FullData` output — never in `LiveDataPoint`
 
 ---
 
