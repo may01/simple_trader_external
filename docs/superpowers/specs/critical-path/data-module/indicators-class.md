@@ -290,17 +290,17 @@ Thresholds sourced from `DataAttributes.rsi_classification` (loaded from `stats/
 
 Only for timeframes in `{15, 60, 240, 1440}`.
 
-All `diff_prc` values are in percent, hence the `/100` in the formulas. Anchor AND statistics
-are all taken at the previous closed candle (`[i−1]`, i.e. `shift(1)`); statistics are the
-same-tf rolling fields from the price_derivatives group (`*_diff_prc_rm_20`,
-`*_diff_prc_rm_20_std_above/below`). Long fields use `std_below`, short fields `std_above`.
+All `diff_prc` values are in percent, hence the `/100` in the formulas. Anchor and statistic
+are both taken at the previous closed candle (`[i−1]`, i.e. `shift(1)`); the statistic is
+the same-tf rolling mean from the price_derivatives group (`*_diff_prc_rm_20`). No std
+term — long/short pairs share values (`tgt_short` = `sl_long`, `sl_short` = `tgt_long`).
 
 | Field name | Output column | Computation |
 |---|---|---|
-| `tgt_long` | `{tf}_tgt_long` | `high[i−1] × (1 + (high_diff_prc_rm_20[i−1] − high_diff_prc_rm_20_std_below[i−1])/100)` |
-| `sl_long` | `{tf}_sl_long` | `low[i−1] × (1 + (low_diff_prc_rm_20[i−1] − low_diff_prc_rm_20_std_below[i−1])/100)` |
-| `tgt_short` | `{tf}_tgt_short` | `low[i−1] × (1 + (low_diff_prc_rm_20[i−1] + low_diff_prc_rm_20_std_above[i−1])/100)` |
-| `sl_short` | `{tf}_sl_short` | `high[i−1] × (1 + (high_diff_prc_rm_20[i−1] + high_diff_prc_rm_20_std_above[i−1])/100)` |
+| `tgt_long` | `{tf}_tgt_long` | `high[i−1] × (1 + high_diff_prc_rm_20[i−1]/100)` |
+| `sl_long` | `{tf}_sl_long` | `low[i−1] × (1 + low_diff_prc_rm_20[i−1]/100)` |
+| `tgt_short` | `{tf}_tgt_short` | `low[i−1] × (1 + low_diff_prc_rm_20[i−1]/100)` — equals `sl_long` by construction |
+| `sl_short` | `{tf}_sl_short` | `high[i−1] × (1 + high_diff_prc_rm_20[i−1]/100)` — equals `tgt_long` by construction |
 | `ZB` | `{tf}_ZB` | PENDING — current code compares close to a `zb_threshold` that is never produced (degenerate constant 1); intended semantics to be decided in a dedicated task |
 | `ZS` | `{tf}_ZS` | PENDING — mirror of `ZB` (degenerate constant 0) |
 
