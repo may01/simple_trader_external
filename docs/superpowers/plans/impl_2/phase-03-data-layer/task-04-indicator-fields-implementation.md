@@ -78,13 +78,15 @@ All classification fields declare `resource_dependencies = ["rsi_classification.
 tgt/sl fields anchor to the previous closed candle's high/low and the rolling diff stats
 of the price_derivatives group (diff_prc values are percent — note the /100):
 
-- `TgtLongField` → `{tf}_tgt_long` = `prev_high × (1 + (high_diff_prc_rm_20 − high_diff_prc_rm_20_std_above)/100)`
-  - `dependencies: ["high_diff_prc_rm_20", "high_diff_prc_rm_20_std_above"]`, `resource_dependencies: []`
-- `SLLongField` → `{tf}_sl_long` = `prev_low × (1 + (low_diff_prc_rm_20 − low_diff_prc_rm_20_std_below)/100)`
+All anchors and statistics taken at the previous closed candle (`[i−1]` = `shift(1)`):
+
+- `TgtLongField` → `{tf}_tgt_long` = `high[i−1] × (1 + (high_diff_prc_rm_20[i−1] − high_diff_prc_rm_20_std_below[i−1])/100)`
+  - `dependencies: ["high_diff_prc_rm_20", "high_diff_prc_rm_20_std_below"]`, `resource_dependencies: []`
+- `SLLongField` → `{tf}_sl_long` = `low[i−1] × (1 + (low_diff_prc_rm_20[i−1] − low_diff_prc_rm_20_std_below[i−1])/100)`
   - `dependencies: ["low_diff_prc_rm_20", "low_diff_prc_rm_20_std_below"]`, `resource_dependencies: []`
-- `TgtShortField` → `{tf}_tgt_short` = `prev_low × (1 + (low_diff_prc_rm_20 + low_diff_prc_rm_20_std_below)/100)`
-  - `dependencies: ["low_diff_prc_rm_20", "low_diff_prc_rm_20_std_below"]`, `resource_dependencies: []`
-- `SLShortField` → `{tf}_sl_short` = `prev_high × (1 + (high_diff_prc_rm_20 + high_diff_prc_rm_20_std_above)/100)`
+- `TgtShortField` → `{tf}_tgt_short` = `low[i−1] × (1 + (low_diff_prc_rm_20[i−1] + low_diff_prc_rm_20_std_above[i−1])/100)`
+  - `dependencies: ["low_diff_prc_rm_20", "low_diff_prc_rm_20_std_above"]`, `resource_dependencies: []`
+- `SLShortField` → `{tf}_sl_short` = `high[i−1] × (1 + (high_diff_prc_rm_20[i−1] + high_diff_prc_rm_20_std_above[i−1])/100)`
   - `dependencies: ["high_diff_prc_rm_20", "high_diff_prc_rm_20_std_above"]`, `resource_dependencies: []`
 - `ZBField` / `ZSField` — zone buy/sell → `{tf}_ZB`, `{tf}_ZS`
   - `resource_dependencies: ["diff_stats.pkl"]`
