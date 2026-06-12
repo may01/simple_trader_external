@@ -47,6 +47,7 @@ Callback: `(start-date.date, days.value, timeframes.value) → chart-groups.chil
 
 - Available timeframes are discovered from the wide df columns — never hardcode the TF list (datasets may differ)
 - Higher TFs have sparser rows in the wide df: forward-filled or NaN between candle closes — drop consecutive duplicate timestamps (or NaN rows) per TF before drawing so candles render one per TF period
+- Each candle plots at its period **open** timestamp (index floored to the TF period start, values from the period's last row); the resulting even spacing makes plotly render every candle across its full TF width (a 15m candle spans 15 minutes on the chart)
 - Each TF group is an independent figure — no shared axes across groups (plotly zoom stays per-chart)
 - Empty selection renders an empty container, not an error
 

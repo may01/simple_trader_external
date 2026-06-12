@@ -79,8 +79,8 @@ Each oscillator's / derivative's moving-average lines draw on the same subplot a
 ### Callback: `(start-date, days, timeframes) → chart-groups`
 
 **Behavior:**
-1. For each selected TF: slice `full_data.df.loc[start : start + days]` (DatetimeIndex slicing)
-2. Drop per-TF duplicate/NaN rows so higher-TF candles render one per period
+1. For each selected TF: slice `full_data.df.loc[start : start + days]` (DatetimeIndex slicing; naive picker dates are localized to the tz-aware UTC index)
+2. Drop per-TF duplicate/NaN rows so higher-TF candles render one per period; re-index each kept row to its period **open** timestamp (values from the period's last row) so candles plot at open time and span the full TF width
 3. Build figure via `DataViewer.build_window_figure(start, days, tf=tf)`
 4. Return one `dcc.Graph` per TF
 
