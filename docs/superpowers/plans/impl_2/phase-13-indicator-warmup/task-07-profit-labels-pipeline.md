@@ -40,6 +40,18 @@ docker compose run --rm graber python3 -m pytest tests/                     # ve
   Parameter values are a modeling choice — initial set goes in YAML where the
   user tunes it; the pipeline must not hardcode any.
 
+  **Approved initial set (2026-06-13)** — each row ships as a `profit` entry
+  plus a `profit_strict` entry (12 specs, 24 columns), `atr_period` default 14:
+
+  | tf  | n | m | x   | strict l | strict y |
+  |-----|---|---|-----|----------|----------|
+  | 15  | 1 | 1 | 0.4 | 15       | 0.4      |
+  | 15  | 2 | 1 | 0.4 | 15       | 0.4      |
+  | 60  | 1 | 1 | 0.3 | 15       | 0.3      |
+  | 60  | 2 | 1 | 0.3 | 15       | 0.3      |
+  | 240 | 1 | 1 | 0.2 | 15       | 0.2      |
+  | 240 | 2 | 1 | 0.2 | 15       | 0.2      |
+
 - **Pipeline placement: after the warmup trim, before NN merge/stats**
   (new step between current steps 6 and 7 of `prepare()`):
   - labels are vectorized over the full frame (no per-row pass, no fork pool);
