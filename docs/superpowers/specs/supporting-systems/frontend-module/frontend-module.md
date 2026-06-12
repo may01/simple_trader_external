@@ -10,7 +10,7 @@
 
 The Frontend Module provides interactive web-based dashboards for analyzing trading data and strategy performance. Built on Plotly and Dash, it enables:
 
-- **Historical Data Viewer:** Display OHLC candles with technical indicators and trading signals
+- **Historical Data Viewer:** Display OHLC candles with technical indicators and trading signals — interactive via `HistoryDashboard` (start-date + days window, multi-timeframe chart groups, full indicator panels; see `history-dashboard-class.md`)
 - **Simulation Viewer:** Replay backtests with trade marks and performance metrics
 - **Live Dashboard:** Real-time market data and open positions
 - **Prediction Viewer:** Display price predictions and forecast confidence
@@ -39,6 +39,7 @@ Key design: Viewers are independent Dash apps that can run standalone or be comb
 ### Key Interfaces
 - **ChartRenderer.render_candlestick()** — Draw OHLC with indicators
 - **DataViewer.display_candles()** — Show candle data with controls
+- **HistoryDashboard.run()** — Interactive dataset review: date window, timeframe multi-select, per-TF indicator chart groups
 - **TrainingDashboard.display_results()** — Show backtest statistics
 - **LiveDashboard.display_positions()** — Real-time position monitoring
 
@@ -161,6 +162,16 @@ Displays backtest analysis dashboard.
 - `display_equity_curve(result)` — Equity curve chart
 - `display_trade_analysis(result)` — Trade statistics
 - `display_comparison(results_list)` — Compare multiple backtests
+
+### HistoryDashboard Class
+Interactive Dash viewer for the prepared backtesting dataset (see `history-dashboard-class.md`).
+
+**Controls:**
+- Start-date picker — from which day data is shown
+- Days input — how many days are shown
+- Timeframe multi-select — one chart group per selected TF
+
+**Per-TF chart group:** OHLC candles with Bollinger/EMA/SAR overlays; RSI, CCI, MACD subplots each with their moving averages; close/high/low diff and rsi_diff derivative subplots each with rolling means.
 
 ### LiveDashboard Class
 Real-time monitoring dashboard.
