@@ -20,7 +20,7 @@ Three chart improvements:
 
 Plotly's rangeslider previews the traces of the axis it is attached to — previously the last subplot row, i.e. whatever indicator sorted last. A dedicated short "range" row holding a second candlestick copy fixes the preview permanently.
 
-Both class fields (`indicators/library/classification.py`) bucket `rsi_ma8` against mean ± std from `rsi_classification.json`; `zone_class == move_class + 1`, so an open diamond ringing the move-class dot shows both without occlusion.
+Both class fields (`indicators/library/classification.py`) draw at the `rsi_ma8` y-value: `move_class` buckets `rsi_ma8_diff` momentum (−2..2), `zone_class` buckets the `rsi_ma8` level (0..4) — see task-15. The open diamond rings the move-class dot, so both read without occlusion.
 
 ---
 

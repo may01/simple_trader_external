@@ -274,17 +274,19 @@ Equivalent fields exist for `high_*` and `low_*` prefixes.
 | `zone_class` | `{tf}_zone_class` | {15, 60, 240, 1440} | `rsi_ma8`; thresholds from `rsi_classification` |
 | `{tf}_class` | `{tf}_{tf}_class` | {15, 60, 240, 1440} | `move_class + zone_class`; overridden by over_low/over_high |
 
-**Classification tiers** (5 levels each):
+**Classification tiers** (5 levels each, same split for both fields):
 
-| move_class | Condition |
-|---|---|
-| `CLASS_RSI_D` | `rsi_ma8_diff < mean − std` |
-| `CLASS_RSI_MD` | `mean − std ≤ x < mean − 0.5·std` |
-| `CLASS_RSI_M` | `−0.5·std ≤ x ≤ 0.5·std` |
-| `CLASS_RSI_MU` | `mean + 0.5·std < x ≤ mean + std` |
-| `CLASS_RSI_U` | `x > mean + std` |
+| move_class (x = `rsi_ma8_diff`, value) | zone_class (x = `rsi_ma8`, value) | Condition |
+|---|---|---|
+| `CLASS_RSI_D` (−2) | 0 | `x < mean − std` |
+| `CLASS_RSI_MD` (−1) | 1 | `mean − std ≤ x < mean − 0.5·std` |
+| `CLASS_RSI_M` (0) | 2 | `mean − 0.5·std ≤ x ≤ mean + 0.5·std` |
+| `CLASS_RSI_MU` (1) | 3 | `mean + 0.5·std < x ≤ mean + std` |
+| `CLASS_RSI_U` (2) | 4 | `x > mean + std` |
 
-Thresholds sourced from `DataAttributes.rsi_classification` (loaded from `stats/{pair}/rsi_classification.json`).
+NaN inputs land in the middle tier.
+
+Thresholds sourced from `DataAttributes.rsi_classification` (loaded from `stats/{pair}/rsi_classification.json`). Each per-TF entry carries `mean`/`std` of `rsi_ma8` (zone_class) and `diff_mean`/`diff_std` of `rsi_ma8_diff` (move_class), computed over closed-candle rows. TFs with fewer than 2 valid rows get no entry (the file never contains NaN); class fields fall back to the nearest available lower TF, then higher.
 
 ### 5.8 Targets
 
