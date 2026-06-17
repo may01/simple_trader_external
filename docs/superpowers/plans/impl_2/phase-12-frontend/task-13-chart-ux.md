@@ -44,7 +44,7 @@ Both class fields (`indicators/library/classification.py`) draw at the `rsi_ma8`
 
 - `_build_figure(..., range_row=False)`; `build_window_figure` always passes `range_row=True` and draws a second candlestick copy into the range row; no indicators there
 - Volume: `draw_bar` instead of `draw_line`
-- `_RSI_CLASS_MARKERS`: `move_class` circles (size 6), `zone_class` open diamonds (size 11); bucket colours red/orange/lightgreen/green low→high; one trace per (field, value), y-values from `{tf}_rsi_ma8`
+- `_RSI_CLASS_MARKERS`: `move_class` circles (size 6), `zone_class` open diamonds (size 11); bucket colours red/orange/lightgreen/green low→high; one trace per (field, value), y-values from `{tf}_rsi_ma8`. Both fields recompute every base-frequency row, so markers are drawn per-minute on the raw window (not deduped to one per displayed candle), exposing intra-candle class evolution.
 
 ---
 

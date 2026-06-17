@@ -27,6 +27,8 @@
 | 10 | `phase-10-execution/` | LiveOrderTracker, Robot polling loop + order management |
 | 11 | `phase-11-nn-module/` | NNModel, NNPredictor, CheckpointManager, NNOrchestrator |
 | 12 | `phase-12-frontend/` | ChartRenderer, DataViewer, TrainingDashboard, LiveDashboard |
+| 13 | `phase-13-indicator-warmup/` | Indicator warmup, diff/std attributes, profit-label pipeline |
+| 14 | `phase-14-simulation-wiring/` | Test strategies, Action records, per-sim storage, report, chart overlay |
 
 ---
 

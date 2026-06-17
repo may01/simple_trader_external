@@ -56,10 +56,12 @@ It replaces the static `DataViewer.view_full()` → `fig.show()` flow for datase
 | price | candles; Bollinger variants (`bb_*`), EMAs (`ema_7/14/25/50/100`), SAR (`sar_002_02`, markers) |
 | volume | volume line |
 | rsi | `rsi_14`, `rsi_ma8`, `rsi_ma12`, `rsi_ma24` |
-| cci | `cci_14`, `cci_14_ma_20` |
+| cci | `cci_14`, `cci_14_ma_5` |
 | macd_12_26_9 | line + signal + histogram (bars) |
 | macd_5_13_9 | line + signal |
 | adx | `adx_14` |
+| atr | `atr_14`, `atr_14_ma_5` |
+| natr | `natr_14`, `natr_14_ma_5` |
 | close_diff | `close_diff_prc` + `rm_20` + `rm_20_std_above`/`rm_20_std_below`, zero line |
 | high_diff | same pattern for high |
 | low_diff | same pattern for low |

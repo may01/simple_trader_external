@@ -27,7 +27,7 @@ Show where each configured profit label (`labels:` section of `indicators_config
 
 ## Interface
 
-- One marker trace per label column, drawn only on rows where the label is 1; legend label = column name without TF prefix
+- One marker trace per label column, drawn on every raw (per-minute) row where the label is 1; legend label = column name without TF prefix. A label holds constant across its label-TF candle, so the markers form a band spanning the candle width rather than a single marker at its open.
 - Longs (`plong`/`pslong`): triangle-up below the candle low; shorts (`pshort`/`psshort`): triangle-down above the high
 - Colours: `plong` limegreen, `pslong` green, `pshort` orange, `psshort` red
 - Stacking: each variant on a side gets the next 0.2 %-of-price offset step, so several label sets never overlap
