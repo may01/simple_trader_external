@@ -29,6 +29,7 @@
 | 12 | `phase-12-frontend/` | ChartRenderer, DataViewer, TrainingDashboard, LiveDashboard |
 | 13 | `phase-13-indicator-warmup/` | Indicator warmup, diff/std attributes, profit-label pipeline |
 | 14 | `phase-14-simulation-wiring/` | Test strategies, Action records, per-sim storage, report, chart overlay |
+| 15 | `phase-15-live-verification/` | Live wiring + small-amount cap; mainnet margin op verification; live EMA action run |
 
 ---
 
