@@ -24,7 +24,9 @@ This is the natural-cross path chosen during design — no forced or replayed si
 
 ## Context
 
-`Robot.do()` → `StrategyManager.check()` → on `OPEN_LONG` / `OPEN_SHORT` → `Robot._open_position` → `_place_valid_order` → real `stock.trade(...)` and (short) `stock.borrow(...)`. Fills are reconciled in `Robot._process_executed_orders` → `position.record_entry_fill` / `record_exit_fill`. `Action` records are the Phase-14 record type assembled when a position transitions.
+`Robot.do()` → `StrategyManager.check()` → on `OPEN_LONG` / `OPEN_SHORT` → `Robot._open_position` → `_place_valid_order` → real `stock.trade(...)` and (short) `stock.borrow(...)`. Fills are reconciled in `Robot._process_executed_orders` → `position.record_entry_fill` / `record_exit_fill`.
+
+`Action` is the Phase-14 record type, but it was **simulation-only** (`sim_id` field; assembled only by `TrainRobot`). The live `Robot` did not produce or persist any Action records — it only logged a "Trade finalized" line and updated `live_tracker.json`. **Resolved in this phase (added production wiring):** at the end of every `Robot.do()` tick, `Robot._record_live_actions()` drains `position.drain_changes()` and appends one `Action` (sim_id = `LIVE_SIM_ID` = 0) per lifecycle change to an append-only JSONL store, `LiveActionLog` (`robots/live_action_log.py`), at `shared_folder()/live_actions.jsonl`. This is what `scripts/tail_live_actions.py` tails. The change is backward compatible: `Robot(action_log_path=None)` keeps the old inert behaviour.
 
 The EMA strategies use `5_ema_7` / `5_ema_14` on the live wide DataFrame; `LiveData` must already be producing those columns (Phase 03 / Phase 13 warmup). If the live dataset lacks the EMA columns at startup, the cross can never fire — verify the columns exist before waiting.
 
@@ -32,8 +34,11 @@ The EMA strategies use `5_ema_7` / `5_ema_14` on the live wide DataFrame; `LiveD
 
 ## Files
 
-- No new production module required if Task 01 + Phase 14 are in place.
-- Optional: a small read-only `scripts/tail_live_actions.py` that prints the most recent `Action` records from the live persistence/action store, so the observer can confirm a record was written without stopping the bot.
+- Create: `robots/live_action_log.py` — `LiveActionLog` append-only JSONL store + `tail(n)` (production; the live Action store that did not previously exist).
+- Modify: `robots/robot.py` — optional `action_log_path` ctor arg; `_record_live_actions()` drains `position.drain_changes()` into the store each tick.
+- Modify: `trader.py` — pass `action_log_path=shared_folder()+"live_actions.jsonl"` so the live path persists Actions.
+- Create: `scripts/tail_live_actions.py` — read-only `--preflight` (creds, EMA columns, size, 2 strategies) + tail of recent live `Action` records.
+- Create: `tests/test_phase15_live_actions.py` — mock store round-trip + Robot recording wiring (Docker, no creds).
 
 ---
 
@@ -52,12 +57,12 @@ Run these first so a multi-hour wait is not wasted on a misconfiguration:
 
 ```bash
 # Pre-flight (no trading)
-docker compose run --rm trader python3 scripts/tail_live_actions.py --preflight
+docker compose run --rm live python3 scripts/tail_live_actions.py --preflight
 
 # Live run — attended, real funds, EMA strategies, ≤50 USDT
 STRATEGY_SET=ema LIVE_POSITION_USDT=40 \
   docker compose run --rm -e STRATEGY_SET -e LIVE_POSITION_USDT \
-    trader python3 trader.py
+    live python3 trader.py
 ```
 
 Watch the logs. When `5_ema_7` crosses `5_ema_14`, the Robot should log an open, place a real order, and (on fill) record an entry. Confirm the `Action` was written (tail the action store). Let it run to the opposite cross for a close, **or** stop after a confirmed open + fill and close the position manually via the Task-02 harness if a natural close is impractical. Either way, ensure no position and no loan are left open at the end.
@@ -75,7 +80,16 @@ Watch the logs. When `5_ema_7` crosses `5_ema_14`, the Robot should log an open,
 
 ## Verification
 
-Verified (mainnet, manual): [ ] pre-flight passes — live creds, EMA columns present, size tradeable, 2 strategies registered
+### Live-path bugs found by pre-flight (fixed)
+
+The first real pre-flight run (read-only, no orders) caught two live-only defects — the live path had never run before this phase:
+
+1. **`KeyError('1_buy_volume')`** — `Stock_Binance.get_candles_history` dropped `taker_base_vol` in both the `tf == base_min` column select and `_resample_to_tf`, so `LiveData.build_candles` could not derive `{tf}_buy_volume` and the volume indicator crashed. Fixed by preserving `taker_base_vol` through both paths (commit `c37b9d0`).
+2. **Every order rejected** — `is_invalid_amount` looked up only the `MIN_NOTIONAL` filter, but Binance renamed it to `NOTIONAL`; the lookup returned `None` and flagged all amounts invalid, which would block every live trade. Fixed by accepting `NOTIONAL` or `MIN_NOTIONAL` (commit `c37b9d0`).
+
+Both are covered by mock unit tests in `tests/unit/stock_abstraction/`.
+
+Verified (mainnet, read-only): [x] pre-flight passes — live creds, EMA columns present, size tradeable, 2 strategies registered
 Verified (mainnet, manual): [ ] a natural EMA cross fires the strategy and the Robot places a real margin order
 Verified (mainnet, manual): [ ] the fill is processed — `Position` reflects the entry, `LiveOrderTracker` cleared/updated
 Verified (mainnet, manual): [ ] an `Action` record is written describing the open (and close, if observed)

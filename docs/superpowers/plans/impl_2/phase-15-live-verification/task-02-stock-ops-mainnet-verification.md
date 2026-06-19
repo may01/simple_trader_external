@@ -75,20 +75,22 @@ Hard guards:
 
 ```bash
 # Dry run first — prints intended calls, sends nothing.
-docker compose run --rm trader python3 scripts/verify_stock_ops.py --dry-run
+docker compose run --rm live python3 scripts/verify_stock_ops.py --dry-run
 
 # Real run — attended, real funds, ≤50 USDT.
 LIVE_POSITION_USDT=40 docker compose run --rm -e LIVE_POSITION_USDT \
-  trader python3 scripts/verify_stock_ops.py
+  live python3 scripts/verify_stock_ops.py
 ```
 
-Verified (mainnet, manual): [ ] `get_info` returns exchange/symbol info
-Verified (mainnet, manual): [ ] `buy` places a real margin LIMIT order, `order_id` returned
-Verified (mainnet, manual): [ ] `get_order` reports the order as NEW/PARTIALLY_FILLED with correct amounts
-Verified (mainnet, manual): [ ] `sell` places a real margin LIMIT order
-Verified (mainnet, manual): [ ] `borrow` takes a real margin loan
-Verified (mainnet, manual): [ ] `repay` returns the loan to zero
-Verified (mainnet, manual): [ ] all placed orders cancelled, no residual loan, summary all-PASS
+**Live result (mainnet LINKUSDT, 10 USDT, attended) — 5/6 PASS.** Harness reordered to borrow-before-sell (commit `37cad3b`) so the loaned coin funds the sell test (no pre-held inventory needed). Two live-only bugs were fixed first (commit `c37b9d0`): `taker_base_vol`/`buy_volume` drop and the `MIN_NOTIONAL`→`NOTIONAL` filter rename.
+
+Verified (mainnet, manual): [x] `get_info` returns exchange/symbol info
+Verified (mainnet, manual): [ ] `buy` places a real margin LIMIT order — **BLOCKED on this account**: Binance `-3087` caps LINK pledged collateral (max transfer 1.266 LINK), while min-notional needs ≥1.58 LINK; no non-filling size satisfies both. Account/collateral issue, not code. Needs a pair without a maxed collateral cap, or freed LINK collateral.
+Verified (mainnet, manual): [x] `get_order` reports the order as NEW/PARTIALLY_FILLED with correct amounts (on the sell order)
+Verified (mainnet, manual): [x] `sell` places a real margin LIMIT order (funded by the borrowed coin)
+Verified (mainnet, manual): [x] `borrow` takes a real margin loan
+Verified (mainnet, manual): [x] `repay` returns the loan to its pre-test level
+Verified (mainnet, manual): [x] all placed orders cancelled, no residual loan (buy never placed; sell cancelled; loan repaid)
 
 ---
 

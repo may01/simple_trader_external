@@ -97,7 +97,7 @@ docker run --rm -v "$PWD":/code -w /code simple_trader \
 # Mock — confirms wiring without touching the exchange.
 STRATEGY_SET=ema STOCK_TYPE=mock_binance LIVE_POSITION_USDT=40 \
   docker compose run --rm -e STRATEGY_SET -e STOCK_TYPE -e LIVE_POSITION_USDT \
-  trader python3 -c "
+  live python3 -c "
 import trader
 sm = trader.build_strategy_manager(__import__('stocks_holder').stock_holder.item, 'ema') \
      if hasattr(trader,'build_strategy_manager') else None
@@ -105,9 +105,9 @@ print('strategies registered:', len(sm.strategies) if sm else 'n/a')
 "
 ```
 
-Verified: [ ] `STRATEGY_SET=ema` registers exactly 2 EMA strategies
-Verified: [ ] `LIVE_POSITION_USDT` sets `full_position` and clamps at 50
-Verified: [ ] plan `README.md` references `trader.py` / `docker-compose.yml` (no `pybtctr.py` / `docker-compose-live.yml`)
+Verified: [x] `STRATEGY_SET=ema` registers exactly 2 EMA strategies
+Verified: [x] `LIVE_POSITION_USDT` sets `full_position` and clamps at 50
+Verified: [x] plan `README.md` references `trader.py` / `docker-compose.yml` (no `pybtctr.py` / `docker-compose-live.yml`)
 
 ---
 

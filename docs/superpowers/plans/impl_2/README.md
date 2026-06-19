@@ -51,7 +51,7 @@ docker compose run --rm trainer python3 trainer.py nn_train
 docker compose run --rm trainer python3 trainer.py simulate_nn
 
 # Path E — live trading (paper mode: IS_TRAIDER_TEST=1)
-docker compose -f docker-compose-live.yml run --rm trader python3 pybtctr.py
+docker compose run --rm trader python3 trader.py
 
 # Path F — data viewer
 docker compose -f docker-compose-view.yml run --rm viewer python3 view_online_point.py

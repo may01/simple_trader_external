@@ -51,10 +51,10 @@ This phase **extends existing layers** — it adds no new bottom layer. It is th
 STRATEGY_SET=ema LIVE_POSITION_USDT=40 \
   docker compose run --rm \
     -e STRATEGY_SET -e LIVE_POSITION_USDT \
-    trader python3 trader.py
+    live python3 trader.py
 
 # Manual stock-operation verification harness (real margin, ≤50 USDT).
-docker compose run --rm trader python3 scripts/verify_stock_ops.py
+docker compose run --rm live python3 scripts/verify_stock_ops.py
 ```
 
 These commands are the contract. Implementation must make them work. `trader.py` must register the EMA strategies when `STRATEGY_SET=ema` and size every order to `LIVE_POSITION_USDT`.
