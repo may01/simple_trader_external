@@ -40,12 +40,20 @@ Both `LiveData` and `SimulationData` expose the same `DataPoint` protocol — co
 The isolation layer between storage format and all consumers.
 
 ```python
+_MISSING = object()
+
 class DataPoint:
-    def get(self, col: str, tf: int, shift: int = 0) -> float:
+    def get(self, col: str, tf: int, shift: int = 0, default=_MISSING) -> float:
         """
-        col:   column name WITHOUT tf prefix (e.g. "rsi_14", "close", "ema_25")
-        tf:    timeframe in minutes (from CANDLES config)
-        shift: 0 = current value; N>0 = Nth last completed candle
+        col:     column name WITHOUT tf prefix (e.g. "rsi_14", "close", "ema_25")
+                 EXCEPT NN result columns "nn_res_*", which are timeframe-agnostic
+                 and looked up by their bare name (no tf prefix) regardless of tf.
+        tf:      timeframe in minutes (from CANDLES config)
+        shift:   0 = current value; N>0 = Nth last completed candle
+        default: returned when the column is absent. If omitted, a missing
+                 column raises (KeyError); if given, missing returns `default`.
+                 This is how strategies stay absence-safe for nn_res_* columns
+                 that only exist after run_inference + load-time join.
         """
 
     def get_df(self, tf: int) -> pd.DataFrame:
@@ -55,6 +63,8 @@ class DataPoint:
         """
 ```
 
+**`nn_res_*` access.** NN result columns (`nn_res_{name}_prob_up`, `nn_res_{name}`, …) carry **no `{tf}` prefix** (`nnmodel-class.md` §6). `get()` resolves any `col` beginning with `nn_res_` against the bare column name — the same value is returned for every `tf`. These columns are present only after a load-time join of `df_with_nn.pkl` (see §9 / §8); when absent, `get(..., default=…)` returns the default.
+
 ### LiveDataPoint
 
 ```python
@@ -62,8 +72,14 @@ class LiveDataPoint(DataPoint):
     def __init__(self, ohlc: dict[int, pd.DataFrame]):
         self._ohlc = ohlc
 
-    def get(self, col: str, tf: int, shift: int = 0) -> float:
-        return self._ohlc[tf][f"{tf}_{col}"].iloc[-1 - shift]
+    def get(self, col: str, tf: int, shift: int = 0, default=_MISSING) -> float:
+        name = col if col.startswith("nn_res_") else f"{tf}_{col}"
+        df = self._ohlc[tf]
+        if name not in df.columns:
+            if default is _MISSING:
+                raise KeyError(name)
+            return default
+        return df[name].iloc[-1 - shift]
 
     def get_df(self, tf: int) -> pd.DataFrame:
         return self._ohlc[tf]
@@ -80,13 +96,18 @@ class WideDataPoint(DataPoint):
         self._df = df
         self._ts = ts
 
-    def get(self, col: str, tf: int, shift: int = 0) -> float:
+    def get(self, col: str, tf: int, shift: int = 0, default=_MISSING) -> float:
+        name = col if col.startswith("nn_res_") else f"{tf}_{col}"
+        if name not in self._df.columns:
+            if default is _MISSING:
+                raise KeyError(name)
+            return default
         if shift == 0:
-            return self._df.loc[self._ts, f"{tf}_{col}"]
+            return self._df.loc[self._ts, name]
         closed = self._df[:self._ts][self._df[:self._ts][f"{tf}_is_closed"]]
         if len(closed) < shift:
             return float("nan")
-        return closed.iloc[-shift][f"{tf}_{col}"]
+        return closed.iloc[-shift][name]
 
     def get_df(self, tf: int) -> pd.DataFrame:
         return build_indicator_input(self._df, self._ts, tf)
@@ -296,9 +317,11 @@ class FullData:
         self._df = df
 
     def get(self, tf: int) -> pd.DataFrame:
-        """One row per closed tf-period candle. Columns: {tf}_* only."""
+        """One row per closed tf-period candle. Columns: {tf}_* plus any
+        timeframe-agnostic nn_res_* result columns (joined at load)."""
         mask = self._df[f"{tf}_is_closed"]
-        tf_cols = [c for c in self._df.columns if c.startswith(f"{tf}_")]
+        tf_cols = [c for c in self._df.columns
+                   if c.startswith(f"{tf}_") or c.startswith("nn_res_")]
         return self._df.loc[mask, tf_cols]
 
     def get_candle(self, tf: int, open_time: pd.Timestamp) -> pd.Series:
@@ -316,6 +339,7 @@ class SimulationData:
     def __init__(self, pair: str, begin_ts: int, end_ts: int, step_min: int):
         path = root_folder() + "/df_with_indicators.pkl"
         self._df = pd.read_pickle(path)
+        self._df = join_nn_results(self._df, root_folder())  # left-join df_with_nn.pkl if present
         self._ts_range = pd.date_range(
             start=pd.Timestamp(begin_ts, unit="s"),
             end=pd.Timestamp(end_ts, unit="s"),
@@ -346,6 +370,29 @@ while not sim.is_end():
     rsi_prev = point.get("rsi_14", tf=15, shift=1)  # last closed candle
     sim.next()
 ```
+
+---
+
+## 9a. NN Result Columns — Load-Time Join
+
+NN inference (`NNOrchestrator.run_inference`, `nn-orchestrator-class.md` §4.3) writes a separate, additive `df_with_nn.pkl` next to each dataset's `df_with_indicators.pkl`, containing **only** timeframe-agnostic `nn_res_*` columns on the same 1-min index. Consumers merge it in at construction — the canonical `df_with_indicators.pkl` is **never mutated** and stays single-writer (DataPreparer).
+
+```python
+def join_nn_results(df: pd.DataFrame, folder: str) -> pd.DataFrame:
+    """Left-join nn_res_* columns from {folder}/df_with_nn.pkl onto df.
+    No-op (returns df unchanged) when the file is absent → strategies stay
+    absence-safe via DataPoint.get(col, tf, default=...)."""
+    path = folder + "/df_with_nn.pkl"
+    if not os.path.exists(path):
+        return df
+    nn = pd.read_pickle(path)                 # nn_res_* cols, 1-min DatetimeIndex
+    return df.join(nn, how="left")            # index-aligned; nn_res_* added as-is
+```
+
+- **Cost.** One index-aligned join per consumer load — cheap relative to the wide frame already held. Each `SimulationOrchestrator` worker joins its own copy; live joins once.
+- **Idempotent / disposable.** Re-running inference overwrites `df_with_nn.pkl` only; re-running `prepare()` never clobbers `nn_res_*`.
+
+**Live parity.** `LiveData` consumes `nn_res_*` through the **same** mechanism: a periodic `run_inference` pass over its accumulating window produces a live `df_with_nn`, whose `nn_res_*` columns are joined into the per-tf `ohlc[tf]` frames by timestamp. The removed per-tick `NNPredictor` is **not** reintroduced (`nnpredictor-class.md` §5). Inference cadence is a LiveData scheduling detail; the computation MUST be the identical batch `run_inference`, guaranteeing live/backtest parity.
 
 ---
 

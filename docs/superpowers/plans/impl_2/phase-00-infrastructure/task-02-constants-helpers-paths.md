@@ -84,7 +84,11 @@ Path functions all read `os.environ['PAIR']` internally — no `pair` parameter:
 - `shared_folder() -> str` — `{dataset_folder()}/shared/`
 - `stats_folder() -> str` — `stats/{DATA_ROOT}/{PAIR}/` — in-repo, version-controlled; NOT on Docker volume
 - `nn_folder() -> str` — `{shared_folder()}/nn_data/` — grouped batches co-located with source dataset
-- `nn_weights_folder() -> str` — `/trader_data_long/{DATA_ROOT}/{PAIR}/nn_weights/` — ALWAYS on `simple_trader_vol_long`; hardcoded, not affected by ROOT_FOLDER
+- `nn_artefact_root() -> str` — `/trader_data_long/{DATA_ROOT}/{PAIR}/nn/` — ALWAYS on `simple_trader_vol_long`; hardcoded, not affected by ROOT_FOLDER
+- `nn_datasets_folder() -> str` — `{nn_artefact_root()}/datasets/` — content-addressed tensor cache (one dir per `dataset_hash`), shared across model specs
+- `nn_checkpoints_folder() -> str` — `{nn_artefact_root()}/checkpoints/` — one dir per `spec_hash`; `CheckpointManager` writes `{group_key}_best.pt` / `{group_key}_epoch{N}.pt`
+- `nn_tracking_folder() -> str` — `{nn_artefact_root()}/tracking/` — one dir per `study_name` (`index.sqlite`, `trials/`, `best.json`)
+- ~~`nn_weights_folder()`~~ — REMOVED. Old `.../nn_weights/model_{TF}_*.pt` keyed weights by timeframe; model is now timeframe-agnostic (`spec_hash`+`group_key` identity). Use `nn_checkpoints_folder()`.
 - `action_folder() -> str` — `{shared_folder()}/actions/` — per-timestamp action pkl files
 - `graber_data_path() -> str` — `{dataset_folder()}/graber_data.pkl`
 - `wide_df_path() -> str` — `{dataset_folder()}/df_with_indicators.pkl`
@@ -125,11 +129,11 @@ print('constants ok')
 
 # Verify path helpers resolve correctly for short dataset
 TRAIN_ENV=configs/train_dataset.env docker compose run --rm simulate python3 -c "
-from helpers import root_folder, dataset_folder, data_folder, shared_folder, nn_weights_folder
+from helpers import root_folder, dataset_folder, data_folder, shared_folder, nn_checkpoints_folder
 print('root_folder:', root_folder())
 print('dataset_folder:', dataset_folder())
 print('data_folder:', data_folder())
-print('nn_weights_folder:', nn_weights_folder())
+print('nn_checkpoints_folder:', nn_checkpoints_folder())
 "
 # expected: root_folder=/trader_data, dataset_folder=/trader_data/{DATA_ROOT}/{DATA_SET_NAME}_{PAIR}
 

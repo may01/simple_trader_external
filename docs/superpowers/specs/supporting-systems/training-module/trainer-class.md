@@ -70,8 +70,11 @@ def run(self, run_type: str) -> None:
     elif run_type == "nn_train":
         NNOrchestrator(self.pair, trainer=self).train()
 
-    elif run_type == "simulate_nn":
-        NNOrchestrator(self.pair, trainer=self).simulate()
+    elif run_type in ("infer_nn", "simulate_nn"):   # simulate_nn kept as legacy alias
+        NNOrchestrator(self.pair, trainer=self).run_inference(
+            dataset=os.getenv("NN_INFER_DATASET", root_folder(self.pair)),
+            checkpoint_id=os.getenv("NN_INFER_CHECKPOINT", "best"),
+        )
 
     elif run_type == "collect_live":
         LiveDataCollector(self.pair).run()
@@ -190,7 +193,7 @@ That is the entire public surface — one constructor call, one `run()` call.
 | `simulate()` | `SimulationOrchestrator.run()` |
 | `group_nn(class_type)` | `NNOrchestrator.group(class_type)` |
 | `train_nn()` | `NNOrchestrator.train()` |
-| `simulate_nn()` | `NNOrchestrator.simulate()` |
+| `infer_nn()` (alias `simulate_nn`) | `NNOrchestrator.run_inference(dataset, checkpoint_id)` |
 | `collect_live_data()` | `LiveDataCollector.run()` |
 | `parallel_generate_data_points`, `parallel_simulate`, `parallel_batch_train`, `parallel_train_nn` | Encapsulated inside the relevant collaborator (no longer module-level helpers). |
 | `get_nn_target`, `get_nn_target_near_level`, `get_regression_target` | Become `IndicatorField` subclasses owned by the data module. |

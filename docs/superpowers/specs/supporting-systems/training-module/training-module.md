@@ -18,7 +18,7 @@ The Training Module is the orchestration engine for the entire training and back
 | `Graber` | Data retrieval: fetch 1-min OHLCV from the Binance API for the requested range and write `graber_data.pkl` to disk |
 | `DataPreparer` | Read `graber_data.pkl`; build the wide base DataFrame; run per-minute `Indicators.compute()` in time-batched workers; compute NN forward-looking targets; compute stats; save `df_with_indicators.pkl` |
 | `SimulationOrchestrator` | Parallel backtest: spawn workers using `SimulationData` + `TrainRobot`, aggregate thread results |
-| `NNOrchestrator` | NN pipeline: `group_nn`, `train_nn`, `simulate_nn` |
+| `NNOrchestrator` | NN pipeline: `group_nn`, `train_nn`, `infer_nn` (alias `simulate_nn`) |
 | `LiveDataCollector` | Continuous live-data ingestion from Binance (60s loop) |
 
 This decomposition aligns the module with the **Data Module v2.0** two-path architecture:
@@ -54,7 +54,7 @@ The module retains parallel-first execution. Both data preparation (per-tf indic
 | `simulate` | `SimulationOrchestrator.run()` |
 | `group_nn` | `NNOrchestrator.group(class_type)` |
 | `nn_train` | `NNOrchestrator.train()` |
-| `simulate_nn` | `NNOrchestrator.simulate()` |
+| `infer_nn` (alias `simulate_nn`) | `NNOrchestrator.run_inference(dataset, checkpoint_id)` |
 | `collect_live` | `LiveDataCollector.run()` |
 
 `grab_data` and `generate_full_ohlc` are independent pipelines coupled by `graber_data.pkl` on disk; a user can re-run `generate_full_ohlc` against the same raw file as many times as they want (e.g. to regenerate after changing `indicators_config.yaml`) without redownloading from Binance.
@@ -198,7 +198,7 @@ Step 1 and Step 2 are decoupled by the on-disk `graber_data.pkl`. Re-running Ste
    └──────────────────────────────────────┘
 ```
 
-### 4.3 NN Pipeline (`RUN_TYPE=group_nn` → `nn_train` → `simulate_nn`)
+### 4.3 NN Pipeline (`RUN_TYPE=group_nn` → `nn_train` → `infer_nn`)
 
 ```
    df_with_indicators.pkl
@@ -281,13 +281,13 @@ Step 1 and Step 2 are decoupled by the on-disk `graber_data.pkl`. Re-running Ste
    - For each `(class_type, cls, tf_type, target_type)` permutation in env config:
      - Build `NN(...)` instance, call `train(data_group=1)`
 
-### F. `simulate_nn`
+### F. `infer_nn` (alias `simulate_nn`)
 
-1. `nn = NNOrchestrator(pair)` → `nn.simulate()`:
-   - Load `FullData` view
-   - For each NN configuration / classification:
-     - Load model, run batch, accumulate long/short probabilities
-   - Aggregate across configurations, save `nn_simulation_cls_big_tf.pkl`
+1. `nn = NNOrchestrator(pair)` → `nn.run_inference(dataset, checkpoint_id)`:
+   - Read NN feature columns from the **target** dataset's `df_with_indicators.pkl` (any dataset, not only training) — no grouped-pickle dependency
+   - Load checkpoint (weights + bundled normalisation manifest); normalise with training stats
+   - `run_batch` over closed candles → `nn_res_*` columns
+   - Save `{dataset}/df_with_nn.pkl` (nn_res_* only; never mutates `df_with_indicators.pkl`)
 
 ### G. `collect_live`
 

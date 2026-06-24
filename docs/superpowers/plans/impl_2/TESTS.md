@@ -103,12 +103,12 @@ def test_root_folder_long_override():
 - `helpers.py`: path functions read `os.environ['PAIR']` at call time; no module-level env reads.
 - `logs.py`: `log`, `log_error`, `log_warning`, `log_revenue`, `log_stock` functions.
 - `LEVEL_TYPE_SHORT_1_RESISTANCE` / `LEVEL_TYPE_SHORT_2_RESISTANCE` do NOT exist.
-- `nn_weights_folder()` always returns path under `/trader_data_long` regardless of `ROOT_FOLDER`.
+- `nn_artefact_root()` / `nn_checkpoints_folder()` always return a path under `/trader_data_long` regardless of `ROOT_FOLDER`.
 
 **Acceptance Criteria**
 - `from constants import STRATEGY_ACTION_OPEN_LONG` imports without error.
 - All path functions resolve to correct mount given `ROOT_FOLDER=short` vs `ROOT_FOLDER=long`.
-- `nn_weights_folder()` always starts with `/trader_data_long`.
+- `nn_checkpoints_folder()` always starts with `/trader_data_long`.
 - No module-level `os.environ` read in `constants.py` or `helpers.py`.
 
 **Unit Tests** (`tests/unit/infrastructure/test_constants_helpers.py`)
@@ -152,27 +152,27 @@ def test_path_helpers_short(monkeypatch):
     monkeypatch.setenv("DATA_ROOT","train")
     monkeypatch.setenv("DATA_SET_NAME","2w")
     monkeypatch.setenv("PAIR","link_usdt")
-    from helpers import root_folder, dataset_folder, nn_weights_folder
+    from helpers import root_folder, dataset_folder, nn_checkpoints_folder
     assert root_folder() == "/trader_data"
     assert "/trader_data/" in dataset_folder()
-    assert nn_weights_folder().startswith("/trader_data_long")
+    assert nn_checkpoints_folder().startswith("/trader_data_long")
 
 def test_path_helpers_long(monkeypatch):
     monkeypatch.setenv("ROOT_FOLDER","long")
     monkeypatch.setenv("DATA_ROOT","train")
     monkeypatch.setenv("DATA_SET_NAME","4m")
     monkeypatch.setenv("PAIR","link_usdt")
-    from helpers import root_folder, nn_weights_folder
+    from helpers import root_folder, nn_checkpoints_folder
     assert root_folder() == "/trader_data_long"
-    assert nn_weights_folder().startswith("/trader_data_long")
+    assert nn_checkpoints_folder().startswith("/trader_data_long")
 
-def test_nn_weights_folder_always_long(monkeypatch):
+def test_nn_checkpoints_folder_always_long(monkeypatch):
     for rf in ["short","long"]:
         monkeypatch.setenv("ROOT_FOLDER", rf)
         monkeypatch.setenv("PAIR","link_usdt")
         monkeypatch.setenv("DATA_ROOT","train")
-        from helpers import nn_weights_folder
-        assert nn_weights_folder().startswith("/trader_data_long")
+        from helpers import nn_checkpoints_folder
+        assert nn_checkpoints_folder().startswith("/trader_data_long")
 ```
 
 **Integration Tests** (`tests/integration/infrastructure/test_helpers.py`)
@@ -191,7 +191,7 @@ def test_constants_import_in_docker():
 def test_path_helpers_resolve_in_docker():
     r = subprocess.run([
         "docker","compose","run","--rm","simulate","python3","-c",
-        "from helpers import root_folder, dataset_folder, nn_weights_folder; print(root_folder()); print(nn_weights_folder())"
+        "from helpers import root_folder, dataset_folder, nn_checkpoints_folder; print(root_folder()); print(nn_checkpoints_folder())"
     ], capture_output=True, text=True, timeout=30)
     assert r.returncode == 0
     assert "/trader_data" in r.stdout
@@ -644,7 +644,7 @@ def test_stock_holder_in_docker():
 - `init_dataset_folders()` creates all required directories for the current dataset config.
 - Uses `helpers.py` path functions; reads env vars at call time (not at import).
 - All paths created with `exist_ok=True` — safe to call multiple times.
-- Covers: `dataset_folder()`, `data_folder()`, `shared_folder()`, `nn_folder()`, `action_folder()`, `nn_weights_folder()`, `stats_folder()`.
+- Covers: `dataset_folder()`, `data_folder()`, `shared_folder()`, `nn_folder()`, `action_folder()`, `nn_artefact_root()`, `stats_folder()`.
 
 **Acceptance Criteria**
 - All 7 required directories exist after one call.
@@ -666,14 +666,14 @@ def test_all_folders_created(tmp_path, monkeypatch):
     base = str(tmp_path)
     dataset = f"{base}/train/2w_link_usdt"
     with patch("helpers.root_folder", return_value=base), \
-         patch("helpers.nn_weights_folder", return_value=f"{base}_long/train/link_usdt/nn_weights"), \
+         patch("helpers.nn_artefact_root", return_value=f"{base}_long/train/link_usdt/nn"), \
          patch("helpers.stats_folder", return_value=f"{base}/stats/train/link_usdt"):
         init_dataset_folders()
     assert os.path.isdir(f"{dataset}/data")
     assert os.path.isdir(f"{dataset}/shared")
     assert os.path.isdir(f"{dataset}/shared/nn_data")
     assert os.path.isdir(f"{dataset}/shared/actions")
-    assert os.path.isdir(f"{base}_long/train/link_usdt/nn_weights")
+    assert os.path.isdir(f"{base}_long/train/link_usdt/nn")
     assert os.path.isdir(f"{base}/stats/train/link_usdt")
 
 def test_idempotent(tmp_path, monkeypatch):
@@ -683,7 +683,7 @@ def test_idempotent(tmp_path, monkeypatch):
     monkeypatch.setenv("PAIR", "link_usdt")
     base = str(tmp_path)
     with patch("helpers.root_folder", return_value=base), \
-         patch("helpers.nn_weights_folder", return_value=f"{base}_long/train/link_usdt/nn_weights"), \
+         patch("helpers.nn_artefact_root", return_value=f"{base}_long/train/link_usdt/nn"), \
          patch("helpers.stats_folder", return_value=f"{base}/stats/train/link_usdt"):
         init_dataset_folders()
         init_dataset_folders()  # must not raise
@@ -706,13 +706,13 @@ def test_folders_created_in_docker():
     r = subprocess.run([
         "docker", "compose", "run", "--rm", "graber", "python3", "-c",
         "from grabers.init_folders import init_dataset_folders; init_dataset_folders(); "
-        "from helpers import data_folder, shared_folder, nn_folder, action_folder, nn_weights_folder; "
+        "from helpers import data_folder, shared_folder, nn_folder, action_folder, nn_artefact_root; "
         "import os; "
         "assert os.path.isdir(data_folder()); "
         "assert os.path.isdir(shared_folder()); "
         "assert os.path.isdir(nn_folder()); "
         "assert os.path.isdir(action_folder()); "
-        "assert os.path.isdir(nn_weights_folder()); "
+        "assert os.path.isdir(nn_artefact_root()); "
         "print('ok')"
     ], capture_output=True, text=True, timeout=60)
     assert r.returncode == 0

@@ -1,267 +1,149 @@
-# DataPointGenerator Class Specification
+# NNDataset & NN Feature Specification
 
-**Class:** `DataPointGenerator` (Proposed Refactoring)  
-**Files:** `trainer.py` (parallel_generate_data_points function, lines 200-350)  
-**Purpose:** Generate timestamped data point snapshots containing OHLC candles, technical indicators, signals, and NN targets for training and simulation.
-
----
-
-## 1. Class Overview
-
-The `DataPointGenerator` class is a proposed refactoring of the current `parallel_generate_data_points()` function in trainer.py. Rather than a standalone function, extracting logic into a dedicated class would improve testability, reusability, and maintainability.
-
-DataPointGenerator's responsibility is to take a time range and produce data point files: one per timestamp containing multi-timeframe OHLC candles, computed indicators, all available signals, and (optionally) NN target classifications. These data points serve as training data for signal evaluation and neural network models.
-
-The class encapsulates the core data generation pipeline: load historical data, iterate timestamps, compute indicators, evaluate signals, optionally run predictor and NN target classification, and persist results to disk.
+**File:** `nn/nn_dataset.py`, `data_layer/nn_features.py`
+**Purpose:** Define the **modular data format** that NN training and inference consume, the **NN-specific engineered indicators** that feed it, and the **target labelling** that supervises it. Designed for fast reuse across the many trials of the agentic training loop.
 
 ---
 
-## 2. Key Attributes
+## 1. Overview
 
-### Instance Variables
+NN training in a search loop reloads data hundreds of times. A format that recomputes features or reparses pickles on every trial is too slow. `NNDataset` solves this by separating three concerns:
 
-| Attribute | Type | Description |
-|-----------|------|-------------|
-| `pair` | `str` | Trading pair (e.g., `link_usdt`) |
-| `begin_time` | `int` | Start timestamp (Unix ms) for data generation |
-| `end_time` | `int` | End timestamp (Unix ms) for data generation |
-| `time_step` | `int` | Minutes between generated data points |
-| `data_root` | `str` | Root data folder path from environment |
-| `run_predictor` | `bool` | If True, compute price predictions and NN targets; if False, skip |
-| `save_candles` | `bool` | If True, persist multi-timeframe candles to disk; if False, skip (optimization for NN-only mode) |
-| `progress_bar` | `tqdm` | Progress indicator for user feedback |
+1. **NN features** — engineered indicators computed once during data preparation (`nn_features` step) and persisted into the indicator DataFrame.
+2. **Materialised tensors** — per-timeframe feature tensors and a multi-target tensor, built once per `(feature-set, target-set)` and cached on disk keyed by a content hash.
+3. **Manifest** — a JSON sidecar describing column order, normalisation stats, target encodings, row index, and the producing spec hash, so a dataset can be loaded and validated without re-deriving anything.
 
 ---
 
-## 3. Constructor
+## 2. Modular Data Format (item 5)
 
-### `__init__(pair, begin_time, end_time, time_step, run_predictor=False, save_candles=True)`
+A materialised dataset lives under `datasets/{dataset_hash}/`:
 
-**Purpose:** Initialize DataPointGenerator with configuration.
-
-**Parameters:**
-- `pair` (`str`) — Trading pair (e.g., `link_usdt`)
-- `begin_time` (`int`) — Start timestamp (Unix ms)
-- `end_time` (`int`) — End timestamp (Unix ms)
-- `time_step` (`int`) — Time interval in minutes between points
-- `run_predictor` (`bool`) — Enable predictor and NN target computation. Default: False
-- `save_candles` (`bool`) — Persist candles to disk. Default: True
-
-**Behavior:**
-1. Store all parameters as instance attributes
-2. Extract data_root from environment variable `DATA_ROOT`
-3. Initialize empty progress bar
-4. Load reference OHLC data from `data_root / pair / full / ohlc.pkl`
-
-**Preconditions:**
-- Environment variables `DATA_ROOT`, `PAIR` must be set
-- Graber data file must exist at `data_root / pair / graber_data.pkl`
-
-**Postconditions:**
-- Instance configured and ready to call `generate()`
-
----
-
-## 4. Key Methods & Interfaces
-
-### `generate(num_threads=1)`
-
-**Purpose:** Generate data points for entire time range.
-
-**Parameters:**
-- `num_threads` (`int`) — Number of parallel threads (1 for sequential). Default: 1
-
-**Return Value:** `dict` with keys:
-- `"total_points"` — Number of data points generated
-- `"start_time"` — Timestamp of first point
-- `"end_time"` — Timestamp of last point
-- `"errors"` — Count of points that failed processing
-
-**Behavior:**
-1. If `num_threads > 1`: Split time range into segments, spawn parallel processes
-2. For each segment (or sequentially if single-threaded):
-   - Call `generate_segment()`
-   - Collect results
-3. Merge results from all threads
-4. Return summary dict
-
-**Preconditions:**
-- Data loaded and valid
-- Environment configured
-
-### `generate_segment()`
-
-**Purpose:** Generate data points for a single time segment (sequential).
-
-**Behavior:**
-
-1. **Initialize Data Structures:**
-   - Create Data instance for current pair
-   - Initialize action storage list
-   - Create predictor if `run_predictor=True`
-
-2. **Load Tick Data:**
-   - Load raw Binance tick data from `graber_data.pkl`
-   - Sort by timestamp
-
-3. **Iterate Time Points:**
-   ```
-   for timestamp in range(begin_time, end_time, time_step * 60000):
-       counter += 1
-       if counter % 100 == 0:
-           progress_bar.update(100)
-   ```
-
-4. **For Each Time Point:**
-   - **Load Historical Data:**
-     - Subtract 5-day shift for indicator warmup
-     - Resample tick data to 1m OHLC
-     - For each configured timeframe (1m, 3m, 5m, 15m, 60m, 240m):
-       - Extract last 120 candles
-       - Resample to timeframe
-       - Backfill missing values
-
-   - **Calculate Indicators:**
-     - Call `data.calculate_indicators()` for each timeframe
-     - Compute RSI, MACD, CCI, Bollinger Bands, ATR, SAR, ADX, etc.
-
-   - **Prepare Candles:**
-     - Normalize columns (e.g., compute differences, moving averages)
-     - Compute statistical boundaries
-
-   - **Evaluate Signals:**
-     - Call signal manager to evaluate all 50+ signals
-     - Store signal outputs in action dict
-
-   - **Compute NN Targets (if run_predictor=True):**
-     - For each NN target type (0-17):
-       - Define future window (e.g., 30-480 minutes ahead)
-       - Define expected move threshold (0.8%-varies by target)
-       - Call `get_nn_target()` to classify as BUY/SELL/NONE
-       - Store target label in `point_target` array
-
-   - **Run Predictor (if run_predictor=True):**
-     - Compute next price levels via Gauss modeling
-     - Store predictions in action dict
-
-   - **Persist Candles (if save_candles=True):**
-     - Save all timeframes to `data_root / pair / data_points / {timestamp} / candles.pkl`
-
-   - **Save Action File:**
-     - Serialize signals, targets, predictions to `data_root / pair / data_points / {timestamp} / action.pkl`
-
-5. **Return Results:**
-   - Count total points generated
-   - Report any errors
-   - Return summary dict
-
----
-
-## 5. State Management
-
-- **Uninitialized:** Just created; no data loaded
-- **Configured:** Constructor completed; ready to generate
-- **Generating:** `generate()` in progress
-- **Complete:** All data points persisted to disk
-
----
-
-## 6. Error Handling
-
-**Missing Data Files:**
-```python
-if not os.path.exists(graber_data_path):
-    raise FileNotFoundError(f"Graber data not found: {graber_data_path}")
+```
+datasets/{dataset_hash}/
+├── manifest.json          # schema, stats, encodings, provenance
+├── X_{tf}.npy             # per-TF feature tensor: (rows, history_points, n_features) — stores NORMALISED values
+├── y.npy                  # multi-target tensor: (rows, total_target_width)
+├── index.npy              # DataFrame index (timestamps) per row
+└── splits.json            # train / val / holdout row ranges (time-ordered)
 ```
 
-**Invalid Timestamps:**
-```python
-if begin_time >= end_time:
-    raise ValueError("begin_time must be < end_time")
+### manifest.json
+
+```json
+{
+  "dataset_hash": "…",
+  "source": "df_with_indicators.pkl@<content-hash>",
+  "timeframes": [15, 60],
+  "history_points": 32,
+  "feature_cols": { "15": ["15_logret", "15_rsi_14", "15_ema_7_minus_close", "15_macd_12_26_9_slope", ...], "60": [...] },
+  "normalization": { "15_logret": {"mean": 0.0, "std": 0.0123}, ... },
+  "targets": [
+    {"name": "dir15n1", "kind": "direction", "horizons": [1],
+     "source": {"long": "15_plong_n1_m1_x0.4", "short": "15_pshort_n1_m1_x0.4", "strict": false},
+     "out_columns": ["nn_res_dir15n1_prob_up", "nn_res_dir15n1_prob_neutral", "nn_res_dir15n1_prob_down"],
+     "encoding": {"up":0,"neutral":1,"down":2}},
+    {"name": "ret60", "kind": "regression", "horizons": [1], "transform": "logret",
+     "out_columns": ["nn_res_ret60"]}
+  ],
+  "rows": 41234,
+  "split": {"strategy": "time_holdout", "train": 0.6, "val": 0.2, "holdout": 0.2}
+}
 ```
 
-**Signal Evaluation Error:**
+**Key properties:**
+- **Tensor-native:** `.npy` arrays load directly into `torch.from_numpy` with zero parsing.
+- **Pre-normalised tensors:** `X_{tf}.npy` is written already z-scored (`(x - mean) / std` per feature column), so training/eval load it ready-to-feed with no transform step.
+- **Self-describing:** the manifest carries the same normalisation stats (mean/std per column), so `run_inference()` applies them to raw live features and reproduces the training scale exactly. Stats are computed on the **train split only** (no val/holdout leakage).
+- **Content-addressed:** `dataset_hash` derives from `(source content-hash, feature set, history, target set, split)`. Identical configs reuse the cache; changed configs build a new directory.
+- **Modular by TF:** each timeframe is stored as a separate block (`X_{tf}.npy`); `tensors()` concatenates the configured timeframes into one multi-TF input. Storing blocks separately lets a different timeframe subset be assembled without recompute.
+
+### `NNDataset` class
+
 ```python
-try:
-    signals = signal_manager.evaluate_all()
-except Exception as e:
-    logger.error(f"Signal evaluation failed at {timestamp}: {e}")
-    error_count += 1
-    continue  # Skip this point
+class NNDataset:
+    @classmethod
+    def build(cls, df, data_attributes, spec) -> "NNDataset": ...   # materialise + cache
+    @classmethod
+    def load(cls, dataset_hash) -> "NNDataset": ...                 # load cached
+    def tensors(self) -> tuple[np.ndarray, np.ndarray]: ...         # X (multi-TF), y
+    def split(self, name: str) -> "NNDataset": ...                  # train/val/holdout view
+    def groups(self, grouping) -> list[str]: ...                    # group keys per GroupingSpec
+    def group(self, group_key: str) -> "NNDataset": ...             # row-subset view for one class/regime
+    @property
+    def manifest(self) -> dict: ...
 ```
+
+`X` concatenates all configured timeframes' feature blocks (model input is multi-TF). `groups()`/`group()` partition rows by the spec's `GroupingSpec` (the routing indicator column is read off the source frame); `grouping.mode="single"` yields one group containing all rows.
+
+Rows with NaN features or NaN targets are dropped at build time (not filled), and the dropped count is recorded in the manifest.
 
 ---
 
-## 7. Existing Approach (Current Implementation)
+## 3. NN-Specific Indicators (item 9)
 
-Currently, data generation is implemented as:
-- `parallel_generate_data_points()` — Worker function for parallel execution
-- Direct calls from `Trainer.generate_data_points()`
-- Heavy environment variable reading for paths and parameters
+The `nn_features` step runs during `DataPreparer.prepare()` after base indicators, writing `{tf}_`-prefixed columns. Two families: (a) explicit indicator **groups** — Group 1 raw indicators, Group 2 indicator differences, Group 3 indicator slopes — and (b) orthogonal engineered features (returns, candle ratios, regime, cyclical, cross-TF). **Normalisation is global only:** these columns are written raw; the single z-score is the dataset-level train-split standardisation in `DataAttributes.compute_nn_stats` (written into `X_{tf}.npy` and the manifest stats). No rolling `_z` columns are produced.
 
-The parallel_generate_data_points function:
-1. Takes time range, thread ID, flags
-2. Processes all points sequentially within segment
-3. Saves results to thread-specific pickle files
-4. Main thread merges results
+| Feature | Column | Definition |
+|---------|--------|------------|
+| Group 1 — raw indicators | existing `{tf}_<ind>` | selected straight into `feature_cols`; globally z-scored (RSI/CCI bases, `rsi_ma*_diff`, `cci_diff`, `atr_14_ma_5`, `natr_14_ma_5`, `*_diff_prc_rm_6*`, MACD/MACD-signal lines) |
+| Group 2 — indicator difference | `{tf}_{a}_minus_{b}` | `a - b` for `bb_*_20_2 − close`, `ema_{7..100} − close`, `vol_ma_20 − volume`, all `ema` pairs (shorter − longer), `atr_14_ma_5 − atr_14`, `natr_14_ma_5 − natr_14` |
+| Group 3 — indicator slope | `{tf}_{ind}_slope` | linear slope over short window for MACD/MACD-signal (12_26_9 & 5_13_9), `ema_{7..100}`, `adx_14`, `rsi_ma8/12/24`, `cci_14_ma_5` |
+| Log return | `{tf}_logret` | `log(close_t / close_{t-1})` |
+| ATR-normalised range | `{tf}_range_atr` | `(high - low) / ATR` |
+| Body ratio | `{tf}_body_ratio` | `(close - open) / (high - low)` |
+| Upper/lower wick | `{tf}_wick_up`, `{tf}_wick_dn` | wick length / candle range |
+| Volatility regime | `{tf}_vol_regime` | bucketed rolling ATR percentile |
+| Session encoding | `{tf}_sin_tod`, `{tf}_cos_tod` | cyclical time-of-day (and day-of-week) |
+| Cross-TF alignment | `{tf}_align_{other}` | sign agreement of trend between this TF and a higher TF |
 
-### Limitations of Current Approach
-- Function-based (harder to reuse, test, extend)
-- Environment variable coupling (harder to test with different configs)
-- Limited progress reporting (no callback mechanism)
-- Tight coupling to Trainer orchestration
+`nn_features` is configured via the `indicators_config.yaml` `nn` section (windows, which features on). The dataset emits **one row per 1-minute timestamp** (`index.npy` carries every 1-min stamp), matching the legacy `WideDataPoint` cadence. The **latest** feature values at each timestamp represent the **current forming (not-yet-closed) candle** of each timeframe — equivalent to `WideDataPoint` `shift=0`. Historical lookback values within `history_points` use **closed** candles (`WideDataPoint` `shift≥1`). Warmup rows yield NaN and are dropped at dataset build.
 
 ---
 
-## 8. Potential Improvements
+## 4. Target Labelling (item 6, resolves README "Unresolved")
 
-1. **Add Progress Callbacks**
-   - Accept callback function for progress updates
-   - Enable real-time monitoring via logging/UI
-   - Would improve user feedback
+Targets are declared in the `NNModelSpec` (`TargetSpec` list) and materialised into `y.npy` at dataset build. **The NN module does not compute direction labels itself** — it reads the profit-label columns produced by the phase-13 profit-labels pipeline (`task-07-profit-labels-pipeline.md`).
 
-2. **Implement Checkpoint & Resume**
-   - Save progress metadata at checkpoints
-   - Allow resuming from last checkpoint if interrupted
-   - Would save time on long data generation runs
+### Source: profit-labels pipeline
 
-3. **Add Data Validation**
-   - Verify candle OHLC invariants (H >= L, close in [L,H])
-   - Check for NaN/inf values
-   - Would catch data corruption early
+`DataPreparer._compute_profit_labels()` writes, per `labels:` config spec, the columns:
+- `{tf}_plong_n{n}_m{m}_x{x}` / `{tf}_pshort_n{n}_m{m}_x{x}` — long/short profit outcome,
+- strict `{tf}_pslong_*` / `{tf}_psshort_*`.
 
-4. **Support Streaming Input**
-   - Accept tick data via iterator instead of loading all at once
-   - Process points as they arrive
-   - Would reduce memory footprint
+Each is a **binary** outcome for a candidate entry at that row: target `m×atr_ma` reached before stop `x×atr_ma` within `n` tf-candles (long enters at `1_low`, short at `1_high`). These columns already live in `df_with_indicators.pkl` before NN dataset build.
 
-5. **Add Configurable Indicator Selection**
-   - Allow selecting subset of indicators to compute
-   - Skip expensive computations for rapid prototyping
-   - Would improve iteration speed during development
+### Direction class (`kind="direction"`)
+- A `TargetSpec` selects a profit-label spec by `(label_tf, n=horizon, label_m, label_x, strict)`.
+- Reads the matching long + short columns and derives 3-class:
+  - `up` if long profitable and short not, `down` if short profitable, else `neutral` → `{up:0, neutral:1, down:2}`.
 
-6. **Implement Incremental Caching**
-   - Cache computed indicators per candle
-   - Reuse when generating overlapping data points
-   - Would significantly reduce computation time
+### Binary label (`kind="label"`)
+- References a single profit-label column directly → binary target (profitable vs not).
 
-7. **Support Multiple Output Formats**
-   - CSV export for external analysis
-   - Parquet for efficient columnar storage
-   - JSON for Web consumption
-   - Would improve interoperability
+### Regression (`kind="regression"`)
+- Computed from price (not a profit label): transformed future move (`logret` over horizon `N`), continuous.
 
-8. **Add Statistical Summaries**
-   - Track indicator distributions per timeframe
-   - Compute correlation matrices between indicators
-   - Would support feature engineering analysis
+### Multi-horizon (`horizons=[h1, h2, …]`)
+- The target is materialised once per horizon. For direction/label, horizon `hk` selects the profit-label spec whose `n = hk` (the matching `labels:` config entry must exist); for regression, `hk` sets the lookahead. Each horizon becomes its own column block (`…_h{hk}_…`) and its own model head.
 
-9. **Implement Data Point Filtering**
-   - Skip points that don't meet signal criteria
-   - Reduce storage for sparse trading signals
-   - Would reduce storage overhead
+The manifest records, per target, the exact source columns, horizon(s), strictness, and class encoding so labels are reproducible and inference output columns map back unambiguously. **Multiple targets per model are supported** — e.g. several `(tf, n, m, x)` profit-label specs as separate direction heads. **Default:** a single direction target from the primary profit-label spec at the strategy's primary horizon.
 
-10. **Add Batch Verification**
-    - Verify generated batches match expected distributions
-    - Detect anomalies in data generation
-    - Would provide quality assurance
+Rows whose forward window is incomplete already carry NaN profit labels (pipeline-produced) and are dropped at build, as are rows past the dataset end for regression targets.
+
+---
+
+## 5. State & Error Handling
+
+- `build()` validates that every `feature_col` exists in the source DataFrame; missing column → `ValueError` naming it.
+- A cache hit verifies `source content-hash` in the manifest; a stale source (hash mismatch) forces a rebuild rather than silently serving old tensors.
+- Corrupt/partial dataset directory (missing `.npy` or manifest) → treated as cache miss and rebuilt.
+- Empty dataset after NaN/horizon drops → `ValueError("no usable rows")`.
+
+---
+
+## 6. Notes
+
+- `NNDataset` replaces the legacy per-point pickle generator. There is no per-candle "data point" object in the training path; training operates on materialised tensors.
+- Time-ordered splits prevent look-ahead leakage; never shuffle before splitting.
+- The same manifest normalisation stats are reused by `NNOrchestrator.run_inference()` so batch inference matches training exactly.

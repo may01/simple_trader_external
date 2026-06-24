@@ -1,48 +1,48 @@
 # NN Module Specification
 
-**Module:** Neural Network (NN)  
-**Files:** `nn.py`, `predictor.py`, `strategies/nn_strategy.py`, `signals_lib/nn_signals.py`  
-**Purpose:** Implement neural network models for enhanced price prediction, signal generation, and trading decision support in the pybtctr2 trading bot.
+**Module:** Neural Network (NN)
+**Files:** `nn/nn_model.py`, `nn/nn_dataset.py`, `nn/checkpoint_manager.py`, `nn/nn_orchestrator.py`, `nn/training_loop.py`, `nn/nn_strategist.py`, `nn/experiment_tracker.py`
+**Purpose:** Build, train, and deploy parametrised PyTorch neural networks that predict future price behaviour for the simple-trader bot. NN outputs are merged into the indicator DataFrame as ordinary columns and consumed by strategies — the NN module does not gate signals directly.
 
 ---
 
 ## 1. Overview
 
-The NN Module provides deep learning capabilities for the pybtctr2 trading bot. It uses Keras/TensorFlow to build, train, and deploy neural network models that learn trading patterns from historical OHLC data, technical indicators, and signal outputs. The module operates in two main phases:
+The NN Module provides deep-learning capabilities for the simple-trader bot using **PyTorch**. It builds, trains, and runs inference on neural networks that learn from normalised multi-timeframe indicator features and emit per-candle predictions (direction class, regression deltas, or multi-horizon variants).
 
-1. **Training Phase:** NNModel class builds and trains neural networks on grouped historical data, learning to classify future price movements (BUY/SELL/NONE) across multiple timeframes and indicator combinations.
+The module is organised around three ideas:
 
-2. **Inference Phase:** Trained models run predictions on live or backtest data, outputting probability distributions that enhance strategy decisions via nn_signals and nn_strategy components.
+1. **Fully parametrised models.** A model is defined entirely by a declarative `NNModelSpec` — data grouping, network depth, history window, indicators, timeframes, targets, and learning parameters. No architecture is hardcoded. Changing a model means changing its spec.
 
-The NN Module is designed for extensibility—multiple model architectures (generic, stochastic, MA-only) can be trained independently for different market conditions, and their predictions are aggregated in the strategy layer.
+2. **A hybrid agentic training loop.** Optuna runs the numeric hyperparameter/architecture search; an LLM strategist steers the search space, selects indicator/timeframe/target sets, reads each trial's metrics, and proposes the next experiment with a written rationale. Every candidate is validated against a holdout set and only promoted if it beats the current best by a margin.
+
+3. **Batch-only inference as indicators.** Trained models run batch inference over `df_with_indicators` during data preparation, producing `df_with_nn.pkl`. Those columns are merged back into `df_with_indicators` on the next prepare run and become available to strategies as regular indicator columns. There is **no per-tick NN predictor in the live prediction stage** (see §6).
+
+A model takes **multi-timeframe features as input** but its outputs are **timeframe-agnostic**: NN result columns are named `nn_res_*` (no `{tf}_` prefix). One model produces one set of `nn_res_*` columns regardless of how many timeframes feed it.
 
 ---
 
 ## 2. Module Boundaries
 
 ### Upstream Dependencies
-- **Training Module:** `trainer.py` generates grouped training data via `group_nn()` and `train_nn()` pipelines; calls NNModel.train()
-- **Data Module:** `data.py` provides OHLC candles and indicators; NN inputs derived from multi-timeframe candle history
-- **Signals Module:** Signal values feed into NN inputs; NN outputs feed back to signal pipeline
-- **Position Data:** Historical positions and trade outcomes inform target classification (BUY/SELL labels)
-- **Environment Configuration:** Model paths, training parameters, NN types specified via `os.environ`
+- **Data layer:** `DataPreparer` produces `df_with_indicators.pkl` (normalised indicator features) and `DataAttributes` (per-column normalisation stats). NN inputs are derived from these.
+- **NN feature step:** `nn_features` computes NN-specific engineered indicators (see §5 and the dataset spec) appended during preparation.
+- **Training entry point:** `Trainer._run_train_nn()` invokes the training loop; `Trainer._run_infer_nn()` (alias `_run_simulate_nn`) invokes batch inference via `NNOrchestrator.run_inference(dataset, checkpoint_id)`, runnable on any dataset.
+- **Environment configuration:** `NUM_WORKERS`, checkpoint/dataset/tracking directories, and GPU device selection via env vars; model definitions via `NNModelSpec` YAML.
 
 ### Downstream Consumers
-- **Strategy Manager:** Uses NN predictions to enhance trading signal evaluation
-- **NN Signals:** `signals_lib/nn_signals.py` wraps NN predictions as high-level trading signals
-- **NN Strategy:** `strategies/nn_strategy.py` makes trading decisions based on NN probabilities
-- **Live Robot:** Loads trained models for live trading inference
-- **TrainRobot:** Loads trained models for backtesting with NN enhancement
+- **DataPreparer:** merges `df_with_nn.pkl` columns into `df_with_indicators.pkl`.
+- **Strategies / StrategyManager:** read `nn_res_*` columns (probabilities, regression deltas) as ordinary indicators via `data_point.get(...)`. No direct coupling to NN classes.
+- **Backtest / Simulation:** consume the same merged columns; no separate NN call path.
 
 ### Key Interfaces Exposed
-- **`NNModel.__init__(pair, class_type, class_name, nn_tf_type, nn_target_idx, nn_history)`** — Initialize NN model
-- **`NNModel.get_model()`** — Build model architecture (generic, stochastic, MA-only)
-- **`NNModel.train(data_group_num)`** — Train model on grouped historical data
-- **`NNModel.run(data)`** — Run inference on single data point, return probability [BUY, SELL, NONE]
-- **`NNModel.run_batch(data)`** — Run inference on batch of data points
-- **`NNModel.load_model()`** — Load pre-trained model weights from disk
-- **`NNPredictor.calc(save_data, action, prediction_cache)`** — Compute next price levels via Gaussian prediction
-- **`NNPredictor.set_data(data, full_data)`** — Configure predictor with current/historical data
+- **`NNModelSpec`** — declarative model definition (see `nnmodel-class.md`).
+- **`NNModel(spec)`** — `build()`, `train()`, `run()`, `run_batch()`, `save_model()`, `load_model()`.
+- **`NNDataset`** — modular tensor dataset + manifest (see `datapoint-generator-class.md`).
+- **`CheckpointManager`** — versioned PyTorch weight persistence (see `checkpoint-manager-class.md`).
+- **`NNOrchestrator`** — train one model per group (class/regime), route rows, run batch inference (see `training-coordinator-class.md`).
+- **`TrainingLoop` + `NNStrategist`** — hybrid Optuna + LLM improvement loop (see `training-coordinator-class.md`).
+- **`ExperimentTracker`** — trial records + promotion gate (see `result-aggregator-class.md`).
 
 ---
 
@@ -50,265 +50,143 @@ The NN Module is designed for extensibility—multiple model architectures (gene
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│            Historical OHLC Data + Indicators                │
-│         (Multi-timeframe candles with RSI, MACD, etc)       │
+│   df_with_indicators.pkl  +  DataAttributes (norm stats)    │
+│         (multi-timeframe candles, indicators)               │
 └──────────────────────────┬──────────────────────────────────┘
                            │
                            ▼
         ┌──────────────────────────────────────┐
-        │  Generate NN Training Data            │
-        │  (generate_data_points w/ predictor) │
-        │  ├─ Extract multi-tf candle history │
-        │  ├─ Compute technical indicators    │
-        │  ├─ Classify future price movement │
-        │  │  (BUY/SELL/NONE labels)          │
-        │  ├─ Compute NN targets             │
-        │  └─ Save grouped pickles           │
+        │  nn_features step                    │
+        │  ├─ log-returns, z-scores            │
+        │  ├─ ATR-normalised range, body/wick │
+        │  ├─ indicator slopes, vol regime    │
+        │  └─ session / cross-TF features     │
         └──────────────────────────────────────┘
                            │
                            ▼
         ┌──────────────────────────────────────┐
-        │  Group NN Data (group_nn)            │
-        │  ├─ Load all generated data points  │
-        │  ├─ Classify by type               │
-        │  ├─ Group into batches (5000 pts)  │
-        │  └─ Save grouped pickles           │
+        │  Build NNDataset (modular format)    │
+        │  ├─ per-TF feature tensors           │
+        │  ├─ multi-target tensor              │
+        │  ├─ manifest.json (cols, stats,     │
+        │  │  target encoding, spec hash)     │
+        │  └─ cached for reuse across trials  │
         └──────────────────────────────────────┘
                            │
-                           ▼
-        ┌──────────────────────────────────────┐
-        │  Train NN Models                     │
-        │  ├─ Load grouped data               │
-        │  ├─ Create model (generic/hack)    │
-        │  ├─ Train via backpropagation      │
-        │  ├─ Save best model weights        │
-        │  └─ Emit training logs             │
-        └──────────────────────────────────────┘
-                           │
-                           ▼
-        ┌──────────────────────────────────────┐
-        │  Trained NN Models                   │
-        │  ├─ Best model per class/tf/target  │
-        │  ├─ Serialized as Keras models      │
-        │  └─ Ready for inference             │
-        └──────────────────────────────────────┘
-                           │
-                           ▼
-        ┌──────────────────────────────────────┐
-        │  Inference Phase (simulate_nn)       │
-        │  ├─ Load trained models             │
-        │  ├─ Run batch predictions           │
-        │  ├─ Aggregate probabilities         │
-        │  └─ Feed to strategy layer          │
-        └──────────────────────────────────────┘
-                           │
-        ┌──────────────────┴──────────────────┐
-        ▼                                      ▼
-    ┌──────────────────────┐      ┌──────────────────────┐
-    │ NN Signals Pipeline  │      │ NN Strategy Signals  │
-    │ (nn_signals.py)      │      │ (nn_strategy.py)     │
-    │ ├─ Probability wrap  │      │ ├─ Decision logic    │
-    │ └─ Confidence scores │      │ └─ Action generation │
-    └──────────────────────┘      └──────────────────────┘
-                                           │
-                                           ▼
-                                   ┌──────────────────────┐
-                                   │ Trading Decisions    │
-                                   │ (BUY/SELL/WAIT)      │
-                                   └──────────────────────┘
+            ┌──────────────┴───────────────┐
+            ▼                               ▼
+┌──────────────────────────┐   ┌──────────────────────────────┐
+│  Hybrid Training Loop    │   │  Batch Inference             │
+│  (TrainingLoop)          │   │  (NNOrchestrator             │
+│  ├─ Optuna search        │   │   .run_inference)            │
+│  ├─ NNStrategist (LLM)  │   │  ├─ route rows to group model│
+│  │  steers space + targets│  │  ├─ run_batch over df        │
+│  ├─ train NNModel(spec) │   │  ├─ append nn_res_* cols     │
+│  ├─ ExperimentTracker   │   │  └─ save df_with_nn.pkl      │
+│  │  records + holdout    │   └──────────────┬───────────────┘
+│  └─ promotion gate →     │                  │
+│     best checkpoint      │                  ▼
+└──────────────────────────┘   ┌──────────────────────────────┐
+                               │  DataPreparer merges NN cols  │
+                               │  into df_with_indicators.pkl  │
+                               └──────────────┬───────────────┘
+                                              ▼
+                               ┌──────────────────────────────┐
+                               │  Strategies read nn_res_*     │
+                               │  as ordinary indicators       │
+                               └──────────────────────────────┘
 ```
 
 ---
 
 ## 4. Execution Flow
 
-### A. Training (NNModel.train)
+### A. Training (`TrainingLoop.run`)
 
-1. Load grouped training data via `get_group(data_group_num)`
-2. Extract input features: `data[NN_POINT_INPUT]`
-   - Multi-timeframe OHLC, RSI, CCI, Volume, ATR, MACD, ADX (historical window)
-3. Extract target labels: `data[NN_POINT_TARGET][nn_target_idx]`
-   - Classification: [P(BUY), P(SELL), P(NONE)]
-4. Filter inputs via `get_data_with_skip_idx()` to remove unused timeframes/indicators
-5. Calculate class weights to handle imbalanced data
-6. Build model via `get_model()`:
-   - Per-timeframe branches (OHLC, RSI, CCI, Volume, ATR, MACD, ADX layers)
-   - Concatenation and dense layers for aggregation
-   - Output: 3-class softmax (BUY, SELL, NONE)
-7. Compile with Adam optimizer, categorical crossentropy loss
-8. Train via `model.fit()`:
-   - Epochs: 15 (REG: 20)
-   - Batch size: 32
-   - Validation split: 30%
-   - Callbacks: ModelCheckpoint (save best), TensorBoard, CSVLogger
-9. Save best model to disk under `best_model/` directory
-10. Clear TensorFlow session
+1. Build or load the `NNDataset` for the configured TFs/targets (cached by spec hash).
+2. Initialise an Optuna study and the `NNStrategist`.
+3. For each round:
+   - `NNStrategist` proposes the experiment scope: indicator set, timeframe set, target set, and search-space bounds — with a written rationale.
+   - Optuna samples concrete hyperparameters/architecture within that space, building an `NNModelSpec` per trial.
+   - `NNModel(spec).train()` runs on train/validation split; intermediate epochs may be pruned by Optuna.
+   - `ExperimentTracker` records the trial (spec hash, train/val/holdout metrics, delta vs best).
+   - **Promotion gate:** if the trial beats the current best on the holdout set by the configured margin, save via `CheckpointManager` and update best.
+   - `NNStrategist` reads the round's metrics and decides the next round (continue, narrow, broaden, change targets, or stop).
+4. Return the best `NNModelSpec` + metrics per group.
 
-### B. Inference (NNModel.run_batch)
+### B. Batch Inference (`NNOrchestrator.run_inference`)
 
-1. Load pre-trained model via `load_model()` (checks local and remote paths)
-2. Prepare input data:
-   - Extract historical indicators for each timeframe
-   - Filter via skip indices to match trained model input shape
-3. Call `model.predict(data_in)` with batch
-4. Return prediction output: shape [batch_size, 3] with probabilities
+1. Load the best checkpoint per group via `CheckpointManager.load_best()` (one model if `grouping=single`; one per class/regime otherwise).
+2. Build the multi-timeframe feature matrix from `df_with_indicators` using the spec's `feature_cols` (closed-candle rows), normalised via `DataAttributes.get_stats()`.
+3. Route each row to its group's model (by the grouping indicator condition), then `model.run_batch(X)` → output array sized to the spec's declared targets.
+4. Append timeframe-agnostic output columns (`nn_res_{target}_prob_up/neutral/down`, `nn_res_{target}`, horizon variants) to a NN-columns-only DataFrame indexed by `df.index`. All groups write the same `nn_res_*` columns; only the producing model differs per row.
+5. Return that DataFrame; the caller saves it as `df_with_nn.pkl`. Input `df` is not modified.
 
-### C. Price Prediction (NNPredictor.calc)
+### C. Merge into Indicators (`DataPreparer.prepare`)
 
-1. Check if data already cached in `prediction_cache`
-   - If match (same index), use cached prediction
-   - Skip recalculation
-2. For each timeframe (15m, 60m, 240m):
-   - For each price type (high, low, close):
-     - Load or train Gauss predictor model
-     - Fit Gaussian distribution to historical price deltas
-     - Predict next price delta and confidence score
-3. Convert predictions to absolute price levels:
-   - `h = h_prev * (1 + predicted_delta_high)`
-   - `l = l_prev * (1 + predicted_delta_low)`
-   - `c = c_prev * (1 + predicted_delta_close)`
-4. Validate prediction (current price within [l, h])
-5. If training mode: Load actual future price from full_data; compute actual delta; store for backtesting
-6. If save_data=True: Persist predictions to disk
+On the next prepare run, `df_with_nn.pkl` columns are merged into `df_with_indicators.pkl`, making NN outputs first-class indicator columns for strategies and backtests.
 
 ---
 
 ## 5. Key Components
 
-### NNModel Class
-The core neural network implementation. Builds, trains, and runs predictions using Keras/TensorFlow.
-
-**Key attributes:**
-- `model` — Keras Sequential or Model instance
-- `nn_tf_type` — Type of timeframe configuration (ALL, BIG, SMALL, REG, X_BIG, HACK_MA, HACK_STOCHASTIC)
-- `skip_tf_idx`, `skip_indicator_idx` — Indices to filter inputs per model type
-- `nn_history` — Number of historical candles to use as context
-
-### NNPredictor Class
-Price prediction via Gaussian models. Estimates future high/low/close based on historical patterns.
-
-**Key attributes:**
-- `data`, `full_data` — Current and full historical data references
-- `cur_levels` — Cached next-period price predictions
-- `next_point`, `cur_point` — Current/predicted price deltas
-- `future_fact` — Actual future prices (for training mode)
-- `tmp_points`, `tmp_counter` — Temporary caching for de-duplication
-
-### Helper Functions
-- **`get_data_with_skip_idx(input_data)`** — Filter NN input to match model architecture
-- **`get_group(group_num)`** — Load grouped training pickle files by class/type/group number
-- **`get_model()`** — Select architecture based on nn_tf_type (generic, stochastic, MA-only)
-- **`run_batch(data)`** — Batch inference wrapper
-
-### NN Type Configurations
-- **`NN_TYPE_ALL`** — Uses all 10 timeframes [1,3,5,15,30,60,120,240,480,1440]
-- **`NN_TYPE_BIG`** — Large timeframes only [15,30,60,120,240,480,1440]
-- **`NN_TYPE_SMALL`** — Small-to-large [5,15,30,60,120,240,480,1440]
-- **`NN_TYPE_REG`** — Regression: [1,3,480]
-- **`NN_TYPE_X_BIG`** — Extra large: [240,480,1440]
-- **`NN_TYPE_HACK_MA`** — MA-only optimization
-- **`NN_TYPE_HACK_STOCHASTIC`** — Stochastic-only optimization
+| Component | Responsibility | Spec file |
+|-----------|----------------|-----------|
+| `NNModelSpec` + `NNModel` | Declarative model definition; build/train/infer in PyTorch | `nnmodel-class.md` |
+| `NNDataset` | Modular tensor data format + manifest + NN feature engineering | `datapoint-generator-class.md` |
+| `CheckpointManager` | Versioned PyTorch weight persistence + best tracking | `checkpoint-manager-class.md` |
+| `NNOrchestrator` | Per-group training driver + batch inference + row routing | `training-coordinator-class.md` |
+| `TrainingLoop` + `NNStrategist` | Hybrid Optuna + LLM improvement loop | `training-coordinator-class.md` |
+| `ExperimentTracker` | Trial records, holdout validation, promotion gate | `result-aggregator-class.md` |
+| Inference path notes | Removal of per-tick predictor; batch path | `nnpredictor-class.md` |
+| NN training infrastructure | Dockerfile, compose service, GPU/CPU device | `nn-infrastructure.md` |
 
 ---
 
-## 6. Existing Approach
+## 6. Inference Stage: No Per-Tick Predictor
 
-### Multi-Architecture Support
+Earlier designs ran a per-tick `NNPredictor` inside the live prediction stage, computing NN columns one candle at a time inside `LiveData.build_candles()`. **That coupling is removed.** Rationale:
 
-The NN Module supports multiple model architectures:
-
-1. **Generic Model** (`get_generic_model`):
-   - Per-timeframe branches: OHLC (9), RSI (2), CCI (2), Volume (1), ATR (1), MACD (3), ADX (3)
-   - Dense layers per indicator type
-   - Concatenation layer across timeframes
-   - Final dense + softmax output
-
-2. **Stochastic Model** (`get_hack_stochastic_model`):
-   - Simplified: RSI + CCI only
-   - Reduces feature space for faster training
-   - Same concatenation and output structure
-
-3. **MA-Only Model** (`get_hack_ma_model`):
-   - OHLC features only
-   - Filters out momentum indicators
-   - Focused on price action patterns
-
-### Class-Based Training Organization
-
-NN models are trained and stored with hierarchical naming:
-```
-best_model/{class_type}_{class_name}_{nn_type_name}_{nn_target_idx}
-```
-
-Example: `NN_POINT_CLASS_BIG_0_big_tf_0` = big class, sub-class 0, big-timeframe type, target 0
-
-This organization allows independent training runs and parallel inference across classes.
-
-### Gaussian Price Prediction (Predictor)
-
-Complementary to NN classification, the Predictor class uses:
-
-1. **Gaussian fitting:** Fit normal distribution to historical price deltas
-2. **Score tracking:** Confidence metric alongside price prediction
-3. **Caching:** Store predictions per index to avoid redundant computation
-4. **Time-based limits:** De-duplicate predictions within time windows (15m→5 calls, 60m→10 calls, 240m→30 calls)
-
-### Callback-Driven Training
-
-Training uses Keras callbacks:
-- **ModelCheckpoint** — Saves best model based on validation accuracy
-- **TensorBoard** — Logs training metrics for visualization
-- **CSVLogger** — Exports epoch-level metrics to CSV
+- NN inference is computed in batch during data preparation/simulation and merged as indicator columns. Live and backtest paths then read identical, precomputed values — eliminating live/backtest skew.
+- The prediction stage no longer imports or depends on any NN class. Removing the NN checkpoint removes the `nn_res_*` columns; strategies that reference them must tolerate their absence (treated as a normal missing indicator).
+- The former `NNPredictor` per-tick responsibilities are retired; `nnpredictor-class.md` documents the removal and the batch-inference replacement.
 
 ---
 
-## 7. Potential Improvements
+## 7. Targets and Labelling
 
-1. **Add Early Stopping to Training**
-   - Monitor validation loss and stop if no improvement for N epochs
-   - Would prevent overfitting and save training time
+Targets are configurable per `NNModelSpec` (`targets: [...]`). **A model may declare multiple targets** — the output layer and combined loss are assembled from the declared list (multi-label / multi-head). Supported target families:
 
-2. **Implement Model Ensembling**
-   - Combine predictions from multiple model architectures
-   - Weight ensemble members by validation performance
-   - Would improve robustness and accuracy
+1. **Direction class (from profit labels)** — labels are **not** computed inside the NN module. They are read from the profit-label columns produced by the phase-13 profit-labels pipeline (`task-07-profit-labels-pipeline.md`): `{tf}_plong_n{n}_m{m}_x{x}` / `{tf}_pshort_…` and strict `{tf}_pslong_*` / `{tf}_psshort_*`. Each profit label is a binary outcome for a candidate entry (target `m×atr_ma` hit before stop `x×atr_ma` within `n` tf-candles; long enters at `1_low`, short at `1_high`). A direction `TargetSpec` references one profit-label spec by its `(tf, n, m, x, strict)` and derives the class:
+   - `up` if the **long** label is profitable and the short is not,
+   - `down` if the **short** label is profitable,
+   - `neutral` if neither — encoded `{0=up, 1=neutral, 2=down}`, 3-class softmax head.
 
-3. **Add Data Augmentation**
-   - Generate synthetic variations of training data (noise injection, resampling)
-   - Increases effective training set size
-   - Would improve model generalization on unseen data
+   Alternatively a TargetSpec may reference a **single** profit-label column directly as a binary head (`profitable` vs not). Because the source columns are `{tf}`-keyed but multiple specs/sides/strictness variants exist, **multiple direction targets can be declared per model** — each becomes its own head and its own `nn_res_{target}_*` output columns.
 
-4. **Introduce Adaptive Learning Rates**
-   - Use learning rate schedules that decrease over time
-   - Adjust based on training loss plateau detection
-   - Would enable finer convergence in later epochs
+2. **Regression** — next-delta (e.g. close log-return over horizon `N`). Linear head, MSE/Huber loss. Computed by `NNDataset` from price (not a profit label).
 
-5. **Add Cross-Validation**
-   - Train multiple folds of the same dataset
-   - Average predictions across folds for robustness
-   - Would provide confidence metrics for inference
+3. **Multi-horizon** — the same target evaluated at several horizons in one model. A `direction_multih` / regression target carries a `horizons: [h1, h2, …]` list; the dataset materialises one label per horizon (for direction, by selecting the matching profit-label spec with `n = hk`, or by recomputing the label at that horizon) and the model grows **one head per horizon**. Each horizon emits suffixed columns: `nn_res_{target}_h{hk}_prob_up/neutral/down` (direction) or `nn_res_{target}_h{hk}` (regression). This lets a single model predict, e.g., 1-candle and 2-candle direction jointly, sharing the trunk and learning cross-horizon structure, while strategies read each horizon independently.
 
-6. **Implement Online Learning**
-   - Update model weights incrementally as new data arrives
-   - Store recent data in rolling buffer
-   - Would support continuous model refinement without full retraining
+This resolves the previously-unresolved labelling question (column naming, encoding, horizon, threshold) by sourcing direction labels from the profit-labels pipeline and making the rest spec-driven. **Default labelling:** a direction target from the primary profit-label spec at the strategy's primary horizon. Output columns are timeframe-agnostic (`nn_res_*`).
 
-7. **Add Feature Importance Analysis**
-   - Use gradient-based methods to rank feature contribution
-   - Identify which indicators drive decisions
-   - Would support feature engineering improvements
+---
 
-8. **Parallelize Batch Predictions**
-   - Use GPU acceleration for batch inference
-   - Multi-threaded prediction for multiple model architectures
-   - Would accelerate backtest simulation_nn() phase
+## 8. Architecture Decisions
 
-9. **Add Model Validation & Monitoring**
-   - Track prediction performance on holdout test set
-   - Alert if validation accuracy drops below threshold
-   - Would catch model degradation in live trading
+- **Framework:** PyTorch. (Legacy Keras/TensorFlow references are obsolete.)
+- **Search:** Optuna (Bayesian sampling + pruning).
+- **Tracking:** dependency-free local store (JSON manifest + SQLite index). No MLflow.
+- **GPU:** optional. Training auto-detects CUDA and falls back to CPU (see `nn-infrastructure.md`).
+- **Timeframe-agnostic output:** a model ingests multi-timeframe features and emits one set of `nn_res_*` columns. Timeframe selection lives in the input (`spec.timeframes`/`feature_cols`), never in the output names.
+- **Grouping ≠ per-timeframe.** Grouping partitions the *training rows* into classes/regimes by a condition on a timeframe-indicator column (e.g. a volatility or trend regime), training one model per class; an inference router assigns each row to its class's model. Initial implementation uses `grouping=single` (one model over all rows); regime/class grouping is the configurable extension. See `nnmodel-class.md` §2 and `training-coordinator-class.md`.
 
-10. **Support Multiple Target Types**
-    - Train separate models for different prediction horizons (1h, 4h, 8h)
-    - Aggregate predictions across horizons
-    - Would improve multi-timeframe strategy coordination
+---
+
+## 9. Potential Improvements
+
+1. Richer regime/class grouping conditions (multi-indicator, learned partitions) beyond a single indicator threshold.
+2. Ensembling across promoted checkpoints, weighted by holdout performance.
+3. Feature-importance attribution feeding the `NNStrategist`'s indicator selection.
+4. Online/incremental refinement between full loop runs.
+5. Multi-objective Optuna (accuracy vs latency vs stability).

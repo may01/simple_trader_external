@@ -52,7 +52,7 @@ All paths derived from `helpers.py` functions (read env vars at call time):
 | `shared_folder()` | `{dataset_folder()}/shared/` | Shared artifacts |
 | `nn_folder()` | `{shared_folder()}/nn_data/` | NN batch files |
 | `action_folder()` | `{shared_folder()}/actions/` | Per-timestamp action pkl files |
-| `nn_weights_folder()` | `/trader_data_long/{DATA_ROOT}/{PAIR}/nn_weights/` | Always on `simple_trader_vol_long` |
+| `nn_artefact_root()` | `/trader_data_long/{DATA_ROOT}/{PAIR}/nn/` | Always on `simple_trader_vol_long`; holds `datasets/`, `checkpoints/`, `tracking/` (each created on demand by its manager) |
 | `stats_folder()` | `stats/{DATA_ROOT}/{PAIR}/` | In-repo; version-controlled |
 
 ---
@@ -72,9 +72,9 @@ All paths derived from `helpers.py` functions (read env vars at call time):
 docker compose run --rm graber python3 -c "
 from grabers.init_folders import init_dataset_folders
 init_dataset_folders()
-from helpers import data_folder, shared_folder, nn_folder, action_folder, nn_weights_folder
+from helpers import data_folder, shared_folder, nn_folder, action_folder, nn_artefact_root
 import os
-for path in [data_folder(), shared_folder(), nn_folder(), action_folder(), nn_weights_folder()]:
+for path in [data_folder(), shared_folder(), nn_folder(), action_folder(), nn_artefact_root()]:
     assert os.path.isdir(path), f'missing: {path}'
 print('all folders ok')
 "

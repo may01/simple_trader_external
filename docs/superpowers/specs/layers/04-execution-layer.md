@@ -148,7 +148,7 @@
 - `trainer.main(run_type)` — single dispatch entry point for all modes:
   - `simulate` — parallel backtest over full time range
   - `train` — parallel data generation for strategy training
-  - `group_nn` / `nn_train` / `simulate_nn` — NN pipeline stages
+  - `group_nn` / `nn_train` / `infer_nn` (alias `simulate_nn`) — NN pipeline stages
 
 **Parallelization contract:**
 - Time range divided across N independent worker processes
