@@ -9,8 +9,26 @@
 ## Goal
 Expand the engineered NN feature set into concrete `IndicatorField` subclasses so the full feature family is produced as ordinary `{tf}_`-prefixed indicator columns, then selected into `nn.feature_cols`. Today `nn_features.py` ships only `NNRSINormField` and `NNCloseDiffATRField`; this task adds (a) three **grouped feature families** drawn from an explicit indicator catalogue — Group 1 raw indicators, Group 2 indicator differences, Group 3 indicator slopes — plus (b) a set of **orthogonal** engineered features (log-returns, ATR-normalised range, candle body/wick ratios, a volatility regime bucket, cyclical time-of-day/day-of-week encodings, and cross-TF trend-alignment). Each is registered in `indicators/registry.py` and declared in `indicators_config.yaml` (the `nn_features` group plus the `nn` section `feature_cols` list), so `DataPreparer.prepare()` materialises them once into `df_with_indicators.pkl` for `NNDataset` to consume.
 
-## Normalisation model — **global pipeline z-score only**
-There is **one** normalisation layer for these features: the dataset-level **global train-split z-score** computed by `DataAttributes.compute_nn_stats(df, feature_cols)` (mean/std over closed-candle rows of the train split, applied at train/inference by `nn_orchestrator` / `nn_predictor`). This task does **not** create rolling on-frame `_z` columns. Consequences for the groups:
+## Normalisation model — **global robust (winsorised) z-score**
+There is **one** normalisation layer for these features, applied by `DataAttributes.compute_nn_stats(df, feature_cols)` and the apply sites (`nn_orchestrator` / `nn_predictor`). It is an **outlier-robust** global z-score: per-column stats are estimated on **winsorised** train-split values, and the standardised output is hard-clamped. This task does **not** create rolling on-frame `_z` columns.
+
+**Per-column stats** (train-split closed-candle rows only; stored in `column_stats` and the dataset manifest):
+1. `q01 = x.quantile(0.01)`, `q99 = x.quantile(0.99)` on the raw column.
+2. `xw = x.clip(q01, q99)` — winsorise to the 1st–99th percentile band.
+3. `mean = xw.mean()`, `std = max(xw.std(), 1e-8)`.
+
+Store `{q01, q99, mean, std}` per feature column.
+
+**Apply** (train, val, holdout, and live inference — all using the stored *train* stats, never recomputed → no leakage):
+```text
+xc = clip(x_raw, q01, q99)
+z  = (xc - mean) / std
+z  = clip(z, -4.0, +4.0)
+```
+
+Rationale: raw `mean`/`std` are non-robust — fat-tail spikes inflate `std` and squash the bulk near 0. Winsorising to `[q01, q99]` before estimating `mean`/`std` ties the scale to the central mass (option 3); the `[-4, +4]` clamp bounds any residual extreme (e.g. a live value beyond the train `q99`) so one spike can't dominate a batch. `compute_nn_stats` therefore stores four numbers per column (`q01, q99, mean, std`) instead of two, and `get_stats(col)` returns all four.
+
+Consequences for the groups:
 
 - **"Z-score on indicator X" (Group 1) ⇒ list X's existing column in `feature_cols`.** The global layer z-scores it. No new field, no `_z` column.
 - **"Z-score on a difference" (Group 2) ⇒ materialise the raw difference `{tf}_{left}_minus_{right}` via `NNDiffField`, then list it in `feature_cols`.** The global layer z-scores the difference.
@@ -25,6 +43,10 @@ These become `{tf}_*` feature columns in `df_with_indicators.pkl`, computed by `
 - Modify: indicators/library/nn_features.py
 - Modify: indicators/registry.py
 - Modify: configs/indicators_config.yaml
+- Modify: indicators/attributes.py — `DataAttributes.compute_nn_stats` / `get_stats` (winsorised stats `{q01,q99,mean,std}`)
+- Modify: nn/nn_orchestrator.py, nn/nn_predictor.py — apply winsorise → z → clamp `[-4,+4]`
+
+> The robust-normalisation change (winsorise + clamp) is the canonical policy here; the materialisation/manifest schema and apply sites are also tracked by task-04 (NNDataset), phase-09 task-02 (DataPreparer), and the NNPredictor spec, which carry the matching `{q01,q99,mean,std}` stats.
 
 ## Interface
 
@@ -439,7 +461,7 @@ nn:
 (Identity args — `left`/`right` for diffs, `source` for slopes, `other_tf` for cross-TF align — are baked into each factory, matching the `rsi_ma8` idiom and the registry docstring ("an empty params dict yields the defaults"). Config `params` stays `{}` except the slope `window` override; `range_atr`/`vol_regime` rely on their class defaults.)
 
 ## Key Constraints
-- **Single normalisation layer.** No rolling `_z` columns. Group features are raw `{tf}_*` columns; the global train-split z-score in `compute_nn_stats` is the only standardisation. Confirm `feature_cols` matches the materialised column names exactly so `compute_nn_stats` finds them.
+- **Single normalisation layer (robust).** No rolling `_z` columns. Group features are raw `{tf}_*` columns; the only standardisation is the global **winsorised** z-score (clip raw to train `[q01,q99]` → `(x-mean)/std` on winsorised stats → clamp `[-4,+4]`), computed on the train split only and reused verbatim at val/holdout/live. Confirm `feature_cols` matches the materialised column names exactly so `compute_nn_stats` finds them.
 - All features are plain indicator columns: `DataPreparer` is the single writer of `df_with_indicators.pkl` during the `nn_features` step (after base indicators); the NN module never writes them and only reads `feature_cols`. Each field follows the derived-name convention (registry key == `self.name`, column == `{tf}_{name}`) and lists its base-indicator suffixes in `self.dependencies` so prep ordering resolves prerequisites first (e.g. each `*_slope` depends on its source MA; each `*_minus_*` depends on both operands).
 - **No look-ahead.** Slope uses only trailing data (`.rolling(window)`); differences are point-in-time; cross-TF alignment forward-fills the *last closed* higher-TF value, never a future one; cyclical time encodings are point-in-time from the index. Warmup rows emit NaN and are dropped at `NNDataset` build, never forward/back-filled.
 - **`atr`/`natr` ⇒ `atr_14`/`natr_14`** in Group 2 (the bare-period columns do not exist).

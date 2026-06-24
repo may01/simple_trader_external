@@ -98,7 +98,7 @@ Executes the full pipeline in dependency order:
 **`_compute_nn_attributes(df: pd.DataFrame) -> DataAttributes`**
 - Instantiates `DataAttributes`
 - Reads `feature_cols` from `indicators_config.yaml` (NN input feature column list)
-- Calls `data_attributes.compute_nn_stats(df, feature_cols)` — mean/std over closed-candle rows only
+- Calls `data_attributes.compute_nn_stats(df, feature_cols)` — robust winsorised stats `{q01,q99,mean,std}` per column over closed-candle train rows (clip raw to `[q01,q99]`, then mean/std on the winsorised values; see phase-11 task-03 Normalisation model)
 - Returns populated `DataAttributes`
 
 ---

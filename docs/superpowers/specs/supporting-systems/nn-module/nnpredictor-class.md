@@ -33,7 +33,7 @@ NNOrchestrator.run_inference(dataset, checkpoint_id)
 ```
 
 - **Producer.** `run_inference` reads the NN feature columns from the *target* dataset's own `df_with_indicators.pkl` (any dataset, not only the training one), runs batch inference (`NNModel.run_batch`) over closed candles, and writes `{dataset}/df_with_nn.pkl` beside it. It returns/writes only the NN columns and **never mutates** `df_with_indicators.pkl`.
-- **Normalisation.** Features are normalised via the **training manifest stats bundled in the checkpoint** (feature list + per-feature stats), identical to training. They are **never recomputed from the inference dataset** — recomputing would introduce distribution shift / leakage.
+- **Normalisation.** Features are normalised via the **training manifest stats bundled in the checkpoint** (feature list + per-feature `{q01,q99,mean,std}`), identical to training: clip raw to `[q01,q99]` → `(x-mean)/std` → clamp `[-4,+4]`. They are **never recomputed from the inference dataset** — recomputing would introduce distribution shift / leakage.
 - **Merge is a consumer-side join, not a prepare() step.** `df_with_indicators.pkl` stays single-writer (DataPreparer); `df_with_nn.pkl` is an additive, disposable artifact. Consumers left-join it on the 1-min index at construction. Re-running `prepare()` never clobbers NN columns; re-running inference overwrites only `df_with_nn.pkl`.
 
 ---

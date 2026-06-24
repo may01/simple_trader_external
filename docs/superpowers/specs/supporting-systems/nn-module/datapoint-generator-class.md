@@ -82,7 +82,7 @@ Rows with NaN features or NaN targets are dropped at build time (not filled), an
 
 ## 3. NN-Specific Indicators (item 9)
 
-The `nn_features` step runs during `DataPreparer.prepare()` after base indicators, writing `{tf}_`-prefixed columns. Two families: (a) explicit indicator **groups** — Group 1 raw indicators, Group 2 indicator differences, Group 3 indicator slopes — and (b) orthogonal engineered features (returns, candle ratios, regime, cyclical, cross-TF). **Normalisation is global only:** these columns are written raw; the single z-score is the dataset-level train-split standardisation in `DataAttributes.compute_nn_stats` (written into `X_{tf}.npy` and the manifest stats). No rolling `_z` columns are produced.
+The `nn_features` step runs during `DataPreparer.prepare()` after base indicators, writing `{tf}_`-prefixed columns. Two families: (a) explicit indicator **groups** — Group 1 raw indicators, Group 2 indicator differences, Group 3 indicator slopes — and (b) orthogonal engineered features (returns, candle ratios, regime, cyclical, cross-TF). **Normalisation is global + outlier-robust:** these columns are written raw; the single z-score is the dataset-level train-split standardisation in `DataAttributes.compute_nn_stats` — per-column `{q01,q99,mean,std}` estimated on **winsorised** values, applied as clip-to-`[q01,q99]` → `(x-mean)/std` → clamp `[-4,+4]` (written into `X_{tf}.npy` and the manifest stats). No rolling `_z` columns are produced.
 
 | Feature | Column | Definition |
 |---------|--------|------------|

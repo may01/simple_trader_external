@@ -48,7 +48,7 @@ class NNDataset:
     cached: bool            # True if build() reused an existing cache dir
 ```
 
-- **`build(cls, df, data_attributes, spec)`** — materialise + cache tensors from a prepared wide `df`. Resolves `dataset_hash` from `(source content-hash, feature set, target set, history, split)`; if the cache dir exists and its manifest's `source` content-hash matches, loads it (`cached=True`) instead of rebuilding. Otherwise: validates every `feature_col` exists in `df` (missing → `ValueError` naming it); builds per-TF feature blocks over `history_points` (latest = forming candle, lookback = closed candles); reads target columns per `TargetSpec` (profit-labels for direction/label, price-derived logret for regression); drops rows with any NaN feature or NaN target; computes normalisation stats (`mean`/`std` per feature column) **on the train split only**; writes pre-normalised `X_{tf}.npy`, `y.npy`, `index.npy`, `splits.json`, `manifest.json`. Empty after drops → `ValueError("no usable rows")`.
+- **`build(cls, df, data_attributes, spec)`** — materialise + cache tensors from a prepared wide `df`. Resolves `dataset_hash` from `(source content-hash, feature set, target set, history, split)`; if the cache dir exists and its manifest's `source` content-hash matches, loads it (`cached=True`) instead of rebuilding. Otherwise: validates every `feature_col` exists in `df` (missing → `ValueError` naming it); builds per-TF feature blocks over `history_points` (latest = forming candle, lookback = closed candles); reads target columns per `TargetSpec` (profit-labels for direction/label, price-derived logret for regression); drops rows with any NaN feature or NaN target; computes **robust normalisation stats** (`{q01,q99,mean,std}` per feature column — winsorise raw to `[q01,q99]`, then `mean`/`std` on the winsorised values) **on the train split only**; writes pre-normalised `X_{tf}.npy`, `y.npy`, `index.npy`, `splits.json`, `manifest.json`. Empty after drops → `ValueError("no usable rows")`.
 - **`load(cls, dataset_hash)`** — load a cached dataset by hash; parse and validate `manifest.json`; a missing `.npy`/manifest is a corrupt dir → treated as cache miss (caller rebuilds). Stale source (manifest `source` content-hash no longer matches the live source) → raise / force rebuild rather than silently serving old tensors.
 - **`tensors()`** — return `(X, y)`. `X` concatenates the configured timeframes' feature blocks into one multi-TF input `(rows, history_points, sum_tf n_features)`; `y` is `(rows, total_target_width)`. Both load directly into `torch.from_numpy` with no transform (tensors are already z-scored).
 - **`split(name)`** — return a time-ordered row-range view (`"train"`/`"val"`/`"holdout"`) from `splits.json`; never shuffles before splitting.
@@ -64,7 +64,7 @@ datasets/{dataset_hash}/
 ├── index.npy              # DataFrame index (timestamps) per row
 └── splits.json            # train / val / holdout row ranges (time-ordered)
 ```
-One `X_{tf}.npy` block per timeframe (modular): a different TF subset can be assembled by `tensors()` without recompute. Tensors are written **already z-scored** (`(x - mean) / std` per feature column) so inference loads them ready-to-feed.
+One `X_{tf}.npy` block per timeframe (modular): a different TF subset can be assembled by `tensors()` without recompute. Tensors are written **already z-scored** (robust: `clip(x, q01, q99)` → `(x - mean) / std` → `clip(z, -4, +4)` per feature column) so inference loads them ready-to-feed.
 
 ### manifest.json schema (verbatim from spec)
 ```json
@@ -73,8 +73,8 @@ One `X_{tf}.npy` block per timeframe (modular): a different TF subset can be ass
   "source": "df_with_indicators.pkl@<content-hash>",
   "timeframes": [15, 60],
   "history_points": 32,
-  "feature_cols": { "15": ["15_logret", "15_rsi_z", ...], "60": [...] },
-  "normalization": { "15_logret": {"mean": 0.0, "std": 0.0123}, ... },
+  "feature_cols": { "15": ["15_logret", "15_rsi_14", ...], "60": [...] },
+  "normalization": { "15_logret": {"q01": -0.041, "q99": 0.038, "mean": 0.0, "std": 0.0123}, ... },
   "targets": [
     {"name": "dir15n1", "kind": "direction", "horizons": [1],
      "source": {"long": "15_plong_n1_m1_x0.4", "short": "15_pshort_n1_m1_x0.4", "strict": false},
@@ -98,7 +98,7 @@ The manifest additionally records the **dropped-row count** (NaN feature/target/
 
 ## Key Constraints
 - **Content-addressed:** `dataset_hash` derives from `(source content-hash, feature set, target set, history, split)`. Identical config reuses the cache dir; a changed config builds a new directory. A cache hit re-verifies the manifest `source` content-hash; a stale source forces a rebuild rather than silently serving old tensors. Corrupt/partial dir (missing `.npy` or manifest) → treated as cache miss and rebuilt.
-- **Normalisation stats on the TRAIN split only** — no val/holdout leakage. Tensors are written pre-normalised; the manifest carries the same mean/std so live inference reproduces the exact training scale.
+- **Normalisation stats on the TRAIN split only** — no val/holdout leakage. Robust winsorised stats `{q01,q99,mean,std}` per feature column; tensors are written pre-normalised (clip→z→clamp `[-4,+4]`); the manifest carries the same stats so live inference reproduces the exact training scale.
 - **Time-ordered splits** — one row per 1-min timestamp; never shuffle before splitting. Lookback within `history_points` uses **closed** candles only; the latest value is the forming candle.
 - **NaN feature/target rows dropped at build** (not filled); the dropped count is recorded in the manifest. Rows with incomplete forward windows already carry NaN profit labels (pipeline-produced) and are dropped, as are rows past the dataset end for regression. Empty after drops → `ValueError("no usable rows")`.
 - **Read-only consumer:** `NNDataset` reads `df_with_indicators.pkl` (feature + profit-label columns) and `DataAttributes`; it never computes direction labels itself and never writes back to the source frame.
