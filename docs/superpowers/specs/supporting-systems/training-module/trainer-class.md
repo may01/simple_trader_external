@@ -64,15 +64,17 @@ def run(self, run_type: str) -> None:
     elif run_type == "simulate":
         SimulationOrchestrator(self.pair, trainer=self).run()
 
-    elif run_type == "group_nn":
-        NNOrchestrator(self.pair, trainer=self).group(NN_POINT_CLASS_BIG)
-
     elif run_type == "nn_train":
-        NNOrchestrator(self.pair, trainer=self).train()
+        # NN_TRAIN_MODE=single (default): single-shot orch.train()
+        # NN_TRAIN_MODE=search: agentic TrainingLoop (Optuna + optional NNStrategist) — not yet wired here
+        orch = NNOrchestrator.from_trainer(self.pair, self)
+        df, data_attributes = _load_nn_inputs(self.pair)
+        orch.train(df, data_attributes)
 
     elif run_type in ("infer_nn", "simulate_nn"):   # simulate_nn kept as legacy alias
-        NNOrchestrator(self.pair, trainer=self).run_inference(
-            dataset=os.getenv("NN_INFER_DATASET", root_folder(self.pair)),
+        orch = NNOrchestrator.from_trainer(self.pair, self)
+        orch.run_inference_dataset(
+            dataset_dir=os.environ["NN_INFER_DATASET"],
             checkpoint_id=os.getenv("NN_INFER_CHECKPOINT", "best"),
         )
 
@@ -86,7 +88,9 @@ def run(self, run_type: str) -> None:
 **Notes:**
 - A `RUN_TYPE` value not in the table above is an error in v2.0 — silent fall-through (the v1.0 pattern of independent `if` blocks) is replaced by explicit dispatch.
 - `grab_data` and `generate_full_ohlc` are independent: `grab_data` writes `graber_data.pkl` to disk; `generate_full_ohlc` reads it as input. A user runs `grab_data` once per dataset, then can re-run `generate_full_ohlc` repeatedly (e.g. after changing `indicators_config.yaml`) without redownloading.
-- Legacy RUN_TYPEs (`generate_data_points`, `generate_data_points_prediction`, `generate_nn_points`, `train`) are not accepted; their work is now done by `generate_full_ohlc`.
+- `group_nn` is **removed** in v3.0. Grouping is internal to `NNOrchestrator.train()` via `spec.grouping` (`single`|`by_indicator`); no pre-grouping step or `nn_group_*.pkl` files are produced.
+- `nn_train` architecture and targets are driven by `configs/nn_spec.yaml` (`NNModelSpec`), not env vars. Legacy `NN_CLS`/`NN_TGT`/`NN_TYPE`/`SHUFFLE_GROUPED_NN_DATA` are retired.
+- Legacy RUN_TYPEs (`generate_data_points`, `generate_data_points_prediction`, `generate_nn_points`, `train`, `group_nn`) are not accepted; their work is now done by `generate_full_ohlc` or absorbed into `NNOrchestrator.train()`.
 
 ---
 
@@ -191,9 +195,9 @@ That is the entire public surface — one constructor call, one `run()` call.
 | `generate_data_points(...)` (all 3 variants) | Removed. Indicator + NN-target enrichment is part of `DataPreparer.prepare()`. |
 | `train()` | Removed. The skeleton had no real logic. |
 | `simulate()` | `SimulationOrchestrator.run()` |
-| `group_nn(class_type)` | `NNOrchestrator.group(class_type)` |
-| `train_nn()` | `NNOrchestrator.train()` |
-| `infer_nn()` (alias `simulate_nn`) | `NNOrchestrator.run_inference(dataset, checkpoint_id)` |
+| `group_nn(class_type)` | **Removed** — grouping is internal to `NNOrchestrator.train()` via `spec.grouping` |
+| `train_nn()` | `NNOrchestrator.from_trainer(pair, self).train(df, data_attributes)` |
+| `infer_nn()` (alias `simulate_nn`) | `NNOrchestrator.from_trainer(pair, self).run_inference_dataset(dataset_dir, checkpoint_id)` |
 | `collect_live_data()` | `LiveDataCollector.run()` |
 | `parallel_generate_data_points`, `parallel_simulate`, `parallel_batch_train`, `parallel_train_nn` | Encapsulated inside the relevant collaborator (no longer module-level helpers). |
 | `get_nn_target`, `get_nn_target_near_level`, `get_regression_target` | Become `IndicatorField` subclasses owned by the data module. |

@@ -34,7 +34,7 @@ Artefact layout: [`../nn-module/nn-infrastructure.md`](../nn-module/nn-infrastru
 | `RUN_TYPE` | Dispatch |
 |------------|----------|
 | `nn_train` | `NNOrchestrator.from_trainer(pair, self).train(df, data_attributes)` — `df` + `DataAttributes` loaded by `Trainer`. |
-| `infer_nn` (alias `simulate_nn`) | `NNOrchestrator.from_trainer(pair, self).run_inference(dataset=NN_INFER_DATASET, checkpoint_id=NN_INFER_CHECKPOINT)` → writes `{dataset}/df_with_nn.pkl`. |
+| `infer_nn` (alias `simulate_nn`) | `NNOrchestrator.from_trainer(pair, self).run_inference_dataset(dataset_dir=NN_INFER_DATASET, checkpoint_id=NN_INFER_CHECKPOINT)` → writes `{dataset_dir}/df_with_nn.pkl`. |
 
 `infer_nn` reads `df_with_indicators.pkl` from any target dataset and writes an additive `df_with_nn.pkl` (`nn_res_*` only); it never mutates `df_with_indicators.pkl`. Absence-safe: no checkpoint → returns `None`, writes nothing. Consumers (`SimulationData`/`FullData`/`LiveData`) left-join `df_with_nn.pkl` at load.
 
@@ -52,4 +52,4 @@ Architecture/grouping/timeframes/targets live in `configs/nn_spec.yaml` (`NNMode
 
 ## Open Follow-Up (other files)
 
-[`trainer-class.md`](trainer-class.md) §4.1 and [`training-module.md`](training-module.md) §2/§4.3/§5.D still reference the removed `group_nn` RUN_TYPE and `NNOrchestrator.group(class_type)`. Obsolete under v3.0 — drop them in a separate edit.
+`trainer-class.md` and `training-module.md` have been updated to match v3.0 (Phase-11 rewrite). Other spec files outside the training-module directory may still carry stale `group_nn`/`NN_CLS`/`run_inference(dataset=` references — flagged as a follow-up cleanup.

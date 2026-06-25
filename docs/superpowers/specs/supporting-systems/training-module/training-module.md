@@ -18,7 +18,7 @@ The Training Module is the orchestration engine for the entire training and back
 | `Graber` | Data retrieval: fetch 1-min OHLCV from the Binance API for the requested range and write `graber_data.pkl` to disk |
 | `DataPreparer` | Read `graber_data.pkl`; build the wide base DataFrame; run per-minute `Indicators.compute()` in time-batched workers; compute NN forward-looking targets; compute stats; save `df_with_indicators.pkl` |
 | `SimulationOrchestrator` | Parallel backtest: spawn workers using `SimulationData` + `TrainRobot`, aggregate thread results |
-| `NNOrchestrator` | NN pipeline: `group_nn`, `train_nn`, `infer_nn` (alias `simulate_nn`) |
+| `NNOrchestrator` | NN pipeline: `nn_train` (grouping internal), `infer_nn` (alias `simulate_nn`) |
 | `LiveDataCollector` | Continuous live-data ingestion from Binance (60s loop) |
 
 This decomposition aligns the module with the **Data Module v2.0** two-path architecture:
@@ -37,7 +37,7 @@ The module retains parallel-first execution. Both data preparation (per-tf indic
 - **Data Module v2.0** — `Indicators`, `IndicatorField` registry (`indicators_config.yaml`), `DataAttributes`, `SimulationData`, `WideDataPoint`, `FullData`, `LiveData`
 - **Strategy / TrainRobot** — Consumed during simulation
 - **NN Module** — Consumed by `NNOrchestrator`
-- **Environment config** (`configs/*.env`) — `DATA_START`, `DATA_END`, `TRAINER_TIME_STEP`, `AVAIABLE_THREADS`, `NN_CLS`, `NN_TGT`, `NN_TYPE`, `SHUFFLE_GROUPED_NN_DATA`
+- **Environment config** (`configs/*.env`) — `DATA_START`, `DATA_END`, `TRAINER_TIME_STEP`, `AVAIABLE_THREADS`, `NN_DEVICE`, `NN_DATA_ROOT`, `NN_ARTEFACT_ROOT`, `NUM_WORKERS`, `NN_INFER_DATASET`, `NN_INFER_CHECKPOINT`, `NN_TRAIN_MODE` (`single`|`search`), `NN_STUDY`, `NN_STRATEGIST`. Architecture/grouping/targets live in `configs/nn_spec.yaml` (`NNModelSpec`). Legacy `NN_CLS`/`NN_TGT`/`NN_TYPE`/`SHUFFLE_GROUPED_NN_DATA` are retired.
 
 ### Downstream Consumers
 - **`SimulationData`** reads `df_with_indicators.pkl` for replay
@@ -52,10 +52,11 @@ The module retains parallel-first execution. Both data preparation (per-tf indic
 | `grab_data` | `Graber(pair).grab_from_env()` — downloads Binance 1-min klines, writes `graber_data.pkl` |
 | `generate_full_ohlc` | `DataPreparer(pair, trainer).prepare()` — reads `graber_data.pkl`, builds the wide base DataFrame, enriches with indicators + NN targets, writes `df_with_indicators.pkl` |
 | `simulate` | `SimulationOrchestrator.run()` |
-| `group_nn` | `NNOrchestrator.group(class_type)` |
-| `nn_train` | `NNOrchestrator.train()` |
-| `infer_nn` (alias `simulate_nn`) | `NNOrchestrator.run_inference(dataset, checkpoint_id)` |
+| `nn_train` | `NNOrchestrator.from_trainer(pair, self).train(df, data_attributes)` — grouping internal via `spec.grouping`; `NN_TRAIN_MODE=search` runs agentic `TrainingLoop` (default is `single`) |
+| `infer_nn` (alias `simulate_nn`) | `NNOrchestrator.from_trainer(pair, self).run_inference_dataset(dataset_dir, checkpoint_id)` → writes `{dataset}/df_with_nn.pkl` |
 | `collect_live` | `LiveDataCollector.run()` |
+
+`group_nn` is **removed** in v3.0. There is no pre-grouping step; grouping is internal to `NNOrchestrator.train()` via `spec.grouping` (`single`|`by_indicator`).
 
 `grab_data` and `generate_full_ohlc` are independent pipelines coupled by `graber_data.pkl` on disk; a user can re-run `generate_full_ohlc` against the same raw file as many times as they want (e.g. to regenerate after changing `indicators_config.yaml`) without redownloading from Binance.
 
@@ -198,34 +199,40 @@ Step 1 and Step 2 are decoupled by the on-disk `graber_data.pkl`. Re-running Ste
    └──────────────────────────────────────┘
 ```
 
-### 4.3 NN Pipeline (`RUN_TYPE=group_nn` → `nn_train` → `infer_nn`)
+### 4.3 NN Pipeline (`RUN_TYPE=nn_train` → `infer_nn`)
+
+`group_nn` is removed (v3.0). Grouping is internal to `train()` via `spec.grouping`.
 
 ```
-   df_with_indicators.pkl
+   df_with_indicators.pkl  (content-addressed dataset under NN_DATA_ROOT/…/datasets/)
             │
-            ▼ FullData.get(tf=N)[nn_feature_cols]
+            ▼
    ┌──────────────────────────────────────┐
-   │  NNOrchestrator.group(class_type)    │
-   │  - read NN feature/target columns    │
-   │    via FullData                      │
-   │  - bucket by classification          │
-   │  - shuffle (optional)                │
-   │  - save nn_group_{ct}_{cls}_{n}.pkl  │
+   │  NNOrchestrator.train(df,            │
+   │      data_attributes)                │
+   │  - builds NNDataset (groups rows     │
+   │    by spec.grouping: single |        │
+   │    by_indicator; no pre-group step)  │
+   │  - NN_TRAIN_MODE=single: single-shot │
+   │    backprop, saves checkpoint        │
+   │  - NN_TRAIN_MODE=search (default):   │
+   │    agentic TrainingLoop (Optuna +    │
+   │    optional NNStrategist LLM)        │
    └───────────┬──────────────────────────┘
-               ▼
+               ▼  checkpoint saved to NN_ARTEFACT_ROOT
    ┌──────────────────────────────────────┐
-   │  NNOrchestrator.train()              │
-   │  - for cls in permutations:          │
-   │      NN(...).train(group)            │
-   └───────────┬──────────────────────────┘
-               ▼
-   ┌──────────────────────────────────────┐
-   │  NNOrchestrator.simulate()           │
-   │  - load_model + run_batch per class  │
-   │  - aggregate long/short probabilities│
-   │  - save nn_simulation_*.pkl          │
+   │  NNOrchestrator.run_inference_dataset│
+   │  (dataset_dir, checkpoint_id="best") │
+   │  - loads df_with_indicators.pkl +    │
+   │    DataAttributes from dataset_dir   │
+   │  - calls pure run_inference(df, …)   │
+   │  - atomically writes df_with_nn.pkl  │
+   │    (nn_res_* only; df_with_indicators│
+   │    is never mutated)                 │
    └──────────────────────────────────────┘
 ```
+
+Targets are **read** from profit-label columns already in `df_with_indicators.pkl` (never re-classified at train time). Consumers (`SimulationData`/`FullData`/`LiveData`) left-join `df_with_nn.pkl`.
 
 ---
 
@@ -267,29 +274,28 @@ Step 1 and Step 2 are decoupled by the on-disk `graber_data.pkl`. Re-running Ste
    - Main thread joins, aggregates, saves `simulation_results.pkl`
 4. Final revenue logged
 
-### D. `group_nn`
+### D. `nn_train`
+
+`group_nn` is **removed** — there is no pre-grouping step. Grouping is internal to `NNOrchestrator.train()`.
 
 1. `Trainer.__init__()`
-2. `nn = NNOrchestrator(pair)` → `nn.group(class_type)`:
-   - Open `FullData` view over `df_with_indicators.pkl`
-   - For each NN-eligible closed candle, extract `(features, target, class)`
-   - Accumulate per-class buckets of size 5000, optionally shuffle, persist to `nn_group_*.pkl`
+2. `orch = NNOrchestrator.from_trainer(pair, self)`; load `df` + `DataAttributes`
+3. `orch.train(df, data_attributes)`:
+   - Builds `NNDataset` (rows grouped by `spec.grouping`: `single` or `by_indicator`) — no `nn_group_*.pkl` files
+   - Architecture, targets, grouping mode all from `configs/nn_spec.yaml` (`NNModelSpec`)
+   - `NN_TRAIN_MODE=single`: single-shot backprop, saves checkpoint to `NN_ARTEFACT_ROOT`
+   - `NN_TRAIN_MODE=search` (default): agentic `TrainingLoop` (Optuna + optional `NNStrategist` LLM)
 
-### E. `nn_train`
+### E. `infer_nn` (alias `simulate_nn`)
 
-1. `nn = NNOrchestrator(pair)` → `nn.train()`:
-   - For each `(class_type, cls, tf_type, target_type)` permutation in env config:
-     - Build `NN(...)` instance, call `train(data_group=1)`
+1. `orch = NNOrchestrator.from_trainer(pair, self)`
+2. `orch.run_inference_dataset(dataset_dir=NN_INFER_DATASET, checkpoint_id=NN_INFER_CHECKPOINT)`:
+   - Thin wrapper: loads `df_with_indicators.pkl` + `DataAttributes` from `dataset_dir`
+   - Calls pure `run_inference(df, data_attributes)` → `nn_res_*`-only DataFrame
+   - Atomically writes `{dataset_dir}/df_with_nn.pkl` (never mutates `df_with_indicators.pkl`)
+   - Absence-safe: no checkpoint → returns `None`, writes nothing
 
-### F. `infer_nn` (alias `simulate_nn`)
-
-1. `nn = NNOrchestrator(pair)` → `nn.run_inference(dataset, checkpoint_id)`:
-   - Read NN feature columns from the **target** dataset's `df_with_indicators.pkl` (any dataset, not only training) — no grouped-pickle dependency
-   - Load checkpoint (weights + bundled normalisation manifest); normalise with training stats
-   - `run_batch` over closed candles → `nn_res_*` columns
-   - Save `{dataset}/df_with_nn.pkl` (nn_res_* only; never mutates `df_with_indicators.pkl`)
-
-### G. `collect_live`
+### F. `collect_live`
 
 1. `collector = LiveDataCollector(pair)` → `collector.run()`:
    - Infinite 60s-aligned loop: fetch latest candles via `LiveData.build_candles()`, persist snapshot
