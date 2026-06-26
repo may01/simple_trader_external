@@ -1,7 +1,12 @@
 # Task 06: Merge parts → labels → nn → save → cleanup
 
 **Phase:** 16 — Chunked Data Prep
-**Depends on:** Task 05 (final part files), existing `_compute_profit_labels`, `_merge_nn_output`, `_compute_nn_attributes`
+**Depends on:** Task 05 (final part files), existing `_compute_profit_labels`, `_compute_nn_attributes`
+
+> **Implementation note:** On the current branch `prepare()` does **not** left-join
+> `df_with_nn.pkl` (that moved to consumers in refactor `969819b`). `_merge_parts`
+> mirrors `prepare()` exactly, so it omits the nn-merge step too. The
+> `nn_output_path` constructor arg was also removed (`a2a52ad`).
 **Produces:** `DataPreparer._merge_parts`
 
 ---

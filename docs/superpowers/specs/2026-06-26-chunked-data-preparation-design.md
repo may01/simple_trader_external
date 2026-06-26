@@ -138,7 +138,6 @@ Consequences:
   MERGE                             ▼
           concat final parts in order → full frame [DATA_START, DATA_END)
           compute profit labels (full frame)
-          merge df_with_nn.pkl (left join, if present)
           compute NN-normalisation stats (full frame)
           atomic save df_with_indicators.pkl + data_attributes.pkl
           delete part files on success
@@ -210,7 +209,9 @@ existing `logs.py` logger:
   - `_pass1_base(portion) -> writes df_base.part_NN.pkl` (skips if present)
   - `_global_base_stats(base_parts)` (skips if stats present)
   - `_pass2_class(portion) -> writes df_with_indicators.part_NN.pkl` (skips if present)
-  - `_merge_parts(parts) -> labels + nn merge + nn-norm + atomic save + cleanup`
+  - `_merge_parts(parts) -> labels + nn-norm + atomic save + cleanup`
+    (mirrors `prepare()` exactly; the `df_with_nn.pkl` left-join lives in
+    *consumers*, not `prepare()`, so the merge step does not perform it)
 - **`chunk_manifest.json`** in the dataset `data/` folder records a config hash
   (`DATA_START`, `DATA_END`, `CHUNK_SPAN_DAYS`). On rerun, a hash mismatch
   invalidates stale parts (config changed between runs) rather than silently
