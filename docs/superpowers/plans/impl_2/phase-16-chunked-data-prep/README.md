@@ -105,6 +105,7 @@ private to `DataPreparer` / `training/data_preparer.py`.
 | 06 | Merge: concat parts → labels → nn merge → nn-norm → atomic save → cleanup |
 | 07 | `prepare_chunked` orchestrator + manifest config-guard + trainer wiring |
 | 08 | Docker validation: single-vs-multi equivalence + crash-resume (2-week set) |
+| 09 | Intra-chunk 1% progress logging (`_PctProgress` in `_compute_tf_rows`) |
 
 Tasks 01–06 build the private helpers; each is independently unit-testable. Task
 07 wires them and is the integration point. Task 08 is the acceptance gate.

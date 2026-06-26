@@ -192,6 +192,31 @@ existing `logs.py` logger:
 - Single-chunk path logs the same pass banners (without per-portion lines) so a
   small run is still observable.
 
+### Intra-chunk 1% progress
+
+Portion-boundary logging alone leaves a *long silent gap inside each portion* —
+the per-row indicator pass (`_compute_tf_rows`, the expensive loop) emits nothing
+until the whole portion finishes. With the default 30-day span that is a
+multi-hour blackout. To fix it, the per-row loop logs a line **each time it
+completes 1% of its rows**:
+
+```
+[prepare] indic tf=15 n=43200 1% (432/43200)
+[prepare] indic tf=15 n=43200 2% (864/43200)
+...
+```
+
+- A `_PctProgress(total, label)` helper owns the "log once per integer percent
+  reached" rule; `_compute_tf_rows` ticks it once per row.
+- Granularity is **per work unit** — one `(tf, row-slice)` unit, tagged with `tf`
+  and the slice row count `n`. In serial mode that is one `0→100%` stream per
+  timeframe; in parallel mode each fork worker reports its own slice's 1% (their
+  stdout is the parent's, so the lines reach docker logs). Streams interleave but
+  each is self-identifying.
+- Logging only — no effect on output, so the bit-identical guarantee is preserved.
+- For `total < 100` rows each row crosses more than 1%; the helper still logs at
+  most once per integer percent, in order.
+
 ---
 
 ## Code shape (interface-first)
