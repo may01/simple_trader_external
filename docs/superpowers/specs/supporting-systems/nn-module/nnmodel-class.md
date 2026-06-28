@@ -152,17 +152,19 @@ A model **always ingests all of `spec.timeframes` as input** and emits one timef
 @dataclass
 class TargetSpec:
     name: str          # unique label, used in output column names (nn_res_{name}_*)
-    kind: str          # "direction" | "label" | "regression"
+    kind: str          # "direction" | "direction_binary" | "label" | "regression"
                        #   ( + multi-horizon via `horizons` below )
     horizons: list[int] = field(default_factory=lambda: [1])  # N candles ahead; >1 entry = multi-horizon
+    side: str | None = None           # direction_binary only: "long" | "short"
 
-    # direction / label (sourced from the profit-labels pipeline, task-07):
+    # direction / direction_binary / label (sourced from the profit-labels pipeline, task-07):
     label_tf: int | None = None       # tf of the profit-label column to read
     label_m: float | None = None      # target size (atr_ma units) — selects the spec
     label_x: float | None = None      # stop size (atr_ma units)
     strict: bool = False              # read pslong/psshort vs plong/pshort
-    #   kind="direction": derive 3-class up/neutral/down from the long+short pair
-    #   kind="label":     single profit-label column → binary head
+    #   kind="direction":        derive 3-class up/neutral/down from the long+short pair
+    #   kind="direction_binary": one side vs rest → 2-class (prob_{side}, prob_other)
+    #   kind="label":            single profit-label column → binary sigmoid head
 
     # regression (computed from price, not a profit label):
     transform: str = "logret"
@@ -170,11 +172,12 @@ class TargetSpec:
 
 Output column naming (**timeframe-agnostic** — no `{tf}` prefix):
 - direction → `nn_res_{name}_prob_up`, `nn_res_{name}_prob_neutral`, `nn_res_{name}_prob_down`
+- direction_binary → `nn_res_{name}_prob_{side}`, `nn_res_{name}_prob_other` (`side` ∈ `long`|`short`)
 - label (binary) → `nn_res_{name}_prob`
 - regression → `nn_res_{name}`
 - multi-horizon (`horizons=[h1,h2,…]`) → one head per horizon, suffixed `_h{hk}`, e.g. `nn_res_{name}_h{hk}_prob_up`
 
-The head width and loss default follow `kind` (`direction`→softmax/cross-entropy, `label`→sigmoid/BCE, `regression`→linear/Huber). **Multiple `TargetSpec`s produce multiple heads trained jointly** — a model can predict several profit-label-derived directions and/or regressions at once. Direction/label targets read existing profit-label columns; see `datapoint-generator-class.md` §4.
+The head width and loss default follow `kind` (`direction`→softmax/cross-entropy width 3, `direction_binary`→softmax/cross-entropy width 2, `label`→sigmoid/BCE width 1, `regression`→linear/Huber width 1). **Multiple `TargetSpec`s produce multiple heads trained jointly** — a model can predict several profit-label-derived directions and/or regressions at once. Direction/direction_binary/label targets read existing profit-label columns; see `datapoint-generator-class.md` §4.
 
 ---
 

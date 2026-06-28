@@ -133,7 +133,13 @@ Each is a **binary** outcome for a candidate entry at that row: target `m×atr_m
   - `up` if long profitable and short not, `down` if short profitable, else `neutral` → `{up:0, neutral:1, down:2}`.
 
 ### Binary label (`kind="label"`)
-- References a single profit-label column directly → binary target (profitable vs not).
+- References a single profit-label column directly → binary target (profitable vs not), single sigmoid output.
+
+### Binary direction — single action vs. rest (`kind="direction_binary"`)
+- One-vs-rest head emitting `(prob_{side}, prob_other)` for a single `side: "long" | "short"`.
+- Reads **one** profit-label column — `{tf}_plong_*` for `side="long"`, `{tf}_pshort_*` for `side="short"` (strict → `pslong`/`psshort`) — selected by `(label_tf, n=horizon, label_m, label_x, strict)`.
+- Positive class = column `== 1` (action profitable), `other` = column `== 0` → width-2 one-hot `{<side>:0, other:1}`, softmax / cross-entropy. NaN source → NaN row, dropped at build.
+- Differs from `kind="label"`: `direction_binary` is a 2-value softmax so `prob_{side} + prob_other = 1`, matching the 3-class direction head's one-hot shape for downstream consumers; `kind="label"` is a single sigmoid scalar.
 
 ### Regression (`kind="regression"`)
 - Computed from price (not a profit label): transformed future move (`logret` over horizon `N`), continuous.
