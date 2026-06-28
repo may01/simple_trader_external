@@ -66,7 +66,9 @@ class NNDataset:
     def build(cls, df, data_attributes, spec) -> "NNDataset": ...   # materialise + cache
     @classmethod
     def load(cls, dataset_hash) -> "NNDataset": ...                 # load cached
-    def tensors(self) -> tuple[np.ndarray, np.ndarray]: ...         # X (multi-TF), y
+    def tensors(self) -> tuple[np.ndarray, np.ndarray]: ...         # X (multi-TF), y — materialised (mmap-loaded)
+    def torch_dataset(self) -> "Dataset": ...                       # LAZY mmap-backed map-style dataset (training)
+    def labels(self) -> np.ndarray: ...                             # y rows only (cheap; for class weights)
     def split(self, name: str) -> "NNDataset": ...                  # train/val/holdout view
     def groups(self, grouping) -> list[str]: ...                    # group keys per GroupingSpec
     def group(self, group_key: str) -> "NNDataset": ...             # row-subset view for one class/regime
@@ -77,6 +79,18 @@ class NNDataset:
 `X` concatenates all configured timeframes' feature blocks (model input is multi-TF). `groups()`/`group()` partition rows by the spec's `GroupingSpec` (the routing indicator column is read off the source frame); `grouping.mode="single"` yields one group containing all rows.
 
 Rows with NaN features or NaN targets are dropped at build time (not filled), and the dropped count is recorded in the manifest.
+
+#### Lazy loading — host RAM O(batch), not O(rows)
+
+`tensors()` materialises the full `(rows, history, sum_tf features)` array, so the training load path does **not** use it (a 3-year set is tens of GB, copied several times: load → concat → torch-tensor). Training instead consumes `torch_dataset()` — a **map-style, mmap-backed** dataset:
+
+- Each `X_{tf}.npy` / `y.npy` is opened with `np.load(mmap_mode='r')`.
+- `__getitem__(i)` reads **one** row's `(history, n_features_tf)` block from each TF mmap and concatenates them along the feature axis in **`manifest['timeframes']` declaration order** (never sorted — a `[60, 15]` spec must not swap feature channels), yielding `(history, sum_tf features)` plus that row's `y`. Tensors are already normalised float32 on disk, so no transform happens on access.
+- A `DataLoader` over this keeps host RAM at **O(batch + OS page cache)**, independent of row count — the complement to the minibatching that bounds GPU memory (see `nnmodel-class.md` §5.2).
+- `labels()` opens only `y.npy` (small: `rows × target_width`) so global balanced class weights are computed without materialising any `X_{tf}.npy`.
+- `tensors()` retains its signature/output (now mmap-loaded) for inference parity, small datasets, and tests.
+
+Shuffle (`spec.shuffle_train`) random-accesses mmap rows — fine on SSD/NVMe; `num_workers=0` by default (memmaps pickle by path, so `NUM_WORKERS>0` is a valid later opt-in to overlap I/O).
 
 ---
 

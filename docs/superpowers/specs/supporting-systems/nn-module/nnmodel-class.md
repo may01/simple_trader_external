@@ -49,6 +49,7 @@ class NNModelSpec:
     val_strategy: str = "time_holdout" # "time_holdout" | "random" | "kfold"
     early_stopping_patience: int | None = 10
     class_weight: str = "balanced"     # for classification targets
+    shuffle_train: bool = True         # shuffle TRAIN minibatches each epoch; val/inference never shuffle
 
     # --- Runtime ---
     device: str = "auto"               # "auto" | "cuda" | "cpu"
@@ -117,12 +118,15 @@ A model **always ingests all of `spec.timeframes` as input** and emits one timef
 ### 5.2 Training
 
 #### `train(dataset: NNDataset, epoch_callback=None) -> dict`
-- Calls `build()` if needed.
+- Seeds `torch` (from `spec.seed`) **before** `build()` so weight init *and* batch shuffle are reproducible, then calls `build()` if needed.
 - Splits train/validation per `spec.val_strategy`/`spec.validation_split` (time-holdout default to avoid look-ahead leakage).
-- Optimiser/loss assembled from spec; per-target losses combined (weighted sum). Class targets use `spec.class_weight`.
+- **Minibatched**: train/val tensors stay on CPU in a `DataLoader(batch_size=spec.batch_size)`; each batch is moved to `device` per step, so resident GPU memory scales with `batch_size`, **not** dataset size. `spec.batch_size >= rows` ⇒ one step/epoch (parity with the former full-batch loop). `num_workers=0` (tensors already in RAM); `drop_last=False`.
+- **Shuffle policy**: train batches are reshuffled each epoch iff `spec.shuffle_train` (default True), via a `spec.seed`-seeded generator. Validation is **never** shuffled; inference never uses a shuffling loader. Sample-axis shuffle is safe for dense and sequence layers (the `history_points` sequence lives inside each sample); only a future *stateful* RNN (BPTT across batch boundaries) would set `shuffle_train=False`.
+- Optimiser/loss assembled from spec; per-target losses combined (weighted sum). Class targets use `spec.class_weight` — **balanced weights are computed once over the full train labels**, not per batch.
+- `loss`/`val_loss`/`accuracy`/`per_target` are **row-weighted means over batches** (equal to the full-batch value at one step/epoch).
 - Trains for `spec.epochs` with `early_stopping_patience`; supports Optuna pruning via `epoch_callback(epoch, metrics)` returning a stop signal.
 - After each epoch, `epoch_callback` (if set) receives `{loss, accuracy, val_loss, val_accuracy, per_target: {...}}`.
-- Returns final metrics dict; sets `is_trained = True`.
+- Returns final metrics dict; sets `is_trained = True`. CUDA OOM during a step → one CPU retry (device policy) before failing.
 
 ### 5.3 Inference
 
