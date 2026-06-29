@@ -32,10 +32,12 @@ Everything routes through the **same code paths** as `kind="direction"` (softmax
 - Modify: `main/nn/nn_model_spec.py` — `TargetSpec.side` field; `__post_init__` validation; `out_columns()` `direction_binary` branch; docstrings.
 - Modify: `main/nn/nn_dataset.py` — `_binary_onehot()` helper; `_target_block()` `direction_binary` branch; add `side` to `_dataset_hash` target spec dict.
 - Modify: `main/nn/nn_model.py` — `_HEAD_WIDTH["direction_binary"] = 2`; include `direction_binary` in `_combined_loss`, `_apply_head_activation`, `_class_weights`, `_accuracy_counts`.
+- Modify: `main/nn/training_loop.py` — `TrainingLoop._score_predictions`: score `direction_binary` heads as width-2 argmax accuracy (NOT the regression `else` branch). This is a SEPARATE holdout scorer from `NNModel._accuracy_counts`; missing it corrupts `holdout_score` and head-offset alignment for any spec mixing kinds. (See Layer 3b.)
 - Modify: `main/configs/nn_spec.yaml` — example `long15` / `short15` targets.
 - Test: `main/tests/unit/nn/test_nn_model_spec.py` — out_columns, validation, spec_hash.
-- Test: `main/tests/unit/nn/test_nn_dataset.py` — `_binary_onehot`, `_target_block`.
+- Test: `main/tests/unit/nn/test_nn_dataset.py` — `_binary_onehot`, `_target_block` (single + multi-horizon).
 - Test: `main/tests/unit/nn/test_nn_model.py` — head width, output size, softmax activation, integration.
+- Test: `main/tests/unit/nn/test_training_loop.py` — `_score_predictions` with a mixed direction + direction_binary spec (guards the offset/scoring fix).
 
 ---
 
@@ -369,7 +371,7 @@ def _binary_onehot(col: np.ndarray) -> np.ndarray:
     valid = ~np.isnan(col)
     out[valid] = 0.0
     pos = np.flatnonzero(valid & (col == 1.0))
-    oth = np.flatnonzero(valid & (col != 1.0))
+    oth = np.flatnonzero(valid & (col == 0.0))
     out[pos, 0] = 1.0
     out[oth, 1] = 1.0
     return out
@@ -536,6 +538,79 @@ git commit -m "feat(nn): direction_binary 2-class softmax head + metrics"
 
 ---
 
+## Layer 3b — holdout scorer (`training_loop.py`)
+
+`NNModel._accuracy_counts` (Layer 3) is the per-batch training metric. The agentic search loop ALSO has a second, independent scorer — `TrainingLoop._score_predictions` in `nn/training_loop.py` — whose result becomes `holdout_score` and drives trial ranking / model promotion. It switches on `kind` with **hard-coded widths** and an `else → regression` fallthrough, so `direction_binary` (width 2) silently lands in the regression branch: it mis-scores the head AND advances `offset` by 1 instead of 2, misaligning every later head. Any spec mixing `direction_binary` with another head (the default `nn_spec.yaml` does, after Layer 4) gets a corrupt holdout score. Update this site too.
+
+- [ ] **Step 3b.1: Holdout-scorer test (RED)**
+
+Add to `main/tests/unit/nn/test_training_loop.py` (module already imports `numpy as np`, `LayerSpec`, `NNModelSpec`, `TargetSpec`, `TrainingLoop`; note the file's top-level `optuna = pytest.importorskip("optuna")` — the test runs only where optuna is installed, which the `nn-train` image is):
+
+```python
+class TestScorePredictionsDirectionBinary:
+    def test_mixed_direction_and_binary_offset_and_accuracy(self):
+        spec = NNModelSpec(
+            name="m",
+            timeframes=[15],
+            indicators=["15_close"],
+            layers=[LayerSpec(kind="dense", units=8)],
+            targets=[
+                TargetSpec(name="dir15", kind="direction",
+                           label_tf=15, label_m=1.0, label_x=0.3),
+                TargetSpec(name="long15", kind="direction_binary", side="long",
+                           label_tf=15, label_m=1.0, label_x=0.3),
+            ],
+        )
+        # columns: [dir up, neutral, down | long prob_long, prob_other]
+        y = np.array([
+            [1, 0, 0, 1, 0],
+            [0, 0, 1, 0, 1],
+        ], dtype=float)
+        preds = np.array([
+            [0.7, 0.2, 0.1, 0.9, 0.1],
+            [0.1, 0.2, 0.7, 0.2, 0.8],
+        ], dtype=float)
+        overall, per_target = TrainingLoop._score_predictions(spec, preds, y)
+        assert per_target["dir15"] == 1.0
+        assert per_target["long15"] == 1.0   # ~0.976 (MSE on 1 col) before the fix
+        assert overall == 1.0
+```
+
+- [ ] **Step 3b.2: Run — expect RED**
+
+Run: `docker compose run --rm nn-train pytest tests/unit/nn/test_training_loop.py -k direction_binary -v`
+Expected: FAIL — `per_target["long15"]` ≈ 0.976, not 1.0 (the head is MSE-scored on one column in the regression branch). If the test is reported **skipped**, optuna is absent in the image — resolve that before relying on this guard.
+
+- [ ] **Step 3b.3: Add the `direction_binary` branch to `_score_predictions`**
+
+In `main/nn/training_loop.py`, change the first branch of the per-target loop:
+
+```python
+                if target.kind in ("direction", "direction_binary"):
+                    width = 3 if target.kind == "direction" else 2
+                    p = preds[:, offset : offset + width]
+                    t = y[:, offset : offset + width]
+                    acc = float((p.argmax(axis=1) == t.argmax(axis=1)).mean())
+                    per_target[target.name] = acc
+                    head_scores.append(acc)
+```
+
+Leave the `label` and `else`/regression branches unchanged.
+
+- [ ] **Step 3b.4: Run — expect GREEN**
+
+Run: `docker compose run --rm nn-train pytest tests/unit/nn/test_training_loop.py -k direction_binary -v`
+Expected: PASS.
+
+- [ ] **Step 3b.5: Commit**
+
+```bash
+git add nn/training_loop.py tests/unit/nn/test_training_loop.py
+git commit -m "fix(nn): score direction_binary heads as argmax accuracy in holdout scorer"
+```
+
+---
+
 ## Layer 4 — config example + full-suite regression
 
 - [ ] **Step 4.1: Add example targets to `configs/nn_spec.yaml`**
@@ -591,6 +666,8 @@ git commit -m "feat(nn): example direction_binary long15/short15 targets in nn_s
 ## Key Constraints
 
 - **Reuse, don't fork.** `direction_binary` must run through the *same* softmax/cross-entropy/argmax/balanced-weight code as `direction` — the only differences are head width (2) and label derivation (single raw profit column). Do not duplicate the loss/activation logic.
+- **Update EVERY `kind`-dispatch site — there are two scorers.** Grep the NN module for `kind == "direction"` / `"direction"` before finishing. The sites that must include `direction_binary`: `nn_model.py` (`_HEAD_WIDTH`, `_combined_loss`, `_apply_head_activation`, `_class_weights`, `_accuracy_counts`) AND `training_loop.py` (`_score_predictions`, the holdout/promotion scorer — Layer 3b). `_accuracy_counts` (train metric) and `_score_predictions` (holdout score) are SEPARATE functions; updating only the first leaves a width-2 head mis-scored and offset-misaligned in promotion. `nn_dataset.py:_target_block` and `nn_model_spec.py:out_columns` keep `direction` and `direction_binary` as distinct adjacent branches (different widths), which is correct — not a fork.
+- **Known out-of-scope follow-ups (NOT part of this task; file as separate tasks):** (1) `frontend/data_viewer.py:_NN_RES_COLORS` only maps `prob_up/neutral/down`; `prob_long/short/other` lines fall back to the default colour (graceful, no crash) — add colours for a consistent viewer. (2) `nn/nn_strategist.py` does not emit `side`, so the agentic strategist cannot propose `direction_binary` (config-only) — extend the proposal schema if strategist-reachability is wanted.
 - **Positive class = raw profit label.** `prob_{side}` is `column == 1` for the side's own profit column; it does **not** consult the opposite side (that is what `kind="direction"` does). `other = column == 0`. NaN rows stay NaN and are dropped at build, exactly like `direction`/`label`.
 - **Column names are part of the public contract.** `nn_res_{name}_prob_{side}` / `nn_res_{name}_prob_other` (and `_h{hk}` for multi-horizon) are read by the viewer, join, and strategies — match them exactly. `block.shape[1]` must equal `len(out_columns)` (the existing assert at the end of `_target_block` enforces this).
 - **`side` enters identity.** It is a dataclass field, so `spec_hash` (via `asdict`) and `_dataset_hash` both include it — a `long` model and a `short` model are distinct artefacts. The Step 1.5 and Step 2.5 changes guarantee this; the `test_side_changes_spec_hash` test guards it.
