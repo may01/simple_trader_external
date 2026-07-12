@@ -131,6 +131,10 @@ restricting nn_features to `[15, 60, 240]`, the wasteful tf=1/5/1440 nn-feature 
 eliminated — recalc drops from >25 min toward a few minutes. Guarded by a scheduling test
 asserting non-align nn_features do NOT schedule on tf=1.
 
+> **Superseded by D12:** the `[15, 60, 240]` restriction was later reverted (user-directed) to the
+> full CANDLE set; the perf cost this decision removed is knowingly re-accepted. The factory
+> threading fix described here remains in force — D12 only changes the config values it governs.
+
 ## D10 — GPU made opt-in (task-01 "GPU optional" hard-failed on driverless host)
 
 Surfaced at e2e: `docker compose run nn-train` aborted with
@@ -220,3 +224,91 @@ the other 5 features (engineered diffs/slopes/logret/range_atr/rsi + cross-TF). 
 batch-computing long-window nn_features on the full frame instead of per-point slices (where they
 already work), or excluding them from the slice recompute. NOT pursued further here (lowest-value
 item, ~43-min recalc per iteration). Logged for a future task.
+
+## D12 — nn_features extended to all 6 CANDLES (supersedes D9 perf restriction)
+
+D9 restricted non-align nn_features to `applies_to: [15, 60, 240]` purely for compute cost: the
+per-point recompute over the 20k-row tf=1 frame (and tf=5) pushed the 2-week recalc past 25 min,
+and at the time only 15/60/240 were consumed by the model. The mechanism D9 fixed (threading
+`cfg.applies_to` through the nn_features factories so config actually governs scheduling) stays —
+this decision only changes the config values it now governs.
+
+**Choice (user-directed):** extend every non-align nn_features entry to the full CANDLE set
+`[1, 5, 15, 60, 240, 1440]` and mirror the per-TF blocks in `nn.feature_cols`, so the model sees
+the same engineered feature family on all six timeframes. Two carve-outs:
+- **sin_tod / cos_tod** stay `[1, 5, 15, 60, 240]` (omit 1440): daily bars all share one wall-clock
+  open, so intraday time-of-day is a zero-variance constant at tf=1440. sin_dow/cos_dow are kept at
+  1440 (day-of-week still varies).
+- **Cross-TF align ladder** extended to the full chain `1→5→15→60→240→1440`: new fields `align_5`
+  (tf1→5), `align_15` (tf5→15), `align_1440` (tf240→1440) added to `_FIELD_REGISTRY` and config,
+  alongside the existing `align_60` (tf15→60) and `align_240` (tf60→240). tf=1440 is the top of the
+  ladder and carries no align column.
+
+**Perf tradeoff (accepted):** this re-introduces exactly the cost D9 removed — tf=1/5 nn_features
+recompute dominate recalc (per-row indicator loop is the bottleneck; the full 4y pipeline runs ~24h
+with tf=1 dominant). The user accepted this knowingly in exchange for full multi-TF feature
+coverage.
+
+**Downstream consequences:**
+- `nn.feature_cols` grows 206 → 411 columns (tf=1/5 added at 69 each, tf=1440 at 66, plus
+  `240_align_1440`). NN input dimension changes accordingly → **prior checkpoints are incompatible;
+  retrain from scratch.**
+- Dataset/tensor cache key changes (feature_cols changed) → the cache under
+  `…/nn/datasets/{hash}` rebuilds on next prepare.
+- A full data regen is required to populate the new tf=1/5/1440 nn_feature columns.
+- `DataAttributes._STAT_TFS` (classification/target/rsi stat files) is unchanged at
+  `[15, 60, 240, 1440]` — those stats are not consumed by nn_features. NN per-column normalisation
+  is computed by `NNDataset` over the spec's feature columns (train-split winsorised stats bundled
+  into the checkpoint manifest), so it auto-covers any TFs the model spec selects. (Note: the legacy
+  `DataAttributes.compute_nn_stats`/`nn.feature_cols` path was orphaned and has since been removed —
+  see D13.)
+
+**Tests:** `test_nn_features.py` scheduling tests rewritten — the D9 guards asserting *zero*
+nn_features on tf=1/tf=1440 are replaced by per-TF count expectations (48 on 1/5/15/60/240, 45 on
+1440) plus align-ladder coverage for align_5/align_15/align_1440 and the sin_tod/cos_tod 1440
+carve-out.
+
+## D13 — removed the orphaned "Pipeline A" NN normalisation (feature_cols + compute_nn_stats)
+
+Two distinct, parallel NN feature systems were discovered to coexist in the experimental_imp_2
+lineage:
+
+- **System A (`nn.feature_cols` + `DataAttributes.compute_nn_stats`):** the original design — an
+  explicit per-TF column list in `indicators_config.yaml`, normalised by a global winsorised
+  z-score (`column_stats`, persisted in `data_attributes.pkl`), applied at inference via
+  `DataAttributes.get_stats`. Consumed by the per-tick `NNPredictor`.
+- **System B (`NNModelSpec` → `NNDataset`):** the current design — features = the cartesian
+  `spec.indicators × spec.timeframes`, normalised by `NNDataset`'s OWN train-split winsorised stats
+  bundled into the checkpoint manifest, applied at inference from that bundled manifest.
+
+Commit `969819b` ("remove per-tick NNPredictor; left-join df_with_nn.pkl in consumers") deleted
+System A's only consumer. Verification (this change) confirmed the residue was fully orphaned on the
+branch: `nn.feature_cols` had one reader (`data_preparer._compute_nn_attributes`); `column_stats` /
+`get_stats` had ZERO readers; `run_inference` explicitly ignores `data_attributes` (leakage guard);
+a test even asserted `get_stats` is never called on the inference path. No planned revival — the
+external specs still describing System A as live were stale, lagging the `969819b` refactor.
+
+**Choice (user-directed, "remove code + docs"):** delete System A's normalisation entirely.
+- Config: removed the whole `nn:` section (`feature_cols` + the also-orphaned `checkpoint_dir` — the
+  orchestrator hardcodes `{artefact_root}/checkpoints/{spec_hash}`).
+- `config_loader.load_nn_config` removed (no remaining caller).
+- `DataAttributes`: removed `compute_nn_stats`, `get_stats`, `column_stats`. Kept `compute()` and the
+  `_STAT_TFS`-gated stat files (`rsi_classification.json`/`diff_stats.pkl`/`indicator_stats.json`) —
+  those feed classification/target *fields* and are alive.
+- `data_preparer._compute_nn_attributes` → `_data_attributes_container`: now returns an empty
+  `DataAttributes()` so `data_attributes.pkl` is still emitted.
+- Tests updated/removed across config_loader, full_data_and_attributes, data_preparer, nn_features
+  (`TestRobustNNStats`), nn_dataset (the `compute_nn_stats` cross-check; the inline winsorised
+  reference stays). All affected suites green.
+
+**Deliberately scoped OUT (follow-up):** the `data_attributes` *parameter* is still threaded through
+`NNDataset.build` / `NNOrchestrator.train` / `run_inference` and loaded by `trainer.py`, even though
+none of them use it for stats (build's signature takes it but the body never reads it). Removing that
+vestigial plumbing is a System-B API change with heavy test-signature churn (~15+ call sites), so it
+is left as a separate task; `data_attributes.pkl` continues to be written (now an empty container) to
+keep `trainer.DataAttributes.load(...)` working.
+
+**Scope:** this removal lives on the `feat/nn-features-tf-1-5-1440` branch only. Sibling worktrees
+still carry System A; two of them (`price-overlay-toggles`, `phase-14-simulation-wiring`) predate
+`969819b` and still RUN `NNPredictor`, so they require it — they must not be hand-cleaned. The
+System-B sibling branches inherit this cleanup via the normal merge from experimental_imp_2.

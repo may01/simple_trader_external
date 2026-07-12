@@ -117,7 +117,7 @@ A model takes **multi-timeframe features as input** but its outputs are **timefr
 ### B. Batch Inference (`NNOrchestrator.run_inference`)
 
 1. Load the best checkpoint per group via `CheckpointManager.load_best()` (one model if `grouping=single`; one per class/regime otherwise).
-2. Build the multi-timeframe feature matrix from `df_with_indicators` using the spec's `feature_cols` (closed-candle rows), normalised via `DataAttributes.get_stats()`.
+2. Build the multi-timeframe feature matrix from `df_with_indicators` using the spec's feature columns (closed-candle rows), normalised via the checkpoint's **bundled manifest stats** (train-split winsorised `{q01,q99,mean,std}`) — never recomputed from inference data (leakage guard). The legacy `DataAttributes.get_stats()` apply path was removed (DECISIONS-LOG D13).
 3. Route each row to its group's model (by the grouping indicator condition), then `model.run_batch(X)` → output array sized to the spec's declared targets.
 4. Append timeframe-agnostic output columns (`nn_res_{target}_prob_up/neutral/down`, `nn_res_{target}`, horizon variants) to a NN-columns-only DataFrame indexed by `df.index`. All groups write the same `nn_res_*` columns; only the producing model differs per row.
 5. Return that DataFrame; the caller saves it as `df_with_nn.pkl`. Input `df` is not modified.

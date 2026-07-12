@@ -95,7 +95,12 @@ Executes the full pipeline in dependency order:
 - If `nn_output_path` exists: loads it, left-joins its columns into `df` on index — NaN for timestamps not covered
 - If absent: no-op
 
-**`_compute_nn_attributes(df: pd.DataFrame) -> DataAttributes`**
+**`_compute_nn_attributes(df: pd.DataFrame) -> DataAttributes`** — **superseded (DECISIONS-LOG D13).**
+NN normalisation moved to `NNDataset` (stats in the checkpoint manifest); `nn.feature_cols` and
+`DataAttributes.compute_nn_stats` were removed. The method was renamed `_data_attributes_container`
+and now just returns an empty `DataAttributes()` so `data_attributes.pkl` is still emitted for the
+spec-driven trainer/orchestrator (which load it but no longer use it for stats). Original behaviour
+below.
 - Instantiates `DataAttributes`
 - Reads `feature_cols` from `indicators_config.yaml` (NN input feature column list)
 - Calls `data_attributes.compute_nn_stats(df, feature_cols)` — robust winsorised stats `{q01,q99,mean,std}` per column over closed-candle train rows (clip raw to `[q01,q99]`, then mean/std on the winsorised values; see phase-11 task-03 Normalisation model)

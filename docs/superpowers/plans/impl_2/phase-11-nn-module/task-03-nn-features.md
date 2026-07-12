@@ -10,6 +10,13 @@
 Expand the engineered NN feature set into concrete `IndicatorField` subclasses so the full feature family is produced as ordinary `{tf}_`-prefixed indicator columns, then selected into `nn.feature_cols`. Today `nn_features.py` ships only `NNRSINormField` and `NNCloseDiffATRField`; this task adds (a) three **grouped feature families** drawn from an explicit indicator catalogue — Group 1 raw indicators, Group 2 indicator differences, Group 3 indicator slopes — plus (b) a set of **orthogonal** engineered features (log-returns, ATR-normalised range, candle body/wick ratios, a volatility regime bucket, cyclical time-of-day/day-of-week encodings, and cross-TF trend-alignment). Each is registered in `indicators/registry.py` and declared in `indicators_config.yaml` (the `nn_features` group plus the `nn` section `feature_cols` list), so `DataPreparer.prepare()` materialises them once into `df_with_indicators.pkl` for `NNDataset` to consume.
 
 ## Normalisation model — **global robust (winsorised) z-score**
+
+> **Superseded by DECISIONS-LOG D13 (historical record below).** The winsorised z-score *formula*
+> is unchanged, but it is now owned by `NNDataset` (train-split stats bundled into the checkpoint
+> manifest), NOT by `DataAttributes.compute_nn_stats` / `nn.feature_cols`. That "Pipeline A" path
+> and its apply site `nn_predictor` were removed (the latter in `969819b`). Read the rest of this
+> section as the original design; substitute `NNDataset` for `compute_nn_stats`/`column_stats`.
+
 There is **one** normalisation layer for these features, applied by `DataAttributes.compute_nn_stats(df, feature_cols)` and the apply sites (`nn_orchestrator` / `nn_predictor`). It is an **outlier-robust** global z-score: per-column stats are estimated on **winsorised** train-split values, and the standardised output is hard-clamped. This task does **not** create rolling on-frame `_z` columns.
 
 **Per-column stats** (train-split closed-candle rows only; stored in `column_stats` and the dataset manifest):
@@ -123,7 +130,7 @@ Not covered by any group; retained because they add independent signal.
 - **`NNVolRegimeField`** — `__init__(self, atr_col="atr_14", window=200, buckets=3)`; `name = "vol_regime"`. compute → bucketed rolling percentile of `atr_col` (`0..buckets-1`, float). Depends on `atr_col`.
 - **`NNSinTodField` / `NNCosTodField`** — `name = "sin_tod"` / `"cos_tod"`. compute → `sin`/`cos(2π · seconds_since_midnight / 86400)` from the index. No data dependencies.
 - **`NNSinDowField` / `NNCosDowField`** — `name = "sin_dow"` / `"cos_dow"`. compute → `sin`/`cos(2π · day_of_week / 7)` from the index. No data dependencies.
-- **`NNCrossTFAlignField`** — `__init__(self, other_tf: int, trend_col="ema_50")`; `name = f"align_{other_tf}"`. compute → sign-agreement of this TF's trend slope vs the higher TF's same trend column, reindexed/forward-filled onto this TF's index (`+1`/`-1`/`0`). Depends on `trend_col` this TF; reads `{other_tf}_{trend_col}`. Instantiated 15 vs 60 → `15_align_60`, 60 vs 240 → `60_align_240`.
+- **`NNCrossTFAlignField`** — `__init__(self, other_tf: int, trend_col="ema_50")`; `name = f"align_{other_tf}"`. compute → sign-agreement of this TF's trend slope vs the higher TF's same trend column, reindexed/forward-filled onto this TF's index (`+1`/`-1`/`0`). Depends on `trend_col` this TF; reads `{other_tf}_{trend_col}`. Instantiated as a **ladder** over the full CANDLE set, each TF aligning to the next-higher one: 1 vs 5 → `1_align_5`, 5 vs 15 → `5_align_15`, 15 vs 60 → `15_align_60`, 60 vs 240 → `60_align_240`, 240 vs 1440 → `240_align_1440`. tf=1440 is the top of the ladder and has no align column.
 
 ### Already-built fields (kept)
 `NNRSINormField` (`nn_rsi_ma8_norm_mean_20`) and `NNCloseDiffATRField` (`nn_close_diff_atr_14_ma_5`) remain as-is; existing `feature_cols` entries reference them.
@@ -316,11 +323,13 @@ Group 3 slopes (identity `source` is baked in the registry factory; `window: 5` 
     params: {window: 5}
 ```
 
-Orthogonal entries (`logret`, `range_atr`, `body_ratio`, `wick_up`, `wick_dn`, `vol_regime`, `sin_tod`, `cos_tod`, `sin_dow`, `cos_dow`, `align_60` [`applies_to: [15]`], `align_240` [`applies_to: [60]`]) are declared as before. The `rsi_14_z` / `cci_14_z` / `vol_ma_20_z` / `macd_12_26_9_z` entries are **deleted**.
+Orthogonal entries (`logret`, `range_atr`, `body_ratio`, `wick_up`, `wick_dn`, `vol_regime`, `sin_tod`, `cos_tod`, `sin_dow`, `cos_dow`) plus the cross-TF align ladder (`align_5` [`applies_to: [1]`], `align_15` [`applies_to: [5]`], `align_60` [`applies_to: [15]`], `align_240` [`applies_to: [60]`], `align_1440` [`applies_to: [240]`]) are declared as before. The `rsi_14_z` / `cci_14_z` / `vol_ma_20_z` / `macd_12_26_9_z` entries are **deleted**.
+
+**TF coverage (D12).** Every non-align nn_features entry applies to the full CANDLE set `[1, 5, 15, 60, 240, 1440]` (equivalently `applies_to: all`). Two carve-outs: `sin_tod`/`cos_tod` use `[1, 5, 15, 60, 240]` (omit 1440 — daily bars share one wall-clock open, so intraday time is a constant), and each `align_{other_tf}` applies only to its single lower TF as listed above. See DECISIONS-LOG D12 (supersedes D9's `[15, 60, 240]` perf restriction).
 
 ## `indicators_config.yaml` — `nn` section `feature_cols`
 
-`feature_cols` is the per-timeframe selection. Show the full Group-1/2/3 block for `tf=15` below; **replicate the identical block for each active TF** (`60`, `240`, and `1440` when enabled), substituting the prefix. The orthogonal columns and the two already-built `nn_*` columns are appended per the prior list.
+`feature_cols` is the per-timeframe selection. Show the full Group-1/2/3 block for `tf=15` below; **replicate the identical block for every CANDLE** (`1`, `5`, `15`, `60`, `240`, `1440`), substituting the prefix. The orthogonal columns and the two already-built `nn_*` columns are appended per the prior list, with two per-TF differences: the align column is the ladder entry for that TF (`1_align_5`, `5_align_15`, `15_align_60`, `60_align_240`, `240_align_1440`; tf=1440 has none), and `tf=1440` omits `sin_tod`/`cos_tod`. This yields 69 columns per TF for 1/5/15/60/240 and 66 for 1440 (411 total).
 
 ```yaml
 nn:
@@ -398,8 +407,9 @@ nn:
     - "15_align_60"
     - "15_nn_rsi_ma8_norm_mean_20"
     - "15_nn_close_diff_atr_14_ma_5"
-    # ---- repeat the same 56 group columns + orthogonal for tf in {60, 240} ----
-    #      (60 uses align_240 instead of align_60; 240 has no higher-TF align)
+    # ---- repeat the same 56 group columns + orthogonal for tf in {1, 5, 60, 240, 1440} ----
+    #      align per ladder: 1→align_5, 5→align_15, 60→align_240, 240→align_1440; 1440 has none.
+    #      tf=1440 also omits sin_tod/cos_tod (daily bars → constant intraday time).
   checkpoint_dir: "checkpoints/"
 ```
 
@@ -454,8 +464,11 @@ nn:
     "cos_tod":             lambda cfg: NNCosTodField(**cfg.params),
     "sin_dow":             lambda cfg: NNSinDowField(**cfg.params),
     "cos_dow":             lambda cfg: NNCosDowField(**cfg.params),
-    "align_60":            lambda cfg: NNCrossTFAlignField(**{"other_tf": 60,  **cfg.params}),
-    "align_240":           lambda cfg: NNCrossTFAlignField(**{"other_tf": 240, **cfg.params}),
+    "align_5":             lambda cfg: NNCrossTFAlignField(**{"other_tf": 5,    "applies_to": cfg.applies_to, **cfg.params}),
+    "align_15":            lambda cfg: NNCrossTFAlignField(**{"other_tf": 15,   "applies_to": cfg.applies_to, **cfg.params}),
+    "align_60":            lambda cfg: NNCrossTFAlignField(**{"other_tf": 60,   "applies_to": cfg.applies_to, **cfg.params}),
+    "align_240":           lambda cfg: NNCrossTFAlignField(**{"other_tf": 240,  "applies_to": cfg.applies_to, **cfg.params}),
+    "align_1440":          lambda cfg: NNCrossTFAlignField(**{"other_tf": 1440, "applies_to": cfg.applies_to, **cfg.params}),
 ```
 
 (Identity args — `left`/`right` for diffs, `source` for slopes, `other_tf` for cross-TF align — are baked into each factory, matching the `rsi_ma8` idiom and the registry docstring ("an empty params dict yields the defaults"). Config `params` stays `{}` except the slope `window` override; `range_atr`/`vol_regime` rely on their class defaults.)
@@ -467,7 +480,7 @@ nn:
 - **`atr`/`natr` ⇒ `atr_14`/`natr_14`** in Group 2 (the bare-period columns do not exist).
 - **EMA-pair direction:** all 10 unordered pairs of `[7,14,25,50,100]`, computed shorter − longer.
 - **The classification group (`move_class`, `zone_class`) is out of scope** for this task (excluded by decision).
-- Cross-TF fields require the higher TF present; `align_60`/`align_240` apply only to the lower member (`applies_to: [15]` / `[60]`), so a missing higher TF is a config error, not a silent NaN.
+- Cross-TF fields require the higher TF present; each `align_{other_tf}` applies only to its lower member (the ladder `align_5`→`[1]`, `align_15`→`[5]`, `align_60`→`[15]`, `align_240`→`[60]`, `align_1440`→`[240]`), so a missing higher TF is a config error, not a silent NaN.
 
 ## Verification
 ```bash

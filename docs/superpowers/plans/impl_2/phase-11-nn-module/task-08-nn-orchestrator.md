@@ -44,7 +44,8 @@ MIGRATION from current implementation:
 - **Output:** was `{tf}_nn_prob_up/_neutral/_down` (TF-prefixed). Now **timeframe-agnostic**
   `nn_res_{target}_prob_*`, `nn_res_{target}`, and multi-horizon `_h{hk}` variants. All groups write the
   **same** `nn_res_*` columns; only the producing model differs per row.
-- **Normalisation:** was recomputed from the inference data via `data_attributes.get_stats()`. Now inference
+- **Normalisation:** was recomputed from the inference data via `data_attributes.get_stats()` (that
+  method has since been removed — DECISIONS-LOG D13). Now inference
   normalises via the **manifest bundled in the checkpoint** (training stats + ordered `feature_cols`),
   never stats recomputed from the inference dataset (leakage guard). No grouped-pickle / `data_attributes`
   dependency for inference stats.

@@ -241,11 +241,8 @@ def test_classification_applies_to_subset():
     assert 5 not in class_field.applies_to
     assert 15 in class_field.applies_to
 
-def test_nn_config_keys():
-    nn = load_nn_config()
-    assert "feature_cols" in nn
-    assert "checkpoint_dir" in nn
-    assert len(nn["feature_cols"]) > 0
+# test_nn_config_keys / load_nn_config REMOVED — the nn: section and load_nn_config
+# were deleted (DECISIONS-LOG D13); NN feature selection lives in NNModelSpec.
 
 def test_all_required_groups_present():
     fields = load_indicators_config()
@@ -2141,6 +2138,11 @@ def test_save_load(tmp_path):
 ---
 
 ### Task 02: NNPredictor
+
+> **Superseded — `NNPredictor` was removed (`969819b`); `test_nn_predictor.py` is deleted.** See
+> phase-11 task-12 (inference-consumer-join) and DECISIONS-LOG D13. Inference is now batch-only via
+> `NNOrchestrator.run_inference`, normalised from the checkpoint manifest (not `data_attributes.get_stats`).
+> The block below is historical.
 
 **Unit Tests** (`tests/unit/nn_module/test_nn_predictor.py`)
 

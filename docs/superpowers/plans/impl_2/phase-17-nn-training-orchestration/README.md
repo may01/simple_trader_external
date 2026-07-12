@@ -138,7 +138,7 @@ def run_version_training(spec_path: str, study: str, *, pair: str,
     # tracking/{study}/best.json until present or timeout; parses holdout_score.
 ```
 
-**Layer C — skills (new, under `.agents/skills/`):** `nn-investigate` (Tier 0a + 0b), `nn-evolve` (Tier 2), `nn-train-orchestrator` (walk archetypes, gate per archetype). Contracts: any emitted `spec.yaml` MUST load via `NNModelSpec.from_yaml`; any emitted `report.md` MUST parse via `parse_report`.
+**Layer C — skills (new, committed in-repo under `.claude/skills/<name>/`):** `nn-investigate` (Tier 0a + 0b), `nn-evolve` (Tier 2), `nn-train-orchestrator` (walk archetypes, gate per archetype). They are git-tracked on the branch (reviewed with the `nn/orchestration` code they drive); a post-merge deploy step symlinks them into the project-root discovery path (`/home/om/projects/simple_trader/.agents/skills/`) — see RUNBOOK.md. Contracts: any emitted `spec.yaml` MUST load via `NNModelSpec.from_yaml`; any emitted `report.md` MUST parse via `parse_report`.
 
 ---
 
