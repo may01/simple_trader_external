@@ -1,7 +1,10 @@
 # Precision@k promotion/search gate for direction_binary — design
 
 **Date:** 2026-07-05
-**Status:** approved (design), pending implementation plan
+**Status:** implemented on `experimental_imp_2` (2026-07-12, commits 29d9d92..2717e9c).
+Three design points changed against code reality during implementation — see
+"Implementation resolution (2026-07-12)" below. Shipped as a **toggle**
+(`gate_metric: accuracy | precision_at_k`, default `accuracy`).
 **Context:** [[project_nn_promotion_gate_broken]] — the `direction_binary` gate is
 argmax accuracy, which a rare-positive target games via always-negative collapse
 (~0.94 base rate). The `nn-features-only` lineage winner (v2, conv1d_seq→lstm→dense)
@@ -43,7 +46,9 @@ Pure helper, no torch — unit-testable in isolation.
    returned `per_target` for the version reports; the **gate scalar is precision@5%**.
    `overall`/`holdout_score` = mean of head scores as today (single head here).
 
-2. **Checkpoint gate metric** (`checkpoint_manager`, currently `metric="val_accuracy"`)
+2. **Checkpoint gate metric** — **[RESOLVED 2026-07-12: EXCLUDED — this is a
+   no-op for the gate; see Implementation resolution below.]**
+   (`checkpoint_manager`, currently `metric="val_accuracy"`)
    → **`val_loss`, mode=min**, so the persisted/scored `_best.pt` is the min-val-loss
    epoch (CE loss ranks probabilities → precision-aligned), not the accuracy-collapse
    epoch. Early stopping already minimises `val_loss`, so this only aligns *which
@@ -55,6 +60,51 @@ Pure helper, no torch — unit-testable in isolation.
 
 3. **`decide` margin** stays 0.01 (precision ∈ [0,1]; 1pp is a meaningful step).
    Revisit after the v1 baseline shows precision@5% variance across trials.
+   *(Implemented unchanged — no code edit.)*
+
+## Implementation resolution (2026-07-12)
+
+Code tracing (branch `experimental_imp_2`) changed three design points. The
+shipped gate is a **toggle**: `gate_metric` in `configs/nn_search.yaml`
+(overridable via `NN_GATE_METRIC`), default `"accuracy"` (legacy behaviour
+byte-for-byte), or `"precision_at_k"`. It threads
+`TrainingLoop.search_config` → `evaluate_on_holdout` → `_score_predictions`,
+where the `direction_binary` head switches to precision@5%. `NNModelSpec` is
+untouched, so `spec_hash` (and cache/checkpoint/study naming) is unchanged.
+
+1. **Wiring site 2 (checkpoint → `val_loss`/min) EXCLUDED — it is a no-op for
+   the gate.** `evaluate_on_holdout` scores the **in-memory just-trained model**
+   from `orchestrator.trained_models`, before any `_best.pt` write and never
+   reading a checkpoint. In search mode the per-trial checkpoint auto-gate is
+   already neutralised (`cm.best_metric = float("inf")`), and `_best.pt` is
+   authored solely by `_maybe_promote(..., promote=True)` gated on the holdout
+   scalar — not `val_accuracy`. So the checkpoint metric changes only *which
+   weights persist for later inference*, never the gate. A real "persist the
+   best epoch" change is larger than this design implied and belongs in a
+   separate plan.
+2. **Checkpoint `mode="min"|"max"` + `metric` params already exist** in
+   `CheckpointManager`. The design's "add a mode param" note was stale; no
+   checkpoint edit was made.
+3. **`_accuracy_counts` (train-display scorer) left untouched.** The
+   [[project_nn_two_scorers]] rule triggers when adding a new *target kind*;
+   precision@k is a new *scoring rule* for the existing `direction_binary`
+   kind, so only the holdout scorer (`_score_predictions`) changed.
+
+Gate-scalar bound: `holdout_score` stays in [0,1] in both modes (mean of head
+scores; the `direction_binary` head contributes precision@5% ∈ [0,1]). The
+unbounded `lift@k` values live only in suffixed `per_target` report keys
+(`{name}__lift@{1,5,10}`), consumed as informational text — no gate/consumer
+does arithmetic assuming ≤ 1.
+
+Tests: full nn suite 348 passed / 2 skipped. Note a fixture-arithmetic
+correction during TDD — the accuracy-path expected value for the unit fixture
+is **0.5** (argmax match rate 2/4), not 0.75 as an early draft comment stated;
+the production accuracy path is unchanged.
+
+Pending (Task 5): record the precision@{1,5,10%}+lift **baseline** by scoring
+the existing `nn-features-only` v2 checkpoint under `NN_GATE_METRIC=precision_at_k`
+(needs a GPU run + the mounted data volume) into the `nn-features-precision` v1
+report, then evolve the lineage under the new gate.
 
 ## Iterate
 
