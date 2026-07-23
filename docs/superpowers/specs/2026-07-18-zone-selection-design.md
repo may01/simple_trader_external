@@ -50,24 +50,44 @@ prove the entries are profitable against candle size + fees on out-of-sample dat
 
 ### 1. Action space (per higher-TF candle; TF ∈ {15, 60, 240})
 
-Levels are computed in percentage-change space, then **converted back to price** — the
-coeff is computed in price space (X capped at 2.0):
+Levels are computed on **completed higher-TF candles** in percentage-change space, then
+**converted back to price** and **held constant across the forming candle's minutes** —
+the coeff is computed in price space (X capped at 2.0).
+
+**Completed-candle reduction (no look-ahead).** The wide df is at 1-minute resolution;
+`{tf}_high`/`{tf}_low` are the *forming* cummax/cummin within the current bucket, and
+`{tf}_is_closed` marks each candle's final minute. Reduce to one row per completed
+candle via `{tf}_is_closed`; the closed-row `{tf}_high`/`{tf}_low` are that candle's
+final high/low. All diff_prc statistics are computed on this per-candle sequence, NOT on
+the 1-minute forming series. For a forming candle *c*, use the **previous completed**
+candle's stats and reference price (index `c−1`), so the levels depend only on fully
+closed candles and are constant for every minute of *c*.
 
 ```
-# percentage-change levels (diff_prc is ×100 percent, see price_derivatives.py)
-high_level(X) = high_diff_prc_ma + X * high_std
-low_level(X)  = low_diff_prc_ma  - X * low_std
+# per COMPLETED candle k (rows where {tf}_is_closed):
+high_diff_prc[k] = (high[k] - high[k-1]) / high[k-1] * 100     # candle-to-candle, percent
+high_diff_prc_ma[k] = rolling mean over the last `window` completed candles
+high_std[k]         = plain rolling std over the last `window` completed candles   # (low mirrors)
 
-# back to price, referenced to the PREVIOUS same-TF candle's high/low
-# (diff_prc is a pct change vs the previous same-TF candle):
-price_high_level = prev_high * (1 + high_level(2.0) / 100)
-price_low_level  = prev_low  * (1 + low_level(2.0)  / 100)   # low_level(2.0) < 0 → below prev_low
+# percentage-change levels for forming candle c, from the PREVIOUS completed candle c-1:
+high_level = high_diff_prc_ma[c-1] + X * high_std[c-1]
+low_level  = low_diff_prc_ma[c-1]  - X * low_std[c-1]
 
-# coeff lives in PRICE space:
+# back to price, referenced to the previous completed candle's high/low:
+price_high_level = high[c-1] * (1 + high_level / 100)
+price_low_level  = low[c-1]  * (1 + low_level  / 100)          # low_level < 0 → below low[c-1]
+
+# broadcast price_high_level / price_low_level to EVERY 1-min row of forming candle c
+# (held constant); coeff lives in PRICE space:
 cur_price = 1-min close
 coeff = clamp( (cur_price - price_low_level)
                / (price_high_level - price_low_level), 0, 1 )
 ```
+
+The existing `{tf}_high_diff_prc` column (computed via `build_indicator_input`, which
+keeps only closed rows) already references the previous closed candle at closed rows —
+so the per-candle diff_prc can reuse that column's closed-row values or be recomputed
+from the closed-row highs/lows; both agree.
 
 `coeff 0` = `price_low_level`, `coeff 1` = `price_high_level`. `coeff(·)` is a general
 price→position map; `cur_price = close` above is the generic marker. The specific price

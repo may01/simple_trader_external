@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - **Read-only on existing code.** No edits to any existing simple_trader module until Layer 10, which is human-gated (spec §Restrictions line 173). Layers 0–9 create new files only.
-- **Artifacts to volume only.** Charts, reports, results files, zoned datasets go under `/trader_data_long/train/<dataset>_<pair>/action_zones/…` — NEVER into the worktree (container writes root-owned files that block merges).
+- **Artifacts to volume only.** Charts, reports, results files, zoned datasets go under `/trader_data_long/train/<dataset>_<pair>/action_zones/…` — NEVER into the worktree (container writes root-owned files that block merges). The `simple_trader_vol_long` volume is mounted **RW** (artifacts write there); the wide df `df_with_indicators.pkl` is treated **read-only by code convention** (the loader never writes it back), matching the `nn-train`/`simulate-nn` precedent (DECISIONS-LOG D8). Do not mount the volume `:ro` — that breaks the papermill artifact writes.
 - **Notebooks in worktree.** `notebooks/action_zones/` (code); artifacts to volume (above).
 - **Stats frozen on train.** All means/stds/ECDFs/regression params fit on the 2y train set, serialized, and applied unchanged to OOS.
 - **TFs = {15, 60, 240}**, matched indicator TF = label TF. Long and short handled separately.
@@ -25,7 +25,7 @@
 
 ---
 
-## Docker Entry Points (Layer 0 — first, before any layer)
+## Task 0: Docker Entry Points & scaffold (Layer 0)
 
 New files only: `docker/Dockerfile.experiment`, `docker-compose.experiment.yml`. The `experiment` service is `FROM simple_trader` + `pip install jupyterlab papermill scikit-learn scipy` (talib/pandas/numpy already in base). Mounts the code dir and `simple_trader_vol_long` (RO for the wide df; artifacts written under a subdir the service owns).
 
@@ -68,7 +68,7 @@ docker compose -f docker-compose.yml -f docker-compose.experiment.yml run --rm \
 
 ---
 
-## Layer 1: Data access & labels (`azlib/loader.py`)
+## Task 1: Data access & labels (`azlib/loader.py`)
 
 Loads the wide df read-only and attaches strict + non-strict profit labels via existing functions.
 
@@ -122,7 +122,7 @@ Run: command 2, `-k layer1`. Expected: FAIL (`azlib.space` / functions absent).
 
 ---
 
-## Layer 2: Action space & label_coeff (`azlib/space.py`)
+## Task 2: Action space & label_coeff (`azlib/space.py`)
 
 Percentage-change levels → price levels → price-space coeff, per spec §1–2.
 
@@ -137,17 +137,32 @@ def diff_prc_std(diff: pd.Series, window: int = 6) -> pd.Series: ...   # plain r
 
 def price_levels(wide_df: pd.DataFrame, tf: int, window: int = 6, x: float = 2.0
                  ) -> tuple[pd.Series, pd.Series]: ...
-# returns (price_high_level, price_low_level), each aligned to wide_df rows.
-# price_high_level = prev_high * (1 + (high_diff_prc_ma + x*high_std)/100)
-# price_low_level  = prev_low  * (1 + (low_diff_prc_ma  - x*low_std )/100)
+# returns (price_high_level, price_low_level), aligned to every 1-min row of wide_df,
+# HELD CONSTANT across each forming candle's minutes (computed from the PREVIOUS
+# completed candle). See "completed-candle reduction" below.
 
 def coeff(price: np.ndarray, low_level: np.ndarray, high_level: np.ndarray) -> np.ndarray: ...
 # clamp((price - low_level)/(high_level - low_level), 0, 1)
 
 def label_coeff(wide_df: pd.DataFrame, tf: int, direction: str,
                 window: int = 6, x: float = 2.0) -> pd.Series: ...
-# entry extreme: 1_low (long) / 1_high (short) mapped through coeff() at each row.
+# entry extreme: 1_low (long) / 1_high (short) mapped through coeff() at each 1-min row,
+# using that row's held-constant per-candle price levels.
 ```
+
+**Completed-candle reduction (the core correctness requirement — per spec §1):**
+`{tf}_high`/`{tf}_low` are per-minute *forming* cummax/cummin; `{tf}_is_closed` marks
+each candle's last minute. `price_levels` MUST:
+1. Reduce to completed candles via `{tf}_is_closed` (closed-row `{tf}_high`/`{tf}_low` =
+   that candle's final high/low).
+2. Compute `diff_prc`, `diff_prc_ma(window)`, `diff_prc_std(window)` on that **per-candle
+   sequence** (not the 1-min series).
+3. For each forming candle *c*, use the **previous** completed candle's ma, std, and
+   reference high/low (`c−1`) → no look-ahead, constant within *c*:
+   `price_high_level = high[c-1] * (1 + (high_ma[c-1] + x*high_std[c-1])/100)`;
+   `price_low_level  = low[c-1]  * (1 + (low_ma[c-1]  - x*low_std[c-1]) /100)`.
+4. Broadcast each candle's two level values to all its 1-min rows (forward-fill from the
+   candle open). Warm-up rows (no `c−1`, or `window` completed candles unavailable) → NaN.
 
 ### Integration test → Layer 3 (RED in Docker)
 
@@ -167,19 +182,35 @@ Run: command 2, `-k layer2`. Expected: FAIL (`attribute_frame` absent).
 ### Unit tests (RED)
 
 - `diff_prc`: known series → exact percentages; first row NaN.
-- `price_levels`: hand-computed on a 3-row frame with known high/low + ma/std → exact `price_high_level`/`price_low_level`; verify `high_level > prev_high` and `low_level < prev_low` for positive x.
+- `price_levels` (multi-candle frame): build a small 1-min frame spanning at least 3
+  completed `tf` candles (set `{tf}_is_closed` at each candle's last minute) with known
+  per-candle highs/lows. Hand-compute the expected `price_high_level`/`price_low_level`
+  for a forming candle from the **previous completed** candle's ma/std/high/low; assert
+  the code matches. Assert `high_level > high[c-1]` and `low_level < low[c-1]` for x>0.
+- **Held constant:** all 1-min rows within one forming candle share the SAME
+  `price_high_level`/`price_low_level` (assert equality across a bucket's rows).
+- **No look-ahead:** a forming candle's levels depend only on candles ≤ c−1 (assert that
+  changing candle c's own forming highs does not change its levels).
+- **Warm-up:** the first completed candle (no c−1) and rows before `window` completed
+  candles exist → NaN levels / NaN label_coeff.
 - `coeff`: price at `low_level`→0, at `high_level`→1, midpoint→0.5, below→clamped 0, above→clamped 1.
 - `label_coeff`: long uses `1_low`, short uses `1_high` (feed a row where low≠high and assert which one drives the coeff).
 - Edge: `high_level == low_level` (degenerate) → coeff returns 0 (or documented sentinel), no divide-by-zero warning.
 
 ### Constraints / notes
 
-- Prefer existing wide-df columns when present (`{tf}_high_diff_prc_rm_6` = diff_prc_ma window 6); recompute only the plain std (`diff_prc_std`) since only sided std is precomputed. Recompute diff_prc/ma from raw `{tf}_high`/`{tf}_low` if the columns are absent, using the same formulas.
-- `prev_high`/`prev_low` = previous **same-TF** candle high/low (diff_prc reference).
+- **Do NOT** reuse `{tf}_high_diff_prc_rm_6` / the 1-min `.shift(1)` approach — those are
+  per-minute forming values. Compute diff_prc/ma/std on the **closed-candle** sequence
+  (`{tf}_is_closed`). Plain std only (no sided `_std_above/_std_below`).
+- `diff_prc`, `diff_prc_ma`, `diff_prc_std` remain generic Series→Series helpers; the
+  completed-candle reduction + previous-candle shift + broadcast happens inside
+  `price_levels`/`label_coeff`.
+- Reference = previous **completed** same-TF candle (`c−1`), levels held constant across
+  the forming candle. Look-ahead-free by construction.
 
 ---
 
-## Layer 3: Indicator attributes (`azlib/indicators.py`)
+## Task 3: Indicator attributes (`azlib/indicators.py`)
 
 position / slope / distance per indicator, z-scored & clamped [-3,3], train-frozen.
 
@@ -236,11 +267,12 @@ Run: command 2, `-k layer3`. Expected: FAIL (`fit_regression` absent).
 ### Constraints / notes
 
 - Exact column names (from `configs/indicators_config.yaml`): `rsi_14`, `rsi_ma8`, `macd_12_26_9`, `macd_hist_12_26_9`, `ema_25`. Confirm the chosen `ma`/`rsi_ma` periods in Task 3.1; keep them in `azlib/config.py`.
+- **Granularity (decided): indicator attributes are POINT-IN-TIME per 1-min row** — read the wide-df indicator columns as-is at each row (they are already closed-candle-based + partial-current via `build_indicator_input`). This is the live-realistic entry signal available at minute *t* and is look-ahead-free. This is intentionally DIFFERENT from Task 2's held-constant per-candle levels (indicators are entry-time signals, not a per-candle zone) — do not apply the completed-candle reduction here. `slope` = `.diff()` of the column over 1-min rows; `distance` = the documented column difference, per row.
 - `fit_stats` computes mean/std on **train only**; OOS calls `attribute_frame(..., stats)` with the frozen stats.
 
 ---
 
-## Layer 4: Regression + classification (`azlib/models.py`)
+## Task 4: Regression + classification (`azlib/models.py`)
 
 Runs for every 1D/2D/3D same-space attribute group (spec §9, all dimensionalities).
 
@@ -300,7 +332,7 @@ Run: command 2, `-k layer4`. Expected: FAIL (`fuse_inverse_variance` absent).
 
 ---
 
-## Layer 5: Inference, fusion & Y-sweep (`azlib/infer.py`)
+## Task 5: Inference, fusion & Y-sweep (`azlib/infer.py`)
 
 ### Interface
 
@@ -346,7 +378,7 @@ Run: command 2, `-k layer5`. Expected: FAIL.
 
 ---
 
-## Layer 6: Reach-probability & R/R grid (`azlib/rr.py`)
+## Task 6: Reach-probability & R/R grid (`azlib/rr.py`)
 
 Hybrid empirical + parametric-tail reach-prob (spec §6.1) + R/R grid (§6).
 
@@ -396,10 +428,23 @@ Run: command 2, `-k layer6`. Expected: FAIL.
 
 - Reach prob is a **touch/first-passage** on the extreme series (high_diff_prc for up, low_diff_prc for down) — not a terminal Gaussian. Normal-CDF only logged as a baseline column, never selected on.
 - `candle_size` = median |high-low| in price (or ATR) on train — document the exact definition in Task 6.1.
+- **Carry-forward from Task 5 (resolve here — the real `rr_fn` lands now):**
+  - **Fee-aware profitability contract.** The `rr_fn` injected into `azlib.infer.sweep_y`
+    MUST return the **expected-return-after-fees** (design §5/§6: R/R aligned against candle
+    size + fees), which is profitable when **> 0** — NOT the raw R/R ratio. Update
+    `azlib/infer.py` `select_y`'s profitability check accordingly (repurpose
+    `_PROFITABLE_RR_THRESHOLD` to `0.0` and rename to reflect "expected return > 0"), and
+    keep the raw R/R ratio as a separate reporting column if useful. Add/adjust a test so
+    `select_y` treats fee-aware expected-return > 0 as profitable. (Touching `infer.py` here
+    is the intended integration point.)
+  - **Alignment guard.** Add to `azlib.infer.sweep_y`: if any passed `pd.Series`
+    (`fused_mean`/`fused_std`/`strict_label`) has an index not equal to `wide_df.index`,
+    raise `ValueError` — turn the documented positional-alignment precondition into a loud
+    failure instead of a silent miscompute.
 
 ---
 
-## Layer 7: Zones & results file (`azlib/zones.py`)
+## Task 7: Zones & results file (`azlib/zones.py`)
 
 ### Interface
 
@@ -448,10 +493,22 @@ Run: command 2, `-k layer7`. Expected: FAIL.
 
 - Zoned dataset + results file write to `…/action_zones/<direction>/<tf>/{datasets,results}/` on the volume.
 - Column prefix `az_` chosen so a later `join_action_zones` (Layer 10) can surface them without name clashes.
+- **Carry-forwards from Task 6:**
+  - **Down-side reach wiring.** When building the R/R inputs for a SHORT, the down-reach
+    estimator MUST be `reach_prob_estimator(-low_diff_prc_train)` (negate), per `azlib.rr`'s
+    sign convention; long uses `reach_prob_estimator(high_diff_prc_train)`. Add a test that
+    the short path negates (a non-negated wiring would give wrong short R/R silently).
+  - **`select_levels` raises when no profitable combo.** `azlib.rr.select_levels` raises
+    `ValueError` if no (tgt_x, sl_x) has expected-return > 0. Task 7 (and Task 8) MUST catch
+    this per (tf, direction) and record "no zone / no profitable levels" for that
+    combination rather than crashing the whole run. Add a test for the no-profitable case.
+- DRY note: `azlib.infer.sweep_y` has an inline `zone_limit` copy of `zone_limit_price`;
+  keep both correct (a test may assert they agree) — do not introduce an infer↔zones import
+  cycle just to dedupe.
 
 ---
 
-## Layer 8: Validation harness (`azlib/validate.py`)
+## Task 8: Validation harness (`azlib/validate.py`)
 
 Train→fit/freeze, OOS→apply-frozen, compute metrics.
 
@@ -497,7 +554,7 @@ Run: command 2, `-k layer8`. Expected: FAIL.
 
 ---
 
-## Layer 9: Notebooks (the mandated Jupyter deliverables)
+## Task 9: Notebooks (the mandated Jupyter deliverables)
 
 Thin, papermill-parametrized notebooks in `notebooks/action_zones/nb/` that import `azlib` and emit charts/reports/datasets to the volume. One integration test per notebook via `papermill` execution (no exceptions) — nbval-style.
 
@@ -507,23 +564,39 @@ Thin, papermill-parametrized notebooks in `notebooks/action_zones/nb/` that impo
 - [ ] **9.4** `80_zones.ipynb` — infer, fuse, Y-sweep, mark zones, write zoned dataset + ResultsFile (params: `tf`, `direction`).
 - [ ] **9.5** `90_validate.ipynb` — full train→OOS run + metrics report (params: `oos_env`).
 
-Integration test (RED in Docker) per notebook, e.g.:
+**Memory safety (critical — the real 2y df is ~6 GB; the 2y pipeline is OOM-sensitive on a 15 GB host per project history).** The automated test gate MUST NOT run the notebooks against the full 6 GB `df_with_indicators.pkl`. Instead:
+
+- Provide a tiny **synthetic wide-df pickle** written to a temp dataset dir (reuse the `synthetic_wide_df` fixture, add `{tf}_is_closed` + the columns the pipeline reads), and point a `SMOKE_ENV`-style env at it. The papermill smoke test runs each notebook against THIS small pickle → fast, memory-safe, exit 0, artifacts present.
+- The **full 2y run** against the real volume df is a documented, heavy, **user-triggered** step (a README/notebook-markdown command), NOT part of the automated gate. Note memory guidance (subset columns if needed; labels are already chunked in `indicators/labels.py`).
+
+Smoke integration test (RED in Docker), small synthetic pickle:
+```bash
+docker compose -f docker-compose.yml -f docker-compose.experiment.yml run --rm \
+  --env-file <smoke.env pointing at the temp synthetic pickle> experiment \
+  papermill notebooks/action_zones/nb/10_action_space.ipynb \
+  <tmp>/out/10_smoke.ipynb -p tf 15 -p direction long
+```
+Expected: exit 0; artifact files present.
+
+Documented full-2y run (user-triggered, heavy — in the notebook README):
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.experiment.yml run --rm \
   --env-file configs/nn_train_dataset_2y.env experiment \
-  papermill notebooks/action_zones/nb/10_action_space.ipynb \
-  /trader_data_long/train/2y_link_usdt/action_zones/out/10_smoke.ipynb -p tf 15 -p direction long
+  papermill notebooks/action_zones/nb/90_validate.ipynb \
+  /trader_data_long/train/2y_link_usdt/action_zones/out/90_validate.ipynb \
+  -p oos_env configs/oos2m_dataset.env
 ```
-Expected: exit 0; artifact files present on the volume.
 
 ### Constraints / notes
 
-- Notebooks contain orchestration + plotting only; all logic is imported from `azlib` (keeps them thin and the logic tested).
+- Notebooks contain orchestration + plotting only; all logic is imported from `azlib` (keeps them thin and the logic tested). Each notebook calls the already-tested `azlib` functions (esp. `validate.run_train`/`run_oos`/`metrics`).
+- Artifacts (charts/reports/zoned datasets/ResultsFile) write to the volume `…/action_zones/…` — never the worktree.
 - Human validation checkpoint (spec §10) happens after 9.2/9.4 review — select the best models before locking ResultsFile.
+- Keep notebooks in git as paired `.py` (jupytext) or committed `.ipynb` with cleared outputs, so they diff/review cleanly and don't bloat the repo with output blobs.
 
 ---
 
-## Layer 10 (GATED — do NOT start until human approval): Viewer integration
+## Task 10 (GATED — do NOT start until human approval): Viewer integration
 
 **Blocked by the spec restriction (line 173): existing code stays untouched until the full flow is human-validated and approved.** Only after that gate:
 
@@ -552,3 +625,28 @@ def join_action_zones(df: pd.DataFrame, dataset_dir: str) -> pd.DataFrame: ...
 ## Appendix A — synthetic wide-df fixture
 
 `tests/conftest.py` builds a small deterministic wide df (a few hundred rows) with columns: `1_high/1_low/1_close`, `{tf}_high/{tf}_low/{tf}_close`, `{tf}_high_diff_prc(_rm_6)`, `{tf}_low_diff_prc(_rm_6)`, `{tf}_atr_14_ma_5`, `{tf}_rsi_14`, `{tf}_rsi_ma8`, `{tf}_macd_12_26_9`, `{tf}_macd_hist_12_26_9`, `{tf}_ema_25`, for tf∈{15,60,240}. Values from a seeded RNG (fixed seed constant, not Date/random-at-import) so tests are reproducible.
+
+## Known limitations (first experiment — human-gated follow-ups)
+
+Surfaced by the whole-branch final review. The pipeline is leakage-free and correct; these
+are experiment-design completeness gaps to close during the spec §10 human checkpoint, NOT
+correctness bugs. The automated `run_train` is a **baseline driver**; the real tuning is the
+notebook exploration (`40nb`) + human model selection.
+
+1. **§5.1 / §10 model-selection not wired into inference.** `run_train` currently fits
+   **1D linear only** for every indicator and fuses those. `40nb` produces the full
+   1D/2D/3D × {linear,poly2,gbr} regression + {logistic,gbc} classification reports, but
+   there is no mechanism yet to feed a human-selected model set into `run_train`/`ResultsFile`.
+   **Follow-up:** add a selected-models field to `ResultsFile` and have `run_train` fit/fuse
+   exactly the human-chosen groups. Until then, treat a `90nb` metric as a baseline, not the
+   tuned result.
+2. **§5.4 Y-selection is degenerate in the automated driver.** `run_train`'s `rr_fn` is
+   Y-invariant (the tgt/sl price distances don't depend on Y), so `select_y` collapses to
+   "widest profitable zone". The true per-entry `realized_rr` is still surfaced by `metrics()`.
+   **Follow-up:** decide the intended coverage-vs-per-zone-RR objective and make `rr_fn`
+   Y-dependent (e.g. penalize wide zones) so `select_y` realizes the trade-off.
+3. **§9.2 classification target** in `40nb` is `label_coeff >= 0.5` (upper half of the band),
+   a diagnostic proxy — not the profit-strict label. Diagnostic-only; never feeds inference.
+   Revisit the target definition at the §10 checkpoint.
+4. **Hygiene (optional):** `validate._apply_env_file` mutates `os.environ` without restore
+   (wrap callers in try/finally); `40nb` duplicates `_MIN_FIT_POINTS` (import instead).
