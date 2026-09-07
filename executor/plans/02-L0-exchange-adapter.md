@@ -42,15 +42,16 @@ here.
 (`docker build . && docker run --network host ...`).
 
 Known gaps, none of which block moving on to L1 but all real:
-- **MEXC futures has no websocket for book/trade/positions; MEXC spot/margin now does.**
+- **MEXC futures websocket for book/trade/positions unbuilt; MEXC spot/margin now has ws.**
   Binance and MEXC spot/margin `subscribe_market_data` both now emit real
   `BookSnapshot`/`BookUpdate` via websocket diff streams and `Trade` via websocket
   trade streams (see `external/executor/specs/2026-09-05-binance-market-data-websocket-design.md`
   and `2026-09-06-mexc-spot-market-data-websocket-design.md`); both also REST-poll
   candles (deliberate, out of scope), and both `subscribe_account_updates` still poll
   `get_account_state` and diff snapshots into synthetic `AccountEvent`s (deliberate
-  REST-fallback path, out of scope). **MEXC futures market data (book/trade/candles/positions)
-  remains entirely unbuilt**, tracked as a separate follow-up.
+  REST-fallback path, out of scope). **MEXC futures websocket (book/trade/positions)
+  remains unbuilt** (tracked separate follow-up); futures candles and account/position
+  updates already work via REST poll-and-diff, unchanged by this task.
 - **Never run against real exchange credentials/testnet on either
   side.** All tests are `wiremock`-backed (loopback only). Each crate
   has one `#[ignore]`d gated integration test
