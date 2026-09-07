@@ -42,13 +42,15 @@ here.
 (`docker build . && docker run --network host ...`).
 
 Known gaps, none of which block moving on to L1 but all real:
-- **MEXC still has no websocket for book/trade.** Binance's `subscribe_market_data`
-  now emits real `BookSnapshot`/`BookUpdate` via `@depth` diff stream and `Trade`
-  via `@trade` stream (see `external/executor/specs/2026-09-05-binance-market-data-websocket-design.md`),
-  but `subscribe_account_updates` still polls `get_account_state` and diffs snapshots
-  into synthetic `AccountEvent`s (REST-fallback path, out of scope). MEXC is still
-  REST-kline-polling only (emits `Candle` only — never `BookSnapshot`/`BookUpdate`/`Trade`),
-  tracked as a separate follow-up once Binance validation is complete.
+- **MEXC futures has no websocket for book/trade/positions; MEXC spot/margin now does.**
+  Binance and MEXC spot/margin `subscribe_market_data` both now emit real
+  `BookSnapshot`/`BookUpdate` via websocket diff streams and `Trade` via websocket
+  trade streams (see `external/executor/specs/2026-09-05-binance-market-data-websocket-design.md`
+  and `2026-09-06-mexc-spot-market-data-websocket-design.md`); both also REST-poll
+  candles (deliberate, out of scope), and both `subscribe_account_updates` still poll
+  `get_account_state` and diff snapshots into synthetic `AccountEvent`s (deliberate
+  REST-fallback path, out of scope). **MEXC futures market data (book/trade/candles/positions)
+  remains entirely unbuilt**, tracked as a separate follow-up.
 - **Never run against real exchange credentials/testnet on either
   side.** All tests are `wiremock`-backed (loopback only). Each crate
   has one `#[ignore]`d gated integration test
