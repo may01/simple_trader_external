@@ -142,6 +142,17 @@ code:
   from inside `BinanceRestClient` for that request), i.e. the ws side may be
   fine but the book can't be seeded/resynced.
 
+- `AlertKind::BookCrossed` — an applied update left the adapter's own
+  ladder with its highest bid strictly above its lowest ask (`bid == ask`,
+  a locked book, is not an error). Fired at `Severity::Error` with the
+  pair and the crossed prices, alongside a `book_crossed_detected` metric.
+  The offending update is withheld from L1 and the stream recovers exactly
+  as it does from a desync: reconnect, refetch the REST snapshot, replay
+  the buffered events on top, emit the fresh `BookSnapshot`. Rate-limited
+  by the same `DESYNC_RETRY_DELAY` floor. See L0's spec, "Crossed-book
+  safety check", for why detection lives in the adapter rather than in
+  L1's `BookTracker`.
+
 A book-stream desync deliberately fires **neither**: it is routine Binance
 protocol behavior, resolved in-band by refetching the snapshot, and never
 counts toward `consecutive_failures`. It is rate-limited by its own fixed

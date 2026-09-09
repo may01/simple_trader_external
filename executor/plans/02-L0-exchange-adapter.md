@@ -41,6 +41,20 @@ here.
 `cargo clippy --workspace --all-targets` both clean; Docker-verified
 (`docker build . && docker run --network host ...`).
 
+**Update (2026-09-09, branch `book-crossed-safety-check`):** both ws
+book tasks now run a crossed-book safety check — each `DepthSync`
+maintains its own ladder and, when an applied update leaves the highest
+bid strictly above the lowest ask, withholds that update, fires
+`AlertKind::BookCrossed` (`Severity::Error`, crossed prices in the
+message) plus a `book_crossed_detected` metric, and rebuilds through
+the existing desync path (reconnect → REST snapshot → replay buffered
+events). `bid == ask` (locked book) is deliberately not an error. The
+shared `apply_deltas` helper moved from `market_data::book` into the
+`exchange_adapter` leaf crate (L0 cannot depend on L1); `market_data`
+re-exports it, so `market_data::apply_deltas` still resolves. New
+tests: 4 unit + 1 wiremock integration per adapter. See
+`specs/layers/L0-exchange-adapter.md`, "Crossed-book safety check".
+
 Known gaps, none of which block moving on to L1 but all real:
 - **MEXC futures websocket for book/trade/positions unbuilt; MEXC spot/margin now has ws.**
   Binance and MEXC spot/margin `subscribe_market_data` both now emit real
