@@ -168,3 +168,19 @@ one flake also hides every later crate's results unless `--no-fail-fast` is pass
 Fix: make the failure injection deterministic (fail the database *before* the batch is
 enqueued, or gate the commit on a barrier) rather than relying on timing.
 
+
+## 6. `indicator_update` accepts an empty `pair`
+
+**Status:** open (flagged 2026-09-21)
+**Where:** `crates/mq_gateway/src/wire.rs` (`decode_inbound`, `InboundPayload::IndicatorUpdate` arm)
+
+The wire decoder rejects a `kind`/`volume` mismatch at parse time. It lets `"pair": ""`
+straight through, and the row lands in `indicators` under an empty pair. No per-pair
+reader (`/api/current_indicators?pair=…`, the SPA panel) will ever surface it. Seen live
+on 2026-09-21: main/'s paper stock (`Stock_MockBinance`) had no `get_pair_name()`, so
+every reading it published arrived as `pair: ""`, about 135 rows before anyone noticed.
+Nothing alerted on either side. The sender is fixed (main/ branch
+`stock-pair-and-readonly-candles`), but the executor still trusts whatever it is sent.
+Fix: reject an empty or whitespace-only `pair` (and `name`) in the decode arm, as a
+`WireError`, with a wire test next to the existing stray-`volume` one. The existing
+`pair = ''` rows are append-only history and can be left to age out of "current".

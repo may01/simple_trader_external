@@ -1,7 +1,7 @@
 # Indicator Broadcast End-to-End Check (main/ → executor) — Design Spec
 
 Date: 2026-09-20
-Status: implemented 2026-09-21 — scripted check green from cold start (6/6); only Tier 2 (real tick loop) open
+Status: complete 2026-09-21 — scripted check green from cold start (6/6); Tier 2 observed on LINKUSDT
 Target projects: `main/` (Python, sender) and `trade_executor` (Rust, receiver, worktree `layer-implementation`)
 Extends: [2026-09-19-level-broadcast-design.md](2026-09-19-level-broadcast-design.md) — this spec adds no wire format, no storage and no behavior, only proof that what that spec describes actually works across the process boundary
 Related: [layers/L4-mq-gateway.md](layers/L4-mq-gateway.md) §`indicator_update`, [layers/L5-state-store.md](layers/L5-state-store.md) §indicators, [layers/L9-deploy.md](layers/L9-deploy.md) step 7b, plan [2026-09-20-level-broadcast-plan.md](../plans/2026-09-20-level-broadcast-plan.md)
@@ -156,4 +156,8 @@ Every run leaves `e2e_<run>_*` rows in the append-only `indicators` table. They 
 - [x] ~~Assertion 2 end to end~~ — **won't do, by decision**: `current_indicator`'s in-process cache is not observable from outside the executor. It is covered by `state_store`'s unit tests (cache hit, write-through visibility, re-query past expiry, failed-insert non-pollution).
 - [x] The same assertions pass from a **scripted** run, from a cold start of both stacks (2026-09-21, run `e2e_bbe2146c`, 6/6, §6b).
 - [x] The check is runnable with a single documented command, and its location is recorded in the L9 testing notes (`main/scripts/e2e_indicator_broadcast.py --cold`, 2026-09-21).
-- [ ] Tier 2 has been observed manually at least once, with the result and date noted here.
+- [x] Tier 2 has been observed manually at least once, with the result and date noted here. **2026-09-21**: main/'s real `live` service (`STOCK_TYPE=binance_candles`, `STRATEGY_SET` empty) → executor on `PAIRS=LINKUSDT`. All 9 allowlisted names arrived under `LINKUSDT` every 30 s; values differed across timeframes (e.g. `15_ema_7` 13.1009, `60_ema_7` 13.0085, `240_ema_7` 12.8805) and moved between publishes; `GET /api/current_indicators?pair=LINKUSDT` served all 9.
+
+  Getting there exposed two main/ defects that no test had caught, both fixed on main/ branch `stock-pair-and-readonly-candles`:
+  - **Empty pair.** `Stock_MockBinance`, the code-default paper stock, had no `get_pair_name()`, so every paper-mode reading went out as `pair: ""`. The executor accepted it (see TECH_DEBT §6). Fixed with an override.
+  - **Frozen values.** That same mock replays a pickled candle fixture, so paper-mode indicators were constants, identical across timeframes. Added `STOCK_TYPE=binance_candles`: real Binance public market data, no API keys read even when set, every order/account call refused. `configs/live.env` now uses it.
