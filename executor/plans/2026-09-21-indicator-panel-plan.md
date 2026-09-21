@@ -1,6 +1,6 @@
 # Current-Indicator Panel (visualiser) Implementation Plan
 
-> **Status 2026-09-21:** implemented on branch `indicator-panel`, all layers green in Docker; commits pending user confirmation; two manual checks open (Layer 4).
+> **Status 2026-09-21: done.** All layers green in Docker. Operator reported the panel verified on live `LINKUSDT` data (main/'s real `live` service, `binance_candles`). `indicator-panel` merged into `layer-implementation` (`ff2938d`) and pushed.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan layer-by-layer. Steps use checkbox (`- [x]`) syntax for tracking.
 
@@ -202,8 +202,8 @@ async function refreshIndicators(asOfMs) { ... }   // fetch + render, keeps last
 - [x] Empty state reads exactly "No live indicators — `main/` may not be publishing." (test by querying a pair with no rows, or before `main/` starts).
 - [x] Row with `expires_in_ms < 30000` renders muted.
 - [x] Rows go muted in their last 30 s, then disappear at `expires_at`. *(Verified with short-TTL synthetic rows, not by stopping a live `main/`.)*
-- [ ] History mode: load a window ending in the past → panel shows what was current at `to`. *(Not exercised in a browser — headless screenshots can't drive the date pickers. `as_of` semantics covered by L5 + route tests.)*
-- [ ] Kill the visualiser mid-poll → last rows stay, no JS error in console. *(Not exercised. Also: "existing banner appears" was wrong — polled panels degrade silently; spec §7 corrected.)*
+- [x] History mode: load a window ending in the past → panel shows what was current at `to`. *(Operator-verified 2026-09-21. Reported as "indicator-panel verified"; the individual steps were not itemised. Headless screenshots can't drive the date pickers; `as_of` semantics are also covered by L5 + route tests.)*
+- [x] Kill the visualiser mid-poll → last rows stay, no JS error in console. *(Operator-verified 2026-09-21, same caveat as above. Also: "existing banner appears" was wrong — polled panels degrade silently; spec §7 corrected.)*
 
 ### Constraints / notes
 
@@ -211,7 +211,7 @@ async function refreshIndicators(asOfMs) { ... }   // fetch + render, keeps last
 - Render `value` string verbatim; format `age_ms`/`expires_in_ms` via `format.js` if it has a duration helper, else a local `Xm Ys` formatter.
 - `kind` `support`/`resistance` → append `(vol N)`; `none` → plain.
 
-- [x] **Gate:** Docker suite still green (no Rust change in this layer, but run it — the SPA ships in the `visualizer` image). Commit: `feat(spa): current indicators panel`. *(Green 2026-09-21; commit pending user confirmation.)*
+- [x] **Gate:** Docker suite still green (no Rust change in this layer, but run it — the SPA ships in the `visualizer` image). Commit: `feat(spa): current indicators panel`. *(Green 2026-09-21; committed `12ab1af`.)*
 
 ---
 
