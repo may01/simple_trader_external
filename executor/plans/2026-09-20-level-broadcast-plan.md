@@ -2,6 +2,17 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **Status 2026-09-21: implemented, verified, closed.** Every checkbox below was ticked retroactively, against evidence rather than a step-by-step log:
+> - executor Tasks 1-5: commits `ce3ed29`…`01d53a2` on `layer-implementation`. `docker compose run --build --rm test` passed on 2026-09-20 at `01d53a2`, and again on 2026-09-21 at `indicator-panel` HEAD (which includes all of this).
+> - main/ Tasks 6-9: 8 commits on `indicator-broadcast-sender`. The plan's own tests pass (65, 2026-09-20); the full suite shows no failures beyond the 21-failure pre-existing baseline (Docker Entry Points).
+> - the RED ("verify they fail") steps are ticked because the tests exist and pass. That they were each observed failing first was **not** independently re-verified.
+>
+> **Follow-on work this plan did not anticipate**, done separately:
+> - **Networking**: as written, the plan's `MQ_EXECUTOR_ADDR=tcp://host.docker.internal:5555` could never reach the executor. Its `127.0.0.1:5555` publish is invisible to containers coming in through host-gateway, and the failure was silent. Fixed with the shared external docker network `trader_mq` + `tcp://executor:5555`. See [e2e-check spec](../specs/2026-09-20-indicator-broadcast-e2e-check-design.md) §3-§4.
+> - **Read path**: `current_indicator` shipped with no caller. `GET /api/current_indicators` + the SPA Indicators panel were added. See [indicator-visualisation spec](../specs/2026-09-20-indicator-visualisation-design.md) / [indicator-panel plan](2026-09-21-indicator-panel-plan.md), branch `indicator-panel`.
+> - **End-to-end check**: this plan had no cross-process task at all. It now exists as `main/scripts/e2e_indicator_broadcast.py`, green from cold start 2026-09-21 (6/6). See the e2e-check spec §6b.
+> - **Still open**: Tier 2, i.e. watching the real `live` tick loop publish the 9 allowlisted EMAs. That runs `trader.py` against the live exchange, so it stays a manual step for the operator.
+
 **Goal:** Add a new `indicator_update` MQ message so `main/` can publish named indicator readings (support/resistance-with-volume, or plain `kind: none` values) to `trade_executor` independently of any trade decision, and have the executor store, persist, and expose them.
 
 **Architecture:** Extends the existing L4 (`mq_gateway`) wire format with a fourth inbound message type alongside `open`/`close`/`modify`/`force_close`, reusing the same dedup/id-space and inbound topic. Postgres (L5, `state_store`) is the store: one new append-only `indicators` table holds every reading, fronted by a write-through/read-through cache keyed by `(pair, name)` — `record_indicator` refreshes the entry once its INSERT commits, and `current_indicator` serves the cached reading until that reading's own `expires_at` passes, falling back to a query otherwise. So repeated reads inside a validity window cost nothing, a freshly written reading is visible at once, and there's no duplicate current-value table to maintain. That cache is private to the store; `local_analysis` is untouched by this plan, and `combined_levels`/wall-detection keeps working exactly as today. On `main/`'s side, a new `main/mq/` module reads an operator-configured allowlist of `main/indicators/` framework fields and PUSHes them every tick as `kind: "none"` readings (v1 scope — support/resistance classification is a later, separate increment with an undecided source).
@@ -43,7 +54,7 @@ docker compose run --rm live pytest tests/ -v --ignore=tests/nn
 
 No dedicated `test` service exists in `main/docker-compose.yml` today — `live` is the leanest service built from the base `simple_trader` image, which already bakes in `pytest`/`pytest-mock` via `requirements.txt`, and mounts `.:/code`. This command was originally inferred (no README/CI references `pytest` at all) and has since been **confirmed to work as written above**, with the two caveats stated above it.
 
-Verified: [ ] `docker compose run --rm test` succeeds on the current `layer-implementation` worktree HEAD (run this before Task 1, to confirm the baseline is green before adding anything).
+Verified: [x] `docker compose run --rm test` succeeds on the current `layer-implementation` worktree HEAD (run this before Task 1, to confirm the baseline is green before adding anything). *(Ticked retroactively 2026-09-21. The pre-Task-1 run itself was not re-observed; what was observed is the post-feature HEAD green — see the status note at the top.)*
 
 ---
 
@@ -70,7 +81,7 @@ Verified: [ ] `docker compose run --rm test` succeeds on the current `layer-impl
   ```
   `decode_inbound(bytes: &[u8]) -> Result<InboundMessage, WireError>` gains the new match arm; existing signature unchanged.
 
-- [ ] **Step 1: Write the failing round-trip tests**
+- [x] **Step 1: Write the failing round-trip tests**
 
 Add to `crates/mq_gateway/src/wire.rs`'s existing `#[cfg(test)] mod tests` block:
 
@@ -117,12 +128,12 @@ fn decode_inbound_rejects_a_support_indicator_missing_volume() {
 }
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `cargo test -p mq_gateway wire:: -- --nocapture` (from `trade_executor/.worktrees/layer-implementation`)
 Expected: FAIL to compile — `InboundMessage::Indicator`, `IndicatorKind`, `IndicatorUpdate` don't exist yet.
 
-- [ ] **Step 3: Implement the wire types and decode arm**
+- [x] **Step 3: Implement the wire types and decode arm**
 
 In `crates/mq_gateway/src/wire.rs`, alongside the existing `InboundPayload` enum (`wire.rs:47-52`):
 
@@ -213,12 +224,12 @@ Add the match arm in `decode_inbound` (`wire.rs:159-179`), alongside the existin
 ```
 Note `decode_inbound`'s existing `let id = DecisionId(envelope.id);` line is reused as-is (`wire.rs:158`) — this new arm doesn't need its own `id` handling, same as every other arm.
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `cargo test -p mq_gateway wire:: -- --nocapture`
 Expected: PASS, all 4 new tests.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 cd trade_executor/.worktrees/layer-implementation
@@ -245,7 +256,7 @@ git commit -m "feat(mq_gateway): add indicator_update inbound message type"
   ```
   implemented by `MqGateway`, reusing the same `SharedDedup` instance as `subscribe_decisions`/`subscribe_force` (per spec §2: "same channel/path, not a side channel").
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Add to `crates/mq_gateway/src/gateway.rs`'s `#[cfg(test)] mod tests`:
 
@@ -308,12 +319,12 @@ async fn subscribe_indicators_dedups_by_id_shared_with_decisions() {
 }
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `cargo test -p mq_gateway gateway:: -- --nocapture`
 Expected: FAIL to compile — `subscribe_indicators` doesn't exist.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 In `crates/mq_gateway/src/gateway.rs`, add near `DecisionInbound`/`StateOutbound` (`gateway.rs:20-27`):
 ```rust
@@ -354,12 +365,12 @@ pub use wire::{decode_inbound, encode_force_close, encode_outbound, IndicatorKin
 ```
 (the `IndicatorKind`/`IndicatorUpdate` addition to the `wire::` line covers Task 1's new public types too, which Task 1 itself didn't yet export — Task 4 needs both from outside this crate.)
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `cargo test -p mq_gateway gateway:: -- --nocapture`
 Expected: PASS, all 3 new tests plus every pre-existing `gateway::tests` test still green.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add crates/mq_gateway/src/gateway.rs crates/mq_gateway/src/lib.rs
@@ -406,7 +417,7 @@ git commit -m "feat(mq_gateway): add subscribe_indicators sharing the decision/f
   ```
   `IndicatorSink` is implemented by `StateStoreImpl`, mirroring `SignalSink::record_signal`'s shape, and additionally updates the cache with what it wrote once the `INSERT` commits. `current_indicator` serves a cached entry while `now < cached.expires_at`, otherwise queries the newest non-expired row and re-caches it.
 
-- [ ] **Step 1: Write the migration**
+- [x] **Step 1: Write the migration**
 
 Create `migrations/0007_indicators.sql`:
 ```sql
@@ -440,7 +451,7 @@ CREATE TABLE indicators (
 CREATE INDEX indicators_pair_name_received ON indicators (pair, name, received_at DESC);
 ```
 
-- [ ] **Step 2: Bump `SCHEMA_VERSION` and doc comment**
+- [x] **Step 2: Bump `SCHEMA_VERSION` and doc comment**
 
 In `crates/db_schema/src/lib.rs`, update the module doc comment to mention `0007_indicators.sql` (mirroring the existing list style) and change:
 ```rust
@@ -451,12 +462,12 @@ to
 pub const SCHEMA_VERSION: i64 = 7;
 ```
 
-- [ ] **Step 3: Run the migration test to verify it applies cleanly**
+- [x] **Step 3: Run the migration test to verify it applies cleanly**
 
 Run: `cargo test -p db_schema -- --nocapture` (exercises `crates/db_schema/tests/migrations.rs`, which runs every migration against a real Postgres — requires the `postgres` service; use `docker compose run --rm test` if no local Postgres is reachable).
 Expected: PASS — migration applies with no SQL errors.
 
-- [ ] **Step 4: Write the domain types, DTO, sink, and reader (RED first)**
+- [x] **Step 4: Write the domain types, DTO, sink, and reader (RED first)**
 
 Add to `crates/state_store/src/lib.rs`, alongside `DecisionRecord` (`lib.rs:31-...`):
 ```rust
@@ -648,12 +659,12 @@ async fn current_indicator_serves_the_cached_value_without_requerying_until_its_
 ```
 (Adjust the pool-access/test-fixture calls — `test_store()`/`store.pool` — to whatever the actual existing `record_signal` test in this same file uses; that test is the ground truth for this crate's exact Postgres-test-harness idiom, copy it rather than the sketch above verbatim. `current_indicator` in these tests is called directly on `store` — if reads and writes are genuinely separate types in this crate rather than the same struct wearing two trait hats, adjust the calls to go through whichever one the existing `current_analysis`-style tests actually construct, and put the cache field on that same type.)
 
-- [ ] **Step 5: Run tests to verify they fail**
+- [x] **Step 5: Run tests to verify they fail**
 
 Run: `cargo test -p state_store -- --nocapture`
 Expected: FAIL to compile — `record_indicator`/`IndicatorSink`/`current_indicator` don't exist yet.
 
-- [ ] **Step 6: Add the cache field, then implement `record_indicator` and `current_indicator`**
+- [x] **Step 6: Add the cache field, then implement `record_indicator` and `current_indicator`**
 
 Add the cache field to `StateStoreImpl` (`pg.rs:344-352`), directly mirroring `last_reconciliation`'s existing shape and doc-comment rationale:
 ```rust
@@ -748,17 +759,17 @@ pub async fn current_indicator(&self, pair: Pair, name: &str, now: Ts) -> Result
 }
 ```
 
-- [ ] **Step 7: Run tests to verify they pass**
+- [x] **Step 7: Run tests to verify they pass**
 
 Run: `cargo test -p state_store -- --nocapture`
 Expected: PASS, all 8 new tests plus every pre-existing `state_store` test still green.
 
-- [ ] **Step 8: Docker-verify the whole L5 slice**
+- [x] **Step 8: Docker-verify the whole L5 slice**
 
 Run: `docker compose run --rm test` (from `trade_executor/.worktrees/layer-implementation`)
 Expected: full `cargo test --workspace` green, including the new migration and all 8 new `state_store` tests.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add migrations/0007_indicators.sql crates/db_schema/src/lib.rs crates/state_store/src/lib.rs crates/state_store/src/dto.rs crates/state_store/src/pg.rs
@@ -788,7 +799,7 @@ git commit -m "feat(state_store): persist indicator_update readings + current_in
   ```
   Spawned once per process (mirroring `mq_gateway::drive`'s own single spawn at `system.rs:356` — indicators aren't per-pair-loop scoped, each message already carries its own `pair`), not per-pair like `run_wall_snapshot_task`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `crates/orchestrator/src/indicators.rs`:
 ```rust
@@ -911,12 +922,12 @@ mod tests {
 }
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `cargo test -p orchestrator indicators:: -- --nocapture`
 Expected: FAIL to compile — `mod indicators;` not wired into `orchestrator`'s `lib.rs`/`main.rs` yet.
 
-- [ ] **Step 3: Wire the module and spawn the task**
+- [x] **Step 3: Wire the module and spawn the task**
 
 Add `mod indicators;` (with `pub use indicators::run_indicator_ingest_task;` if this crate re-exports its internal task functions the way it does elsewhere — check an existing one like `run_wall_snapshot_task`'s own visibility for the pattern to match) to wherever `crates/orchestrator/src/system.rs`'s sibling modules are declared.
 
@@ -935,17 +946,17 @@ In `crates/orchestrator/src/system.rs`, alongside the existing `drive(...)` spaw
 ```
 (placed once, not inside the per-pair `for pair in &pairs` loop, since indicator messages already carry their own `pair` field — same reasoning as `drive()`'s own single spawn just above it.)
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `cargo test -p orchestrator indicators:: -- --nocapture`
 Expected: PASS, both tests.
 
-- [ ] **Step 5: Docker-verify**
+- [x] **Step 5: Docker-verify**
 
 Run: `docker compose run --rm test`
 Expected: full workspace green.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add crates/orchestrator/src/indicators.rs crates/orchestrator/src/system.rs
@@ -956,9 +967,9 @@ git commit -m "feat(orchestrator): ingest indicator_update into state_store, no 
 
 ## Task 5: Final executor-side Docker verification
 
-- [ ] **Step 1:** From `trade_executor/.worktrees/layer-implementation`, run `docker compose run --rm test`.
-- [ ] **Step 2:** Confirm output shows `cargo test --workspace` passing for every crate touched: `mq_gateway`, `local_analysis`, `state_store`, `db_schema`, `orchestrator`.
-- [ ] **Step 3:** If `visualizer_server`'s `check_schema` has its own test asserting `SCHEMA_VERSION`, confirm it's still green (it should be, since Task 3 bumped the constant in the same commit as the migration).
+- [x] **Step 1:** From `trade_executor/.worktrees/layer-implementation`, run `docker compose run --rm test`.
+- [x] **Step 2:** Confirm output shows `cargo test --workspace` passing for every crate touched: `mq_gateway`, `local_analysis`, `state_store`, `db_schema`, `orchestrator`.
+- [x] **Step 3:** If `visualizer_server`'s `check_schema` has its own test asserting `SCHEMA_VERSION`, confirm it's still green (it should be, since Task 3 bumped the constant in the same commit as the migration).
 
 No commit for this task — it's a verification checkpoint only. If anything is red, return to the relevant task above; do not proceed to Task 6 until this is fully green.
 
@@ -982,12 +993,12 @@ No commit for this task — it's a verification checkpoint only. If anything is 
   def load_shared_indicators_config(path: str = "configs/shared_indicators_config.yaml") -> list[SharedIndicatorConfig]: ...
   ```
 
-- [ ] **Step 0: Confirm the Docker test command**
+- [x] **Step 0: Confirm the Docker test command**
 
 Run: `docker compose run --rm live pytest tests/ -v --ignore=tests/nn` (from `main/`)
 Expected (confirmed 2026-09-20): the suite runs and reports **2081 passed, 21 failed, 2 skipped**. Those 21 failures are the pre-existing baseline documented under Docker Entry Points (trainer + chart-renderer + label-marker tests) and are not this plan's concern. Dropping `--ignore=tests/nn` instead produces `Interrupted: 2 errors during collection` (missing `optuna`) and runs nothing at all — that is a broken command, not a broken branch.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `main/tests/test_shared_indicators_config.py`:
 ```python
@@ -1015,12 +1026,12 @@ def test_empty_indicators_list_returns_empty(tmp_path):
     assert load_shared_indicators_config(path=str(config_file)) == []
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `docker compose run --rm live pytest tests/test_shared_indicators_config.py -v` (or the fallback command from Step 0)
 Expected: FAIL — `load_shared_indicators_config` doesn't exist yet.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 In `main/config_loader.py`, add alongside `load_indicators_config` (following its exact `open()`/`yaml.safe_load()` idiom):
 ```python
@@ -1047,12 +1058,12 @@ def load_shared_indicators_config(path: str = "configs/shared_indicators_config.
 ```
 (`yaml` is already imported at the top of `config_loader.py` for the other loaders — no new import needed.)
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `docker compose run --rm live pytest tests/test_shared_indicators_config.py -v`
 Expected: PASS, both tests.
 
-- [ ] **Step 5: Create the real config file**
+- [x] **Step 5: Create the real config file**
 
 Create `main/configs/shared_indicators_config.yaml`:
 ```yaml
@@ -1065,7 +1076,7 @@ indicators:
     timeframes: [15, 60, 240]
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 cd main
@@ -1097,7 +1108,7 @@ git commit -m "feat(config): add shared_indicators_config allowlist for indicato
   ```
   `build_indicator_update` is the pure, fully unit-testable piece (JSON shape, fresh uuid, `expires_at` heartbeat math) — `IndicatorPublisher` wraps it with the actual zmq PUSH socket, exercised separately in Task 8's integration test.
 
-- [ ] **Step 1: Write the failing tests for the pure JSON builder**
+- [x] **Step 1: Write the failing tests for the pure JSON builder**
 
 Create `main/tests/test_indicator_publisher.py`:
 ```python
@@ -1149,12 +1160,12 @@ def test_a_naive_now_is_rejected():
         )
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `docker compose run --rm live pytest tests/test_indicator_publisher.py -v`
 Expected: FAIL — `mq` module doesn't exist yet.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Create `main/mq/__init__.py` (empty — marks the package).
 
@@ -1196,12 +1207,12 @@ def build_indicator_update(pair: str, name: str, value: float, now: datetime, tt
     }
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `docker compose run --rm live pytest tests/test_indicator_publisher.py -v`
 Expected: PASS, all 3 tests.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add mq/__init__.py mq/indicator_publisher.py tests/test_indicator_publisher.py
@@ -1235,14 +1246,14 @@ git commit -m "feat(mq): add build_indicator_update, the pure indicator_update w
 
 Dropping is safe *because* of the heartbeat design (spec §107): every reading is republished each tick with a fresh 300 s `expires_at`, so a dropped message costs at most one tick of freshness, and a prolonged outage correctly ages indicators out of `current_indicator` rather than feeding the executor stale values.
 
-- [ ] **Step 1: Add the dependency**
+- [x] **Step 1: Add the dependency**
 
 In `main/requirements.txt`, add a new line (matching the file's existing `name==version` style):
 ```
 pyzmq==26.4.0
 ```
 
-- [ ] **Step 2: Write the failing integration test (real PULL socket, mirrors `zmq_transport.rs`'s own test precedent)**
+- [x] **Step 2: Write the failing integration test (real PULL socket, mirrors `zmq_transport.rs`'s own test precedent)**
 
 Add to `main/tests/test_indicator_publisher.py`:
 ```python
@@ -1343,12 +1354,12 @@ def test_publishing_resumes_after_the_executor_comes_back():
         pull.close()
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `docker compose run --rm live pytest tests/test_indicator_publisher.py::test_publish_reaches_a_real_pull_socket -v`
 Expected: FAIL — `IndicatorPublisher` doesn't exist yet. (If `pyzmq` isn't installed in the running container yet because the image wasn't rebuilt, rebuild first: `docker compose build live`.)
 
-- [ ] **Step 4: Implement `IndicatorPublisher`**
+- [x] **Step 4: Implement `IndicatorPublisher`**
 
 Extend `main/mq/indicator_publisher.py`:
 ```python
@@ -1398,12 +1409,12 @@ class IndicatorPublisher:
         self._socket.close()
 ```
 
-- [ ] **Step 5: Run tests to verify they pass**
+- [x] **Step 5: Run tests to verify they pass**
 
 Run: `docker compose run --rm live pytest tests/test_indicator_publisher.py -v`
 Expected: PASS, all 6 tests (3 from Task 7 + the three above). The dead-address test is the one that matters most: if `publish` is ever made blocking again it hangs rather than fails, so treat a timeout there as a real regression, not a slow test.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add mq/indicator_publisher.py requirements.txt tests/test_indicator_publisher.py
@@ -1421,7 +1432,7 @@ git commit -m "feat(mq): add IndicatorPublisher zmq PUSH client"
 **Interfaces:**
 - Consumes: `IndicatorPublisher.publish` (Task 8), `SharedIndicatorConfig`/`load_shared_indicators_config` (Task 6), `DataPoint.get(name, tf)` (existing, `data.py:22-29`/`77-92`).
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Add to `main/tests/test_robot.py` (match whatever fixture the file already uses to construct a `Robot` with a fake `data_point`/`strategy_manager` — read the file first to copy the exact pattern; the sketch below assumes a `data_point` test double with a `.get(name, tf)` method, matching `DataPoint`'s real contract):
 ```python
@@ -1433,12 +1444,12 @@ def test_do_publishes_configured_indicators_every_tick(robot_with_fake_data_poin
 ```
 (Adjust fixture names/assertion to whatever `test_robot.py`'s actual `Robot` construction fixture is called — this step's real deliverable is: one test proving that after `Robot.do()` runs, every `(name, tf)` pair in the allowlist has been published with the value read from `data_point.get(f"{name}", tf)`. Write it against the real fixture names once Step 0 of reading the file is done.)
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `docker compose run --rm live pytest tests/test_robot.py -k publishes_configured_indicators -v`
 Expected: FAIL — `Robot.do()` doesn't publish anything yet.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 In `main/robots/robot.py`, `Robot.__init__` gains an `indicator_publisher: IndicatorPublisher | None = None` constructor parameter (defaulting to `None` so existing callers/tests that don't care about this feature don't break) and loads `self._shared_indicators = load_shared_indicators_config()` once at construction. In `Robot.do()`, immediately after `data_point = self.live_data.get_data_point()` (`robot.py:127`), add:
 ```python
@@ -1452,21 +1463,21 @@ In `main/robots/robot.py`, `Robot.__init__` gains an `indicator_publisher: Indic
 
 The publish call itself is already safe to make inline — Task 8's `publish` never blocks and never raises even with no executor listening. What is *not* yet guarded here is `data_point.get(cfg.name, tf)`: confirm what it does for an allowlisted indicator that is missing or not yet warmed up, and if it can raise, wrap this loop so a telemetry read can never abort `Robot.do()` before the trading logic below it runs.
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `docker compose run --rm live pytest tests/test_robot.py -v`
 Expected: PASS — the new test, and every pre-existing `test_robot.py` test still green (since `indicator_publisher` defaults to `None` and is a no-op when absent).
 
-- [ ] **Step 5: Wire construction in `trader.py`/wherever `Robot` is actually instantiated for live trading**
+- [x] **Step 5: Wire construction in `trader.py`/wherever `Robot` is actually instantiated for live trading**
 
 Find the real construction call site (likely `main/trader.py`, per the earlier audit's `main/trader.py:69-84` `main()`) and pass a real `IndicatorPublisher(connect_addr=<executor host:5555 from config/env>, ttl_seconds=300.0)`. Read that call site first to match its existing config/env-var conventions for where the executor host/port would come from (a new env var, e.g. `MQ_EXECUTOR_ADDR`, following whatever pattern `configs/live.env` already uses for other addresses/credentials) before hardcoding anything.
 
-- [ ] **Step 6: Docker-verify**
+- [x] **Step 6: Docker-verify**
 
 Run: `docker compose run --rm live pytest tests/ -v --ignore=tests/nn`
 Expected: **no new failures beyond the 21-failure baseline** from Docker Entry Points, and every test this plan added passing. "Full suite green" is unreachable on this repo and is not the bar — compare against the baseline instead. To check this plan's own tests in isolation: `docker compose run --rm live pytest tests/test_shared_indicators_config.py tests/test_indicator_publisher.py tests/test_robot.py -v` (65 tests, all passing as of 2026-09-20).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add robots/robot.py trader.py  # plus whatever env/config file Step 5 touched
