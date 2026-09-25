@@ -108,11 +108,11 @@ Each run: operator sets `LIVE_TRADE_OPS=1`, `LIVE_PAIR`, `LIVE_MAX_NOTIONAL`, `L
 
 | # | Run | Needs | Proves | Status |
 |---|---|---|---|---|
-| M0 | G0 probe | 1/5 | F1–F8 verdicts, D2 (futures order permission), fixtures | [ ] |
-| M3 | Futures scenario: open → plan-order stop → move stop (cancel-and-replace) → close reduce-only → flat; `position_risk` vs `LiqCalc` golden row | 2/5, 3/5 (L0-d) | spec §7 whole | [ ] |
+| M0 | G0 probe | 1/5 | F1–F8 verdicts, D2 (futures order permission), fixtures | ✅ 2026-09-25, [runs/2026-09-25-mexc-g0.md](../runs/2026-09-25-mexc-g0.md) |
+| M3 | Futures scenario: open → plan-order stop → move stop (cancel-and-replace) → close reduce-only → flat; `position_risk` vs `LiqCalc` golden row | 2/5, 3/5 (L0-d) | spec §7 whole | ✅ 2026-09-25 attempt 7, [runs/2026-09-25-mexc-m3.md](../runs/2026-09-25-mexc-m3.md) |
 | M5 | Executor, `EXCHANGE=mexc MARKET_KIND=futures EXECUTION_MODE=live`, one SAR-test-signal position at minimum notional, with `main/` | 3/5, 4/5 | boot gate, plan-order stop in production, position-management on MEXC futures | [ ] |
-| M1 | Spot scenario: limit buy → `get_order_fills` → `settle` → limit sell (`reduce_only=true`) → flat; stop step `Skipped(native_stop=false)` | 2/5, 5/5 (L0-b) | C1, C2, C4–C11, MEXC fee assets, string ids through the journal | [ ] |
-| M2 | M1 with the user-data stream up: every fill seen on push before the poll | 5/5 (L0-c) | spec §6.4 | [ ] |
+| M1 | Spot scenario: limit buy → `get_order_fills` → `settle` → limit sell (`reduce_only=true`) → flat; stop step `Skipped(native_stop=false)` | 2/5, 5/5 (L0-b) | C1, C2, C4–C11, MEXC fee assets, string ids through the journal | [ ] scenario + runner built (`mexc-spot` cb079d9); awaiting operator go |
+| M2 | M1 with the user-data stream up: every fill seen on push before the poll | 5/5 (L0-c) | spec §6.4 | [ ] stream built (`mexc-spot` c254176); awaiting M1 |
 | M4 | Executor, `EXCHANGE=mexc MARKET_KIND=spot EXECUTION_MODE=live`, `ALLOW_LOCAL_ONLY_STOP=1`, `LOCAL_ONLY_MAX_NOTIONAL` at minimum, one SAR-test-signal position | 4/5, 5/5, pos-mgmt feed-loss grace | position-management on MEXC spot | [ ] |
 
 **Human gate:** every live run needs the operator's explicit go, in the conversation, for that run. Approval of one run does not extend to the next.
@@ -124,17 +124,17 @@ Each run: operator sets `LIVE_TRADE_OPS=1`, `LIVE_PAIR`, `LIVE_MAX_NOTIONAL`, `L
 | # | Criterion | Proven by | Status |
 |---|---|---|---|
 | 1 | D1–D5 recorded | spec §4 | ✅ 2026-09-25 |
-| 2 | G0 report + fixtures committed; F-table has a confirmed / refuted column | 1/5 Task 1.4 | [ ] |
-| 3 | `OrderId` string end to end; place, restart, cancel by stored id | 2/5 integration test + M1 | [ ] |
-| 4 | Every MEXC-spot C-row implemented or refuses as documented, wiremock on captured fixtures | 5/5 | [ ] |
-| 5 | `get_order_fills` real on spot; M1 ends `settlement_complete: true` | 5/5 + M1 | [ ] |
-| 6 | Boot refuses MEXC spot live without waiver + cap; `MARKET_KIND=margin` on MEXC → config error, not panic | 4/5 Tasks 2.1, 2.2 | [ ] |
-| 7 | Spot short → `NotPlaced { reason: "short_unsupported" }`, zero exchange calls | 4/5 Task 3.2 | [ ] |
+| 2 | G0 report + fixtures committed; F-table has a confirmed / refuted column | 1/5 Task 1.4 | ✅ spec §2.1 |
+| 3 | `OrderId` string end to end; place, restart, cancel by stored id | 2/5 integration test + M1 | [~] offline half: `mexc_spot_order_survives_restart`; M1 pending |
+| 4 | Every MEXC-spot C-row implemented or refuses as documented, wiremock on captured fixtures | 5/5 | ✅ `tests/spot_wiremock_tests.rs` (660e9d6) |
+| 5 | `get_order_fills` real on spot; M1 ends `settlement_complete: true` | 5/5 + M1 | [~] fills + `mexc_spot_fills_settle_with_base_asset_fee`; M1 pending |
+| 6 | Boot refuses MEXC spot live without waiver + cap; `MARKET_KIND=margin` on MEXC → config error, not panic | 4/5 Tasks 2.1, 2.2 | ✅ `orchestrator::venue` tests (fd7369f) |
+| 7 | Spot short → `NotPlaced { reason: "short_unsupported" }`, zero exchange calls | 4/5 Task 3.2 | ✅ `execution` venue_capabilities tests (fd7369f) |
 | 8 | No `classify` row seen in M0–M5 still "from docs"; every `Unknown` listed | run reports | [ ] |
-| 9 | M3 green on current REST (no REST to `contract.mexc.com`); MEXC `LiqCalc` golden row; no-permission key → `can_place_orders == false`, futures live boot refuses | 3/5 + 4/5 Task 2.1 + M3 | [ ] |
-| 9a | Every MEXC-futures C-row implemented, wiremock on captured fixtures; M5 green | 3/5 + M5 | [ ] |
-| 9b | Spot exit with `reduce_only=true` placed, sized `min(net_size, free_base)` | 5/5 Task 1.2 + 4/5 Task 3.3 | [ ] |
-| 10 | `exchange_adapter_mexc/NOTES.md` describes only what is still true | end of 3/5 and 5/5 | [ ] |
+| 9 | M3 green on current REST (no REST to `contract.mexc.com`); MEXC `LiqCalc` golden row; no-permission key → `can_place_orders == false`, futures live boot refuses | 3/5 + 4/5 Task 2.1 + M3 | ✅ M3 attempt 7; permission probe tests |
+| 9a | Every MEXC-futures C-row implemented, wiremock on captured fixtures; M5 green | 3/5 + M5 | [~] 3/5 done; M5 pending |
+| 9b | Spot exit with `reduce_only=true` placed, sized `min(net_size, free_base)` | 5/5 Task 1.2 + 4/5 Task 3.3 | ✅ `reduce_only_is_accepted_and_not_sent` + execution close sizing |
+| 10 | `exchange_adapter_mexc/NOTES.md` describes only what is still true | end of 3/5 and 5/5 | ✅ 2026-09-26 (margin §2 and symbol-cache §4 removed, §1b rewritten) |
 | 11 | Plans exist per layer (this set); `TECH_DEBT.md` §7 closed; `amend_stop` follow-up recorded | 2/5 Task 1.6, this plan | [~] plans written 2026-09-25 |
 
 ## Finalisation

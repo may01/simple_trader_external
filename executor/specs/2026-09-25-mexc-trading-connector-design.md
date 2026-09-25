@@ -547,6 +547,18 @@ Built on `mexc-trading-connector` directly, not on a separate `mexc-common` bran
 - **Compose:** the `executor` futures defaults now point at `api.mexc.com` and `contract.mexc.com/edge`, and the four gate variables are passed through.
 - **Not built:** the orchestrator-level integration test `live_boot_on_mexc_futures_fake_reaches_execution`. The gate is unit-tested against fakes for every refusal and for setup order.
 
+### Implementation drift — plan 5/5 (L0-b, L0-c) as built (2026-09-26)
+
+- **Spot not-found:** `-2013` (G0) and the docs' `-2011` both map to `OrderNotFound`; `700011` (margin endpoint) to `PermissionDenied`. The message-text "insufficient balance" row is gone: only codes are classified.
+- **Market info:** `get_market_info` always re-reads `exchangeInfo` (status can change); `place_order` validates tick and step against a copy cached 1 h. `selfSymbols` and `tradeFee` are cached 1 h.
+- **Order placement** sends no `newOrderRespType` (MEXC has none). The ack status is `New` unless the answer carries one.
+- **Fills:** the side comes from `myTrades.isBuyer`; a row without it makes one `get_order` call for the side.
+- **Rate buckets:** spot IP weight per endpoint as in the docs (`order` GET 2, `openOrders` 3, `account` / `exchangeInfo` / `myTrades` 10, `tradeFee` 20, others 1), public calls included; the order bucket covers `POST` / `DELETE /api/v3/order`.
+- **`live_trade_ops`:** `reconcile_journal` parsed journaled exchange ids as numbers, so a leftover MEXC order was skipped and then failed step 0 as "sent without a journal row". Fixed: ids are opaque strings.
+- **User-data stream:** protobuf field numbers for `PrivateOrdersV3Api` / `PrivateDealsV3Api` / `PrivateAccountV3Api` come from MEXC's websocket-proto repository (vendored under `proto/`), not from a capture. M2 confirms them. The stream is live once the subscribe acknowledgement (G0 shape: `code 0`, channels in `msg`) arrives. The `listenKey` is deleted when a connection ends, including when the stream is dropped.
+- **Not built:** the plan's `run_fill_sync` integration test (Task 3.1). The mapping and the poll fallback are unit-tested against a local ws server; the fill-sync wake-up on `OrderUpdate` is already covered in `execution`.
+- **Compose:** the `executor` service's spot host defaults are still Binance's. A MEXC spot deployment sets `EXCHANGE_REST_BASE_URL=https://api.mexc.com` and `EXCHANGE_WS_BASE_URL=wss://wbs-api.mexc.com/ws`.
+
 ### Still open (need a capture, not a decision)
 
 ~~Spot `newClientOrderId` limit~~ (G0: `^[0-9a-zA-Z_-]{1,32}$`); `cumulativeQuoteQty` spelling; `isTaker` vs `taker`; ~~`contract/detail` path~~ (G0: `/api/v1/contract/detail`); order-cancel body shape; plan-cancel per-item errors; `riskLevelLimit` bound inclusivity (G0: this pair has a single bracket, so it cannot show it); futures ws compression default. The ones not struck through are M3 items (they need a real order).

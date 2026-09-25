@@ -57,7 +57,9 @@ docker compose run --build --rm --env-file configs/live-trade-ops/mexc.spot.main
   cargo test -p live_trade_ops --test live_trade_ops live_spot_trade_ops -- --ignored --nocapture --test-threads=1
 ```
 
-Verified: [ ] baseline green on `mexc-spot` at its cut point.
+Verified: [x] baseline green on `mexc-spot` at its cut point (5436808; only the known flaky `write_path` test, TECH_DEBT §5).
+
+**Status 2026-09-26:** Layers 1–3 built and merged into `mexc-trading-connector` (660e9d6, cb079d9, c254176; merge 7454a50). M1 / M2 wait for the operator's go. Drift: spec §15 "plan 5/5 as built".
 
 ---
 
@@ -101,10 +103,10 @@ Verified: [ ] baseline green on `mexc-spot` at its cut point.
 
 ### Task 1.5: Margin → `None`, capabilities, NOTES
 
-- [ ] `ExchangeAdapter::margin()` returns `None` on MEXC; delete the spot-endpoint reuse. Test: `margin().is_none()`.
-- [ ] `capabilities()` spot: `can_place_orders` true, `native_stop` false, `reduce_only_enforced` false, `can_short` false, `order_fills` true, `client_id_lookup` true, `account_push` false (true after Layer 2).
-- [ ] Stop using `order_cache.rs` for spot; delete the file if 3/5 has merged.
-- [ ] `NOTES.md`: delete §2 (margin; it also cites the legacy docs), the spot parts of §4, and anything else this layer closes.
+- [x] `ExchangeAdapter::margin()` returns `None` on MEXC; delete the spot-endpoint reuse. Test: `margin().is_none()`.
+- [x] `capabilities()` spot: `can_place_orders` true, `native_stop` false, `reduce_only_enforced` false, `can_short` false, `order_fills` true, `client_id_lookup` true, `account_push` false (true after Layer 2).
+- [x] Stop using `order_cache.rs` for spot; delete the file if 3/5 has merged.
+- [x] `NOTES.md`: delete §2 (margin; it also cites the legacy docs), the spot parts of §4, and anything else this layer closes.
 
 ---
 
@@ -143,4 +145,4 @@ Steps: `s0` preconditions (market info Trading, quote balance ≥ `LIVE_MAX_NOTI
 ### Task 3.2: Run M2 (human-gated)
 
 - [ ] M1 again with the stream up; the report shows every fill seen on push before the poll. Report `external/executor/runs/<date>-mexc-m2.md`.
-- [ ] `NOTES.md` §1b (poll-and-diff) rewritten as "fallback only". Layer gate green; commit after confirmation.
+- [x] `NOTES.md` §1b (poll-and-diff) rewritten as "fallback only". Layer gate green; committed (c254176).
