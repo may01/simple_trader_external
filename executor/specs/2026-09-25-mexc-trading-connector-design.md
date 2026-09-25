@@ -61,7 +61,7 @@ Answers to the capture-dependent items:
 - Fees: spot LINKUSDT maker 0, taker 0.0005. Futures LINK_USDT maker 0 and taker 0 in both `contract/detail` and `tiered_fee_rate`.
 - Clock offset (server − local): spot +437 ms, futures +126 ms. This host runs about 0.4 s behind MEXC, inside any recvWindow, but R8's `ServerClock` still applies.
 - **Futures USDT wallet equity = 0.** Fund it (≥ 2 × `LIVE_MAX_NOTIONAL`) before M3.
-- Not probed (REST-only probe): futures ws compression default, spot private channel names. Deferred to L4/L8's first connection.
+- **Run 2 (complete §10.1 set, `5956b46`):** see [`runs/2026-09-25-mexc-g0.md`](../runs/2026-09-25-mexc-g0.md). It adds: **R15 confirmed**, API fees differ (`tiered_fee_rate/v2` real taker 0.0008 / maker 0.0006, where `contract/detail` says 0). **R29 confirmed**: `contract/detail/country` carries `riskLimitCustom` with 2 levels (230 000 vol at 300× / mmr 0.0023; 1 550 000 vol at 200× / mmr 0.004), so the derived single bracket is wrong for LINK_USDT. The spot user stream acknowledged all 3 private channels in one comma-separated `msg`. Futures ws login with `subscribe:false` → `rs.login` success. `selfSymbols` contains LINKUSDT. The STOP_MARKET_ORDER `order/test` is refused with `700004` (missing price) before the type is judged, so F1 rests on `orderTypes`.
 
 ## 3. Capability matrix — what the system calls, Binance reference, MEXC plan
 
@@ -524,6 +524,17 @@ Checked against the code (`.worktrees/layer-implementation`, HEAD 165afdb plus u
 | R28 | Branch base: consumers are uncommitted position-management work | — | branch after it merges (§11) |
 | R29 | `contract/detail` has `riskLimitCustom` / `riskLimitType` that override the derived ladder | (a) custom ladder when present; (b) always derive | **(a)** (§7.4) |
 | — | Smaller corrections: `OrderId` ≈300 lines / 10 crates (not 176 / 8); journal code parses `u64` (pg.rs:669); F4 already surfaces as `Network`; `margin()` lives on `ExchangeAdapter`; 17 implementors incl. `CappedAccount`, `AdapterAccountView`, `ScriptedAccount`, `PaperMarketAccount`; `FUTURES_REST_BASE_URL` overrides the host table; `UNMAPPED Mexc` spelling; no spot `live_trade_ops` scenario exists (M1 builds one); `LiqCalc` = `risk.rs::isolated_liquidation_price`; futures `lot_size` misses `× contractSize`; `mark_price` already from `fair_price`; wrong §6.2 cross-references → §6.1; stale "Given (c)" / "unless D1(a) is chosen" wording; MEXC margin column dropped from §5.1 | — | applied in place |
+
+### Implementation drift — L0-a as built (2026-09-25)
+
+Built on `mexc-trading-connector` directly, not on a separate `mexc-common` branch: `8ae129f` (first pass, against the pre-review draft), then an alignment commit.
+
+- **`OrderId` still accepts a legacy JSON number** when deserializing, where plan 2/5 Task 1.1 asked for a loud failure. The reason: `position_log.state` (0009) jsonb already holds numeric Binance ids for positions persisted before this change, and a loud failure would stop every such position from loading at boot. New writes are always strings.
+- `get_order_by_client_id` takes `Pair` by value, per plan 2/5.
+- `ShortUnsupported` is not a `RejectReason` (R20). `PermissionDenied` replaced the first pass's `EndpointUnavailable` (R7).
+- A fill whose order row has no `exchange_order_id` is now a journal read **error**. It used to be attributed to a placeholder `OrderId(0)`.
+- MEXC `classify(venue, status, code, msg) -> AdapterError` keeps the one pre-existing message-matched row ("insufficient balance" → `InsufficientBalance`) until 3/5 and 5/5 replace it with code rows.
+- `JournaledAccount::resolve_submitted_unknown(now, min_age_ms)` is the recovery helper §5.3 names. Callers pass `recvWindow + 10 s` (R26). Wiring it into boot and runtime belongs to plan 4/5.
 
 ### Still open (need a capture, not a decision)
 
