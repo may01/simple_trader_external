@@ -89,6 +89,10 @@ Decomposition (full set): label(gate) share +0.38–0.49 · entry-fill share −
 3. 60_up's 0.9967 test AUC is on n=61 — treat as upper-bound noise.
 4. Single symbol (LINK/USDT), single 2m OOS window.
 
+## Plain-truth full run (follow-up — EXECUTED 2026-07-23)
+
+Full improvement loop + frozen OOS rerun with the NON-STRICT (plain race+fill, no clean-entry gate) labels, then a shape-excluded (noshape) rerun — see `plain_results.md`. Headline: plain-full tf15 test 0.55–0.58, OOS holds (15_up 0.5997, 15_dn 0.5416) — but the **noshape rerun collapses tf15 to 0.51–0.52 and every combo fails OOS**, proving the plain-full transfer was entry-fill mechanics read off candle shape. Ladder (15_up gbc test): strict 0.94 → plain full 0.56 → plain noshape 0.51 → fwd ~0.51 — the entire strict AUC is now accounted for by label mechanics. tf240 trainable on 2y at last (89/79 pts) but OOS-starved. Artifacts under `.../trend_detection/{plain,plain_noshape}/`; new `truth_kind`/`feature_set` parameters in `tdlib.loop` (+`truth_kind` in `tdlib.oos`), drivers `run_loop_plain{,_noshape}.py`/`run_oos_plain{,_noshape}.py`.
+
 ## Next steps (recommended follow-ups)
 
 1. ~~Isolate the future-only component~~ **DONE — see Truth decomposition section.** Verdict: gate ≈ everything; genuine forward signal only on strong-down points (~0.54 AUC) via bound/level-distance features.

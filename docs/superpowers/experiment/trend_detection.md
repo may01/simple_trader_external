@@ -45,3 +45,6 @@ Constains:
 - perfrom search for tf 15, 60, 240
 - use 2y dataset for training 
 - use 2m oos dataset for validation
+
+Update:
+- use non strict labels to mark data for classification

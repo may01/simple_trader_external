@@ -5,6 +5,26 @@ Part of [architecture index](2026-09-04-architecture-design.md). Extends
 but explicitly left UI technology and transport out of scope
 ("a future frontend spec's concern"). This is that spec.
 
+> **Superseded 2026-09-11, partially.**
+> [postgres-market-data-store-design.md](2026-09-09-postgres-market-data-store-design.md)
+> replaces everything below about **process topology and transport**:
+> `visualizer_server` no longer runs inside the executor process
+> subscribing to its `tokio::sync::broadcast` channels (the
+> "Architecture" section below) — it is a separate process, reading
+> only committed Postgres rows through `PgMarketDataReader`/
+> `PgStateReader`, with no in-process call into the executor at all.
+> `LiveModeFlag` is deleted outright (replaced by a `max(recv_ts)`-lag
+> freshness signal).
+>
+> Everything this document says about **what the dashboard renders**
+> still stands, unchanged: the panel layout, `BookTracker`
+> reconstruction from order-book deltas, and the `lightweight-charts`
+> frontend choice are exactly as described below. Read the
+> "Architecture" and any transport/process-boundary details below as
+> historical context for *why* the rendering logic looks the way it
+> does, not as the current process shape — for that, see L8's own spec
+> and the Postgres design doc linked above.
+
 ## Purpose
 
 A read-only web dashboard showing the orchestrator's live and historical

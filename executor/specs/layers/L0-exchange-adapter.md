@@ -222,6 +222,12 @@ Contract tests against the trait (fakeable), integration tests against
 exchange testnet/sandbox where available. No dependency on any other
 workspace crate — this crate is a leaf.
 
+Exchange-agnostic live trade-operations test, written once against the traits and run per exchange via `EXCHANGE` (Binance first: margin on mainnet sub-account,
+futures on testnet or mainnet via the exchange-agnostic `EXCHANGE_NETWORK`; place/rest/cancel/fill, borrow/repay, leverage and
+margin type) and the `MarginOps` / `FuturesOps` extension traits it
+needs: [../2026-09-22-live-trade-ops-l0-test-design.md](../2026-09-22-live-trade-ops-l0-test-design.md)
+(draft, 2026-09-22).
+
 ## Acceptance criteria (staged)
 
 L0 is signed off in stages, each gated on the layer it glues to next.

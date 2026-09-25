@@ -37,12 +37,44 @@ clippy clean, Docker-verified. Wired to L7: a detected gap calls both
 since observability already existed).
 
 **Update (2026-09-09, branch `book-crossed-safety-check`):**
-`apply_deltas` moved out of `market_data::book` into the
-`exchange_adapter` leaf crate so both L0 adapters can maintain their own
-ladders for the crossed-book safety check (L0 cannot depend on L1).
-`market_data` re-exports it — `market_data::apply_deltas` still
-resolves, and `BookTracker` is otherwise unchanged: a crossed book is
-detected and repaired in L0, so one never reaches L1.
+**Correction, 2026-09-11: this note was factually wrong and is now
+fixed.** `apply_deltas` did **not** move out of `market_data::book` —
+it is still defined there (`crates/market_data/src/book.rs:10`,
+`pub fn apply_deltas`). The false claim below ("moved into
+`exchange_adapter`, re-exported by `market_data`") was copied
+verbatim into
+[postgres-market-data-store-design.md](../specs/2026-09-09-postgres-market-data-store-design.md)
+and the 2026-09-09 plan; both have been corrected alongside this note.
+What L0 adapters actually maintain for the crossed-book safety check is
+their own independent ladder-maintenance logic, not a shared call into
+`market_data::apply_deltas` — L0 cannot depend on L1, so it could never
+have called L1's function regardless of which crate it lived in; this
+note conflated "L0 has its own deltas logic for the same problem" with
+"the shared function moved," which is not what happened. `BookTracker`
+in `market_data` is otherwise unchanged: a crossed book is detected and
+repaired in L0, so one never reaches L1.
+
+**Update (2026-09-11, branch `postgres-market-data-store`):**
+`market_data` moved from sled to PostgreSQL — schema, write path, read
+path and the visualiser's read-only `PgMarketDataReader` are implemented
+and Docker-verified (408 tests passing, 45 suites, as of Task 10's
+re-verification). See
+[postgres-market-data-store-design.md](../specs/2026-09-09-postgres-market-data-store-design.md)
+for the full design and
+[L1-market-data.md](../specs/layers/L1-market-data.md) for the amended
+spec. Two things this update does **not** close: (1) the feed-staleness
+fallback to "exchange-native stop only" is a no-op on MEXC, which has no
+exchange-native stop order on either market kind — see L1's spec's own
+Error handling section, a pre-existing safety gap this migration did not
+introduce but did not fix either; (2) the write-failure shutdown policy
+this plan's Task 7 specified was **not implemented** — `write_failed()`
+is exposed but nothing polls it — because the safety-gate check that
+same task required turned up (1) above: shutting the executor down on a
+sustained write failure would kill the in-process stop-loss watcher,
+which on MEXC is the *only* thing protecting an open position, making
+shutdown strictly worse than continuing to trade. See
+`.superpowers/sdd/2026-09-09-postgres-market-data-store-plan/task-7-report.md`
+in the code worktree for the full finding.
 
 Not yet closed: Stage 1's "for a live pair" wording implies a live/
 testnet adapter feed — what's actually verified is ingestion/replay

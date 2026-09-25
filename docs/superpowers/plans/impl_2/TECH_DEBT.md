@@ -42,3 +42,48 @@ i.e. both columns are constants carrying no signal.
 **Resolution:** either define and compute real `zb_threshold` / `zs_threshold`
 in `_compute_diff_stats` (and document the intended zone semantics), or drop
 ZB/ZS from the config until the zone model exists.
+
+## 3. `TargetSpec.kind` dispatch duplicated across 8 call sites
+
+**Status:** open (flagged 2026-09-20)
+**Where:** `nn/nn_model_spec.py`, `nn/nn_dataset.py`, `nn/nn_model.py`,
+`nn/training_loop.py`
+
+`kind` is a plain `str` on `TargetSpec` (`"direction" | "direction_binary" |
+"label" | "regression"`). Every behaviour that varies by kind is re-derived at
+the point of use, so the same four-branch `if/elif` chain is written out eight
+times:
+
+| Site | Branches on kind to decide |
+|------|----------------------------|
+| `nn_model_spec.py:115` `__post_init__` | required fields (`side` for `direction_binary`) |
+| `nn_model_spec.py:143` `out_columns` | output column names |
+| `nn_dataset.py:165-252` `_build_target_block` | y-block encoding, source columns, manifest entry |
+| `nn_model.py:43` `_HEAD_WIDTH` | head width (3 / 2 / 1 / 1) |
+| `nn_model.py:578` `_class_weights` | balanced-weight scheme (per-class vector vs scalar pos_weight vs none) |
+| `nn_model.py:602` `_combined_loss` | loss fn (cross-entropy / BCE-with-logits / smooth L1) |
+| `nn_model.py:632` `_accuracy_counts` | train-time accuracy (argmax / sigmoid>0.5 / skip) |
+| `nn_model.py:710` `_apply_head_activation` | inference activation (softmax / sigmoid / linear) |
+| `training_loop.py:627` `_score_predictions` | holdout/promotion score (argmax acc / >0.5 acc / 1/(1+MSE) / p@k) |
+
+**Why this bites:** adding or changing a kind means finding all eight sites.
+Missing one does not raise — it silently produces wrong numbers. This is the
+already-recorded "two scorers" failure: `_accuracy_counts` (train) and
+`_score_predictions` (holdout/promotion gate) are independent implementations
+of the same idea, and a target kind wired into only the first scores
+nonsense through the promotion gate. The two have already diverged —
+`direction_binary` supports `precision_at_k` in the holdout scorer only.
+
+**Why deferred:** consolidation is invasive across the NN core and touches the
+promotion path, and the current sites work for the four kinds in use.
+
+**Resolution:** make kind-varying behaviour a property of the kind itself —
+one `TargetKind` object per kind exposing `width`, `validate()`,
+`out_columns()`, `build_block()`, `class_weights()`, `loss()`, `activation()`
+and `score()` — with the eight call sites reduced to a lookup plus a call.
+Constraint to respect: `spec_hash` is a sha256 over the canonical `TargetSpec`
+dataclass fields and addresses the checkpoint directories, so keeping `kind` as
+a `str` field with a behaviour registry keyed off it leaves the hash and all
+existing checkpoints intact. Turning `TargetSpec` into a subclass hierarchy is
+the cleaner typing but re-hashes every spec and orphans existing checkpoint
+dirs — treat that as a separate, explicitly-costed decision.

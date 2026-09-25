@@ -308,6 +308,10 @@ inert (the caller just recomputes, or treats "no cached value" as
 "nothing known yet"), unlike position state or the audit logs, whose
 existing stricter handling is unchanged.
 
+## Order journal
+
+Migration `0008` adds `exchange_order` / `exchange_fill`, written by the live connector test's `JournaledAccount` / `PgOrderJournal` (test crate `live_trade_ops`, not `state_store`). `state_store` itself is unchanged; persisting production orders is a follow-up — design in [../2026-09-22-live-trade-ops-l0-test-design.md](../2026-09-22-live-trade-ops-l0-test-design.md) §4.7 (draft, 2026-09-22).
+
 ## Testing
 
 Reconciliation logic tested against fixture "exchange truth vs local
