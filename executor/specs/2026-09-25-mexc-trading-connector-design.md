@@ -536,6 +536,17 @@ Built on `mexc-trading-connector` directly, not on a separate `mexc-common` bran
 - MEXC `classify(venue, status, code, msg) -> AdapterError` keeps the one pre-existing message-matched row ("insufficient balance" → `InsufficientBalance`) until 3/5 and 5/5 replace it with code rows.
 - `JournaledAccount::resolve_submitted_unknown(now, min_age_ms)` is the recovery helper §5.3 names. Callers pass `recvWindow + 10 s` (R26). Wiring it into boot and runtime belongs to plan 4/5.
 
+### Implementation drift — plan 4/5 (L3) as built (2026-09-26)
+
+- **Local-only banner:** it uses a new `AlertKind::ProtectionDegraded` (Critical, once at boot), not `OrderPlacementFailed`. A deliberate, waived mode must not read as a placement failure.
+- **Runtime recovery of `submitted_unknown`:** a background task every `ORDER_POLL_INTERVAL_SECS` (minimum 5 s), for rows older than 15 s. An order the exchange accepted after its send timed out is **cancelled, not adopted**: `open_position` already treated the send as failed, so nothing tracks the order. If it filled before the cancel, the periodic reconciliation (D8) brings that position in. It raises a Warn alert.
+- **Close sizing:** capped at the free base balance only for a closing **sell** on a venue without enforced `reduce_only`. A closing buy (e.g. Binance margin short cover) is never capped.
+- **Exit retry and stop upkeep:** both run on the fill-sync poll. A `Closing` position with size and no working exit gets one. An `Open` position's stop that is no longer live and was not cancelled here is re-placed. A stop older than 6 days is cancelled and re-placed.
+- **`StopLeg` / `stop_placed_at`:** persisted in `position_log.state` with serde defaults (old rows read as `Exchange`). The visualiser shows "local only" instead of the unprotected banner.
+- **Venue resolution:** `KindAccount` in `main.rs` is replaced by `orchestrator::resolve_account` (a config error, not a panic).
+- **Compose:** the `executor` futures defaults now point at `api.mexc.com` and `contract.mexc.com/edge`, and the four gate variables are passed through.
+- **Not built:** the orchestrator-level integration test `live_boot_on_mexc_futures_fake_reaches_execution`. The gate is unit-tested against fakes for every refusal and for setup order.
+
 ### Still open (need a capture, not a decision)
 
 ~~Spot `newClientOrderId` limit~~ (G0: `^[0-9a-zA-Z_-]{1,32}$`); `cumulativeQuoteQty` spelling; `isTaker` vs `taker`; ~~`contract/detail` path~~ (G0: `/api/v1/contract/detail`); order-cancel body shape; plan-cancel per-item errors; `riskLevelLimit` bound inclusivity (G0: this pair has a single bracket, so it cannot show it); futures ws compression default. The ones not struck through are M3 items (they need a real order).
