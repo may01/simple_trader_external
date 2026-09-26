@@ -135,11 +135,11 @@ Each run: operator sets `LIVE_TRADE_OPS=1`, `LIVE_PAIR`, `LIVE_MAX_NOTIONAL`, `L
 | 9a | Every MEXC-futures C-row implemented, wiremock on captured fixtures; M5 green | 3/5 + M5 | [~] 3/5 done; M5 pending |
 | 9b | Spot exit with `reduce_only=true` placed, sized `min(net_size, free_base)` | 5/5 Task 1.2 + 4/5 Task 3.3 | ✅ `reduce_only_is_accepted_and_not_sent` + execution close sizing |
 | 10 | `exchange_adapter_mexc/NOTES.md` describes only what is still true | end of 3/5 and 5/5 | ✅ 2026-09-26 (margin §2 and symbol-cache §4 removed, §1b rewritten) |
-| 11 | Plans exist per layer (this set); `TECH_DEBT.md` §7 closed; `amend_stop` follow-up recorded | 2/5 Task 1.6, this plan | [~] plans written 2026-09-25 |
+| 11 | Plans exist per layer (this set); `TECH_DEBT.md` §7 closed; `amend_stop` follow-up recorded | 2/5 Task 1.6, this plan | ✅ plans 2026-09-25; §7 closed; `amend_stop` = TECH_DEBT §13 |
 
 ## Finalisation
 
 - [ ] Every row above green, with a link to the test or run report that proves it.
 - [ ] Spec status → **implemented**, F-table verdict column filled, §15 "Still open" emptied or moved to TECH_DEBT.
-- [ ] `external/executor/TECH_DEBT.md`: §7 closed; new numbered section for `amend_stop` / `planorder/change_price` (D5).
+- [x] `external/executor/TECH_DEBT.md`: §7 closed; `amend_stop` / `planorder/change_price` (D5) recorded as §13; spot live-run state as §12.
 - [ ] Merge `mexc-trading-connector` → `layer-implementation` after user confirmation.
