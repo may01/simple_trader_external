@@ -142,4 +142,4 @@ Each run: operator sets `LIVE_TRADE_OPS=1`, `LIVE_PAIR`, `LIVE_MAX_NOTIONAL`, `L
 - [ ] Every row above green, with a link to the test or run report that proves it.
 - [ ] Spec status → **implemented**, F-table verdict column filled, §15 "Still open" emptied or moved to TECH_DEBT.
 - [x] `external/executor/TECH_DEBT.md`: §7 closed; `amend_stop` / `planorder/change_price` (D5) recorded as §13; spot live-run state as §12.
-- [ ] Merge `mexc-trading-connector` → `layer-implementation` after user confirmation.
+- [x] Merge `mexc-trading-connector` → `layer-implementation` after user confirmation — 2f55ba7, 2026-09-26, pushed. Live runs M1, M2, M4, M5 still open (TECH_DEBT §12).

@@ -330,7 +330,7 @@ only thing keeping the real assertion from passing vacuously.
 
 **Status:** open (flagged 2026-09-26)
 **Where:** `crates/exchange_adapter_mexc/src/{spot.rs,spot_user_ws.rs,ws.rs}`, `crates/live_trade_ops/src/spot_scenario.rs`
-(trade_executor branch `mexc-trading-connector` @ 7454a50; plan
+(trade_executor `layer-implementation` @ 2f55ba7, merged from `mexc-trading-connector`; plan
 [plans/2026-09-25-mexc-spot-trading-plan.md](plans/2026-09-25-mexc-spot-trading-plan.md), drift in
 [specs/2026-09-25-mexc-trading-connector-design.md](specs/2026-09-25-mexc-trading-connector-design.md) §15 "plan 5/5 as built")
 
@@ -365,8 +365,7 @@ only thing keeping the real assertion from passing vacuously.
 5. **Compose defaults:** the `executor` service's spot `REST_BASE_URL` / `WS_BASE_URL` default to Binance.
    A MEXC spot deployment must set `EXCHANGE_REST_BASE_URL=https://api.mexc.com` and
    `EXCHANGE_WS_BASE_URL=wss://wbs-api.mexc.com/ws`.
-6. **Not pushed:** `mexc-execution`, `mexc-spot`, `mexc-trading-connector` are local only (GCM/gpg credential
-   timeout, see memory "GPG credential failure").
+6. ~~Not pushed~~ — pushed and merged into `layer-implementation` (2f55ba7) on 2026-09-26.
 
 **Fix / close:** run M1 then M2 (reports `runs/<date>-mexc-m1.md`, `-m2.md`), commit captures, replace
 "from docs" rows and fixtures with captured ones, then M4. Close when index-plan acceptance rows 3, 5, 8
