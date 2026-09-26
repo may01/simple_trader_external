@@ -371,3 +371,25 @@ only thing keeping the real assertion from passing vacuously.
 **Fix / close:** run M1 then M2 (reports `runs/<date>-mexc-m1.md`, `-m2.md`), commit captures, replace
 "from docs" rows and fixtures with captured ones, then M4. Close when index-plan acceptance rows 3, 5, 8
 are green.
+
+## 13. Stop moves are cancel-and-replace — no `amend_stop` (MEXC `planorder/change_price`)
+
+**Status:** open (recorded 2026-09-26; MEXC trading-connector spec D5 / R3)
+**Where:** `crates/exchange_adapter/src/lib.rs` (`MarketAccount`), `crates/execution/src/engine.rs` (stop moves,
+`upkeep_stop`), `crates/exchange_adapter_mexc/src/futures.rs` (`place_plan_order`, `Surface::Plan`)
+
+Every stop move — trailing, breakeven, the 6-day renewal in `upkeep_stop` — cancels the resting stop and
+places a new one. Between the two calls the position has no exchange-side stop, and if the place fails
+after the cancel succeeded, it stays without one until the next fill-sync pass re-places it (4/5's
+"lost stop" upkeep). Same gap on Binance today. M3 (2026-09-25) exercised it on MEXC futures (F8→F9)
+without incident, but the window is real.
+
+MEXC has a modify in place: `POST /api/v1/private/planorder/change_price`
+(`symbol, orderId, triggerPrice, price, orderType, triggerType, trend`; 4 / 2 s, the order-place bucket).
+The plan order keeps its id, so the `p:SYMBOL:ID` tracked by execution stays valid.
+
+Fix: new trait method `amend_stop(&self, id: OrderId, trigger: Decimal) -> Result<(), AdapterError>`
+(default `NotSupported`) behind a `stop_amend` capability; MEXC futures implements it for `p:` ids;
+execution prefers it when the capability is set and falls back to cancel-and-replace otherwise. Needs a
+captured `change_price` answer (success and a refusal) before any `classify` row is trusted. Binance
+has no equivalent (its stops are plain orders), so it keeps cancel-and-replace.
