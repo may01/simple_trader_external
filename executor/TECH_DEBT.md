@@ -392,3 +392,19 @@ Fix: new trait method `amend_stop(&self, id: OrderId, trigger: Decimal) -> Resul
 execution prefers it when the capability is set and falls back to cancel-and-replace otherwise. Needs a
 captured `change_price` answer (success and a refusal) before any `classify` row is trusted. Binance
 has no equivalent (its stops are plain orders), so it keeps cancel-and-replace.
+
+## 14. Continuous reconciliation corrects the store, not the running executor
+
+**Status:** open (flagged 2026-09-26, live MEXC futures M5 prep)
+**Where:** `crates/orchestrator/src/system.rs` (`run_reconcile_loop`), `crates/execution/src/engine.rs` (in-memory `positions`)
+
+`run_reconcile_loop` compares `get_account_state` with `state_store` every interval and applies the
+exchange's truth to the **store** (`PositionDrift` "extra_locally … the correction is applied"). The
+executor's in-memory position map is only seeded from the store at boot, so a running executor never
+sees the correction: on 2026-09-26 it kept a position MEXC had closed for 20 minutes while the drift
+alert fired every minute. Commit `5163899` (branch `mexc-live-m5`) closes the two paths that caused it
+(the lost-update race, and no flat check when the venue refuses a close or drops a stop), but
+reconciliation itself still cannot correct a live executor.
+
+Fix: have the reconcile loop hand each correction to the executor (a `Executor::apply_reconciliation`
+behind the per-pair lock) instead of only writing the store, or run reconciliation inside the executor.
