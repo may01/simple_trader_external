@@ -325,3 +325,49 @@ Fix: find the third flush trigger (idle/empty-channel drain is the first suspect
 `crates/market_data/src/pg/writer.rs`) and either gate the test on it explicitly or, if
 it turns out to be unintended, fix the writer. Do not simply relax the guard — it is the
 only thing keeping the real assertion from passing vacuously.
+
+## 12. MEXC spot trading — built, never run live (M1 / M2 / M4 open)
+
+**Status:** open (flagged 2026-09-26)
+**Where:** `crates/exchange_adapter_mexc/src/{spot.rs,spot_user_ws.rs,ws.rs}`, `crates/live_trade_ops/src/spot_scenario.rs`
+(trade_executor branch `mexc-trading-connector` @ 7454a50; plan
+[plans/2026-09-25-mexc-spot-trading-plan.md](plans/2026-09-25-mexc-spot-trading-plan.md), drift in
+[specs/2026-09-25-mexc-trading-connector-design.md](specs/2026-09-25-mexc-trading-connector-design.md) §15 "plan 5/5 as built")
+
+**Current state.** Plan 5/5 is fully built and green offline (wiremock on G0 captures, local ws server):
+
+- Orders: `s:SYMBOL:ID` string ids (cancel after restart by stored id), `reduce_only` accepted and not sent,
+  `Stop` → `NotSupported`, off-tick / off-step refused (no rounding), unreadable 2xx →
+  `Network("accepted-but-unparsed")`, strict status map (unknown → error, never a guess).
+- Fills from `myTrades`, client-id lookup (`-2013` → `None`), account-wide `openOrders`, market info per F5 +
+  `selfSymbols` tradability, `tradeFee` `data` envelope, spot `classify` code rows, spot token buckets.
+- `margin()` → `None`. Capabilities: `native_stop=false`, `reduce_only_enforced=false`, `can_short=false`,
+  `order_fills`, `client_id_lookup`, `account_push=true`.
+- User-data stream: `listenKey` create / 30 min keepalive / delete, renewal at 23 h, protobuf private
+  orders / deals / account → `OrderUpdate` / re-read / `BalanceUpdate`; poll-and-diff stays as fallback.
+- `live_spot_trade_ops` scenario (s0–s6) and `configs/live-trade-ops/mexc.spot.mainnet.env.example`.
+
+**What is not proven** — nothing on spot has touched a real order:
+
+1. **M1 not run.** Blocked 2026-09-26: the assistant's permission mode refused to create the live env file
+   (real-money action). The operator runs it, or grants a permission rule for live trade-ops runs.
+   Unconfirmed until then: the `POST /api/v3/order` response shape, `cummulativeQuoteQty` vs
+   `cumulativeQuoteQty`, `myTrades` field names (`isBuyer`, `commissionAsset` on a fee-bearing pair),
+   `openOrders` without `symbol` listing a resting order (F8), balance lag after a fill (the scenario
+   retries 5 × 1 s), and every spot `classify` row still marked "from docs".
+2. **M2 not run.** The private protobuf field numbers (`proto/Private*V3Api.proto`) come from MEXC's
+   websocket-proto repo, not a capture. A wrong number degrades silently to the 3 s poll (events decode to
+   nothing), so M2 must check push-before-poll explicitly, not just a green run.
+3. **M4 not run** (executor live on MEXC spot, `ALLOW_LOCAL_ONLY_STOP=1`); also needs the pos-mgmt
+   feed-loss grace.
+4. **Plan's `run_fill_sync` integration test not built** (Task 3.1); covered only by unit tests of the
+   stream and by `execution`'s own wake-up tests.
+5. **Compose defaults:** the `executor` service's spot `REST_BASE_URL` / `WS_BASE_URL` default to Binance.
+   A MEXC spot deployment must set `EXCHANGE_REST_BASE_URL=https://api.mexc.com` and
+   `EXCHANGE_WS_BASE_URL=wss://wbs-api.mexc.com/ws`.
+6. **Not pushed:** `mexc-execution`, `mexc-spot`, `mexc-trading-connector` are local only (GCM/gpg credential
+   timeout, see memory "GPG credential failure").
+
+**Fix / close:** run M1 then M2 (reports `runs/<date>-mexc-m1.md`, `-m2.md`), commit captures, replace
+"from docs" rows and fixtures with captured ones, then M4. Close when index-plan acceptance rows 3, 5, 8
+are green.
