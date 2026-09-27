@@ -1,0 +1,448 @@
+ Container layer-implementation-postgres-1  Running
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded async-stream v0.3.6
+  Downloaded autocfg v1.5.1
+  Downloaded arrayvec v0.7.8
+  Downloaded atomic-waker v1.1.2
+  Downloaded async-stream-impl v0.3.6
+  Downloaded allocator-api2 v0.2.21
+  Downloaded atoi v2.0.0
+  Downloaded async-trait v0.1.92
+  Downloaded cfg_aliases v0.2.2
+  Downloaded futures-sink v0.3.34
+  Downloaded const-oid v0.9.6
+  Downloaded lazy_static v1.5.0
+  Downloaded futures-io v0.3.34
+  Downloaded md-5 v0.10.6
+  Downloaded getrandom v0.4.3
+  Downloaded futures-macro v0.3.34
+  Downloaded futures-channel v0.3.34
+  Downloaded lock_api v0.4.14
+  Downloaded form_urlencoded v1.2.2
+  Downloaded borsh-derive v1.8.1
+  Downloaded futures-executor v0.3.34
+  Downloaded heck v0.5.0
+  Downloaded hashlink v0.10.0
+  Downloaded dunce v1.0.5
+  Downloaded dotenvy v0.15.7
+  Downloaded crc v3.4.0
+  Downloaded quote v1.0.47
+  Downloaded lru-slab v0.1.2
+  Downloaded http-body v1.1.0
+  Downloaded generic-array v0.14.7
+  Downloaded num-traits v0.2.19
+  Downloaded rand_chacha v0.3.1
+  Downloaded rand_core v0.9.5
+  Downloaded futures-task v0.3.34
+  Downloaded cpufeatures v0.3.1
+  Downloaded cfg-if v1.0.4
+  Downloaded idna_adapter v1.2.2
+  Downloaded rand_core v0.6.4
+  Downloaded rand_chacha v0.9.0
+  Downloaded num-iter v0.1.46
+  Downloaded hex v0.4.3
+  Downloaded futures-core v0.3.34
+  Downloaded crypto-common v0.1.7
+  Downloaded cpufeatures v0.2.17
+  Downloaded itoa v1.0.18
+  Downloaded httparse v1.10.1
+  Downloaded home v0.5.12
+  Downloaded tower-layer v0.3.3
+  Downloaded serde_urlencoded v0.7.1
+  Downloaded hmac v0.12.1
+  Downloaded equivalent v1.0.2
+  Downloaded block-buffer v0.10.4
+  Downloaded spki v0.7.3
+  Downloaded num-integer v0.1.47
+  Downloaded thiserror v1.0.69
+  Downloaded sync_wrapper v1.0.2
+  Downloaded signature v2.2.0
+  Downloaded rand_core v0.10.1
+  Downloaded stringprep v0.1.5
+  Downloaded http-body-util v0.1.5
+  Downloaded fs_extra v1.3.0
+  Downloaded crc-catalog v2.5.0
+  Downloaded ipnet v2.12.1
+  Downloaded displaydoc v0.2.7
+  Downloaded cmake v0.1.58
+  Downloaded synstructure v0.13.2
+  Downloaded either v1.18.0
+  Downloaded base64ct v1.8.3
+  Downloaded jobserver v0.1.35
+  Downloaded uuid v1.26.0
+  Downloaded digest v0.10.7
+  Downloaded sqlx-macros-core v0.8.6
+  Downloaded hyper-rustls v0.27.9
+  Downloaded foldhash v0.1.5
+  Downloaded socket2 v0.6.5
+  Downloaded openssl-probe v0.2.1
+  Downloaded data-encoding v2.11.1
+  Downloaded crossbeam-queue v0.3.14
+  Downloaded byteorder v1.5.0
+  Downloaded event-listener v5.4.2
+  Downloaded tinyvec_macros v0.1.1
+  Downloaded smallvec v1.16.0
+  Downloaded serde_derive v1.0.229
+  Downloaded rustls-native-certs v0.8.4
+  Downloaded chacha20 v0.10.2
+  Downloaded getrandom v0.2.17
+  Downloaded utf-8 v0.7.6
+  Downloaded tower-service v0.3.3
+  Downloaded stable_deref_trait v1.2.1
+  Downloaded sqlx-macros v0.8.6
+  Downloaded spin v0.9.9
+  Downloaded parking v2.2.1
+  Downloaded ryu v1.0.23
+  Downloaded find-msvc-tools v0.1.12
+  Downloaded percent-encoding v2.3.2
+  Downloaded slab v0.4.12
+  Downloaded crossbeam-utils v0.8.22
+  Downloaded litemap v0.8.3
+  Downloaded bitflags v2.13.1
+  Downloaded tokio-stream v0.1.19
+  Downloaded sha2 v0.10.9
+  Downloaded log v0.4.34
+  Downloaded icu_provider v2.3.1
+  Downloaded tracing-attributes v0.1.31
+  Downloaded getrandom v0.3.4
+  Downloaded thiserror-impl v2.0.20
+  Downloaded shlex v2.0.1
+  Downloaded secrecy v0.10.3
+  Downloaded pem-rfc7468 v0.7.0
+  Downloaded pin-project-lite v0.2.17
+  Downloaded once_cell v1.21.4
+  Downloaded potential_utf v0.1.6
+  Downloaded parking_lot v0.12.5
+  Downloaded parking_lot_core v0.9.12
+  Downloaded bytes v1.12.1
+  Downloaded pkg-config v0.3.34
+  Downloaded pkcs8 v0.10.2
+  Downloaded subtle v2.6.1
+  Downloaded rand_pcg v0.10.2
+  Downloaded proc-macro-crate v3.5.0
+  Downloaded flume v0.11.1
+  Downloaded ppv-lite86 v0.2.21
+  Downloaded quinn-udp v0.5.15
+  Downloaded zmij v1.0.23
+  Downloaded zerovec-derive v0.11.6
+  Downloaded tokio-rustls v0.26.5
+  Downloaded pkcs1 v0.7.5
+  Downloaded icu_locale_core v2.3.0
+  Downloaded want v0.3.1
+  Downloaded webpki-roots v0.26.11
+  Downloaded try-lock v0.2.5
+  Downloaded yoke-derive v0.8.2
+  Downloaded icu_normalizer_data v2.3.0
+  Downloaded zerofrom v0.1.8
+  Downloaded tokio-macros v2.7.2
+  Downloaded sha1 v0.10.7
+  Downloaded zeroize v1.9.0
+  Downloaded tinystr v0.8.4
+  Downloaded writeable v0.6.4
+  Downloaded base64 v0.22.1
+  Downloaded indexmap v2.14.1
+  Downloaded icu_collections v2.3.0
+  Downloaded borsh v1.8.1
+  Downloaded rustc-hash v2.1.3
+  Downloaded version_check v0.9.5
+  Downloaded proc-macro2 v1.0.107
+  Downloaded icu_properties v2.3.0
+  Downloaded zerofrom-derive v0.1.7
+  Downloaded utf8_iter v1.0.4
+  Downloaded untrusted v0.9.0
+  Downloaded der v0.7.10
+  Downloaded thiserror v2.0.20
+  Downloaded scopeguard v1.2.0
+  Downloaded futures-intrusive v0.5.0
+  Downloaded whoami v1.6.1
+  Downloaded yoke v0.8.3
+  Downloaded toml_parser v1.1.3+spec-1.1.0
+  Downloaded memchr v2.8.3
+  Downloaded mio v1.2.3
+  Downloaded hyper-util v0.1.20
+  Downloaded unicode-properties v0.1.4
+  Downloaded rustls-pki-types v1.15.1
+  Downloaded cc v1.4.5
+  Downloaded hashbrown v0.15.5
+  Downloaded tracing-core v0.1.36
+  Downloaded toml_datetime v1.1.1+spec-1.1.0
+  Downloaded thiserror-impl v1.0.69
+  Downloaded http v1.5.0
+  Downloaded num-bigint-dig v0.8.6
+  Downloaded hashbrown v0.17.1
+  Downloaded idna v1.1.0
+  Downloaded tokio-tungstenite v0.24.0
+  Downloaded hkdf v0.12.4
+  Downloaded toml_edit v0.25.13+spec-1.1.0
+  Downloaded rand v0.8.8
+  Downloaded unicode-bidi v0.3.18
+  Downloaded libm v0.2.16
+  Downloaded hyper v1.11.1
+  Downloaded futures-util v0.3.34
+  Downloaded unicode-ident v1.0.24
+  Downloaded rustls-platform-verifier v0.7.0
+  Downloaded aws-lc-rs v1.18.1
+  Downloaded icu_properties_data v2.3.0
+  Downloaded tinyvec v1.13.2
+  Downloaded rand v0.9.5
+  Downloaded tungstenite v0.24.0
+  Downloaded quinn v0.11.11
+  Downloaded serde_core v1.0.229
+  Downloaded rand v0.10.2
+  Downloaded zerotrie v0.2.5
+  Downloaded sqlx-core v0.8.6
+  Downloaded rsa v0.9.10
+  Downloaded zerovec v0.11.8
+  Downloaded sqlx-sqlite v0.8.6
+  Downloaded quinn-proto v0.11.17
+  Downloaded serde_json v1.0.151
+  Downloaded icu_normalizer v2.3.0
+  Downloaded sqlx v0.8.6
+  Downloaded serde v1.0.229
+  Downloaded rustls-webpki v0.103.15
+  Downloaded tower v0.5.3
+  Downloaded sqlx-mysql v0.8.6
+  Downloaded libc v0.2.189
+  Downloaded url v2.5.8
+  Downloaded typenum v1.20.1
+  Downloaded reqwest v0.13.4
+  Downloaded vcpkg v0.2.15
+  Downloaded unicode-normalization v0.1.25
+  Downloaded rust_decimal v1.43.0
+  Downloaded sqlx-postgres v0.8.6
+  Downloaded tower-http v0.6.11
+  Downloaded syn v2.0.119
+  Downloaded winnow v1.0.4
+  Downloaded webpki-roots v1.0.9
+  Downloaded zerocopy v0.8.56
+  Downloaded rustls v0.23.43
+  Downloaded syn v3.0.5
+  Downloaded tracing v0.1.44
+  Downloaded tokio v1.53.1
+  Downloaded ring v0.17.14
+  Downloaded libsqlite3-sys v0.30.1
+  Downloaded aws-lc-sys v0.45.0
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.47
+   Compiling libc v0.2.189
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+   Compiling stable_deref_trait v1.2.1
+   Compiling futures-core v0.3.34
+   Compiling cfg-if v1.0.4
+   Compiling pin-project-lite v0.2.17
+   Compiling bytes v1.12.1
+   Compiling writeable v0.6.4
+   Compiling litemap v0.8.3
+   Compiling subtle v2.6.1
+   Compiling version_check v0.9.5
+   Compiling icu_normalizer_data v2.3.0
+   Compiling utf8_iter v1.0.4
+   Compiling icu_properties_data v2.3.0
+   Compiling futures-sink v0.3.34
+   Compiling typenum v1.20.1
+   Compiling itoa v1.0.18
+   Compiling once_cell v1.21.4
+   Compiling memchr v2.8.3
+   Compiling slab v0.4.12
+   Compiling futures-io v0.3.34
+   Compiling futures-task v0.3.34
+   Compiling percent-encoding v2.3.2
+   Compiling autocfg v1.5.1
+   Compiling log v0.4.34
+   Compiling find-msvc-tools v0.1.12
+   Compiling generic-array v0.14.7
+   Compiling shlex v2.0.1
+   Compiling zerocopy v0.8.56
+   Compiling zeroize v1.9.0
+   Compiling dunce v1.0.5
+   Compiling parking_lot_core v0.9.12
+   Compiling form_urlencoded v1.2.2
+   Compiling fs_extra v1.3.0
+   Compiling pkg-config v0.3.34
+   Compiling tracing-core v0.1.36
+   Compiling cpufeatures v0.2.17
+   Compiling zmij v1.0.23
+   Compiling arrayvec v0.7.8
+   Compiling scopeguard v1.2.0
+   Compiling serde_json v1.0.151
+   Compiling lock_api v0.4.14
+   Compiling rustls-pki-types v1.15.1
+   Compiling num-traits v0.2.19
+   Compiling aws-lc-rs v1.18.1
+   Compiling equivalent v1.0.2
+   Compiling crossbeam-utils v0.8.22
+   Compiling http v1.5.0
+   Compiling bitflags v2.13.1
+   Compiling foldhash v0.1.5
+   Compiling thiserror v2.0.20
+   Compiling syn v3.0.5
+   Compiling syn v2.0.119
+   Compiling allocator-api2 v0.2.21
+   Compiling futures-channel v0.3.34
+   Compiling untrusted v0.9.0
+   Compiling crc-catalog v2.5.0
+   Compiling hashbrown v0.17.1
+   Compiling tinyvec_macros v0.1.1
+   Compiling base64 v0.22.1
+   Compiling httparse v1.10.1
+   Compiling rust_decimal v1.43.0
+   Compiling rustls v0.23.43
+   Compiling parking v2.2.1
+   Compiling mio v1.2.3
+   Compiling socket2 v0.6.5
+   Compiling jobserver v0.1.35
+   Compiling getrandom v0.2.17
+   Compiling hashbrown v0.15.5
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling crossbeam-queue v0.3.14
+   Compiling event-listener v5.4.2
+   Compiling rand_core v0.6.4
+   Compiling digest v0.10.7
+   Compiling cc v1.4.5
+   Compiling tinyvec v1.13.2
+   Compiling crc v3.4.0
+   Compiling indexmap v2.14.1
+   Compiling hex v0.4.3
+   Compiling tokio v1.53.1
+   Compiling sha2 v0.10.9
+   Compiling hmac v0.12.1
+   Compiling http-body v1.1.0
+   Compiling unicode-normalization v0.1.25
+   Compiling byteorder v1.5.0
+   Compiling unicode-bidi v0.3.18
+   Compiling unicode-properties v0.1.4
+   Compiling hashlink v0.10.0
+   Compiling hkdf v0.12.4
+   Compiling md-5 v0.10.6
+   Compiling atoi v2.0.0
+   Compiling futures-util v0.3.34
+   Compiling whoami v1.6.1
+   Compiling home v0.5.12
+   Compiling dotenvy v0.15.7
+   Compiling try-lock v0.2.5
+   Compiling tower-service v0.3.3
+   Compiling stringprep v0.1.5
+   Compiling want v0.3.1
+   Compiling atomic-waker v1.1.2
+   Compiling thiserror v1.0.69
+   Compiling cmake v0.1.58
+   Compiling sync_wrapper v1.0.2
+   Compiling ipnet v2.12.1
+   Compiling tower-layer v0.3.3
+   Compiling heck v0.5.0
+   Compiling openssl-probe v0.2.1
+   Compiling sha1 v0.10.7
+   Compiling rustls-native-certs v0.8.4
+   Compiling webpki-roots v1.0.9
+   Compiling utf-8 v0.7.6
+   Compiling data-encoding v2.11.1
+   Compiling getrandom v0.4.3
+   Compiling http-body-util v0.1.5
+   Compiling webpki-roots v0.26.11
+   Compiling secrecy v0.10.3
+   Compiling observability v0.1.0 (/app/crates/observability)
+   Compiling aws-lc-sys v0.45.0
+   Compiling uuid v1.26.0
+   Compiling ppv-lite86 v0.2.21
+   Compiling serde_derive v1.0.229
+   Compiling synstructure v0.13.2
+   Compiling zerovec-derive v0.11.6
+   Compiling displaydoc v0.2.7
+   Compiling tokio-macros v2.7.2
+   Compiling futures-macro v0.3.34
+   Compiling rand_chacha v0.3.1
+   Compiling thiserror-impl v2.0.20
+   Compiling async-trait v0.1.92
+   Compiling rand v0.8.8
+   Compiling zerofrom-derive v0.1.7
+   Compiling yoke-derive v0.8.2
+   Compiling tracing-attributes v0.1.31
+   Compiling thiserror-impl v1.0.69
+   Compiling async-stream-impl v0.3.6
+   Compiling async-stream v0.3.6
+   Compiling tokio-stream v0.1.19
+   Compiling zerofrom v0.1.8
+   Compiling yoke v0.8.3
+   Compiling zerovec v0.11.8
+   Compiling zerotrie v0.2.5
+   Compiling tracing v0.1.44
+   Compiling tinystr v0.8.4
+   Compiling potential_utf v0.1.6
+   Compiling icu_collections v2.3.0
+   Compiling icu_locale_core v2.3.0
+   Compiling smallvec v1.16.0
+   Compiling either v1.18.0
+   Compiling icu_provider v2.3.1
+   Compiling parking_lot v0.12.5
+   Compiling icu_properties v2.3.0
+   Compiling icu_normalizer v2.3.0
+   Compiling futures-intrusive v0.5.0
+   Compiling idna_adapter v1.2.2
+   Compiling idna v1.1.0
+   Compiling hyper v1.11.1
+   Compiling tower v0.5.3
+   Compiling url v2.5.8
+   Compiling hyper-util v0.1.20
+   Compiling sqlx-core v0.8.6
+   Compiling tower-http v0.6.11
+   Compiling exchange_adapter v0.1.0 (/app/crates/exchange_adapter)
+   Compiling sqlx-postgres v0.8.6
+   Compiling rustls-webpki v0.103.15
+   Compiling sqlx-macros-core v0.8.6
+   Compiling sqlx-macros v0.8.6
+   Compiling sqlx v0.8.6
+   Compiling test_support v0.1.0 (/app/crates/test_support)
+   Compiling db_schema v0.1.0 (/app/crates/db_schema)
+   Compiling tokio-rustls v0.26.5
+   Compiling tungstenite v0.24.0
+   Compiling rustls-platform-verifier v0.7.0
+   Compiling hyper-rustls v0.27.9
+   Compiling reqwest v0.13.4
+   Compiling tokio-tungstenite v0.24.0
+   Compiling exchange_adapter_binance v0.1.0 (/app/crates/exchange_adapter_binance)
+   Compiling exchange_adapter_mexc v0.1.0 (/app/crates/exchange_adapter_mexc)
+   Compiling live_trade_ops v0.1.0 (/app/crates/live_trade_ops)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5m 15s
+     Running tests/live_trade_ops.rs (target/debug/deps/live_trade_ops-e655ad84c4539984)
+
+running 1 test
+test live_margin_trade_ops ... EXCHANGE = binance  KIND = margin  NETWORK = mainnet (api.binance.com)
+metric name=binance_rest_latency_ms value=6941.263661 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/account")]
+metric name=binance_rest_error value=1 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/account")]
+ALERT kind=FeedDisconnected severity=Error message=/sapi/v1/margin/account failed: HTTP 400 Bad Request: {"code":-1021,"msg":"Timestamp for this request is outside of the recvWindow."} tags=[("kind", "margin"), ("path", "/sapi/v1/margin/account")]
+metric name=binance_rest_latency_ms value=588.778951 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/account")]
+metric name=binance_rest_latency_ms value=406.94510699999995 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/openOrders")]
+metric name=binance_rest_latency_ms value=381.347241 severity=Info tags=[("kind", "margin"), ("path", "/api/v3/exchangeInfo")]
+metric name=binance_rest_latency_ms value=563.669259 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/account")]
+metric name=binance_rest_latency_ms value=378.595625 severity=Info tags=[("kind", "margin"), ("path", "/api/v3/klines")]
+metric name=binance_rest_latency_ms value=386.50214500000004 severity=Info tags=[("kind", "margin"), ("path", "/api/v3/depth")]
+metric name=binance_rest_latency_ms value=449.884214 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/order")]
+metric name=binance_rest_latency_ms value=403.660903 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/order")]
+metric name=binance_rest_latency_ms value=439.609745 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/myTrades")]
+metric name=binance_rest_latency_ms value=488.569439 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/borrow-repay")]
+metric name=binance_rest_latency_ms value=487.123957 severity=Info tags=[("kind", "margin"), ("path", "/sapi/v1/margin/borrow-repay")]
+[binance margin mainnet] run  report:
+[binance margin mainnet]   step 0: Failed("rejected: Timestamp for this request is outside of the recvWindow. [Binance -1021]")
+[binance margin mainnet]   step run: Failed("rejected: Timestamp for this request is outside of the recvWindow. [Binance -1021]")
+[binance margin mainnet]   0 fill(s) recorded
+[binance margin mainnet]   passed = false
+live_trade_ops: run  complete -- see target/live-trade-ops/.jsonl
+
+thread 'live_margin_trade_ops' (5371) panicked at crates/live_trade_ops/tests/live_trade_ops.rs:325:5:
+live run did not pass -- see the report printed above
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    live_margin_trade_ops
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 15.17s
+
+error: test failed, to rerun pass `-p live_trade_ops --test live_trade_ops`
+

@@ -330,9 +330,12 @@ Flat ──open decision──▶ Opening ─────┼── filled = 0 �
     `close`, a `force_close`, a stop trigger, a target trigger) → `Closing`
     directly, for the quantity that actually filled. The request is held as
     `pending_close: Option<CloseReason>` on the position and applied here, not
-    dropped and not raced against the entry: cancelling a working entry and
-    placing an exit against a size still being filled is exactly how a partial
-    fill becomes an unhedged remainder.
+    dropped and not raced against the entry: placing an exit against a size
+    still being filled is exactly how a partial fill becomes an unhedged
+    remainder. The working entry *is* cancelled once (I-10, 2026-09-26: left
+    working, it filled against the flip that asked for the close), but no exit
+    is placed until the cancel has made the entry terminal and this rule has
+    run on what actually filled.
 - `Open` — net size ≠ 0, no entry order working. A scale-in (D11) places a
   further entry against an `Open` position and **leaves the status `Open`** —
   `Opening` is the initial-entry state only. There is already a position to
@@ -494,8 +497,9 @@ the `Stop` role's `OrderInfo.status` to `Rejected`, which is what the
 visualiser renders as an unprotected position (§8).
 
 **Close.** If the position is `Opening`, the request is recorded as
-`pending_close` and applied at resolution (§3.1) — the working entry is *not*
-cancelled out from under itself. If it is `Open`: cancel the resting stop →
+`pending_close` and applied at resolution (§3.1). The working entry is cancelled
+once (`entry_cancel = CloseRequested`), and resolution waits for it to be
+terminal (I-10). If it is `Open`: cancel the resting stop →
 place exit for `net_size` reduce-only → status `Closing`. `Flat` is written only
 when `net_size` reaches 0. One cancel, not two — there is no target order to
 race.
@@ -512,7 +516,11 @@ same two streams to reach the same `do_close` would be a race with itself.
 
 **Timeouts.** Two, both new:
 - `ENTRY_FILL_TIMEOUT_SECS` (default 120): an `Opening` position whose entry is
-  still working is cancelled. The cancel is what makes the entry terminal; the
+  still working is cancelled. *As built (I-10, 2026-09-26):* the timeout is
+  `SignalAction::Open.max_wait` (`SIGNAL_MAX_WAIT_SECS`, 300 in compose),
+  stored as `entry_expires_at` and checked on every order poll. There is no
+  separate `ENTRY_FILL_TIMEOUT_SECS` knob. An expired entry that filled nothing
+  reports `NotFilled` "entry expired unfilled after max_wait". The cancel is what makes the entry terminal; the
   resolution rule (§3.1) then decides, so a *partially* filled entry becomes
   `Open` at the filled size, not `Flat`. `NotFilled { reason }` is emitted only
   when nothing filled at all.

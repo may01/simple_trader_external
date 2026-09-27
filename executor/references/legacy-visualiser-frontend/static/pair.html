@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pair -- Executor Visualiser</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+  <h1>Executor Visualiser &mdash; <span id="pair-title">&hellip;</span></h1>
+  <a href="index.html">&larr; Overview</a>
+  <div class="mode-toggle">
+    <button id="mode-live-btn" class="active" type="button">Live</button>
+    <button id="mode-history-btn" type="button">History</button>
+  </div>
+</header>
+<main>
+  <div id="banner" class="banner"></div>
+
+  <div id="history-controls" class="history-controls" style="display:none;">
+    <label>From <input type="datetime-local" id="history-from"></label>
+    <label>To <input type="datetime-local" id="history-to"></label>
+    <button id="history-load-btn" type="button">Load</button>
+  </div>
+
+  <div class="panel">
+    <h2>Position</h2>
+    <div id="position-summary" class="muted">Loading&hellip;</div>
+  </div>
+
+  <div class="panel">
+    <h2>Chart</h2>
+    <!-- Populated by js/chart.js's `renderChartLegend` so the swatch
+         colours come from the same constants that draw the series --
+         a hand-written colour here would silently drift from them. -->
+    <div id="chart-legend" class="chart-legend"></div>
+    <div id="chart"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Recent Trades (20min) <span class="hint">scroll to zoom &middot; double-click to reset</span></h2>
+    <div id="trades-legend" class="chart-legend"></div>
+    <div id="trades-chart"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Order Book</h2>
+    <div id="depth-chart-container"><canvas id="depth-chart"></canvas></div>
+    <h3 class="subpanel-title">Near the spread (&plusmn;0.5%)</h3>
+    <div id="depth-chart-container-zoom"><canvas id="depth-chart-zoom"></canvas></div>
+    <div style="display:flex; gap:16px;">
+      <table class="book-table">
+        <thead><tr><th>Bid</th><th>Qty</th></tr></thead>
+        <tbody id="book-bids"><tr><td class="muted" colspan="2">&hellip;</td></tr></tbody>
+      </table>
+      <table class="book-table">
+        <thead><tr><th>Ask</th><th>Qty</th></tr></thead>
+        <tbody id="book-asks"><tr><td class="muted" colspan="2">&hellip;</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="panel">
+    <h2>Event Log</h2>
+    <ul id="log"></ul>
+  </div>
+</main>
+<script src="vendor/lightweight-charts.standalone.production.js"></script>
+<script src="vendor/chart.umd.js"></script>
+<script src="js/format.js"></script>
+<script src="js/api.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/pair.js"></script>
+</body>
+</html>
