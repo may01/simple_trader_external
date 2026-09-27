@@ -110,7 +110,7 @@ stats/{DATA_ROOT}/{PAIR}/  (in-repo directory, version-controlled)
 | `docker-compose.yml` | Standard training/simulation | `train_dataset.env` |
 | `docker-compose-live.yml` | Live trading bot | `live.env` |
 | `docker-compose-long.yml` | Long-dataset training | `long_dataset.env` |
-| `docker-compose-test.yml` | Test run with simulate_nn | `train_dataset.env` |
+| `docker-compose-test.yml` | Test run with infer_nn (alias simulate_nn) | `train_dataset.env` |
 | `docker-compose-view.yml` | Data visualization (view_online_point) | `live.env` |
 | `docker-compose-view-live.yml` | Live trading dashboard | `live.env` |
 | `docker-compose-view-long.yml` | Full data viewer | `long_dataset.env` |
@@ -206,7 +206,7 @@ nn_folder_local()    → {local_root_folder()}/shared/nn_data/
 dir = data_folder() + '/' + str(time_point)
 path = shared_folder() + '/thread_result_by_id_' + str(thread_num) + '.pkl'
 path = stats_folder() + '/rsi_classification.json'
-path = nn_folder() + '/nn_simulation_cls_big_tf.pkl'
+path = data_folder() + '/df_with_nn.pkl'   # nn_res_* columns, joined at load
 ```
 
 **Current state and cleanup required:**

@@ -29,6 +29,7 @@
 | 12 | `phase-12-frontend/` | ChartRenderer, DataViewer, TrainingDashboard, LiveDashboard |
 | 13 | `phase-13-indicator-warmup/` | Indicator warmup, diff/std attributes, profit-label pipeline |
 | 14 | `phase-14-simulation-wiring/` | Test strategies, Action records, per-sim storage, report, chart overlay |
+| 15 | `phase-15-live-verification/` | Live wiring + small-amount cap; mainnet margin op verification; live EMA action run |
 
 ---
 
@@ -50,7 +51,7 @@ docker compose run --rm trainer python3 trainer.py nn_train
 docker compose run --rm trainer python3 trainer.py simulate_nn
 
 # Path E — live trading (paper mode: IS_TRAIDER_TEST=1)
-docker compose -f docker-compose-live.yml run --rm trader python3 pybtctr.py
+docker compose run --rm trader python3 trader.py
 
 # Path F — data viewer
 docker compose -f docker-compose-view.yml run --rm viewer python3 view_online_point.py

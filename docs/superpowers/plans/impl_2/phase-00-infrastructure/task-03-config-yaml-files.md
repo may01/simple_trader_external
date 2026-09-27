@@ -75,11 +75,17 @@ fields:
 | classification | `move_class`, `zone_class`, `over_low`, `over_high` (applies_to: [15, 60, 240, 1440]) |
 | targets | `tgt_long`, `sl_long`, `tgt_short`, `sl_short`, `ZB`, `ZS` (applies_to: [15, 60, 240, 1440]) |
 | trend_flags | `trend_up`, `trend_down` |
-| nn_features | `nn_rsi_ma8_norm_mean`, `nn_close_diff_atr_ma` |
+| nn_features | engineered NN feature family — indicator diffs/slopes, `logret`, `range_atr`, body/wick ratios, `vol_regime`, cyclical time encodings, cross-TF align ladder, `nn_rsi_ma8_norm_mean_20`, `nn_close_diff_atr_14_ma_5` (applies_to: all CANDLES; see phase-11 task-03 + DECISIONS-LOG D12) |
 
 ---
 
 ## indicators_config.yaml — nn section
+
+> **Removed (DECISIONS-LOG D13).** The whole `nn:` section (`feature_cols` + `checkpoint_dir`) was
+> deleted: `feature_cols` fed only the orphaned `DataAttributes.compute_nn_stats` (Pipeline A, no
+> consumer after `NNPredictor`'s removal in `969819b`), and `checkpoint_dir` was never read (the
+> orchestrator hardcodes `{artefact_root}/checkpoints/{spec_hash}`). The spec-driven NN derives its
+> feature columns from `NNModelSpec.indicators × timeframes`. Historical design below.
 
 Top-level section alongside `fields`:
 
@@ -102,7 +108,7 @@ nn:
 
 - `load_candles_config(path: str = "configs/candles_config.yaml") -> list[int]` — returns `[1, 5, 15, 60, 240, 1440]`
 - `load_indicators_config(path: str = "configs/indicators_config.yaml") -> list[IndicatorFieldConfig]` — returns list of field descriptors sorted in dependency order
-- `load_nn_config(path: str = "configs/indicators_config.yaml") -> dict` — returns `nn` section as dict with keys `feature_cols`, `checkpoint_dir`
+- ~~`load_nn_config(...)`~~ — **removed (DECISIONS-LOG D13)** along with the `nn:` section it parsed (no remaining caller).
 - `CANDLES: list[int]` — module-level constant, loaded once at import
 
 ---
@@ -112,6 +118,7 @@ nn:
 - `indicators_config.yaml` must declare fields in dependency order OR `config_loader.py` must topologically sort by `depends_on`
 - `applies_to: all` expands to full `CANDLES` list at load time
 - `classification` and `targets` groups apply ONLY to `[15, 60, 240, 1440]` — NOT to 1-min or 5-min
+- `nn_features` apply to all CANDLES `[1, 5, 15, 60, 240, 1440]` (D12, supersedes D9's `[15, 60, 240]`), with two carve-outs: `sin_tod`/`cos_tod` omit 1440 (daily bars → constant intraday time); each `align_{other_tf}` applies only to its single lower TF (ladder 1→5→15→60→240→1440)
 
 
 ---

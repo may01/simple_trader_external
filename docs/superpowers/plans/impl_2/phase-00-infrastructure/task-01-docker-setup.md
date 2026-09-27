@@ -143,8 +143,8 @@ services:
       - simple_trader_vol_long:/trader_data_long
 
   # Path D2 — Train NN model (any dataset via NN_TRAIN_ENV override)
-  # Reads batches from /trader_data (ROOT_FOLDER in env selects which vol's data)
-  # Writes model weights to /trader_data_long (always simple_trader_vol_long)
+  # Reads input data from /trader_data READ-ONLY (live/backtest source; ROOT_FOLDER selects vol)
+  # Writes NN artefacts (datasets/checkpoints/tracking) to /trader_data_long (simple_trader_vol_long)
   # Weights are reused by simulate-nn, simulate, and live.
   nn-train:
     image: simple_trader
@@ -152,7 +152,7 @@ services:
     env_file: ${NN_TRAIN_ENV:-configs/nn_train_dataset.env}
     volumes:
       - .:/code
-      - simple_trader_vol:/trader_data
+      - simple_trader_vol:/trader_data:ro   # input data is consumed read-only; NN never writes here
       - simple_trader_vol_long:/trader_data_long
     environment:
       - NN_CLS=${NN_CLS}
@@ -306,7 +306,7 @@ docker volume ls --filter name=simple_trader
 | Volume | Mount | Contents |
 |--------|-------|----------|
 | `simple_trader_vol` | `/trader_data` | Small datasets: functional (1-day), train (2-week), validate (2-week), live reference |
-| `simple_trader_vol_long` | `/trader_data_long` | Large datasets (4-month, 3-year), NN grouped batches, NN model weights |
+| `simple_trader_vol_long` | `/trader_data_long` | Large datasets (4-month, 3-year), NN grouped batches, NN artefacts (`datasets/`, `checkpoints/`, `tracking/`) |
 
 Both declared `external: true` in compose file.
 
@@ -315,11 +315,18 @@ Both declared `external: true` in compose file.
 | Function | Returns | Rule |
 |----------|---------|------|
 | `nn_folder()` | `/trader_data/{DATA_ROOT}/{DATA_SET_NAME}_{PAIR}/shared/nn_data/` | Grouped batches live on whichever volume is mounted at `/trader_data` — always co-located with the source dataset |
-| `nn_weights_folder()` | `/trader_data_long/{DATA_ROOT}/{PAIR}/nn_weights/` | Model weights always read from `simple_trader_vol_long` at `/trader_data_long` — weights trained on 3-year dataset are shared by all consumers |
+| `nn_artefact_root()` | `/trader_data_long/{DATA_ROOT}/{PAIR}/nn/` | Root of the three NN artefact namespaces; always on `simple_trader_vol_long`, hardcoded, not affected by ROOT_FOLDER |
+| `nn_datasets_folder()` | `{nn_artefact_root()}/datasets/` | Content-addressed tensor cache, one dir per `dataset_hash`; **shared** across all model specs |
+| `nn_checkpoints_folder()` | `{nn_artefact_root()}/checkpoints/` | One dir per `spec_hash`; files `{group_key}_best.pt` / `{group_key}_epoch{N}.pt` |
+| `nn_tracking_folder()` | `{nn_artefact_root()}/tracking/` | One dir per `study_name`: `index.sqlite`, `trials/`, `best.json` |
 
-**Weight reuse rule:** `simulate-nn`, `simulate`, and `live` all read weights from `/trader_data_long` regardless of which small dataset they're running against. Only `nn-train` writes to `/trader_data_long`.
+The three are **sibling namespaces, not nested** — `datasets/` is reused by many model specs (the search loop trains hundreds against one cached dataset), so checkpoints/tracking link to it by hash reference, never by directory nesting. The whole `nn/` subtree is scoped per `{DATA_ROOT}/{PAIR}` because weights are pair-specific.
 
-`simulate-nn` is the only service that mounts both volumes simultaneously (small dataset at `/trader_data`, weights at `/trader_data_long`).
+**Obsolete:** the old `nn_weights_folder()` → `.../nn_weights/model_{TF}_*.pt` scheme keyed weights by timeframe. The current model is timeframe-agnostic (`spec_hash` + `group_key` identity, TF lives only in `spec.timeframes` input). Replaced by the per-`spec_hash` `checkpoints/` namespace above.
+
+**Weight reuse rule:** `simulate-nn`, `simulate`, and `live` all read checkpoints from `/trader_data_long` regardless of which small dataset they're running against. Only `nn-train` writes to `/trader_data_long`.
+
+`nn-train` and `simulate-nn` mount both volumes (input data read-only at `/trader_data`, artefacts at `/trader_data_long`); `nn-train` mounts `/trader_data` `:ro`.
 
 ---
 

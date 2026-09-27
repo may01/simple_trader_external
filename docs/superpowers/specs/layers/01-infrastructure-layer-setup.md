@@ -167,7 +167,7 @@ Optional: enable NVIDIA runtime in compose for GPU acceleration.
 **D3 — NN-enhanced simulation:**
 ```yaml
 SCRIPT_TYPE: trainer
-RUN_TYPE:    simulate_nn
+RUN_TYPE:    infer_nn   # legacy alias: simulate_nn
 USE_NN_SIMULATION: "True"
 ```
 
@@ -280,7 +280,7 @@ F1, F3             ← independent of training paths; read from live volume
 | C — Long simulation | docker-compose-long.yml | `trainer` | `simulate` | long_dataset.env | alexandria_pybtctr_vol |
 | D1 — Group NN | docker-compose.yml | `trainer` | `group_nn` | train_dataset.env | pybtctr_vol |
 | D2 — Train NN | docker-compose.yml | `trainer` | `nn_train` | train_dataset.env | pybtctr_vol |
-| D3 — NN simulation | docker-compose.yml | `trainer` | `simulate_nn` | train_dataset.env | pybtctr_vol |
+| D3 — NN inference | docker-compose.yml | `trainer` | `infer_nn` (alias `simulate_nn`) | train_dataset.env | pybtctr_vol |
 | E — Live trading | docker-compose-live.yml | `pybtctr` | — | live.env | pybtctr_vol |
 | F1 — Full viewer | docker-compose-view-long.yml | `view_full` | none | long_dataset.env | alexandria_pybtctr_vol |
 | F2 — Sim viewer | docker-compose-view.yml | `view_online_point` | none | live.env | pybtctr_vol |

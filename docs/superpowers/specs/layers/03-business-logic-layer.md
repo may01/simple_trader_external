@@ -33,7 +33,7 @@
 **Upstream (feeds into this layer):**
 - Data layer: `data_point.get(col, tf, shift)` — the `DataPoint` protocol (see Data Layer spec v2); NN and predictor outputs are pre-computed columns accessible via the same interface
 - Levels: accessed via `data.get_levels(tf, level_type, ema_cols)` — `Levels` is a Data module concern; Business Logic layer never imports it directly
-- NN layer (optional): pre-computed simulation pkl (`shared/nn_data/nn_simulation_cls_big_tf.pkl`) or live NN inference
+- NN layer (optional): pre-computed `nn_res_*` columns from `df_with_nn.pkl`, left-joined into the wide view at load (same path for backtest and live — no separate live-inference branch). Accessed like any indicator via `data_point.get('nn_res_*', tf, default)`.
 
 **Downstream (layers that consume this layer):**
 - Execution layer: receives `(action, open_price, close_price, stop_price, time_frame)` 5-tuple from `strategy_manager.check()`; then reads `position.get_action()` to know what order to place; calls `position.record_entry_fill()` / `position.record_exit_fill()` to record fills; calls `position.finalize()` after close

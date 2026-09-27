@@ -49,13 +49,12 @@ Implement `FullData` (read interface over wide DataFrame exposing per-TF closed-
 - `_compute_diff_stats(df: pd.DataFrame) -> None` — computes price differential stats per move class; saves to `stats/diff_stats.pkl`
 - `load_rsi_classification() -> dict` — loads existing JSON; raises if absent
 - `load_diff_stats() -> dict` — loads existing pkl; raises if absent
-- `compute_nn_stats(df: pd.DataFrame, feature_cols: list[str]) -> None` — computes mean and std for each column in `feature_cols` using only `{tf}_is_closed=True` rows; populates `column_stats`
-- `get_stats(col: str) -> tuple[float, float]` — returns `(mean, std)` for `col`; raises `KeyError` if col not in `column_stats`
+- ~~`compute_nn_stats(df, feature_cols)`~~ / ~~`get_stats(col)`~~ — **removed (DECISIONS-LOG D13).** This was Pipeline A's NN normalisation; it had no consumer after `NNPredictor` was deleted (`969819b`). NN normalisation now lives in `NNDataset` (train-split winsorised stats bundled into the checkpoint manifest). `DataAttributes` keeps only the classification/target stat methods above.
 - `save(path: str) -> None` — pickles self to `path`
 - `classmethod load(path: str) -> DataAttributes` — unpickles from `path`
 
 Attributes:
-- `column_stats: dict[str, dict]` — `{col_name: {"mean": float, "std": float}}`; populated only for NN feature columns passed to `compute_nn_stats()`
+- ~~`column_stats`~~ — removed with `compute_nn_stats` (D13).
 
 ---
 
@@ -81,9 +80,7 @@ Attributes:
 - `DataAttributes.compute()` skips computation if files already exist (idempotent)
 - Stats files are static per pair — changing them invalidates all cached indicator values
 - `DataAttributes` is only called by `DataPreparer` — never in live path
-- `compute_nn_stats()` uses only closed-candle rows (`{tf}_is_closed=True`) for each feature column's TF; partial-candle rows excluded from mean/std calculation
-- `column_stats` covers only columns explicitly passed to `compute_nn_stats()` — not all DataFrame columns
-- `save()` / `load()` persist the entire `DataAttributes` instance (including `column_stats`) via pickle
+- `save()` / `load()` persist the `DataAttributes` instance via pickle (NN `column_stats` removed — D13)
 - Target columns (`tgt_long`, `sl_long`, `tgt_short`, `sl_short`) are backward-looking (prev candle + rolling diff stats) and live-safe; truly forward-looking labels (phase 13 `indicators/labels.py`) must ONLY appear in `FullData` output — never in `LiveDataPoint`
 
 ---

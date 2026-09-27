@@ -1,184 +1,103 @@
-# ResultAggregator Class Specification
+# ExperimentTracker Specification
 
-**Class:** `ResultAggregator` (Proposed Refactoring)  
-**Files:** `trainer.py` (simulate result aggregation, lines 800-900)  
-**Purpose:** Collect and merge results from parallel simulation/training processes into unified summaries.
+**File:** `nn/experiment_tracker.py`
+**Purpose:** Record every training trial, validate model improvement against a held-out set, and gate promotion of new best models. Dependency-free local store (JSON manifests + SQLite index) — no MLflow.
 
 ---
 
 ## 1. Class Overview
 
-The `ResultAggregator` class aggregates partial results from parallel TrainRobot instances into unified performance metrics. Rather than inline aggregation in Trainer, extracting into a dedicated class improves reusability and testability.
+`ExperimentTracker` is the memory and judge of the training loop. It answers two questions the loop depends on:
 
-ResultAggregator handles:
-- Loading thread-specific result files
-- Merging dictionaries (revenue by strategy ID)
-- Summing scalar metrics (total revenue, trades count)
-- Computing aggregate statistics
-- Exporting results for analysis
+1. *What has been tried, and how did it do?* — a durable, queryable history of trials feeding the `NNStrategist`.
+2. *Is this candidate actually better?* — a strict promotion gate so the best checkpoint only changes when a new model beats the incumbent on a holdout set by a margin (not on noise or validation overfit).
+
+Storage is local and serverless: a SQLite index for fast queries plus per-trial JSON records under the tracking directory.
 
 ---
 
-## 2. Key Attributes
+## 2. Storage Layout
 
-| Attribute | Type | Description |
-|-----------|------|-------------|
-| `data_root` | `str` | Root data folder path |
-| `pair` | `str` | Trading pair |
-| `num_threads` | `int` | Number of threads that produced results |
-| `thread_results` | `list[dict]` | Loaded results from each thread |
-| `aggregated_result` | `dict` | Merged result summary |
+```
+tracking/{study_name}/
+├── index.sqlite           # one row per trial (queryable)
+├── trials/{trial_id}.json # full record: spec, metrics, rationale
+└── best.json              # current incumbent per group (class/regime)
+```
+
+### SQLite `trials` columns
+`trial_id, round, group_key, spec_hash, train_acc, val_acc, holdout_score, promoted (bool), status (ok|failed|pruned), created_at`.
+
+### Trial JSON record
+```json
+{
+  "trial_id": "…", "round": 3, "group_key": "all",   // "all" for grouping=single; else class/regime key
+  "spec_hash": "…", "spec": { …full NNModelSpec… },
+  "metrics": {"loss":…, "accuracy":…, "val_loss":…, "val_accuracy":…, "per_target":{…}},
+  "holdout": {"score":…, "per_target":{…}, "n_rows":…},
+  "promoted": true,
+  "strategist_rationale": "added vol_regime; dropped raw RSI level",
+  "status": "ok"
+}
+```
 
 ---
 
 ## 3. Constructor
 
-### `__init__(data_root, pair, num_threads)`
-
-**Purpose:** Initialize aggregator.
-
-**Parameters:**
-- `data_root` (`str`) — Data folder path
-- `pair` (`str`) — Trading pair
-- `num_threads` (`int`) — Number of parallel threads
-
-**Behavior:**
-1. Store parameters
-2. Initialize empty thread_results list
-3. Initialize empty aggregated_result dict
+### `__init__(tracking_dir, study_name, metric="holdout_score", margin=0.0, mode="max")`
+- `study_name` — keys `tracking/{study_name}/`; resolved and owned by `Trainer._run_train_nn()`, reuse = resume (see `training-coordinator-class.md` §2 "Study identity").
+- `metric` — the promotion criterion (holdout direction-accuracy by default; configurable per target type).
+- `margin` — minimum improvement over incumbent required to promote (guards against noise).
+- `mode` — `"max"` or `"min"`.
+- Creates the study directory and SQLite schema if absent.
 
 ---
 
-## 4. Key Methods & Interfaces
+## 4. Key Methods
 
-### `load_thread_results()`
+### `record(spec, metrics, holdout, round, status="ok", rationale=None) -> str`
+- Writes the trial JSON and inserts the SQLite row; returns `trial_id`.
+- `status="failed"|"pruned"` records non-completing trials so the strategist sees dead ends.
 
-**Purpose:** Load all thread result files from disk.
+### `is_improvement(group_key, holdout) -> bool`
+- The **promotion gate**: returns `True` only if `holdout[metric]` beats the incumbent for `group_key` by at least `margin` (respecting `mode`). No incumbent → `True`.
 
-**Behavior:**
-1. For each thread from 0 to num_threads-1:
-   - Load file: `{data_root}/pair/results/thread_result_by_id_{thread_num}.pkl`
-   - Parse result dict
-   - Append to thread_results list
+### `promote(group_key, trial_id) -> None`
+- Updates `best.json` for `group_key`, marks the trial `promoted=true`. Called by the loop after `CheckpointManager.save(..., promote=True)` so the tracker's notion of best stays in sync with the saved weights.
 
-**Returns:** `int` — Count of results loaded
+### `summary() -> dict`
+- Compact history for the `NNStrategist`: incumbent metrics, per-indicator and per-target performance deltas, recent trial outcomes, count of trials/rounds. Sized to fit an LLM prompt (aggregated, not raw).
 
-### `aggregate()`
+### `round_summary(round) -> dict`
+- Metrics for one round (best/median/failed counts) feeding `NNStrategist.review()`.
 
-**Purpose:** Merge thread results into unified summary.
+### `best(group_key=None) -> dict`
+- Returns incumbent trial record(s).
 
-**Behavior:**
-1. Initialize aggregated totals: total_revenue, total_revenue_abs, revenue_by_id
-2. For each thread_result:
-   - Add revenue and revenue_abs to totals
-   - Merge revenue_by_id dict (per-strategy breakdown)
-3. Compute aggregate statistics:
-   - Average revenue per thread
-   - Min/max revenue
-   - Revenue distribution
-4. Store in aggregated_result
-
-**Returns:** `dict` — Aggregated results
-
-### `export_results(format='pickle')`
-
-**Purpose:** Export aggregated results to disk.
-
-**Parameters:**
-- `format` (`str`) — Output format: 'pickle' or 'json'
-
-**Behavior:**
-1. If format == 'pickle':
-   - Save aggregated_result to pickle file
-2. If format == 'json':
-   - Convert to JSON-compatible format
-   - Save to JSON file
-3. Return file path
-
-### `get_summary()`
-
-**Purpose:** Get human-readable summary of results.
-
-**Return Value:** `dict` with keys:
-- `"total_revenue"` — Aggregate revenue
-- `"average_revenue_per_thread"` — Mean
-- `"revenue_std"` — Standard deviation
-- `"best_thread"` — Thread with highest revenue
-- `"worst_thread"` — Thread with lowest revenue
+### `export(format="json") -> str`
+- Exports the full history (JSON or CSV) for offline analysis.
 
 ---
 
-## 5. Error Handling
+## 5. Improvement Validation
 
-**Missing Result Files:**
-```python
-if not os.path.exists(file):
-    logger.warning(f"Result file not found: {file}")
-    continue
-```
-
-**Corrupted Pickle:**
-```python
-try:
-    data = pickle.load(f)
-except pickle.UnpicklingError as e:
-    logger.error(f"Failed to load result: {e}")
-    continue
-```
+- **Holdout, not validation:** promotion is judged on the time-ordered holdout split (untouched by training and Optuna pruning), so a model that overfit the validation set cannot be promoted.
+- **Margin gate:** small holdout gains within `margin` are treated as no improvement, preventing churn on noise.
+- **Per-group:** each group (class/regime) has its own incumbent; promotion is independent across groups.
+- **Metric per target family:** classification uses holdout accuracy/F1; regression uses holdout MAE/Huber (with `mode="min"`); multi-target uses a configured weighted combination declared in the study config.
 
 ---
 
-## 6. Existing Approach
+## 6. Error Handling
 
-Current implementation in Trainer.simulate():
-```python
-for key in result_by_id_by_thread:
-    if key in result_by_id:
-        result_by_id[key] += result_by_id_by_thread[key]
-```
-
-Inline aggregation at end of simulate method. No dedicated abstraction.
+- Corrupt `index.sqlite` → rebuilt from the `trials/*.json` records (JSON is the source of truth).
+- Missing holdout (empty split) → trial recorded but cannot be promoted; loop warns.
+- Concurrent writers (parallel trials) → SQLite WAL mode + per-trial JSON files avoid contention; `best.json` updates are serialised.
 
 ---
 
-## 7. Potential Improvements
+## 7. Notes
 
-1. **Add Incremental Aggregation**
-   - Aggregate results as threads complete
-   - Provide intermediate summaries
-   - Would enable real-time progress reporting
-
-2. **Implement Checksum Validation**
-   - Verify result integrity before aggregation
-   - Detect corrupted files
-
-3. **Add Statistical Testing**
-   - Compare performance across configurations
-   - Generate significance tests
-
-4. **Support Different Aggregation Methods**
-   - Weighted average by timeframe
-   - Median instead of mean (robust to outliers)
-
-5. **Add Outlier Detection**
-   - Flag threads with anomalous results
-   - Investigate causes
-
-6. **Implement Result Versioning**
-   - Track aggregated results with timestamps
-   - Enable comparison across versions
-
-7. **Add Export to CSV/Excel**
-   - Enable analysis in spreadsheet tools
-
-8. **Implement Result Visualization**
-   - Generate charts of revenue distribution
-   - Export plots
-
-9. **Add Metadata Tracking**
-   - Store configuration alongside results
-   - Document reproducibility
-
-10. **Support Custom Metrics**
-    - Allow pluggable metric computations
-    - Enable domain-specific analysis
+- Replaces the legacy parallel-result aggregation; the unit of aggregation is now a *trial*, not a worker shard.
+- The tracker is the contract between numeric search and LLM reasoning: Optuna writes trials, the strategist reads `summary()`, the gate decides truth.

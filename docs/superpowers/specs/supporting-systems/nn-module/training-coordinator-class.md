@@ -1,226 +1,144 @@
-# TrainingCoordinator Class Specification
+# NNOrchestrator, TrainingLoop & NNStrategist Specification
 
-**Class:** `TrainingCoordinator` (Proposed Refactoring)  
-**Files:** `trainer.py` (train, group_nn, train_nn methods, lines 700-900)  
-**Purpose:** Orchestrate neural network training pipelines: data grouping, model instantiation, training execution, and result management.
-
----
-
-## 1. Class Overview
-
-The `TrainingCoordinator` class is a proposed refactoring of the current NN training orchestration in trainer.py. It encapsulates the multi-step NN training pipeline: grouping generated data points by classification, instantiating NNModel instances for each class/timeframe/target combination, training models via backpropagation, and managing checkpoints.
-
-TrainingCoordinator serves as the coordination layer between raw data points and trained models, abstracting the complexity of multi-dimensional model configurations.
+**File:** `nn/nn_orchestrator.py`, `nn/training_loop.py`, `nn/nn_strategist.py`
+**Purpose:** Coordinate NN training and inference. `NNOrchestrator` drives per-group training, batch inference, and row routing (a model takes multi-TF input, emits timeframe-agnostic `nn_res_*` output). `TrainingLoop` runs the **hybrid agentic improvement loop** (Optuna search steered by an LLM `NNStrategist`), validating and promoting models.
 
 ---
 
-## 2. Key Attributes
+## 1. NNOrchestrator
 
-### Instance Variables
+The execution-level coordinator. Two modes, both called from `Trainer`.
 
-| Attribute | Type | Description |
-|-----------|------|-------------|
-| `pair` | `str` | Trading pair (e.g., `link_usdt`) |
-| `data_root` | `str` | Root data folder path |
-| `class_types` | `list` | NN classification types to train (e.g., [NN_POINT_CLASS_BIG, NN_POINT_CLASS_SMALL]) |
-| `target_types` | `list` | NN target indices to train (0-17) |
-| `nn_types` | `list` | NN architecture types to train (NN_TYPE_ALL, NN_TYPE_BIG, NN_TYPE_SMALL, NN_TYPE_REG) |
-| `nn_history` | `int` | Historical candle window size (default 120) |
-| `models_trained` | `dict` | Tracks trained models: {(class_type, class_name, nn_type, target_idx): NN instance} |
-| `training_metrics` | `dict` | Per-model training statistics: loss, accuracy, etc. |
+### Constructor
 
----
+#### `__init__(checkpoint_dir, dataset_dir, base_spec)`
+- `checkpoint_dir` — where `CheckpointManager` stores weights per group (class/regime; one group if `grouping=single`).
+- `dataset_dir` — where `NNDataset` materialised tensors live.
+- `base_spec: NNModelSpec` — the default model definition (loop may override fields).
+- `num_workers` — from `NUM_WORKERS` env (default 4).
+- `trained_models: dict[str, NNModel]` — keyed by group string.
 
-## 3. Constructor
+### `train(df, data_attributes, spec=None, epoch_callback=None) -> dict`
+- Resolves the spec (`spec or base_spec`).
+- Builds the `NNDataset` once over all rows (multi-TF input per `spec.timeframes`), cached.
+- Partitions rows into groups per `spec.grouping` (one group if `mode="single"`; one per class/regime if `mode="by_indicator"`).
+- For each group:
+  - `NNModel(spec).train(dataset.group(group_key), epoch_callback=…)`.
+  - Save via `CheckpointManager`; store in `trained_models`.
+- Returns `{group_key: final_metrics}`. Called by `Trainer._run_train_nn()` — for a single-shot train. The full search is driven by `TrainingLoop` (below).
 
-### `__init__(pair, class_types=None, target_types=None, nn_types=None, nn_history=120)`
-
-**Purpose:** Initialize TrainingCoordinator with configuration.
-
-**Parameters:**
-- `pair` (`str`) — Trading pair
-- `class_types` (`list[int]`) — Classifications to train. Default: [NN_POINT_CLASS_BIG]
-- `target_types` (`list[int]`) — NN target indices (0-17). Default: [0]
-- `nn_types` (`list[int]`) — Architectures to train. Default: [NN_TYPE_ALL]
-- `nn_history` (`int`) — History window. Default: 120
-
-**Behavior:**
-1. Store configuration parameters
-2. Extract data_root from environment
-3. Initialize tracking dicts: models_trained, training_metrics
-4. Validate configuration (non-empty lists, valid indices)
+### `run_inference(df, data_attributes, spec=None) -> pd.DataFrame`
+- Loads the best checkpoint per group via `CheckpointManager.load_best()` (each checkpoint embeds its own spec).
+- Builds the multi-TF feature matrix from the **target** `df` (any dataset); normalises via the **manifest bundled in the checkpoint** (training stats + `feature_cols`), never stats recomputed from the inference dataset (leakage guard). No grouped-pickle dependency.
+- **Routes each row to its group's model** by the grouping condition (single group → all rows to the one model), then `model.run_batch(X)` → output sized to the spec's targets.
+- Appends only the **timeframe-agnostic** NN output columns (`nn_res_{target}_prob_*`, `nn_res_{target}`, multi-horizon `_h{hk}` variants) to a fresh DataFrame indexed by `df.index`. All groups write the same `nn_res_*` columns; only the producing model differs per row.
+- Returns that NN-columns-only DataFrame. Caller (`NNOrchestrator.run_inference` / `Trainer._run_infer_nn`) saves `{dataset}/df_with_nn.pkl`. Input `df` is not modified.
 
 ---
 
-## 4. Key Methods & Interfaces
+## 2. TrainingLoop (item 4 — agentic improvement loop)
 
-### `group_data(shuffle=False)`
+`TrainingLoop` turns training from a single run into a **search for a better model**, combining numeric optimisation with LLM-level reasoning.
 
-**Purpose:** Load all generated data points, group by classification, save grouped pickles.
+### Constructor
 
-**Parameters:**
-- `shuffle` (`bool`) — Shuffle within groups. Default: False
+#### `__init__(orchestrator, tracker, strategist, search_config)`
+- `orchestrator: NNOrchestrator`
+- `tracker: ExperimentTracker` (records + promotion gate; see `result-aggregator-class.md`)
+- `strategist: NNStrategist` (LLM steering)
+- `search_config` — round budget, trials-per-round, Optuna sampler/pruner, time/compute caps.
 
-**Behavior:**
-1. Iterate through all data points in time order
-2. For each point:
-   - Load NN point data (features, targets, timestamp)
-   - Extract classification (e.g., NN_POINT_CLASS_BIG)
-   - Append to group list
-3. When group reaches size threshold (5000) or iteration ends:
-   - Optionally shuffle
-   - Save to pickle: `nn_group_{class_type}_{class_name}_{group_num}.pkl`
-   - Reset group
+### Study identity (`study_name`)
 
-**Returns:** `dict` with summary:
-- `"total_points"` — Points processed
-- `"groups_created"` — Pickle files created
-- `"group_sizes"` — Sizes per group
+`study_name` keys the whole `tracking/{study_name}/` namespace (`ExperimentTracker.__init__`, see `result-aggregator-class.md`; layout in `nn-infrastructure.md`). Unlike its sibling namespaces it is **not content-addressed** — `dataset_hash` and `spec_hash` are derived from content, but `study_name` is a caller-chosen label for *one search run*. Ownership and rules:
 
-### `train_models(epochs=15, batch_size=32, validation_split=0.30)`
+- **Owner:** `Trainer._run_train_nn()` resolves `study_name` and constructs the `ExperimentTracker` with it, then passes the tracker into `TrainingLoop`. `TrainingLoop` never derives or mutates it — it receives an already-named tracker.
+- **Source / default:** taken from training config / CLI (`--study <name>`). When omitted, default to `"{PAIR}_{base_spec.spec_hash[:8]}"` — pair-scoped (matches the `{DATA_ROOT}/{PAIR}/` artefact scope) and stable across restarts of the same base spec, so a re-run resumes rather than forks by accident.
+- **Resume semantics:** reusing an existing `study_name` **resumes** that study — the loop reads the existing SQLite index + `best.json` as its starting history/incumbent (`nn-infrastructure.md` §5 "Tracking persistence"). A fresh search requires a new name. This is the only switch between resume and fresh, so it is a deliberate caller decision, never auto-generated per-process (an auto-timestamp would silently fork history every run).
+- **Validation:** filesystem-safe slug (no path separators); rejected early by `Trainer` before the tracker touches disk.
 
-**Purpose:** Train all configured model combinations.
+### `run(df, data_attributes) -> RunResult`
 
-**Parameters:**
-- `epochs` (`int`) — Training epochs
-- `batch_size` (`int`) — Batch size
-- `validation_split` (`float`) — Validation fraction
-
-**Behavior:**
-1. For each class_type in self.class_types:
-2. For each target_type in self.target_types:
-3. For each nn_type in self.nn_types:
-   - Instantiate NN: `nn = NN(pair, class_type, class_name, nn_type, target_type, nn_history)`
-   - Call `nn.train(data_group_num)` with appropriate grouped data
-   - Track metrics: loss, accuracy, training time
-   - Save model via checkpoint
-
-**Returns:** `dict` with training summary:
-- `"models_trained"` — Count
-- `"training_time"` — Total seconds
-- `"average_accuracy"` — Mean validation accuracy
-- `"failed_models"` — Count of failed training runs
-
-### `validate_models(test_split=0.20)`
-
-**Purpose:** Evaluate trained models on holdout test set.
-
-**Parameters:**
-- `test_split` (`float`) — Fraction reserved for testing
-
-**Behavior:**
-1. For each trained model:
-   - Load test data
-   - Call `nn.run_batch(test_data)`
-   - Compute accuracy, precision, recall
-   - Compare predictions vs. actual targets
-2. Aggregate statistics
-
-**Returns:** `dict` with validation results:
-- `"model_accuracies"` — Per-model accuracy
-- `"average_accuracy"` — Mean across all models
-- `"worst_model"` — Lowest-performing model
-- `"best_model"` — Highest-performing model
-
-### `get_trained_model(class_type, class_name, nn_type, target_idx)`
-
-**Purpose:** Retrieve trained model for inference.
-
-**Parameters:**
-- `class_type` (`int`) — Classification
-- `class_name` (`str`) — Subclass
-- `nn_type` (`int`) — Architecture type
-- `target_idx` (`int`) — Target index
-
-**Return Value:** `NN` instance with loaded weights, or None if not trained
-
----
-
-## 5. State Management
-
-- **Uninitialized:** Just created
-- **Grouped:** Data points grouped into training batches
-- **Training:** `train_models()` in progress
-- **Trained:** All models persisted; ready for inference
-
----
-
-## 6. Error Handling
-
-**Missing Grouped Data:**
-```python
-if not os.path.exists(group_file):
-    logger.warning(f"Group not found: {group_file}, skipping model")
-    continue
+```
+for round in range(max_rounds):
+    proposal = strategist.propose(history=tracker.summary())
+        # → indicator set, timeframe set, target set, search-space bounds, rationale
+    study = optuna.create_study(direction="maximize",
+                                sampler=TPESampler, pruner=MedianPruner)
+    for trial in range(trials_per_round):
+        spec = build_spec(base_spec, proposal, optuna_suggestions(trial))
+        metrics = orchestrator.train(df, data_attributes, spec,
+                                     epoch_callback=optuna_prune_cb)
+        holdout = evaluate_on_holdout(spec, df, data_attributes)
+        tracker.record(spec, metrics, holdout, round)
+        if tracker.is_improvement(holdout):       # promotion gate
+            checkpoint_manager.save(model, holdout, promote=True)
+    decision = strategist.review(tracker.round_summary(round))
+        # → continue | narrow | broaden | change_targets | stop
+    if decision == "stop": break
+return tracker.best()
 ```
 
-**Training Failure:**
-```python
-try:
-    nn.train(group_num)
-except Exception as e:
-    logger.error(f"Training failed for {model_config}: {e}")
-    failed_models.append(model_config)
-    continue
-```
+**Division of labour:**
+
+| Concern | Owner |
+|---------|-------|
+| Numeric hyperparameter/architecture sampling, pruning | Optuna |
+| Which indicators / timeframes / targets to explore, when to stop, why | `NNStrategist` (LLM) |
+| Train one concrete spec | `NNModel` via `NNOrchestrator` |
+| Record trials, hold out, decide promotion | `ExperimentTracker` |
+
+Optuna explores *within* a space; the strategist *moves* the space. This keeps the search efficient (Optuna) while letting higher-level structural decisions (drop a noisy indicator, switch to a longer horizon, add a regression head) be reasoned about explicitly and logged.
 
 ---
 
-## 7. Existing Approach
+## 3. NNStrategist (LLM steering)
 
-Current implementation:
-- `group_nn(class_type)` — Standalone method in Trainer
-- `train_nn()` — Environment variable-based configuration
-- Direct NN instantiation without abstraction
+A bounded LLM agent that reasons over experiment history and proposes the next experiment. **It only emits structured proposals — it never trains or touches weights.**
 
-Limitations:
-- Hard-coded loop over class types/targets/architectures
-- No coordination or progress tracking
-- Tight coupling to Trainer
-- Difficult to reuse in different contexts
+### `propose(history: dict) -> Proposal`
+- Input: tracker summary (best metrics so far, per-indicator/target performance deltas, recent trial outcomes).
+- Output (validated schema):
+  ```python
+  @dataclass
+  class Proposal:
+      indicators: list[str]
+      timeframes: list[int]
+      targets: list[TargetSpec]
+      search_space: dict          # bounds for Optuna: lr range, depth range, units, dropout
+      rationale: str              # why this scope — logged with the round
+  ```
+- **Investigation log (short form):** before returning, `propose` emits one concise, human-readable line via `logs.log()` summarising *what it investigated and what it decided* — for the user to follow the search at a glance, distinct from the verbose reproducibility record (prompt + full proposal, see §3 Guardrails). One line, no JSON dump. Shape:
+  ```
+  [NNStrategist] round={r}: best={metric}={value:.4f} | signals: <top driver / weakest indicator from history> → propose {n_ind} ind, tf={timeframes}, targets=[…]; space lr={lo}-{hi}, depth={lo}-{hi} | why: {rationale[:120]}
+  ```
+  - Sourced only from the inputs `propose` already has (the tracker `history` summary + the `Proposal` it is about to return) — no extra computation, no model/weight access.
+  - Truncate `rationale` to keep the line readable; the full rationale stays in the `Proposal` and the reproducibility log.
+  - On the fallback path (schema-rejected proposal → previous proposal reused, see Guardrails), log `[NNStrategist] round={r}: proposal rejected ({reason}); reusing previous scope` so the user sees the search did not advance.
+
+### `review(round_summary: dict) -> str`
+- Returns one of `continue | narrow | broaden | change_targets | stop`, plus a rationale.
+
+### Guardrails
+- Proposals are schema-validated; any field outside allowed indicator/timeframe/target vocab is rejected and the round falls back to the previous proposal.
+- Search-space bounds are clamped to `search_config` limits (the LLM cannot request unbounded LR/depth).
+- Per-run caps: max rounds, max trials, wall-clock and compute budget; the loop stops at the first cap reached regardless of strategist output.
+- The strategist call is optional — with it disabled, `TrainingLoop` degrades to a pure Optuna search over `base_spec`.
+- Model/provider for the strategist follows project LLM conventions; calls are logged (prompt, proposal, rationale) for reproducibility.
 
 ---
 
-## 8. Potential Improvements
+## 4. State & Error Handling
 
-1. **Add Parallel Training**
-   - Train multiple models simultaneously (different architectures)
-   - Would reduce wall-clock time on multi-GPU systems
+- A trial that raises (bad spec, OOM) is recorded as failed in the tracker and pruned; the loop continues.
+- GPU OOM → retry once on CPU (per `nn-infrastructure.md` device policy) before marking failed.
+- If no trial beats the incumbent across a full round, the incumbent best is retained; the strategist is told so it can broaden.
+- All randomness seeded (`spec.seed`, Optuna seed) for reproducible rounds.
 
-2. **Implement Early Stopping**
-   - Monitor validation loss, stop if no improvement for N epochs
-   - Would prevent overfitting
+---
 
-3. **Add Model Versioning**
-   - Track model versions with timestamps
-   - Allow rollback to previous models
-   - Would support experimentation
+## 5. Notes
 
-4. **Implement Hyperparameter Tuning**
-   - Grid search or Bayesian optimization over hyperparameters
-   - Track best configuration
-   - Would improve model performance
-
-5. **Add Cross-Validation**
-   - K-fold validation across different time windows
-   - Would provide robust performance estimates
-
-6. **Implement Distributed Training**
-   - Support training across multiple machines
-   - Would enable larger datasets
-
-7. **Add Model Pruning**
-   - Remove low-importance weights post-training
-   - Would reduce inference latency
-
-8. **Implement Ensemble Methods**
-   - Combine predictions from multiple models
-   - Would improve robustness
-
-9. **Add Automated Hyperparameter Selection**
-   - Suggest learning rate, layers, etc. based on data
-   - Would reduce manual tuning
-
-10. **Implement Model Registry**
-    - Central tracking of all trained models
-    - Would improve model lifecycle management
+- `NNOrchestrator.train()` remains usable standalone (single-shot, no search) so `Trainer._run_train_nn()` works without the LLM loop.
+- The loop's terminal artefact is the promoted best checkpoint per group plus the tracker's full history.
+- Each model ingests multi-timeframe features and emits timeframe-agnostic `nn_res_*` outputs. Initial implementation uses `grouping=single` (one model over all rows); class/regime grouping (one model per partition, with inference routing) is the configurable extension via `spec.grouping`.
