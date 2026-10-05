@@ -114,6 +114,16 @@ never influences its own bounds.
 Per (tf, side), persisted for inference: the fitted `StandardScaler` mean/scale, the Ridge
 coefficients and intercept, and `band_pct`. Nothing else is needed.
 
+**Where they live (2026-10-06, phase 18):** `indicators/candle_bounds/models_link_usdt.json`
+(top level `pair`, `train` = `2y_az`, `features`; per (tf, side) under `models`: `mean`, `scale`,
+`coef`, `intercept`, `band_pct`, `n_train`),
+exported once by `scripts/cb_export_models.py` (fits with `cbnc.fit_side` on `2y_az_link_usdt`,
+aborts unless `band_pct` matches `candle_bounds_meta.json` to rel < 1e-3 and the numpy prediction
+matches sklearn to < 1e-12). Runtime predicts with numpy (`indicators/candle_bounds/models.py`,
+`((x − mean) / scale) · coef + intercept`), no scikit-learn. The other frozen constants
+(`ZONE_FRAC`, `TGT_SHRINK_PCT`, feature list, extdone ladder) are in
+`indicators/candle_bounds/params.py`.
+
 ---
 
 ## Validated performance (2y_az train → oos2m)

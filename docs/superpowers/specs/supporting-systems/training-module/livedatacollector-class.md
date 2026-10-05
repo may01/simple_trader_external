@@ -79,6 +79,10 @@ def run(self):
 
 **Notes:**
 - `LiveData.build_candles(time_point=0)` triggers per-tf indicator computation via `Indicators.compute()` per Data Module v2.0 §8.1.
+- After the indicator compute, `build_candles` runs the candle-bound stage (`LiveCbStage.update`, phase 18): it writes the
+  `{tf}_cb_*` / `cbnc_*` / `extdone_*` / `cb_f_*` columns into the last row of `ohlc[15|60|240]` for the current minute.
+  No extra indicator computation; a stage failure is logged once per exception type and leaves the columns absent for
+  that tick. Spec: `specs/2026-10-05-cb-markers-main-flow-design.md` ("Live session").
 - Snapshot persistence is for diagnostics only — the live Robot reads from the in-memory `LiveData` singleton, not from disk.
 - The loop catches transient network exceptions internally (see §5) and continues; only fatal errors break out.
 

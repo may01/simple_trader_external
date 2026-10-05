@@ -408,3 +408,131 @@ reconciliation itself still cannot correct a live executor.
 
 Fix: have the reconcile loop hand each correction to the executor (a `Executor::apply_reconciliation`
 behind the per-pair lock) instead of only writing the store, or run reconciliation inside the executor.
+
+## 15. main/: live and prep/backtest feed indicators from different data shapes
+
+**Status:** open (flagged 2026-10-05, CB-markers main-flow spec)
+**Where:** `main/data.py` (`LiveData.build_candles` :267, `_build_wide_df` :180, `SimulationData` :700,
+`LiveDataPoint.get` :77, `WideDataPoint.get` :128), `main/training/data_preparer.py` (`_compute_tf_rows` :104),
+`main/indicators/framework.py` (`build_indicator_input` :114), `main/stocks/binance_stock.py` (`tail(120)` :157);
+spec `docs/superpowers/specs/2026-10-05-cb-markers-main-flow-design.md`
+
+The same indicator fields run on two differently shaped inputs, so a strategy backtested on prepared
+data is not fed the same values live.
+
+| | prep → backtest | live |
+|---|---|---|
+| Frame | one wide frame, one row per minute, every tf side by side as `{tf}_*` columns | one separate frame per tf, one row per candle of that tf, not joined |
+| Indicator input | per 1-min row: last ≤105 **closed** candles of the tf + the forming row (`INDICATOR_WINDOW_ROWS`) | all 120 fetched candles, vectorized, recomputed every ~1 s tick |
+| Forming candle | marked `{tf}_is_closed = False` until its last minute | every row marked `{tf}_is_closed = True`, the forming kline included (`data.py:292`) |
+| Candle source | built from stored 1-min data | exchange klines at four base intervals, resampled to the other tfs |
+| Cross-tf access | any column of any tf on the same row | none: a field for tf N receives only frame N |
+| `get(col, tf, shift=N)` | Nth previous closed candle of the tf | row `-1-N` of the tf frame |
+
+Backtest computes nothing; it replays the prep output, so it inherits the prep shape.
+
+Consequences seen so far:
+
+- Window length (105 vs 120) and candle source differ, so warm-up-dependent indicators (EMA, RSI, MACD,
+  ATR) are not numerically identical between the two flows. First measurement (CB-markers G8, 2026-10-05,
+  600 one-per-minute ticks replayed on oos2m, live frames resampled from stored 1-min data, so the
+  candle-source difference is NOT covered): OHLC inputs identical; indicator inputs max rel diff
+  `rsi_14` / `rsi_ma8` ≤ 6e-4, `ema_25` ≤ 2e-5, `macd_12_26_9` ≤ 8e-3, `macd_hist_12_26_9` ≤ 2e-2 (0.54 once
+  at 240 on a near-zero value); `move_class` / `ema_25_slope_class` 0 mismatches. Resulting CB columns:
+  `cb_inzone_*` 0 mismatches, worst bool 1/600 (`15_cbnc_inzone_long`, a boundary row), float max rel
+  ≤ 5.9e-5 (15 m), 9.0e-6 (60 m), 1.9e-5 (240 m). Thresholds 0.005 / 2e-4 proposed, not agreed. Numbers
+  and replay limits: `docs/superpowers/experiment/results/cb_markers_main_flow_results.md` "Live parity".
+- Cross-tf fields cannot work live: `NNCrossTFAlignField` (`main/indicators/library/nn_features.py:393`)
+  returns NaN there by design. (It is also all-NaN in prep, for a different reason: the base pass computes
+  every tf before assigning columns.)
+- Anything that depends on `is_closed` behaves differently live.
+- No test compares prep and live output. The existing equivalence tests cover only chunked vs single-pass
+  and parallel vs serial inside prep.
+- Each new cross-tf feature has to work around it. The CB-markers spec does so by assembling a small wide
+  frame in live every tick and adds the first prep-to-live parity gate (its G8), for the CB columns only.
+
+Not fixed in the CB-markers work: that spec is scoped to new columns and must not change values the
+existing strategies read.
+
+**Resolution:** options, smallest first:
+
+1. Add a prep-to-live parity test for all indicators (replay a prepared fixture through `LiveData`, compare
+   per minute) to measure the gap before changing anything.
+2. Make live mark the forming kline `is_closed = False` and use the same 105-closed-plus-forming window as
+   prep.
+3. Have live build the same wide frame as prep (`_build_wide_df` over its 1-min history plus closed
+   higher-tf candles) and run one shared indicator path; `LiveDataPoint` then becomes a view of the last
+   wide row. Removes the cross-tf limitation and the duplicate `get` semantics.
+
+## 16. main/: live candle-bound stage costs 81 ms mean / 135 ms p95 per tick (target 50 ms)
+
+**Status:** open (flagged 2026-10-06, CB-markers main-flow phase 18, task 09 — open decision for the user)
+**Where:** `main/indicators/candle_bounds/stage.py` (`LiveCbStage.update`), called from
+`main/data.py` (`LiveData._update_cb`, inside `build_candles`); measured by `main/scripts/cb_live_parity.py`
+
+`LiveCbStage.update` runs on every ~1 s live tick. After caching the closed bounds and forming-history
+aggregates per (tf, closed block) it costs mean 81 / p95 135 / max 249 ms on the G8 replay (before:
+221 / 363 / 452), i.e. ~8–14 % of a tick, under shared load (±30 % between runs). Cache-miss ticks (a new
+candle) are slower: mean 122 / p95 193 ms on synthetic frames. What remains is fixed pandas overhead —
+~300 Series operations on one-row frames per tick (6 forming predictions + zones, extdone, filters for 3 tfs).
+
+Not fixed: getting under 50 ms needs a numpy evaluation of the one-row path, i.e. a second implementation of
+the kernel maths, against the spec's single-implementation design.
+
+**Resolution:** options, decided by the user:
+
+1. Accept the cost (no consumer reads the columns yet).
+2. Numpy one-row path in `stage.py`, pinned to the kernel by the existing parity tests (`test_cb_live_stage.py`
+   cached-vs-`compute_cb` test) and the G8 replay.
+3. Run the stage less often than every tick (e.g. once per second only when the 1-min row changed), at the
+   cost of marker latency.
+
+## 17. main/: an on_change broadcast value never published before waits for the 30 s heartbeat
+
+**Status:** open (flagged 2026-10-06, CB-markers main-flow phase 18, task 10 review)
+**Where:** `main/robots/robot.py` (`_publish_shared_indicators`, `_last_published_on_change`),
+`main/configs/shared_indicators_config.yaml` (`on_change: true` entries)
+
+The `on_change` rule publishes immediately when a value differs from the last **published** one. A
+(name, tf) that has never been published (after start, or after it was NaN so nothing was sent) has no last
+value, so its first finite value is not a "change" and waits up to the 30 s heartbeat. Affects the CB
+markers and filter flags right after start / warm-up / a stage failure; the first tick after start publishes
+anyway. Untested: a flag flapping every tick (one publish per tick), NaN → a different finite value, a
+multi-tf batch, the legacy entries' cadence.
+
+**Resolution:** treat "no last published value and value now finite" as a change for `on_change` entries,
+with a test for each case above.
+
+## 18. main/: absent candle-bound columns raise `KeyError` for live consumers
+
+**Status:** open (flagged 2026-10-06, CB-markers main-flow phase 18, task 09 review)
+**Where:** `main/data.py` (`LiveData.__init__`, `_update_cb`, `LiveDataPoint.get` :77),
+`main/indicators/candle_bounds/stage.py` (`LiveCbStage`)
+
+When the CB stage is disabled (no model file for the pair), failed to construct, or raised on a tick, the
+`{tf}_cb_*` / `cbnc_*` / `extdone_*` / `cb_f_*` columns are **absent** from `ohlc[tf]` for that tick — not
+NaN. `LiveDataPoint.get(name, tf)` then raises `KeyError`. Today only the broadcast reads them, and it guards
+the read (logged once). A future strategy or signal reading them unguarded would crash the tick on any pair
+other than LINK/USDT or on a transient stage failure. Related: a mid-loop exception in `update` leaves some
+tfs with this tick's columns and later tfs without; `LiveData()` loads the model JSON at import in every
+process.
+
+**Resolution:** write NaN / 0.0 columns for every expected name when the stage is disabled or fails (one
+helper in `stage.py`), or give `LiveDataPoint.get` a default for the CB family; add a test per path.
+
+## 19. Dataset volume: oos2m EMA-slope backfill is approximate on its first 103 closed candles per tf
+
+**Status:** open (flagged 2026-10-05, CB-markers main-flow phase 18, task 07)
+**Where:** `/trader_data_long/train/oos2m_link_usdt/df_with_indicators.pkl` (materialized in place,
+backup `.precb_bak`); `main/scripts/cb_markers_materialize.py` (`backfill_ema_slope`)
+
+oos2m predates `ema_25_diff_prc` / `ema_25_slope_class`; the materialize script backfilled them. The field's
+previous-candle EMA is a talib EMA over the 104 closed candles of its input slice; for the first 103 closed
+candles of each tf that window reached into warm-up rows prep trimmed, so the stored 105-candle `ema_25` is
+used instead. Approximate rows: 1.82 % / 7.27 % / 29.10 % of oos2m (15 / 60 / 240; through 2025-01-02 01:59 /
+01-05 07:59 / 01-18 07:59); error up to ~2.3e-3 %-pt, estimated ~1 / 5 / 24 slope-class flips (not
+measurable — the field value is unavailable there). Affects only `ema_25_slope_class` → `{tf}_cb_f_trend_*`.
+The 240 m share is the material one. Any other dataset materialized the same way has the same window.
+
+**Resolution:** full re-prep of oos2m with the CB stage (removes it), or start the materialization from a
+frame that still holds the warm-up rows.

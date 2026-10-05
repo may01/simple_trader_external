@@ -119,6 +119,14 @@ Roughly 60 % of zone minutes go: the 5 %-of-span zone sits next to the stop-side
 which is where the opposite extreme tends to be "in" by mid-candle. Profitability of the
 filtered zones has NOT been replayed yet (open item, see §4).
 
+> **Note 2026-10-06 — production state (phase 18).** The main flow
+> (`indicators/candle_bounds/`, prep + live) computes extdone **per minute, not sticky**, with the
+> **2y ladder** (§1.3 provenance values, `params.EXTDONE_LADDER`), and stores the veto as the
+> unapplied flag `{tf}_cb_f_extdone_{long,short}`; the viewer applies it through the
+> `cb_f_extdone` toggle (on by default) instead of `_ZONE_VETO`. Under that state the veto removes
+> 34–56 % of `cb_inzone` minutes on oos2m, not ~60 %. The numbers above (sticky, oos2m ladder) are
+> unchanged as the experiment record. See `results/cb_markers_main_flow_results.md`.
+
 ---
 
 ## 3. Filtered cb markers → where does the low/high land?

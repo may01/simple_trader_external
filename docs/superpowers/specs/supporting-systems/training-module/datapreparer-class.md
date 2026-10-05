@@ -90,6 +90,15 @@ The class is a thin orchestrator around the Data Module's `Indicators`, `Indicat
    - Each row of the output is itself a complete `WideDataPoint`: signals/strategies reading `df.loc[ts, "{tf}_rsi_14"]` always get a meaningful value with no gaps.
    - Workers return a DataFrame slice covering only their assigned rows and the indicator columns they wrote.
    - Main thread concatenates the per-batch slices along the time axis to produce the enriched wide DataFrame.
+3b. **Candle-bound (CB) stage** (phase 18, 2026-10-06; `DataPreparer._compute_cb_stage`). One vectorized call
+   `indicators.candle_bounds.stage.compute_cb_columns(df)` over the whole wide frame — not part of the per-row
+   worker pool. In the code it runs as step 6b of `prepare()`: after the class indicators and the warm-up trim,
+   before the profit labels; in the chunked path at the start of `_merge_parts` on the concatenated frame, so
+   single-pass and chunked output agree. Appends 114 columns per dataset (38 per tf ∈ {15, 60, 240}: closed and
+   forming bounds, zones, the raw `cb_inzone` marker, per-minute extdone, and the unapplied filter flags
+   `cb_f_extdone` / `cb_f_trend` / `cb_f_mcx`). Stale CB columns are dropped first (rerun safety). No model file
+   for the pair (`indicators/candle_bounds/models_{pair}.json`) → skipped with one warning; model present but an
+   input column missing → `ValueError`. Spec: `specs/2026-10-05-cb-markers-main-flow-design.md`.
 4. **Forward-looking target computation** (see §5). The NN target fields read forward in the DataFrame; they run after step 3 so they can reference completed indicator values.
 5. **Stats computation.** Call `self.attributes.compute(df)`:
    - Builds `rsi_classification.json` if absent or out of date.
@@ -265,6 +274,8 @@ The output `df_with_indicators.pkl` matches Data Module v2.0 §6.2 exactly:
   - Trend flags: `{tf}_trend_up`, `{tf}_trend_down`
   - NN features (tf ∈ {1, 5, 15}): `{tf}_nn_*`
   - NN forward-looking targets (tf=1): `1_nn_tgt_*`
+  - Candle-bound columns (tf ∈ {15, 60, 240}, when a CB model exists for the pair): `{tf}_cb_*`, `{tf}_cbnc_*`,
+    `{tf}_cbx_inzone_*`, `{tf}_extdone_*`, `{tf}_cb_f_*` (step 3b)
 
 Approximate column count: ~300+ depending on the configured registry.
 

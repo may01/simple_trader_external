@@ -16,7 +16,7 @@ The Training Module is the orchestration engine for the entire training and back
 |-------|----------------|
 | `Trainer` | Thin orchestrator; reads `RUN_TYPE`, manages metadata, dispatches to collaborators |
 | `Graber` | Data retrieval: fetch 1-min OHLCV from the Binance API for the requested range and write `graber_data.pkl` to disk |
-| `DataPreparer` | Read `graber_data.pkl`; build the wide base DataFrame; run per-minute `Indicators.compute()` in time-batched workers; compute NN forward-looking targets; compute stats; save `df_with_indicators.pkl` |
+| `DataPreparer` | Read `graber_data.pkl`; build the wide base DataFrame; run per-minute `Indicators.compute()` in time-batched workers; append the candle-bound (CB) columns in one vectorized pass (`indicators/candle_bounds`, phase 18); compute NN forward-looking targets; compute stats; save `df_with_indicators.pkl` |
 | `SimulationOrchestrator` | Parallel backtest: spawn workers using `SimulationData` + `TrainRobot`, aggregate thread results |
 | `NNOrchestrator` | NN pipeline: `nn_train` (grouping internal), `infer_nn` (alias `simulate_nn`) |
 | `LiveDataCollector` | Continuous live-data ingestion from Binance (60s loop) |

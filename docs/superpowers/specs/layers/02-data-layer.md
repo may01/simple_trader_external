@@ -257,6 +257,11 @@ row = full.get_candle(tf=5, open_time=pd.Timestamp("2024-01-15 09:00"))
 ### Candle building — live (`Data.build_candles`, called each tick)
 1. `stock.item.get_candles_history(CANDLES, coin, time_point)` → `Dict[tf → DataFrame]`
 2. For each tf: `Indicators.compute(ohlc[tf], tf)` — all fields in dependency order
+3. Candle-bound stage (phase 18): `LiveCbStage.update(ohlc)` assembles a sparse wide frame (closed candles of each
+   of 15 / 60 / 240 at their closing minute + one row for the current minute) and writes the CB columns
+   (`{tf}_cb_*`, `cbnc_*`, `cbx_inzone_*`, `extdone_*`, `cb_f_*`) into the last row of `ohlc[tf]`; earlier rows NaN.
+   Same kernel as prep (`indicators/candle_bounds/`); closed parts cached per candle. Failure → columns absent
+   for the tick. See `specs/2026-10-05-cb-markers-main-flow-design.md`.
 
 ### Wide data generation — simulation path (`trainer.py RUN_TYPE=generate_full_ohlc`)
 Transforms `graber_data.pkl` into `df_with_indicators.pkl`:
@@ -266,6 +271,9 @@ Transforms `graber_data.pkl` into `df_with_indicators.pkl`:
    - At each row where `{tf}_is_closed=True`: run `build_indicator_input(df, ts, tf)` → `Indicators.compute(data_point, tf)` → write results to `df.loc[ts, {tf}_*]`
    - Indicator values are written only at `{tf}_is_closed=True` rows; non-closed rows remain NaN — consumers filter using `{tf}_is_closed`
 4. Compute `DataAttributes` artifacts: `rsi_classification.json`, `diff_stats.pkl` (if absent)
+4b. Candle-bound (CB) columns, one vectorized pass over the trimmed / merged wide frame
+    (`indicators.candle_bounds.stage.compute_cb_columns`, phase 18; skipped when the pair has no model file).
+    Existing datasets get them in place via `scripts/cb_markers_materialize.py`.
 5. Save `df_with_indicators.pkl`
 
 ### Simulation replay (`SimulationData`)
