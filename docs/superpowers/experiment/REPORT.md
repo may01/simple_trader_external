@@ -23,6 +23,7 @@ decision-grade) · `negative` (hypothesis died) · `running` · `not started`
 | 2026-07-24 | [nn_zone_filtered_training](../plans/2026-07-24-nn-zone-filtered-training.md) → [results](results/nn_zone_filtered_training_results.md) | Train the NN only on rows inside the nc entry zones | success | branch `nn-zone-filtered-training` kept, not merged |
 | 2026-08-06 | [rsi_parameters_selection](rsi_parameters_selection.md) → [results](results/rsi_parameters_selection_results.md) | Pick the RSI ma window, class count and cut technique that best separate profit labels | success | merged → `experimental_imp_2` @ `d2aeece`, branch removed |
 | 2026-08-07 | [zone_profitability](zone_profitability.md) | Shift the bound per move class to a zone holding the most profitable points | partial | branch `zone-profitability` kept, uncommitted, worktree alive |
+| 2026-10-01 | [ev_line](ev_line.md) → [results](results/ev_line_results.md), [detail](results/extdone_zone_filter_results.md) | Place the entry between the candle-bound bands by probability (EV line), then by candle state (executed bound, extension quantiles) | partial | branch `ev-line-experiment` kept (off `zone-profitability` @ `2788110`, commit `60def30`, not pushed, not merged), worktree `worktrees/ev-line-experiment` alive |
 | — | [color_prediction](color_prediction.md) | Predict next candle colour | not started | n/a |
 | — | [nn_signal_validation](nn_signal_validation.md) | Validate NN signals end to end | not started | n/a (spec empty) |
 
@@ -89,3 +90,17 @@ Extreme move classes hold OOS (15/−3 long 29.3% winrate vs 6.8% base, 25.5% OO
 classes lift only 1.3–1.4×. No open/target pair beats breakeven inside the candle horizon.
 Scoring rule had to be fixed twice mid-run: EV degenerated to the fewest-points cell, and
 the target margin argmax picked zero-reach corners. Left uncommitted.
+
+### 2026-10-01 · ev_line — partial
+
+Placement is dead: Gaussian EV-best, 25 σ combos, 1,545 empirically replayed (entry, stop,
+target) cells and six ATR shifts all net ≈ −0.20 % per fill on oos2m (gross ≈ 0; 0 of 150 sweep
+cells net-positive; the 2y-selected empirical rule won 0 trades in 6 of 6 cells). Gaussian band
+probabilities overstate win rate ×3–4 because a fill conditions against reaching the target.
+Survivors: the executed-bound state (pull-away ≥ d(progress) 1-min ATRs) holds 0.93–0.96 on
+oos2m with the ladder fit on 2y, against a 0.62–0.83 progress base rate; ATR-scaled
+remaining-extension quantiles cover oos2m near nominal. Dead by-product: Ridge of extension on
+market state (r² ≤ 0.26, scale only). Open for further investigation: EMA-25 slope classes
+(fall / neutral / rise) — only +0.95 % / −0.09 % pinball as a quantile conditioner so far, but
+now an in-code indicator (`ema_25_diff_prc`, `ema_25_slope_class`, frozen 2y stats). Trap hit: the first extdone ladder was picked on oos2m and scored row-based —
+both corrected. Not P&L-validated: the vetoed zones were never replayed.
