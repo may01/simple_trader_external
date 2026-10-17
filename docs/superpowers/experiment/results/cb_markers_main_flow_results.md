@@ -1,7 +1,7 @@
 # CB markers in the main flow — gate report (phase 18)
 
 **Run date:** 2026-10-05 (task 07 materialization + fix round 1 re-run; task 09 G8 replay), summary added 2026-10-06 (task 12)
-**Code:** branch `cb-markers-main-flow` (worktree `worktrees/cb-markers-main-flow`), base `757fc1d` plus the phase-18 working tree (tasks 01–12), **uncommitted, awaiting user review** — there is no commit hash for these numbers yet.
+**Code:** branch `cb-markers-main-flow`, commit `44da2d4` on base `757fc1d` (tasks 01–12); merged into `experimental_imp_2` as `97fb76d` on 2026-10-17.
 **Spec:** `specs/2026-10-05-cb-markers-main-flow-design.md`
 
 ## Gate summary (G1–G10)
