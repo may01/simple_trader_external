@@ -227,6 +227,23 @@ async fn current_indicator(&self, pair: Pair, name: &str, now: Ts)
 async fn read_current_indicators(&self, pair: Pair, as_of: Ts)
     -> Result<Vec<(Ts, IndicatorReading)>, StoreError>;
 
+// added 2026-10-16, see 2026-10-16-cb-overlay-visualiser-design.md -- BUILT.
+// Also on PgStateReader. Every reading needed to reconstruct, minute by
+// minute, what each name said for `pair` over `[from, to]`: a seed per
+// name (newest row with received_at < from AND expires_at > from --
+// read_current_indicators' body at `from`, strict lower bound) UNION ALL
+// the in-window rows compressed into runs: a row starts a run when it is
+// the first of its name in the window, its value differs from the
+// previous row's, or it arrived at/after the previous row's expires_at
+// (a sender gap, kept so the SPA shows it). Each run comes back as its
+// first row carrying the run's LATEST expires_at -- the folded heartbeats
+// are what kept the reading alive, and the SPA holds a value only until
+// its row expires. Ordered received_at, seq over the whole union (seeds
+// first); tuple Ts = received_at. No name filtering. Undecodable
+// kind/volume -> StoreError::Decode, as its siblings.
+async fn read_indicator_series(&self, pair: Pair, from: Ts, to: Ts)
+    -> Result<Vec<(Ts, IndicatorReading)>, StoreError>;
+
 // Read side only. The write side is local_analysis::WallSink, which
 // StateStoreImpl implements — deliberately not a method here, because it
 // fires on execution's decision path and so must not hand back a Result
@@ -352,6 +369,16 @@ back to an older live one; past `as_of` honoured; rows received after
 `as_of` excluded; pair isolation; `support`/`resistance` volume
 decoded; empty table → empty vec; `expires_at == as_of` excluded; a
 same-millisecond tie resolved by `seq`.
+`read_indicator_series` (added 2026-10-16, 13 DB tests, all as the
+`dashboard` role): seed returned for a name live at `from`; no seed when
+expired at or before `from`; seed is the newest pre-window row; heartbeat
+repeats folded into one row carrying the run's latest expiry; a run not
+extended past a value change; a value change kept; the same value after
+an expiry gap kept; the first in-window row kept even when equal to the
+seed; both window bounds (`received_at == from` in-window, `== to` in,
+one past out, pre-window expired row out); pair isolation; order
+`received_at, seq` across names; empty table → empty vec;
+`support` volume decoded.
 
 `current_levels`/`current_command`/`analysis_current`/`analysis_log`
 (added 2026-09-08) tested independently: `log_decision(Decision)`

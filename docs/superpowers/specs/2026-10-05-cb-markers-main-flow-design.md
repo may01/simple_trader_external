@@ -76,7 +76,7 @@ is left to the consumer.
 - No refit of the bound models, the ladder, or the class thresholds.
 - The other experiment sidecars stay sidecars: `cb_close*`, `cb_hi_adj` /
   `cb_lo_adj`, `cb_enter_*`, `cbover_*` / `cb_overshoot_*`, `cbatr_*`,
-  `ev_*`, `evr_*`, `zp_*`, and the `ema25_*` drawing columns.
+  `ev_*`, `evr_*`, `zp_*`, and the `ema25_*` drawing columns. *(2026-10-17: `cbover_*` / `cb_overshoot_*` moved into the main flow by phase 19 — `2026-10-17-cb-overshoot-main-flow-design.md`, columns `{tf}_cb_overshoot_{side}` / `{tf}_cb_f_overshoot_{side}`; the sidecar join and viewer veto are gone.)*
 - No fix for the unrelated findings listed under "Observed, out of scope".
 
 ## Current state (verified)

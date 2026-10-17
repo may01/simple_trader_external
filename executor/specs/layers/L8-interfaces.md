@@ -42,6 +42,22 @@ transport moved.
   30 s left, and shows "No live indicators — `main/` may not be
   publishing." when empty. Read-only, like everything else here: no
   chart drawing of indicators, no history series.
+- **Candle-bound overlay** (added 2026-10-16, built — see
+  [cb-overlay-visualiser-design.md](../2026-10-16-cb-overlay-visualiser-design.md)):
+  `VisualizerBackend::indicator_series(pair, from, to)`, a pass-through
+  to `PgStateReader::read_indicator_series`, served as
+  `GET /api/pair_indicators?pair=&from=&to=` (`HistoryParams`;
+  `IndicatorPointDto` = `CurrentIndicatorDto` minus `age_ms`/
+  `expires_in_ms`; seed rows appear with `received_at < from`). The
+  pair page draws main/'s `{tf}_cb_zone_*` levels as step lines and
+  `{tf}_cb_inzone_*` minutes as dots on the candle chart (plus the
+  optional bound / forming-bound / extdone families), with family,
+  filter (`cb_f_extdone`, `cb_f_overshoot`, `cb_f_trend`) and timeframe toggles above the
+  chart. Logic in `static/js/cb_overlay.js` (DOM-free, `node --test`),
+  series in `chart.js`, fetch cadence in `pair.js`: full window on a
+  backfill / History load, incremental `[lastReceivedAt + 1, now]` on
+  the existing 5 s status tick in Live. The Indicators panel is
+  unchanged.
 
 ## Depends on
 

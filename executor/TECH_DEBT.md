@@ -503,6 +503,8 @@ multi-tf batch, the legacy entries' cadence.
 **Resolution:** treat "no last published value and value now finite" as a change for `on_change` entries,
 with a test for each case above.
 
+**2026-10-17:** also covers the phase-19 flags `{tf}_cb_f_overshoot_{long,short}` (6 more on_change names; 48 CB wire names in total).
+
 ## 18. main/: absent candle-bound columns raise `KeyError` for live consumers
 
 **Status:** open (flagged 2026-10-06, CB-markers main-flow phase 18, task 09 review)
