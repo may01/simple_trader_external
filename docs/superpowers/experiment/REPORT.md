@@ -129,3 +129,6 @@ the entry gate carries the shape (narrow band → +15 stop-outs, wide band → r
 wanders 0.6–1.0. Keep 0.7. Gross edge ≈ 3.9 bp of notional per trade: breakeven fee 0.021 %/side — at 0.1 %/side
 every X loses ~13 k over the window. Report `results/trend_x_sweep_results.md`.
 
+### 2026-10-20 · ma_window_by_tf_replay — negative (57.7 h replay, executor paper data)
+
+A slower trade-price MA as the entry class for the higher-tf CB zones: 3 / 5 min on tf 60 + 240 → net +2 489 → +2 482 / +2 128, the tf 60+240 positions +772 → +572 / +242; 10 / 15 min on tf 240 alone → +2 226 / +1 861 (tf 240 +667 → +541 / +310). All inside the bootstrap noise, mechanism uniform: the same (side, tf, zone) keys fire 0.6–1.8 min later (up to +43 min) at a worse price, the 15-min-anchored stop does not move, 6–8 tf-60 trades are taken first by the 15 zone and inherit its nearer target; slower MA on every tf is clearly worse (+1 723 / +1 042). Keep the 1-min class. Report `external/executor/runs/2026-10-20-ma-window-by-tf-replay.md`, summary `experiment/results/ma_window_by_tf_results.md`.
