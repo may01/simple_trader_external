@@ -1,0 +1,186 @@
+trades 670203  10-16 22:29:05 -> 10-20 21:23:29
+trade feed gaps > 60 s: 18 [('10-16 23:52:38', 138), ('10-17 00:43:46', 72), ('10-17 02:46:08', 60), ('10-17 03:48:42', 71), ('10-17 07:10:46', 73), ('10-17 10:32:51', 75), ('10-17 10:51:10', 66), ('10-17 11:26:05', 73), ('10-17 11:39:01', 62), ('10-17 19:33:42', 97), ('10-18 01:53:20', 80), ('10-18 04:26:26', 72), ('10-18 04:27:38', 101), ('10-18 04:49:44', 88), ('10-18 05:08:21', 62), ('10-19 13:01:46', 5564), ('10-19 20:01:34', 9432), ('10-20 16:13:10', 305)]
+  15_cb_zone_long          rows   9912  present at 98.0% of trades
+  15_cb_zone_short         rows   9912  present at 98.0% of trades
+  15_cb_inzone_long        rows  10371  present at 98.0% of trades
+  15_cb_inzone_short       rows  10366  present at 98.0% of trades
+  15_cb_f_overshoot_long   rows   7447  present at 75.9% of trades
+  15_cb_f_overshoot_short  rows   7504  present at 75.9% of trades
+  15_cb_f_trend_long       rows  10098  present at 98.0% of trades
+  15_cb_f_trend_short      rows  10099  present at 98.0% of trades
+  15_cbnc_high             rows   9894  present at 98.0% of trades
+  15_cbnc_low              rows   9890  present at 98.0% of trades
+  60_cb_zone_long          rows   9921  present at 98.0% of trades
+  60_cb_zone_short         rows   9921  present at 98.0% of trades
+  60_cb_inzone_long        rows  10101  present at 98.0% of trades
+  60_cb_inzone_short       rows  10042  present at 98.0% of trades
+  60_cb_f_overshoot_long   rows   7357  present at 75.9% of trades
+  60_cb_f_overshoot_short  rows   7375  present at 75.9% of trades
+  60_cb_f_trend_long       rows  10034  present at 98.0% of trades
+  60_cb_f_trend_short      rows  10048  present at 98.0% of trades
+  60_cbnc_high             rows   9904  present at 98.0% of trades
+  60_cbnc_low              rows   9907  present at 98.0% of trades
+  240_cb_zone_long         rows   9933  present at 98.0% of trades
+  240_cb_zone_short        rows   9929  present at 98.0% of trades
+  240_cb_inzone_long       rows  10013  present at 98.0% of trades
+  240_cb_inzone_short      rows   9997  present at 98.0% of trades
+  240_cb_f_overshoot_long  rows   7345  present at 75.9% of trades
+  240_cb_f_overshoot_short rows   7347  present at 75.9% of trades
+  240_cb_f_trend_long      rows  10028  present at 98.0% of trades
+  240_cb_f_trend_short     rows   9945  present at 98.0% of trades
+  240_cbnc_high            rows   9911  present at 98.0% of trades
+  240_cbnc_low             rows   9911  present at 98.0% of trades
+trend cache loaded
+trades from 10-17 22:00:00: 521959; trades where some (tf, side) can be a candidate: 161018
+
+=== REPRODUCTION GATE (X = 0.7) ===
+recorded CbZoneEntry fires: 152  (from 10-18 11:41:10);  sim fires in the same span: 147
+  exact match (same ms, side, tf): 141/152; within ±120 s (same side, tf): 4; unmatched: 7
+  class agrees at exact matches: 140/141; |slope diff| max 3.92e-05
+  class at the recorded fire's trade (any sim state): 144/152 agree; |slope diff| max 3.64e-04 median 4.97e-14
+  sim fires with no recorded counterpart: 2 (restart resets of the once-per-zone state, warm-ups and feed gaps explain live/sim differences)
+    unmatched recorded: 10-18 11:41:10 Buy  tf  15 in_zone        up
+    unmatched recorded: 10-19 22:43:33 Sell tf 240 in_zone        down
+    unmatched recorded: 10-19 22:50:10 Sell tf  60 in_zone        down
+    unmatched recorded: 10-19 23:52:05 Sell tf 240 in_zone        down
+    unmatched recorded: 10-20 00:21:27 Buy  tf  15 in_zone        up
+    unmatched recorded: 10-20 20:26:46 Buy  tf  15 zone_rejection up
+    unmatched recorded: 10-20 20:31:49 Sell tf  60 in_zone        down
+  sim-0.7 fire rules: in_zone 120, zone_rejection 81; tf mix {15: 151, 60: 39, 240: 11}
+
+=== JOINT SWEEP (X for open gate and trend-flip exit), window from 10-17 22:00:00 to 10-20 21:23:29, paper (no fees) ===
+        X=0.01 | n 188 | net    +2224 | PF  1.30 | wr  47% | R  +45.9 | hold   7.5m | risk   76 | CI90 [    +0, +4557] P<0 0.05 | top2  +600 | stop=97/-7416 targ=56/+5770 reve=35/+3870 | fires 212 skip 24 | up  50% down  49% neutral   1%
+         X=0.1 | n 187 | net    +2094 | PF  1.28 | wr  47% | R  +43.2 | hold   7.3m | risk   76 | CI90 [  -191, +4331] P<0 0.06 | top2  +596 | stop=96/-7456 targ=57/+5847 reve=34/+3702 | fires 211 skip 24 | up  47% down  45% neutral   8%
+         X=0.2 | n 186 | net    +2205 | PF  1.30 | wr  49% | R  +42.0 | hold   7.0m | risk   77 | CI90 [   -46, +4474] P<0 0.05 | top2  +595 | stop=93/-7317 targ=60/+5898 reve=33/+3624 | fires 209 skip 23 | up  43% down  41% neutral  16%
+         X=0.3 | n 186 | net    +2310 | PF  1.32 | wr  49% | R  +45.5 | hold   7.1m | risk   77 | CI90 [   +28, +4565] P<0 0.05 | top2  +587 | stop=92/-7272 targ=60/+5843 reve=34/+3738 | fires 209 skip 23 | up  39% down  38% neutral  23%
+         X=0.4 | n 181 | net    +2562 | PF  1.36 | wr  50% | R  +46.7 | hold   7.1m | risk   79 | CI90 [  +313, +4857] P<0 0.03 | top2  +611 | stop=88/-7019 targ=60/+5769 reve=33/+3812 | fires 204 skip 23 | up  36% down  34% neutral  30%
+         X=0.5 | n 181 | net    +2826 | PF  1.41 | wr  51% | R  +45.2 | hold   7.2m | risk   79 | CI90 [  +565, +5117] P<0 0.02 | top2  +602 | stop=86/-6841 targ=63/+5973 reve=32/+3695 | fires 205 skip 24 | up  32% down  31% neutral  37%
+         X=0.6 | n 180 | net    +3259 | PF  1.48 | wr  52% | R  +49.8 | hold   7.4m | risk   82 | CI90 [  +873, +5685] P<0 0.01 | top2  +762 | stop=84/-6740 targ=64/+5845 reve=32/+4153 | fires 204 skip 24 | up  29% down  28% neutral  43%
+        X=0.65 | n 178 | net    +3320 | PF  1.50 | wr  52% | R  +48.7 | hold   7.2m | risk   84 | CI90 [  +987, +5697] P<0 0.01 | top2  +756 | stop=82/-6603 targ=66/+6264 reve=30/+3659 | fires 201 skip 23 | up  28% down  26% neutral  46%
+         X=0.7 | n 178 | net    +3490 | PF  1.52 | wr  52% | R  +52.5 | hold   7.2m | risk   84 | CI90 [ +1135, +5923] P<0 0.01 | top2  +804 | stop=82/-6622 targ=66/+6494 reve=30/+3619 | fires 201 skip 23 | up  26% down  25% neutral  49%
+        X=0.75 | n 178 | net    +3513 | PF  1.52 | wr  52% | R  +51.8 | hold   7.4m | risk   85 | CI90 [ +1118, +5962] P<0 0.01 | top2  +804 | stop=82/-6642 targ=66/+6605 reve=30/+3551 | fires 201 skip 23 | up  25% down  23% neutral  52%
+         X=0.8 | n 177 | net    +3428 | PF  1.52 | wr  53% | R  +51.3 | hold   7.5m | risk   86 | CI90 [  +987, +5893] P<0 0.01 | top2  +804 | stop=81/-6570 targ=66/+6487 reve=30/+3511 | fires 198 skip 21 | up  23% down  22% neutral  55%
+        X=0.85 | n 176 | net    +3304 | PF  1.50 | wr  53% | R  +49.8 | hold   7.2m | risk   86 | CI90 [  +918, +5840] P<0 0.01 | top2  +800 | stop=81/-6574 targ=66/+6387 reve=29/+3492 | fires 198 skip 22 | up  22% down  21% neutral  57%
+         X=0.9 | n 175 | net    +3090 | PF  1.47 | wr  53% | R  +47.0 | hold   7.1m | risk   86 | CI90 [  +744, +5533] P<0 0.01 | top2  +800 | stop=80/-6508 targ=65/+5989 reve=30/+3609 | fires 197 skip 22 | up  21% down  20% neutral  60%
+           X=1 | n 172 | net    +2983 | PF  1.47 | wr  52% | R  +43.7 | hold   7.1m | risk   87 | CI90 [  +737, +5378] P<0 0.01 | top2  +799 | stop=78/-6311 targ=63/+5383 reve=31/+3911 | fires 193 skip 21 | up  19% down  17% neutral  64%
+         X=1.2 | n 167 | net    +2667 | PF  1.45 | wr  50% | R  +36.2 | hold   7.9m | risk   92 | CI90 [  +436, +4917] P<0 0.02 | top2  +790 | stop=74/-5845 targ=60/+4520 reve=33/+3992 | fires 186 skip 19 | up  15% down  14% neutral  72%
+         X=1.5 | n 161 | net    +1914 | PF  1.32 | wr  47% | R  +27.9 | hold   8.5m | risk   95 | CI90 [  -244, +4165] P<0 0.07 | top2  +742 | stop=71/-5675 targ=54/+3365 reve=36/+4224 | fires 183 skip 22 | up  10% down   9% neutral  81%
+           X=2 | n 156 | net     +700 | PF  1.11 | wr  38% | R  +11.8 | hold  10.0m | risk   95 | CI90 [ -1479, +3044] P<0 0.31 | top2  +767 | stop=72/-5643 targ=44/+2393 reve=40/+3950 | fires 178 skip 22 | up   5% down   5% neutral  89%
+           X=3 | n 137 | net     +576 | PF  1.09 | wr  38% | R   +9.4 | hold  11.0m | risk   95 | CI90 [ -1597, +2900] P<0 0.34 | top2  +814 | stop=74/-5728 targ=17/+1055 reve=46/+5248 | fires 174 skip 37 | up   2% down   2% neutral  96%
+         X=inf | n 126 | net     +749 | PF  1.12 | wr  37% | R  +12.2 | hold  11.1m | risk   93 | CI90 [ -1795, +3449] P<0 0.32 | top2 +1107 | stop=75/-6209 reve=51/+6959 | fires 174 skip 48 | up   0% down   0% neutral 100%
+
+--- fees: net after f %/side (fee = f · size · (entry + exit)); breakeven f = gross / Σ size·(entry+exit); bp = gross per trade in bp of notional ---
+       X |   gross | notional/trade | bp/trade |   0.01% |   0.02% |   0.05% |   0.10% | breakeven f/side
+    0.01 |   +2224 |          50389 |     +2.3 |    +453 |   -1318 |   -6630 |  -15485 | 0.013 %
+     0.1 |   +2094 |          50356 |     +2.2 |    +340 |   -1414 |   -6677 |  -15447 | 0.012 %
+     0.2 |   +2205 |          50333 |     +2.4 |    +464 |   -1278 |   -6502 |  -15208 | 0.013 %
+     0.3 |   +2310 |          50340 |     +2.5 |    +577 |   -1156 |   -6356 |  -15023 | 0.013 %
+     0.4 |   +2562 |          50473 |     +2.8 |    +870 |    -822 |   -5899 |  -14360 | 0.015 %
+     0.5 |   +2826 |          50498 |     +3.1 |   +1133 |    -560 |   -5640 |  -14107 | 0.017 %
+     0.6 |   +3259 |          50646 |     +3.6 |   +1576 |    -106 |   -5154 |  -13567 | 0.019 %
+    0.65 |   +3320 |          50497 |     +3.7 |   +1660 |      -1 |   -4982 |  -13283 | 0.020 %
+     0.7 |   +3490 |          50477 |     +3.9 |   +1830 |    +170 |   -4810 |  -13111 | 0.021 %
+    0.75 |   +3513 |          50478 |     +3.9 |   +1855 |    +197 |   -4777 |  -13068 | 0.021 %
+     0.8 |   +3428 |          50499 |     +3.8 |   +1783 |    +138 |   -4796 |  -13020 | 0.021 %
+    0.85 |   +3304 |          50490 |     +3.7 |   +1669 |     +34 |   -4872 |  -13049 | 0.020 %
+     0.9 |   +3090 |          50518 |     +3.5 |   +1468 |    -154 |   -5021 |  -13132 | 0.019 %
+       1 |   +2983 |          50436 |     +3.4 |   +1391 |    -201 |   -4977 |  -12937 | 0.019 %
+     1.2 |   +2667 |          50417 |     +3.2 |   +1136 |    -395 |   -4988 |  -12643 | 0.017 %
+     1.5 |   +1914 |          50406 |     +2.4 |    +451 |   -1012 |   -5403 |  -12719 | 0.013 %
+       2 |    +700 |          50060 |     +0.9 |    -678 |   -2056 |   -6188 |  -13077 | 0.005 %
+       3 |    +576 |          49946 |     +0.8 |    -626 |   -1829 |   -5437 |  -11451 | 0.005 %
+     inf |    +749 |          50065 |     +1.2 |    -367 |   -1484 |   -4834 |  -10417 | 0.007 %
+
+--- paired vs X=0.7: trades matched by opening trade; unmatched trades enter as (pnl − 0) ---
+    0.01 | shared opens  34 | only-X 154 | only-0.7 144 | Δnet   -1267 | paired CI90 [ -4371,  +1927] | P(Δ<0) 0.74
+     0.1 | shared opens  43 | only-X 144 | only-0.7 135 | Δnet   -1396 | paired CI90 [ -4414,  +1677] | P(Δ<0) 0.77
+     0.2 | shared opens  50 | only-X 136 | only-0.7 128 | Δnet   -1285 | paired CI90 [ -4300,  +1654] | P(Δ<0) 0.76
+     0.3 | shared opens  68 | only-X 118 | only-0.7 110 | Δnet   -1180 | paired CI90 [ -4092,  +1748] | P(Δ<0) 0.75
+     0.4 | shared opens  84 | only-X  97 | only-0.7  94 | Δnet    -928 | paired CI90 [ -3608,  +1615] | P(Δ<0) 0.72
+     0.5 | shared opens 103 | only-X  78 | only-0.7  75 | Δnet    -664 | paired CI90 [ -3020,  +1678] | P(Δ<0) 0.68
+     0.6 | shared opens 127 | only-X  53 | only-0.7  51 | Δnet    -231 | paired CI90 [ -2297,  +1731] | P(Δ<0) 0.59
+    0.65 | shared opens 150 | only-X  28 | only-0.7  28 | Δnet    -170 | paired CI90 [ -1776,  +1522] | P(Δ<0) 0.57
+     0.7 | shared opens 178 | only-X   0 | only-0.7   0 | Δnet      +0 | paired CI90 [    +0,     +0] | P(Δ<0) 0.00
+    0.75 | shared opens 141 | only-X  37 | only-0.7  37 | Δnet     +23 | paired CI90 [ -1805,  +1778] | P(Δ<0) 0.49
+     0.8 | shared opens 131 | only-X  46 | only-0.7  47 | Δnet     -62 | paired CI90 [ -2241,  +2025] | P(Δ<0) 0.51
+    0.85 | shared opens 122 | only-X  54 | only-0.7  56 | Δnet    -186 | paired CI90 [ -2442,  +2117] | P(Δ<0) 0.55
+     0.9 | shared opens 110 | only-X  65 | only-0.7  68 | Δnet    -400 | paired CI90 [ -2695,  +1889] | P(Δ<0) 0.60
+       1 | shared opens  97 | only-X  75 | only-0.7  81 | Δnet    -507 | paired CI90 [ -2910,  +1932] | P(Δ<0) 0.63
+     1.2 | shared opens  80 | only-X  87 | only-0.7  98 | Δnet    -823 | paired CI90 [ -3577,  +1805] | P(Δ<0) 0.70
+     1.5 | shared opens  66 | only-X  95 | only-0.7 112 | Δnet   -1576 | paired CI90 [ -4434,  +1361] | P(Δ<0) 0.81
+       2 | shared opens  57 | only-X  99 | only-0.7 121 | Δnet   -2791 | paired CI90 [ -5801,   +250] | P(Δ<0) 0.94
+       3 | shared opens  49 | only-X  88 | only-0.7 129 | Δnet   -2914 | paired CI90 [ -5994,    +89] | P(Δ<0) 0.95
+     inf | shared opens  46 | only-X  80 | only-0.7 132 | Δnet   -2741 | paired CI90 [ -5972,   +512] | P(Δ<0) 0.92
+
+--- stability: net by half (split at 10-19 09:41:45) and by UTC day, joint X, no fees ---
+       X |   H1 net   n |   H2 net   n |  10-17 n |  10-18 n |  10-19 n |  10-20 n
+    0.01 |    +1314  97 |     +910  91 |    +86  5 |   +786 68 |    +98 43 |  +1254 72
+     0.1 |    +1215  97 |     +879  90 |    +77  5 |   +754 68 |    +64 42 |  +1198 72
+     0.2 |    +1050  97 |    +1155  89 |    +64  5 |   +619 68 |    +23 42 |  +1499 71
+     0.3 |    +1018  97 |    +1292  89 |    +79  5 |   +629 68 |   +197 42 |  +1405 71
+     0.4 |    +1268  94 |    +1294  87 |    +79  5 |   +879 66 |   +239 40 |  +1366 70
+     0.5 |    +1603  94 |    +1224  87 |    +69  5 |  +1345 66 |   +104 40 |  +1309 70
+     0.6 |    +1796  93 |    +1463  87 |    +73  5 |  +1595 65 |    +14 40 |  +1577 70
+    0.65 |    +1522  92 |    +1798  86 |    +73  5 |  +1334 64 |   +261 40 |  +1652 69
+     0.7 |    +1618  92 |    +1872  86 |    +69  5 |  +1463 64 |   +334 40 |  +1624 69
+    0.75 |    +1676  92 |    +1838  86 |    +69  5 |  +1409 64 |   +408 40 |  +1627 69
+     0.8 |    +1651  91 |    +1777  86 |    +60  5 |  +1402 63 |   +376 40 |  +1590 69
+    0.85 |    +1612  90 |    +1692  86 |    +60  5 |  +1375 62 |   +361 40 |  +1508 69
+     0.9 |    +1593  89 |    +1498  86 |    +56  5 |  +1377 61 |   +423 40 |  +1234 69
+       1 |    +1471  88 |    +1512  84 |    +60  5 |  +1257 60 |   +426 40 |  +1240 67
+     1.2 |    +1215  87 |    +1452  80 |    -36  4 |  +1173 61 |   +209 38 |  +1321 64
+     1.5 |    +1211  82 |     +703  79 |    -45  4 |  +1148 56 |   +259 38 |   +552 63
+       2 |     +338  81 |     +362  75 |    +24  5 |   +463 55 |   -357 35 |   +570 61
+       3 |     -108  75 |     +684  62 |    +66  5 |   +188 49 |   -101 32 |   +423 51
+     inf |     +415  66 |     +334  60 |    +66  5 |   +429 40 |    +10 32 |   +245 49
+
+=== ENTRY-GATE SWEEP (exit X fixed at 0.7), no fees ===
+      Xin=0.01 | n 188 | net    +2447 | PF  1.33 | wr  47% | R  +51.9 | hold   8.0m | risk   76 | CI90 [  +131, +4880] P<0 0.04 | top2  +737 | stop=97/-7427 targ=53/+5532 reve=38/+4342 | fires 212 skip 24
+       Xin=0.1 | n 187 | net    +2221 | PF  1.30 | wr  47% | R  +46.9 | hold   8.0m | risk   76 | CI90 [  -134, +4565] P<0 0.06 | top2  +732 | stop=96/-7464 targ=54/+5533 reve=37/+4152 | fires 211 skip 24
+       Xin=0.2 | n 186 | net    +2313 | PF  1.31 | wr  49% | R  +45.6 | hold   7.7m | risk   77 | CI90 [   -28, +4637] P<0 0.05 | top2  +731 | stop=93/-7324 targ=58/+5720 reve=35/+3917 | fires 209 skip 23
+       Xin=0.3 | n 186 | net    +2295 | PF  1.31 | wr  49% | R  +47.5 | hold   7.4m | risk   77 | CI90 [   -63, +4633] P<0 0.06 | top2  +731 | stop=92/-7275 targ=59/+5676 reve=35/+3893 | fires 209 skip 23
+       Xin=0.4 | n 181 | net    +2628 | PF  1.37 | wr  50% | R  +50.3 | hold   7.3m | risk   79 | CI90 [  +302, +5016] P<0 0.03 | top2  +732 | stop=88/-7022 targ=59/+5686 reve=34/+3963 | fires 204 skip 23
+       Xin=0.5 | n 181 | net    +2993 | PF  1.43 | wr  51% | R  +49.8 | hold   7.5m | risk   79 | CI90 [  +680, +5379] P<0 0.02 | top2  +731 | stop=86/-6846 targ=62/+6039 reve=33/+3800 | fires 205 skip 24
+       Xin=0.6 | n 180 | net    +3495 | PF  1.51 | wr  52% | R  +55.1 | hold   7.5m | risk   82 | CI90 [ +1085, +6004] P<0 0.01 | top2  +815 | stop=84/-6746 targ=63/+5981 reve=33/+4260 | fires 204 skip 24
+      Xin=0.65 | n 178 | net    +3551 | PF  1.53 | wr  52% | R  +53.9 | hold   7.2m | risk   84 | CI90 [ +1178, +5979] P<0 0.01 | top2  +809 | stop=82/-6608 targ=66/+6497 reve=30/+3662 | fires 201 skip 23
+       Xin=0.7 | n 178 | net    +3490 | PF  1.52 | wr  52% | R  +52.5 | hold   7.2m | risk   84 | CI90 [ +1135, +5923] P<0 0.01 | top2  +804 | stop=82/-6622 targ=66/+6494 reve=30/+3619 | fires 201 skip 23
+      Xin=0.75 | n 178 | net    +3409 | PF  1.51 | wr  52% | R  +50.8 | hold   7.2m | risk   85 | CI90 [ +1030, +5855] P<0 0.01 | top2  +804 | stop=82/-6641 targ=69/+6763 reve=27/+3288 | fires 201 skip 23
+       Xin=0.8 | n 177 | net    +3439 | PF  1.52 | wr  53% | R  +51.7 | hold   7.3m | risk   86 | CI90 [  +996, +5923] P<0 0.01 | top2  +804 | stop=81/-6571 targ=69/+6758 reve=27/+3253 | fires 198 skip 21
+      Xin=0.85 | n 176 | net    +3387 | PF  1.51 | wr  53% | R  +50.9 | hold   7.0m | risk   86 | CI90 [  +989, +5930] P<0 0.01 | top2  +800 | stop=81/-6576 targ=69/+6716 reve=26/+3247 | fires 198 skip 22
+       Xin=0.9 | n 175 | net    +3215 | PF  1.49 | wr  53% | R  +49.0 | hold   6.9m | risk   87 | CI90 [  +857, +5660] P<0 0.01 | top2  +800 | stop=80/-6511 targ=70/+6607 reve=25/+3120 | fires 197 skip 22
+         Xin=1 | n 172 | net    +3095 | PF  1.49 | wr  53% | R  +46.7 | hold   6.9m | risk   87 | CI90 [  +850, +5536] P<0 0.01 | top2  +800 | stop=78/-6313 targ=71/+6446 reve=23/+2962 | fires 193 skip 21
+       Xin=1.2 | n 167 | net    +3098 | PF  1.53 | wr  53% | R  +45.0 | hold   7.1m | risk   92 | CI90 [  +859, +5303] P<0 0.01 | top2  +790 | stop=73/-5808 targ=72/+6281 reve=22/+2624 | fires 186 skip 19
+       Xin=1.5 | n 162 | net    +2714 | PF  1.47 | wr  51% | R  +41.5 | hold   6.9m | risk   95 | CI90 [  +471, +4946] P<0 0.02 | top2  +742 | stop=71/-5705 targ=70/+5934 reve=21/+2485 | fires 183 skip 21
+         Xin=2 | n 161 | net    +1900 | PF  1.33 | wr  49% | R  +31.2 | hold   6.7m | risk   95 | CI90 [  -189, +4086] P<0 0.07 | top2  +700 | stop=71/-5575 targ=69/+5401 reve=21/+2074 | fires 178 skip 17
+         Xin=3 | n 159 | net    +2296 | PF  1.41 | wr  51% | R  +35.0 | hold   6.7m | risk   95 | CI90 [  +125, +4518] P<0 0.04 | top2  +769 | stop=69/-5363 targ=70/+5742 reve=20/+1917 | fires 174 skip 15
+       Xin=inf | n 159 | net    +2293 | PF  1.41 | wr  51% | R  +36.1 | hold   6.7m | risk   93 | CI90 [  +111, +4534] P<0 0.04 | top2  +807 | stop=69/-5363 targ=70/+5787 reve=20/+1869 | fires 174 skip 15
+
+=== EXIT-GATE SWEEP (entry X fixed at 0.7), no fees ===
+     Xout=0.01 | n 178 | net    +3375 | PF  1.51 | wr  52% | R  +50.0 | hold   6.7m | risk   84 | CI90 [ +1055, +5755] P<0 0.01 | top2  +752 | stop=82/-6616 targ=72/+7107 reve=24/+2885 | fires 201 skip 23
+      Xout=0.1 | n 178 | net    +3361 | PF  1.50 | wr  52% | R  +49.6 | hold   6.7m | risk   84 | CI90 [ +1046, +5741] P<0 0.01 | top2  +752 | stop=82/-6616 targ=72/+7093 reve=24/+2885 | fires 201 skip 23
+      Xout=0.2 | n 178 | net    +3318 | PF  1.50 | wr  52% | R  +49.1 | hold   6.7m | risk   84 | CI90 [ +1006, +5683] P<0 0.01 | top2  +752 | stop=82/-6616 targ=71/+6968 reve=25/+2966 | fires 201 skip 23
+      Xout=0.3 | n 178 | net    +3366 | PF  1.51 | wr  52% | R  +50.2 | hold   6.7m | risk   84 | CI90 [ +1039, +5723] P<0 0.01 | top2  +752 | stop=82/-6619 targ=69/+6670 reve=27/+3315 | fires 201 skip 23
+      Xout=0.4 | n 178 | net    +3316 | PF  1.50 | wr  52% | R  +49.0 | hold   6.7m | risk   84 | CI90 [  +971, +5677] P<0 0.01 | top2  +752 | stop=82/-6620 targ=68/+6520 reve=28/+3415 | fires 201 skip 23
+      Xout=0.5 | n 178 | net    +3260 | PF  1.49 | wr  52% | R  +48.0 | hold   7.0m | risk   84 | CI90 [  +938, +5613] P<0 0.01 | top2  +752 | stop=82/-6620 targ=68/+6465 reve=28/+3415 | fires 201 skip 23
+      Xout=0.6 | n 178 | net    +3131 | PF  1.47 | wr  52% | R  +46.3 | hold   7.1m | risk   84 | CI90 [  +812, +5481] P<0 0.01 | top2  +751 | stop=82/-6616 targ=68/+6334 reve=28/+3414 | fires 201 skip 23
+     Xout=0.65 | n 178 | net    +3264 | PF  1.49 | wr  52% | R  +47.5 | hold   7.2m | risk   84 | CI90 [  +933, +5632] P<0 0.01 | top2  +752 | stop=82/-6618 targ=68/+6467 reve=28/+3414 | fires 201 skip 23
+      Xout=0.7 | n 178 | net    +3490 | PF  1.52 | wr  52% | R  +52.5 | hold   7.2m | risk   84 | CI90 [ +1135, +5923] P<0 0.01 | top2  +804 | stop=82/-6622 targ=66/+6494 reve=30/+3619 | fires 201 skip 23
+     Xout=0.75 | n 178 | net    +3605 | PF  1.54 | wr  52% | R  +53.6 | hold   7.4m | risk   84 | CI90 [ +1223, +6051] P<0 0.01 | top2  +804 | stop=82/-6624 targ=66/+6609 reve=30/+3620 | fires 201 skip 23
+      Xout=0.8 | n 178 | net    +3492 | PF  1.52 | wr  52% | R  +52.3 | hold   7.4m | risk   84 | CI90 [ +1105, +5916] P<0 0.01 | top2  +804 | stop=82/-6622 targ=66/+6495 reve=30/+3619 | fires 201 skip 23
+     Xout=0.85 | n 178 | net    +3426 | PF  1.51 | wr  52% | R  +51.5 | hold   7.4m | risk   84 | CI90 [ +1040, +5852] P<0 0.01 | top2  +804 | stop=82/-6621 targ=66/+6428 reve=30/+3618 | fires 201 skip 23
+      Xout=0.9 | n 178 | net    +3393 | PF  1.51 | wr  52% | R  +50.8 | hold   7.4m | risk   84 | CI90 [  +994, +5797] P<0 0.01 | top2  +804 | stop=82/-6620 targ=65/+6240 reve=31/+3773 | fires 201 skip 23
+        Xout=1 | n 178 | net    +3410 | PF  1.51 | wr  52% | R  +49.4 | hold   7.6m | risk   84 | CI90 [ +1024, +5824] P<0 0.01 | top2  +804 | stop=82/-6621 targ=64/+6072 reve=32/+3959 | fires 201 skip 23
+      Xout=1.2 | n 178 | net    +2996 | PF  1.44 | wr  51% | R  +42.5 | hold   7.9m | risk   84 | CI90 [  +582, +5394] P<0 0.02 | top2  +804 | stop=83/-6655 targ=59/+5170 reve=36/+4481 | fires 201 skip 23
+      Xout=1.5 | n 177 | net    +2490 | PF  1.37 | wr  47% | R  +36.5 | hold   8.5m | risk   84 | CI90 [   +87, +4986] P<0 0.04 | top2  +803 | stop=82/-6584 targ=54/+3998 reve=41/+5076 | fires 201 skip 24
+        Xout=2 | n 173 | net    +1804 | PF  1.25 | wr  42% | R  +29.6 | hold   9.9m | risk   84 | CI90 [  -617, +4194] P<0 0.11 | top2  +803 | stop=83/-6745 targ=42/+2585 reve=48/+5964 | fires 201 skip 28
+        Xout=3 | n 157 | net    +1223 | PF  1.17 | wr  38% | R  +20.4 | hold  10.9m | risk   83 | CI90 [ -1295, +3757] P<0 0.22 | top2  +861 | stop=90/-7189 targ=14/+1167 reve=53/+7245 | fires 201 skip 44
+      Xout=inf | n 147 | net    +1424 | PF  1.19 | wr  37% | R  +23.2 | hold  10.9m | risk   83 | CI90 [ -1258, +4262] P<0 0.18 | top2 +1137 | stop=89/-7261 reve=58/+8685 | fires 201 skip 54
+
+=== BREAKDOWN by rule / tf / side (joint X), no fees ===
+X=0.3: in_/15/B 49:+450; in_/15/S 58:+705; in_/60/B 14:+54; in_/60/S 11:+462; in_/240/B 3:-49; in_/240/S 5:+238; zon/15/B 15:+472; zon/15/S 21:-220; zon/60/B 3:-12; zon/60/S 4:+78; zon/240/B 1:+281; zon/240/S 2:-149
+X=0.5: in_/15/B 40:+418; in_/15/S 50:+1352; in_/60/B 11:+232; in_/60/S 11:+373; in_/240/B 3:-40; in_/240/S 5:+232; zon/15/B 21:+357; zon/15/S 26:-227; zon/60/B 6:-201; zon/60/S 5:+173; zon/240/B 1:+302; zon/240/S 2:-146
+X=0.7: in_/15/B 35:+390; in_/15/S 44:+1007; in_/60/B 10:+30; in_/60/S 11:+345; in_/240/B 3:+151; in_/240/S 5:+800; zon/15/B 25:+528; zon/15/S 29:+101; zon/60/B 7:-317; zon/60/S 6:+305; zon/240/B 1:+296; zon/240/S 2:-146
+X=1: in_/15/B 30:+24; in_/15/S 32:+497; in_/60/B 9:+59; in_/60/S 10:+302; in_/240/B 2:+230; in_/240/S 4:+610; zon/15/B 28:+663; zon/15/S 38:+345; zon/60/B 8:-329; zon/60/S 6:+398; zon/240/B 2:+198; zon/240/S 3:-13
+X=1.5: in_/15/B 19:+596; in_/15/S 19:+73; in_/60/B 5:+93; in_/60/S 10:+335; in_/240/B 2:+348; in_/240/S 2:+351; zon/15/B 34:+37; zon/15/S 47:+7; zon/60/B 12:-374; zon/60/S 6:+387; zon/240/B 2:+173; zon/240/S 3:-109
+
+X=0.7 stop source: candle 178, placeholder 0; class at open: {1: 49, 0: 63, -1: 66}
