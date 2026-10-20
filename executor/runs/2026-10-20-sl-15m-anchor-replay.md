@@ -7,7 +7,7 @@ Script: [`2026-10-20-sl-15m-anchor-replay.py`](2026-10-20-sl-15m-anchor-replay.p
 exports of `trade`, `signal_log` CbZoneEntry rows, `position_log`); full output incl. the per-trade table:
 [`…-output.txt`](2026-10-20-sl-15m-anchor-replay-output.txt). Status: **decision taken 2026-10-20 — "forming-15m extreme ± mean 1-min range, trailing 60" (§9) is being
 implemented as the default CB stop: spec [`2026-10-20-cb-candle-stop-design.md`](../specs/2026-10-20-cb-candle-stop-design.md),
-branch `cb-candle-stop`, uncommitted; the 0.2 % placeholder (§7) was also adopted the same day.**
+branch `cb-candle-stop` @ `a6a5bc6`, live since 2026-10-20 ~20:25Z; the 0.2 % placeholder (§7) was also adopted the same day.**
 
 ## 1. Proposed rule (user, 2026-10-20)
 
