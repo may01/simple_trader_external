@@ -3,6 +3,19 @@
 What is left open across the plans that have landed but are not closed out. Newest work on top. A line here means "known and deliberate", not "forgotten"; when a line is done, tick it in its own plan and delete it here.
 
 
+## CB zone stop from the 15-min candle (spec [2026-10-20](specs/2026-10-20-cb-candle-stop-design.md), plan [2026-10-20](plans/2026-10-20-cb-candle-stop-plan.md))
+
+Branch `cb-candle-stop` (worktree `trade_executor/.worktrees/cb-candle-stop`) off `layer-implementation` = `release_001` @ `1689dc5`, **uncommitted**. Replaces the order-book stop as the default for CB zone opens after the 2026-10-20 replay ([runs/2026-10-20-sl-15m-anchor-replay.md](runs/2026-10-20-sl-15m-anchor-replay.md)): the book stop sat a median 3 ticks from the entry and stopped 46/68 positions inside minutes; `stop = forming 15-min candle's low (long) / high (short) ∓ trailing mean range of the last 60 closed 1-min bars`, bars built by the check from the trades it sees (`signals::cb_stop::MinuteBars`, the feed's candle cache holds only ~15 min of kline updates). `CB_STOP_MODE=candle` (default) / `book` / `off`; `CB_STOP_ANCHOR_MINUTES=15`, `CB_STOP_RANGE_CANDLES=60`. Event + both DTOs carry `stop_anchor` / `stop_offset`. Placeholder fallback 1 % → 0.2 %. Host loop green: signals 131 (+20), local_analysis 40, execution 136, orchestrator 113 (+5), state_store 23+96, visualizer_server 17+58.
+
+- [x] **Docker gate** on a fresh volume (`-p ccs-test`): 1549 passed / 0 failed on the tree before the last two DTO tests and the 0.2 % placeholder; rerun on the final tree pending.
+- [ ] **Commit** — awaiting the user's decision.
+- [x] **Rebuild + restart** 2026-10-20 ~20:25Z (user instruction): image `cbov-check-executor` built from the `cb-candle-stop` worktree, `EXECUTION_MODE=paper docker compose -p cbov-check -f <cb-candle-stop>/docker-compose.yml up -d --no-build --no-deps executor` (env diff vs the running container was `EXECUTION_MODE` only; the API keys sit in the login shell env). Recreated while flat (previous position closed 20:21:26Z). Boot printed `cb stop armed: candle mode, anchor 15 min, offset = mean range of the last 60 closed 1-min bars (CB_STOP_MODE=candle)`. The first fire inside the first minute after boot carries no stop (no closed bar yet → placeholder, logged); the trailing mean is over fewer than 60 bars for the first hour.
+- [ ] **Forward check** over a day: stop distance distribution, stop-out share (book-stop day: 68 %), `cb stop skipped` lines; then replay the day with the script's `proposed_anchor_c1_range_trail` mode against the live numbers (reproduction gate for the rule).
+- [ ] Bars are in memory only (warm-up ≤ 60 min after a restart); rebuild from the `candle` table is a follow-up (spec §12).
+- [x] **Placeholder 1 % → 0.2 %** (user decision 2026-10-20, `PLACEHOLDER_STOP_LOSS_PCT`): the fallback now sizes onto the notional cap like every signal stop (run report §7, spec §3). Boot/compose text updated.
+
+---
+
 ## release_001 (2026-10-20)
 
 Both repos have a `release_001` branch = the running paper system: trade_executor `layer-implementation` @ `1689dc5`, main/ `experimental_imp_2` (see `docs/releases/2026-10-20-release_001.md` for the rules in force, env, paper results and the branch inventory). Pushed to origin 2026-10-20; merged work branches and worktrees deleted locally.

@@ -1,0 +1,205 @@
+trade feed gaps > 60 s: 2 [(1792440094727, 9432), (1792512790316, 305)]
+ACTUAL stop-outs sum -407.88
+ACTUAL recorded: positions 68  net +331.70  stop 46  target 14  main_close(reversal) 8
+
+=== SIM current stop (reproduction of live rule) ===
+trades 68  net +144.96  gross profit +797.14 (20)  gross loss -652.18 (48)  flat 0  win rate 29%  PF 1.22  avg hold 4.5 min  median 1.9
+  reversal     n=  8  pnl=+326.26
+  stop         n= 46  pnl=-615.11
+  target       n= 14  pnl=+433.81
+  risk/trade median 14.6 USDT (max 100.0); sum R -6.7, mean R -0.10; net bootstrap 90% CI [-267, +591]; P(net<0) 0.31; top-2 trades +264
+
+=== SIM proposed: forming-15m extreme ± d ===
+trades 65  net +411.11  gross profit +2230.35 (32)  gross loss -1819.24 (33)  flat 0  win rate 49%  PF 1.23  avg hold 8.0 min  median 6.5
+  reversal     n= 11  pnl=+669.12
+  stop         n= 31  pnl=-1785.75
+  target       n= 23  pnl=+1527.74
+  risk/trade median 66.9 USDT (max 100.0); sum R +3.7, mean R +0.06; net bootstrap 90% CI [-641, +1544]; P(net<0) 0.28; top-2 trades +615
+
+=== SIM variant: last CLOSED 15m extreme ± d ===
+trades 66  net +48.81  gross profit +1178.99 (27)  gross loss -1130.18 (39)  flat 0  win rate 41%  PF 1.04  avg hold 6.6 min  median 3.4
+  reversal     n=  9  pnl=+345.09
+  stop         n= 37  pnl=-1080.41
+  target       n= 20  pnl=+784.12
+  risk/trade median 54.2 USDT (max 100.0); sum R +8.0, mean R +0.12; net bootstrap 90% CI [-621, +726]; P(net<0) 0.45; top-2 trades +264
+
+=== SIM variant: forming-15m extreme only (d = 0) ===
+trades 69  net +1153.99  gross profit +2994.30 (28)  gross loss -1840.31 (41)  flat 0  win rate 41%  PF 1.63  avg hold 5.8 min  median 4.0
+  reversal     n=  8  pnl=+1207.63
+  stop         n= 41  pnl=-1840.31
+  target       n= 20  pnl=+1786.67
+  risk/trade median 41.6 USDT (max 100.0); sum R +37.9, mean R +0.55; net bootstrap 90% CI [-49, +2432]; P(net<0) 0.06; top-2 trades +599
+fill model: stop fills at the crossing trade price
+
+same-side events skipped: current 6, proposed 9, closed15 8
+current: stop distance median 0.0035 (0.029 %), min 0.0015, max 0.1221; size median 4160
+proposed: stop distance median 0.0160 (0.134 %), min 0.0030, max 0.1424; size median 4138
+
+PER-TRADE (current sim | proposed sim)
+open            side  tf    entry |   stop_c reason_c      pnl_c  hold_c | anchor15   stop_p reason_p      pnl_p  hold_p
+10-19 22:43:33  Sell 240  12.0345 |  12.0370 stop         -10.39     0.4 |  12.0450  12.0475 stop         -56.09    19.2
+10-19 22:50:10  Sell  60  12.0255 |  12.0290 stop         -14.55     0.3 |                                               (not opened)
+10-19 23:17:04  Buy   15  12.0135 |  12.0120 stop          -6.24     0.1 |  12.0120  12.0105 stop         -14.56     0.1
+10-19 23:52:05  Sell 240  12.0615 |  12.1821 reversal     +42.70    21.9 |  12.0760  12.1966 reversal     +38.12    21.9
+10-20 00:14:00  Buy   60  12.0100 |  11.8899 reversal     -25.81    20.2 |  12.0010  11.8809 reversal     -24.01    20.2
+10-20 00:34:10  Sell  15  11.9790 |  11.9820 stop         -12.52     0.0 |  11.9890  11.9920 stop         -54.23     1.5
+10-20 01:06:50  Buy  240  11.9475 |  11.9440 stop         -14.64     0.7 |  11.9380  11.9345 stop         -56.43     0.9
+10-20 01:08:51  Buy   60  11.9195 |  11.9160 stop         -14.68     0.3 |  11.9180  11.9145 stop         -23.03     0.4
+10-20 01:20:11  Sell  15  11.8935 |  11.9000 stop         -27.31     0.3 |  11.9210  11.9275 stop        -101.47     7.4
+10-20 01:35:30  Sell  15  11.9415 |  11.9440 stop         -10.46     2.2 |  11.9690  11.9715 stop        -101.67     4.6
+10-20 01:48:13  Sell  15  11.9875 |  11.9910 stop         -14.58     2.8 |  12.0020  12.0055 reversal    +139.18    15.8
+10-20 02:04:01  Buy   15  11.9545 |  11.8350 reversal     +32.21    15.0 |  11.9480  11.8285 reversal     +30.54    15.0
+10-20 02:19:02  Sell  60  11.9930 |  11.9970 stop         -16.66     8.8 |  12.0030  12.0070 stop         -58.24     9.4
+10-20 02:38:30  Buy   15  11.9715 |  11.8518 target       +50.54    11.2 |  11.9610  11.8413 target       +46.46    11.2
+10-20 03:20:05  Buy   15  12.0055 |  12.0040 stop          -6.24     0.0 |  12.0020  12.0005 stop         -22.85     0.7
+10-20 03:42:07  Sell  15  12.0535 |  12.0550 stop          -6.22     0.3 |  12.0650  12.0665 stop         -55.86     2.9
+10-20 03:50:40  Sell  60  12.0925 |  12.0950 stop         -10.33     1.1 |  12.1060  12.1085 stop         -68.01     6.5
+10-20 04:13:09  Buy   15  12.0755 |  11.9547 target       +15.32    10.0 |  12.0680  11.9472 target       +14.42    10.0
+10-20 04:54:21  Buy   15  12.0565 |  12.0550 stop          -6.22     0.0 |  12.0490  12.0475 stop         -39.25    12.1
+10-20 05:22:02  Buy   15  12.0335 |  12.0320 stop          -6.23     5.5 |  12.0280  12.0265 stop         -31.04    14.2
+10-20 05:38:12  Buy   15  12.0025 |  11.8825 target       +25.41     6.0 |  11.9930  11.8730 target       +23.55     6.0
+10-20 05:46:52  Sell  15  12.0535 |  12.0550 stop          -6.22     0.0 |  12.0630  12.0645 target      +121.86     8.6
+10-20 05:59:02  Buy   60  11.9905 |  11.8706 reversal     +40.45    45.0 |  11.9840  11.8641 reversal     +38.37    45.0
+10-20 06:44:02  Sell  60  12.0390 |  12.1594 reversal     +26.58     8.0 |  12.0410  12.1614 reversal     +26.15     8.0
+10-20 06:52:00  Buy   15  12.0070 |  12.0050 stop          -8.33     0.1 |  12.0030  12.0010 stop         -24.93     0.3
+10-20 07:03:00  Sell  15  12.0175 |  12.0210 reversal     +93.63    14.4 |  12.0230  12.0265 reversal     +93.38    14.4
+10-20 07:17:23  Buy   15  11.9950 |  11.8750 target        +2.50     3.2 |  11.9770  11.8571 target        +2.17     3.2
+10-20 07:32:00  Buy   15  11.9675 |  11.8478 target       +10.44    10.7 |  11.9610  11.8413 target        +9.91    10.7
+10-20 07:58:00  Buy   60  11.9535 |  11.9510 stop         -10.47     0.2 |  11.9470  11.9445 stop         -39.68     3.8
+10-20 08:18:23  Sell  15  11.9365 |  11.9380 stop          -6.29     2.9 |  11.9550  11.9565 stop         -85.71     7.7
+10-20 08:32:18  Buy   15  11.9295 |  11.9270 stop         -10.49     0.1 |  11.9160  11.9135 target       +68.97     4.2
+10-20 08:48:12  Buy   15  11.9275 |  11.9260 stop          -6.29     0.5 |  11.9200  11.9185 stop         -39.74     1.5
+10-20 08:51:28  Buy   60  11.9105 |  11.9060 stop         -18.91     4.9 |  11.8970  11.8925 reversal    +110.98    10.2
+10-20 09:01:40  Sell  15  11.9375 |  11.9420 target      +136.22     7.3 |  11.9500  11.9545 target      +135.94     7.3
+10-20 09:26:07  Sell  15  11.9375 |  11.9400 stop         -10.49     1.5 |  11.9550  11.9575 target      +111.00    14.7
+10-20 09:41:07  Buy   15  11.9135 |  11.9120 stop          -6.31     0.0 |  11.9000  11.8985 stop         -65.13     4.1
+10-20 09:58:03  Sell  15  11.9265 |  11.9340 stop         -31.50     0.3 |  11.9280  11.9355 stop         -39.85     5.9
+10-20 10:27:22  Buy   15  11.9135 |  11.9120 target       +48.34     3.3 |  11.9040  11.9025 target       +48.27     3.3
+10-20 10:43:31  Buy   15  11.9085 |  11.7894 target        +7.14     7.2 |  11.9040  11.7849 target        +6.88     7.2
+10-20 10:59:02  Sell  15  11.9245 |  11.9260 stop          -6.30     0.6 |  11.9320  11.9335 stop         -39.86     1.6
+10-20 11:02:12  Sell  15  11.9385 |  11.9400 stop          -6.30     0.2 |  11.9520  11.9535 target       +27.23     5.4
+10-20 11:11:32  Sell  60  11.9595 |  11.9630 reversal    +127.77     9.1 |  11.9660  11.9695 reversal    +127.58     9.1
+10-20 11:20:41  Buy   15  11.9290 |  11.8097 target       +12.57     5.3 |  11.9200  11.8007 target       +11.69     5.3
+10-20 11:32:54  Sell  15  11.9515 |  11.9540 target       +39.88     2.7 |  11.9580  11.9605 target       +39.82     2.7
+10-20 11:46:00  Buy   15  11.9625 |  11.9580 stop         -18.88     0.2 |  11.9620  11.9575 stop         -23.04     0.2
+10-20 12:04:21  Sell  15  11.9705 |  12.0902 target       +13.78     6.2 |  11.9790  12.0987 target       +12.87     6.2
+10-20 12:19:01  Sell  15  11.9845 |  11.9880 stop         -14.66     0.3 |  11.9900  11.9935 stop         -39.72     0.6
+10-20 12:21:10  Sell  60  11.9895 |  12.1094 reversal     -11.26    10.8 |  12.0120  12.1319 reversal      -9.48    10.8
+10-20 12:31:55  Buy   15  12.0030 |  12.0010 stop          -8.36     0.2 |  11.9860  11.9840 stop         -79.28     2.3
+10-20 12:51:40  Buy   15  11.9935 |  11.9920 stop          -6.27     5.3 |  11.9780  11.9765 stop         -73.02     8.8
+10-20 13:03:27  Buy   60  11.9525 |  11.9510 stop          -6.30     0.2 |  11.9390  11.9375 reversal     +98.32    16.7
+10-20 13:20:10  Sell  15  11.9755 |  11.9780 stop         -10.47     0.0 |  11.9820  11.9845 target       +85.69     8.7
+10-20 13:33:02  Buy   15  11.9385 |  11.9360 stop         -10.50     0.1 |  11.9290  11.9265 stop         -52.46     0.7
+10-20 13:43:09  Sell  15  11.9945 |  12.0020 stop         -31.36     0.2 |  12.0270  12.0345 stop        -101.25     6.6
+10-20 13:47:00  Sell  15  12.0235 |  12.0290 stop         -22.94     2.4 |                                               (not opened)
+10-20 13:55:01  Sell  60  12.0515 |  12.0540 stop         -10.40     2.8 |  12.0600  12.0625 stop         -47.74     3.3
+10-20 14:48:13  Buy   15  12.4265 |  12.4200 stop         -26.22     0.6 |  12.3930  12.3865 stop        -101.25     1.7
+10-20 15:05:50  Buy   60  12.3275 |  12.3210 stop         -26.42     4.6 |  12.3090  12.3025 stop        -102.00     6.5
+10-20 15:46:32  Buy   15  12.1085 |  12.1050 stop         -14.48     0.2 |  12.0760  12.0725 target      +234.72    15.1
+10-20 16:19:02  Buy  240  12.1665 |  12.1600 stop         -26.76     7.7 |  12.1600  12.1535 target      +380.27    18.8
+10-20 17:03:30  Buy   15  12.2585 |  12.2550 stop         -14.30     0.1 |  12.2410  12.2375 target        +6.14     2.9
+10-20 17:19:03  Buy   15  12.2145 |  12.2080 stop         -26.64    12.6 |  12.2070  12.2005 stop         -59.60    16.7
+10-20 17:37:00  Buy   60  12.2085 |  12.0864 target       +34.81    11.0 |  12.1980  12.0759 target       +32.05    11.0
+10-20 17:57:50  Buy   15  12.2315 |  12.2290 target       +26.61     3.0 |  12.2170  12.2145 target       +26.67     3.0
+10-20 18:08:08  Buy   15  12.2055 |  12.0834 target       +10.24     3.4 |  12.1900  12.0679 target        +9.09     3.4
+10-20 18:26:24  Buy   60  12.1635 |  12.1610 stop         -10.30     0.4 |  12.1450  12.1425 stop         -88.76     6.5
+10-20 18:28:14  Buy   15  12.1625 |  12.1600 stop         -10.29     1.2 |                                               (not opened)
+10-20 18:41:50  Sell  15  12.1865 |  12.1900 stop         -14.38     0.1 |  12.1970  12.2005 target       +72.04     2.3
+
+REPRODUCTION: actual vs sim-current per actual position (entry, stop, size, pnl)
+  10-19 22:43:33 sell actual stop 12.0370 size    4155 exit 12.0355 pnl    -4.15 stop       | sim stop 12.0370 size    4155 exit 12.0370 pnl   -10.39 stop      
+  10-19 22:50:10 sell actual stop 12.0290 size    4158 exit 12.0285 pnl   -12.47 stop       | sim stop 12.0290 size    4157 exit 12.0290 pnl   -14.55 stop      
+  10-19 23:17:04 buy  actual stop 12.0120 size    4161 exit 12.0125 pnl    -4.16 stop       | sim stop 12.0120 size    4161 exit 12.0120 pnl    -6.24 stop      
+  10-19 23:52:05 sell actual stop 12.1821 size     829 exit 12.0095 pnl   +43.11 main_close | sim stop 12.1821 size     829 exit 12.0100 pnl   +42.70 reversal  
+  10-20 00:14:02 buy  actual pnl   -26.64 main_close | sim: NOT OPENED
+  10-20 00:34:12 sell actual pnl   -12.52 stop       | sim: NOT OPENED
+  10-20 01:06:50 buy  actual stop 11.9440 size    4185 exit 11.9455 pnl    -8.37 stop       | sim stop 11.9440 size    4184 exit 11.9440 pnl   -14.64 stop      
+  10-20 01:08:51 buy  actual stop 11.9160 size    4195 exit 11.9175 pnl    -8.39 stop       | sim stop 11.9160 size    4193 exit 11.9160 pnl   -14.68 stop      
+  10-20 01:20:11 sell actual stop 11.9000 size    4203 exit 11.8985 pnl   -21.02 stop       | sim stop 11.9000 size    4202 exit 11.9000 pnl   -27.31 stop      
+  10-20 01:35:30 sell actual stop 11.9440 size    4186 exit 11.9435 pnl    -8.37 stop       | sim stop 11.9440 size    4184 exit 11.9440 pnl   -10.46 stop      
+  10-20 01:48:13 sell actual stop 11.9910 size    4169 exit 11.9895 pnl    -8.34 stop       | sim stop 11.9910 size    4167 exit 11.9910 pnl   -14.58 stop      
+  10-20 02:04:01 buy  actual stop 11.8350 size     837 exit 11.9925 pnl   +31.79 main_close | sim stop 11.8350 size     837 exit 11.9930 pnl   +32.21 reversal  
+  10-20 02:19:02 sell actual pnl   -12.51 stop       | sim: NOT OPENED
+  10-20 02:38:31 buy  actual stop 11.8518 size     835 exit 12.0310 pnl   +49.70 target     | sim stop 11.8518 size     835 exit 12.0320 pnl   +50.54 target    
+  10-20 03:20:05 buy  actual stop 12.0040 size    4166 exit 12.0025 pnl   -12.50 stop       | sim stop 12.0040 size    4163 exit 12.0040 pnl    -6.24 stop      
+  10-20 03:42:07 sell actual stop 12.0550 size    4148 exit 12.0545 pnl    -4.15 stop       | sim stop 12.0550 size    4146 exit 12.0550 pnl    -6.22 stop      
+  10-20 03:50:40 sell actual stop 12.0950 size    4135 exit 12.0925 pnl    +0.00 stop       | sim stop 12.0950 size    4133 exit 12.0950 pnl   -10.33 stop      
+  10-20 04:13:10 buy  actual stop 11.9547 size     828 exit 12.0940 pnl   +15.32 target     | sim stop 11.9547 size     828 exit 12.0940 pnl   +15.32 target    
+  10-20 04:54:21 buy  actual stop 12.0550 size    4148 exit 12.0565 pnl    +0.00 stop       | sim stop 12.0550 size    4145 exit 12.0550 pnl    -6.22 stop      
+  10-20 05:22:02 buy  actual stop 12.0320 size    4156 exit 12.0325 pnl    -4.16 stop       | sim stop 12.0320 size    4153 exit 12.0320 pnl    -6.23 stop      
+  10-20 05:38:12 buy  actual stop 11.8825 size     833 exit 12.0320 pnl   +24.58 target     | sim stop 11.8825 size     833 exit 12.0330 pnl   +25.41 target    
+  10-20 05:46:52 sell actual stop 12.0550 size    4150 exit 12.0545 pnl    -4.15 stop       | sim stop 12.0550 size    4147 exit 12.0550 pnl    -6.22 stop      
+  10-20 05:59:02 buy  actual stop 11.8706 size     834 exit 12.0395 pnl   +40.87 main_close | sim stop 11.8706 size     834 exit 12.0390 pnl   +40.45 reversal  
+  10-20 06:44:02 sell actual pnl   +26.58 main_close | sim: NOT OPENED
+  10-20 06:52:00 buy  actual pnl    -4.17 stop       | sim: NOT OPENED
+  10-20 07:03:00 sell actual stop 12.0210 size    4165 exit 11.9955 pnl   +91.62 main_close | sim stop 12.0210 size    4161 exit 11.9950 pnl   +93.63 reversal  
+  10-20 07:17:24 buy  actual pnl    +0.42 target     | sim: NOT OPENED
+  10-20 07:32:00 buy  actual stop 11.8478 size     836 exit 11.9790 pnl    +9.61 target     | sim stop 11.8478 size     836 exit 11.9800 pnl   +10.44 target    
+  10-20 07:58:00 buy  actual stop 11.9510 size    4191 exit 11.9505 pnl   -12.57 stop       | sim stop 11.9510 size    4188 exit 11.9510 pnl   -10.47 stop      
+  10-20 08:18:23 sell actual stop 11.9380 size    4197 exit 11.9365 pnl    +0.00 stop       | sim stop 11.9380 size    4194 exit 11.9380 pnl    -6.29 stop      
+  10-20 08:32:19 buy  actual stop 11.9270 size    4199 exit 11.9275 pnl    -8.40 stop       | sim stop 11.9270 size    4196 exit 11.9270 pnl   -10.49 stop      
+  10-20 08:48:12 buy  actual stop 11.9260 size    4199 exit 11.9265 pnl    -4.20 stop       | sim stop 11.9260 size    4196 exit 11.9260 pnl    -6.29 stop      
+  10-20 08:51:29 buy  actual stop 11.9060 size    4205 exit 11.9065 pnl   -16.82 stop       | sim stop 11.9060 size    4202 exit 11.9060 pnl   -18.91 stop      
+  10-20 09:01:41 sell actual stop 11.9420 size    4195 exit 11.9060 pnl  +132.14 target     | sim stop 11.9420 size    4191 exit 11.9050 pnl  +136.22 target    
+  10-20 09:26:08 sell actual stop 11.9400 size    4201 exit 11.9395 pnl    -8.40 stop       | sim stop 11.9400 size    4197 exit 11.9400 pnl   -10.49 stop      
+  10-20 09:41:07 buy  actual stop 11.9120 size    4209 exit 11.9105 pnl   -12.63 stop       | sim stop 11.9120 size    4205 exit 11.9120 pnl    -6.31 stop      
+  10-20 09:58:03 sell actual stop 11.9340 size    4204 exit 11.9295 pnl   -12.61 stop       | sim stop 11.9340 size    4200 exit 11.9340 pnl   -31.50 stop      
+  10-20 10:27:22 buy  actual stop 11.9120 size    4208 exit 11.9240 pnl   +44.18 target     | sim stop 11.9120 size    4204 exit 11.9250 pnl   +48.34 target    
+  10-20 10:43:31 buy  actual stop 11.7894 size     840 exit 11.9180 pnl    +7.98 target     | sim stop 11.7894 size     840 exit 11.9170 pnl    +7.14 target    
+  10-20 10:59:02 sell actual stop 11.9260 size    4206 exit 11.9255 pnl    -4.21 stop       | sim stop 11.9260 size    4202 exit 11.9260 pnl    -6.30 stop      
+  10-20 11:02:12 sell actual stop 11.9400 size    4201 exit 11.9375 pnl    +4.20 stop       | sim stop 11.9400 size    4197 exit 11.9400 pnl    -6.30 stop      
+  10-20 11:11:33 sell actual stop 11.9630 size    4194 exit 11.9285 pnl  +130.00 main_close | sim stop 11.9630 size    4189 exit 11.9290 pnl  +127.77 reversal  
+  10-20 11:20:42 buy  actual pnl   +12.16 target     | sim: NOT OPENED
+  10-20 11:32:54 sell actual stop 11.9540 size    4202 exit 11.9440 pnl   +31.52 target     | sim stop 11.9540 size    4198 exit 11.9420 pnl   +39.88 target    
+  10-20 11:46:00 buy  actual stop 11.9580 size    4200 exit 11.9585 pnl   -16.80 stop       | sim stop 11.9580 size    4196 exit 11.9580 pnl   -18.88 stop      
+  10-20 12:04:21 sell actual stop 12.0902 size     835 exit 11.9530 pnl   +14.62 target     | sim stop 12.0902 size     835 exit 11.9540 pnl   +13.78 target    
+  10-20 12:19:01 sell actual stop 11.9880 size    4192 exit 11.9875 pnl   -12.58 stop       | sim stop 11.9880 size    4188 exit 11.9880 pnl   -14.66 stop      
+  10-20 12:21:10 sell actual stop 12.1094 size     834 exit 12.0035 pnl   -11.68 main_close | sim stop 12.1094 size     834 exit 12.0030 pnl   -11.26 reversal  
+  10-20 12:31:56 buy  actual pnl    +4.18 stop       | sim: NOT OPENED
+  10-20 12:51:40 buy  actual stop 11.9920 size    4188 exit 11.9935 pnl    +0.00 stop       | sim stop 11.9920 size    4183 exit 11.9920 pnl    -6.27 stop      
+  10-20 13:03:28 buy  actual stop 11.9510 size    4202 exit 11.9545 pnl    +8.40 stop       | sim stop 11.9510 size    4197 exit 11.9510 pnl    -6.30 stop      
+  10-20 13:20:10 sell actual stop 11.9780 size    4195 exit 11.9775 pnl    -8.39 stop       | sim stop 11.9780 size    4189 exit 11.9780 pnl   -10.47 stop      
+  10-20 13:33:02 buy  actual stop 11.9360 size    4207 exit 11.9385 pnl    +0.00 stop       | sim stop 11.9360 size    4201 exit 11.9360 pnl   -10.50 stop      
+  10-20 13:43:09 sell actual stop 12.0020 size    4188 exit 12.0015 pnl   -29.31 stop       | sim stop 12.0020 size    4181 exit 12.0020 pnl   -31.36 stop      
+  10-20 13:47:00 sell actual stop 12.0290 size    4176 exit 12.0285 pnl   -20.88 stop       | sim stop 12.0290 size    4170 exit 12.0290 pnl   -22.94 stop      
+  10-20 13:55:01 sell actual stop 12.0540 size    4166 exit 12.0535 pnl    -8.33 stop       | sim stop 12.0540 size    4159 exit 12.0540 pnl   -10.40 stop      
+  10-20 14:48:13 buy  actual stop 12.4200 size    4040 exit 12.4255 pnl    -4.04 stop       | sim stop 12.4200 size    4033 exit 12.4200 pnl   -26.22 stop      
+  10-20 15:05:50 buy  actual stop 12.3210 size    4072 exit 12.3215 pnl   -24.43 stop       | sim stop 12.3210 size    4065 exit 12.3210 pnl   -26.42 stop      
+  10-20 15:46:32 buy  actual stop 12.1050 size    4145 exit 12.1055 pnl   -12.43 stop       | sim stop 12.1050 size    4137 exit 12.1050 pnl   -14.48 stop      
+  10-20 16:19:02 buy  actual stop 12.1600 size    4124 exit 12.1595 pnl   -28.87 stop       | sim stop 12.1600 size    4117 exit 12.1600 pnl   -26.76 stop      
+  10-20 17:03:30 buy  actual stop 12.2550 size    4092 exit 12.2575 pnl    -4.09 stop       | sim stop 12.2550 size    4085 exit 12.2550 pnl   -14.30 stop      
+  10-20 17:19:03 buy  actual stop 12.2080 size    4107 exit 12.2085 pnl   -24.64 stop       | sim stop 12.2080 size    4099 exit 12.2080 pnl   -26.64 stop      
+  10-20 17:37:00 buy  actual stop 12.0864 size     819 exit 12.2520 pnl   +35.63 target     | sim stop 12.0864 size     819 exit 12.2510 pnl   +34.81 target    
+  10-20 17:57:50 buy  actual stop 12.2290 size    4102 exit 12.2380 pnl   +26.66 target     | sim stop 12.2290 size    4094 exit 12.2380 pnl   +26.61 target    
+  10-20 18:08:08 buy  actual stop 12.0834 size     819 exit 12.2170 pnl    +9.42 target     | sim stop 12.0834 size     819 exit 12.2180 pnl   +10.24 target    
+  10-20 18:26:24 buy  actual stop 12.1610 size    4126 exit 12.1615 pnl    -8.25 stop       | sim stop 12.1610 size    4118 exit 12.1610 pnl   -10.30 stop      
+  10-20 18:28:15 buy  actual stop 12.1600 size    4126 exit 12.1615 pnl    -4.13 stop       | sim stop 12.1600 size    4118 exit 12.1600 pnl   -10.29 stop      
+  10-20 18:41:50 sell actual stop 12.1900 size    4118 exit 12.1885 pnl    -8.24 stop       | sim stop 12.1900 size    4109 exit 12.1900 pnl   -14.38 stop      
+  actual net +331.70 vs sim-current net on same positions +174.99; sim-current total +144.96
+
+TREND PORT CHECK (sim class/slope/sigma at the actual target-exit trade)
+  10-20 02:49:59 buy  exit 12.0310 -> sim class down    slope -0.002576 sigma 0.001806
+  10-20 04:23:12 buy  exit 12.0940 -> sim class down    slope -0.002661 sigma 0.001323
+  10-20 05:44:17 buy  exit 12.0320 -> sim class down    slope -0.001444 sigma 0.001297
+  10-20 07:20:36 buy  exit 11.9950 -> sim class down    slope -0.001228 sigma 0.001345
+  10-20 07:42:43 buy  exit 11.9790 -> sim class down    slope -0.002021 sigma 0.001306
+  10-20 09:08:59 sell exit 11.9060 -> sim class up      slope +0.001179 sigma 0.001475
+  10-20 10:30:42 buy  exit 11.9240 -> sim class down    slope -0.000927 sigma 0.001160
+  10-20 10:50:47 buy  exit 11.9180 -> sim class down    slope -0.001042 sigma 0.001092
+  10-20 11:25:56 buy  exit 11.9430 -> sim class down    slope -0.000904 sigma 0.001175
+  10-20 11:35:47 sell exit 11.9440 -> sim class up      slope +0.001202 sigma 0.001106
+  10-20 12:10:42 sell exit 11.9530 -> sim class neutral slope +0.000574 sigma 0.001383
+  10-20 17:48:00 buy  exit 12.2520 -> sim class down    slope -0.001066 sigma 0.001496
+  10-20 18:00:55 buy  exit 12.2380 -> sim class down    slope -0.001074 sigma 0.001383
+  10-20 18:11:34 buy  exit 12.2170 -> sim class down    slope -0.001137 sigma 0.001394
+
+TRANSITIONS current -> proposed (same opening event)
+  reversal  -> reversal   n= 8  pnl current  +326.26  proposed  +320.64  delta    -5.62
+  stop      -> not_opened n= 3  pnl current   -47.78  proposed    +0.00  delta   +47.78
+  stop      -> reversal   n= 3  pnl current   -39.79  proposed  +348.48  delta  +388.27
+  stop      -> stop       n=31  pnl current  -413.65  proposed -1785.75  delta -1372.09
+  stop      -> target     n= 9  pnl current  -113.89  proposed +1107.93  delta +1221.82
+  target    -> target     n=14  pnl current  +433.81  proposed  +419.81  delta   -14.01
+  current: stop-outs n=46 mean -13.37 median -10.48 worst -31.50; stop dist ticks median 3
+  proposed: stop-outs n=31 mean -57.60 median -55.86 worst -102.00; stop dist ticks median 13
+  proposed d source: {'book': 49, 'placeholder': 16}
