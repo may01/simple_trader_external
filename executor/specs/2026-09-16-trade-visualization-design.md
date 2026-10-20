@@ -165,6 +165,104 @@ line only, never on the chart. `NotPlaced` is the same shape of
 decision: reasoned-about but nothing opened, carries a `reason`
 string, panel-only.
 
+**Trade markers sit on their candle (2026-10-19, branch
+`close-marker-pnl`).** lightweight-charts' time scale is *ordinal*: one
+slot per distinct `time` across every series on the chart. A trade
+marker placed at the event's own second (`Closed` at 10:39:57, the next
+`Opened` at 10:39:59) therefore did not fall inside the 10:39 candle —
+each opened a slot of its own after it, pushing the marker and every
+later candle one bar to the right, so a close and the flip's open drew
+as one blob where the 10:40 candle should have been and the axis
+stretched by a bar per event. `setTradeMarkers` now anchors every point
+to the candle at or before its `ts` (`DecisionMarkers.pointAtOrBefore`
+over the candlestick series, the same rule the decision markers use)
+and keeps the price at the event's own value; the batch is kept on the
+chart state (`tradeEvents`) and re-applied after `setChartHistory`,
+since a replaced candle set may anchor the same events to different
+bars. An event older than the first candle is dropped. Several points
+of one kind inside one candle collapse to the last (`dedupeByTime`,
+same tradeoff as before, now per candle rather than per second).
+
+**Open-time dots on the Recent Trades chart (2026-10-20, branch
+`trades-open-markers`).** The Recent Trades price line now carries the
+same entry / stop-loss / target dots the candlestick chart draws from
+each `Opened` position event (`avg_entry_price`, `stop_loss_price`,
+`take_profit_price`), anchored to the trade at or before the event's
+`ts` — one to two seconds after the `Open` decision whose arrow sits on
+the same bar. The event → point mapping moved out of `chart.js` into
+`static/js/trade_markers.js` (`globalThis.TradeMarkers`: the style
+table, `build(events, points, kinds)`, `OPEN_KINDS`, `legendEntries`;
+host-tested by `trade_markers.test.js`), so both charts share it:
+`createTradeMarkerSeries(chart, kinds)` makes only the series a chart
+asks for, and `applyTradeMarkers` anchors on the chart's
+`decisionSeries` (candles / price line) and re-runs after every
+`setTradesChartData`. The trades chart asks for `OPEN_KINDS` only and
+sets `positionCloses: false`: closes stay the candlestick chart's (the
+close dots and the `buildPositionCloses` arrows), so the trades pane
+shows where the rules opened and what they aimed at, not the outcome.
+Unlike the candlestick chart's dots these *do* take part in autoscale
+(`createTradeMarkerSeries(chart, kinds, { autoscale: true })`): a
+two-hour price line often moves less than the ~1 % a target sits from
+the entry, and a dot left out of autoscale is a dot off the bottom of
+the pane. The price line compresses accordingly; the pane's own zoom
+(scroll / double-click) is the way back. Legend: the four swatches join
+the Recent Trades key.
+
+**Price axis at 3 decimals (2026-10-19, same branch).** lightweight-
+charts formats prices to 2 decimals by default (`minMove` 0.01), which
+on a ~12 USDT pair printed a 12.0645 close and a 12.0675 open both as
+"12.06" and hid a 0.0045 target distance entirely. Every series on a
+price scale (candles, trade/signal/CB-overlay markers, the Recent
+Trades price line and its trend MA) now carries
+`priceFormat: { type: "price", precision: 3, minMove: 0.001 }`
+(`PRICE_FORMAT` in `chart.js`) — the axis, crosshair and the
+Entry/Stop/Target price-line labels all read at the tick the strategy
+works at. Volume histograms keep `type: "volume"`.
+
+**Decision markers (added 2026-10-18, branch `decision-markers`).** The
+Decisions panel's rows also draw on both time-series charts — the
+candlestick chart and the Recent Trades price line — as lightweight-
+charts *series markers* (`series.setMarkers`), not price-anchored dots:
+a `TradeDecision` carries no price of its own (only `main_levels`,
+often empty) and a `ForceAction` nothing at all, so the marker says
+*when* the executor decided and the bar under it says what price was
+doing. Each entry anchors to the series point at or before its `ts`
+(the candle containing it; the last trade before it); an entry older
+than the first point is dropped, which in Live mode is what trims the
+24 h decision window to the trades chart's 2 h (widened from 60 min on 2026-10-18).
+
+| Entry | Marker | Style |
+|---|---|---|
+| `Decision`, side Buy | `belowBar` arrow up, text `"<kind> <timeframe>"` | magenta `#bf3989` |
+| `Decision`, side Sell | `aboveBar` arrow down, same text | magenta |
+| `Force` | `aboveBar` circle, text `"Force <kind>"` | grey `#57606a` |
+
+Each chart has its own **Decision markers** checkbox (default on,
+in-memory like the CB toggles) above its legend; hiding keeps the data,
+so showing again needs no refetch. Pure logic lives in
+`static/js/decision_markers.js` (`globalThis.DecisionMarkers`: `build`,
+`pointAtOrBefore`, `legendEntries`), host-tested by
+`decision_markers.test.js` under `node --test`, the same shape as
+`cb_overlay.js`; `chart.js` re-applies the markers after every
+`setData` on the anchoring series, since a replaced dataset may no
+longer hold the anchor points.
+
+**Recent Trades price MA with trend colour (added 2026-10-18, same
+branch).** The Recent Trades chart draws a trailing 1-minute mean of
+trade price over the price line, coloured by trend. Mechanics
+(`static/js/trades_ma.js`, `globalThis.TradesMa`, host-tested by
+`trades_ma.test.js`): mean price per 10 s bucket on a dense grid
+(quiet buckets carry the last mean forward), trailing mean over 6
+buckets, slope = first difference per bucket, σ = population std of
+the slope over the loaded window, class = **up** when slope > +X·σ,
+**down** when < −X·σ, else **neutral** (X = `TradesMa.DEFAULTS.stdMult`
+= 0.7; band centred on zero — "is the MA going somewhere", not
+"faster than usual"). Drawn as one lightweight-charts line series
+(width 2, price scale) whose points carry per-point `color` — green
+up `#1a7f37`, red down `#cf222e`, grey neutral `#6e7781` — recomputed
+over the whole window on every redraw, since σ is a window statistic.
+Live: the rolling 2 h; History: the loaded range. No toggle.
+
 ### 6. Update mechanism: poll only
 
 Both panels and the chart markers refresh on `pair.js`'s existing poll

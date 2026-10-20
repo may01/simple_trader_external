@@ -1,7 +1,7 @@
 # Candle-bound overlay on the visualiser chart — Design Spec
 
 Date: 2026-10-16
-Status: **implemented 2026-10-17 on branch `cb-overlay-visualiser` (uncommitted) — rendering verified headless (Chrome DevTools, seeded data, Live + History, every toggle); the user-gated check in the real Docker stack is still open**
+Status: **implemented 2026-10-17 on branch `cb-overlay-visualiser` (`7d0b06f`, merged into `layer-implementation` `57d8561`; in `release_001`) — rendering verified headless (Chrome DevTools, seeded data, Live + History, every toggle); the user-gated check in the real Docker stack is still open**
 Target project: `trade_executor` (worktree `layer-implementation`) — L5 read path, L8 `visualizer_backend`, `visualizer_server` route + SPA. No `main/` change.
 Extends: [2026-09-20-indicator-visualisation-design.md](2026-09-20-indicator-visualisation-design.md), whose 2026-09-21 revision cut "lines on the chart" and said: "If lines are wanted later, they are a separate spec." This is that spec.
 Related: [2026-09-19-level-broadcast-design.md](2026-09-19-level-broadcast-design.md) (wire format and `indicators` table), [2026-09-16-trade-visualization-design.md](2026-09-16-trade-visualization-design.md) (chart marker conventions), main/ phase 18 `external/docs/superpowers/specs/2026-10-05-cb-markers-main-flow-design.md` (what is broadcast and what the markers mean), [layers/L5-state-store.md](layers/L5-state-store.md), [layers/L8-interfaces.md](layers/L8-interfaces.md).

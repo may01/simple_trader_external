@@ -538,3 +538,22 @@ The 240 m share is the material one. Any other dataset materialized the same way
 
 **Resolution:** full re-prep of oos2m with the CB stage (removes it), or start the materialization from a
 frame that still holds the warm-up rows.
+
+## 20. Executor: the periodic reconcile loop flattens every open position on a venue that reports no positions
+
+**Status:** open (flagged 2026-10-18, paper-mode builder check)
+**Where:** `crates/orchestrator/src/system.rs` (`run_reconcile_loop`, every `RECONCILE_INTERVAL_SECS`),
+`crates/state_store/src/pg.rs` (`reconcile_pair`, the `(Some(local_open), None)` → "extra locally" arm)
+
+`reconcile_pair` treats a local `Open`/`Closing` position with no matching entry in the venue's
+`positions` as "extra locally" and persists `Flat` (a `state_store_reconciliation_extra_locally`
+correction row in `position_log` and a `PositionDrift` alert) — every tick. MEXC spot/margin
+(`spot.rs`) and the paper account report `positions: []` by design (no position concept), so any
+open position on those venues is flattened in the store once a minute while the executor keeps
+trading it in memory (I-7). Never hit live because `no_trade` never opened a position. Paper mode
+sidesteps it by not spawning the loop (`paper-mode` design §2); live margin still has it.
+
+**Resolution:** make `reconcile_pair` kind-aware (no "extra locally" when the venue has no position
+concept — compare base balance instead), or have the spot/margin adapters synthesise a
+`PositionInfo` from the base balance.
+

@@ -290,3 +290,22 @@ backfill. Commit `618255f` on `i17-late-stopped-out`, fast-forwarded into `mexc-
 (compose defaults, `docker-compose.yml:186`) with `EXCHANGE=mexc`. There were 0 spot requests, but
 a spot-surface call would sign with the MEXC key against Binance.
 **Status:** open (config). Audit 2, Y5.
+
+### I-19. An order acked `FILLED` is never polled, so a position never opens (or re-places its exit)
+
+**Seen:** not live — found by the paper-mode lifecycle test (2026-10-18): the paper entry ack
+reports `Filled`, `working_order` stored that status, `tracked_orders` skips terminal orders, so the
+entry was never polled, its fills never booked, and the position stayed `Opening` with `net_size 0`.
+**Live meaning:** Binance (`market.rs`) and MEXC spot (`spot.rs`) pass the venue's status through in
+the ack. A limit that crosses the book is acked `FILLED`: the entry would never open. Worse on the
+exit: a stop-path market exit acked `FILLED` was stored terminal, `retry_missing_exit` then saw
+"no working exit, net_size > 0" and re-placed it on every poll — for a short (buy exit, never
+capped) a second market buy per poll with real money; for a long, qty 0 and a Warn per tick,
+stuck `Closing`. Never hit live only because no position had ever opened.
+**Fix:** `working_order` records a `Filled`/`PartiallyFilled` ack as `New`: the fills it implies are
+booked by the poll, never by the ack (the existing rule "terminal status comes only from
+`get_order`"). `Rejected`/`Cancelled` acks stay as reported. Test
+`an_ack_that_reports_filled_is_tracked_as_working_until_polled` plus the three paper lifecycle
+tests. Branch `paper-mode` (uncommitted).
+**Status:** fixed on branch, not deployed.
+

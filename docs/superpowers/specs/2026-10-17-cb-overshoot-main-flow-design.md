@@ -3,7 +3,7 @@
 **Date:** 2026-10-17
 **Base branch:** `experimental_imp_2` (main/; `cb-markers-main-flow` merged into it as `97fb76d` on 2026-10-17) — the executor side builds on `cb-overlay-visualiser` (trade_executor; uncommitted off `layer-implementation`).
 **Work branches:** `cb-overshoot-main-flow` (main/, off `experimental_imp_2`); `cb-overlay-overshoot` (trade_executor, off `cb-overlay-visualiser`).
-**Status:** built and merged 2026-10-17 — main/ `4e5d791` → `experimental_imp_2` `aca3ef6`; trade_executor `9acc357` → `layer-implementation` `ecebb1f`; D1–D7 as proposed. Plan: `plans/impl_2/phase-19-cb-overshoot-main-flow/`; gates: `experiment/results/cb_overshoot_main_flow_results.md`. G1b not run; G9 user-gated.
+**Status:** approved 2026-10-17 (D1–D7 as proposed: freeze sidecar thresholds, flags only on the wire, on by default in both viewers, sidecar join/veto deleted). Plan: `plans/impl_2/phase-19-cb-overshoot-main-flow/`.
 **Extends:** [2026-10-05-cb-markers-main-flow-design.md](2026-10-05-cb-markers-main-flow-design.md) (listed `cbover_*` / `cb_overshoot_*` under its Non-goals: "stay sidecars"); executor side extends `external/executor/specs/2026-10-16-cb-overlay-visualiser-design.md` §8.2.
 **Related:** `notebooks/zone_profitability/run_cb_overshoot.py` (the sidecar producer this moves), `data.join_cb_overshoot`, `frontend/data_viewer._MARKER_VETO`, phase-18 plan `plans/impl_2/phase-18-cb-markers-main-flow/`.
 
@@ -40,7 +40,7 @@ Nothing consumes the flag in trading logic (same posture as the other three).
 - `cbnc_*` / `cbx_*` markers get no overshoot flag (the sidecar never had one; a forming bound's band is not a frozen reference).
 - No change to the executor's Indicators panel (lists all names verbatim; it will show 48).
 
-## State before this spec (verified 2026-10-17)
+## Current state (verified 2026-10-17)
 
 - **Definition** (`run_cb_overshoot.py` docstring, `overshoot()`): per 1-min row,
   `long: z = (cb_low − 1_low) / cb_low_std`, `short: z = (1_high − cb_high) / cb_high_std`
