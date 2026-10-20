@@ -1,0 +1,259 @@
+window 10-18 21:16:56 -> 10-19 21:16:56 UTC (24 h): 43 CbZoneEntry events of 152 stored; trades in window 174186
+trade feed gaps > 60 s in window: 3 [('10-19 13:01:46', 5564), ('10-19 20:01:34', 9432), ('10-20 16:13:10', 305)]
+
+EVENTS in window with higher-tf zone context (opp = higher tf in-zone on the opposite side; same = on the same side; oppP = price beyond higher tf's opposite zone line; oppF = higher tf fired opposite on its current zone)
+ts              side  tf rule              price | 15 L/S  60 L/S  240 L/S | opp     same    oppP    oppF   | actual
+10-18 21:21:00  Sell  15 zone_rejection  11.6980 | 0/1     0/0     0/1     | []      [240]   []      []     | skipped/not placed
+10-18 21:36:03  Sell  60 zone_rejection  11.6970 | 0/0     0/1     0/1     | []      [240]   []      []     | skipped/not placed
+10-18 21:54:23  Sell  15 in_zone         11.7320 | 0/1     0/1     0/1     | []      [60, 240] []      []     | skipped/not placed
+10-18 23:10:03  Buy   15 zone_rejection  11.9620 | 1/0     0/0     0/1     | [240]   []      [240]   [240]  | stop          +0.00
+10-19 00:17:10  Buy   15 in_zone         12.0380 | 1/0     0/0     0/0     | []      []      []      []     | stop          +0.00
+10-19 02:11:23  Sell 240 in_zone         12.2260 | 0/1     0/0     0/1     | []      []      []      []     | stop          +0.00
+10-19 02:19:36  Buy   15 in_zone         12.1990 | 1/0     0/0     0/0     | []      []      []      [240]  | stop          +0.00
+10-19 03:04:07  Buy   15 zone_rejection  12.1890 | 0/0     0/0     0/0     | []      []      []      [240]  | stop          +0.00
+10-19 03:56:00  Buy   15 zone_rejection  12.1770 | 1/0     0/0     0/0     | []      []      []      [240]  | stop          +0.00
+10-19 04:13:23  Buy   15 zone_rejection  12.1550 | 0/0     0/0     0/0     | []      []      []      []     | stop          +0.00
+10-19 04:30:20  Buy   60 in_zone         12.1110 | 0/0     1/0     0/0     | []      []      []      []     | stop          +0.00
+10-19 04:36:09  Sell  15 in_zone         12.1430 | 0/1     0/0     0/0     | []      []      []      [60]   | target        +0.00
+10-19 04:51:09  Sell  15 zone_rejection  12.1610 | 0/0     0/0     0/0     | []      []      []      [60]   | stop          +0.00
+10-19 05:03:01  Buy   60 zone_rejection  12.1150 | 1/0     1/0     0/0     | []      []      []      []     | stop          +0.00
+10-19 05:18:03  Sell  15 in_zone         12.1380 | 0/1     0/0     0/0     | []      []      []      [60]   | stop          +0.00
+10-19 05:33:08  Sell  15 in_zone         12.1640 | 0/1     0/0     0/0     | []      []      []      [60]   | stop          +0.00
+10-19 06:03:12  Sell  15 zone_rejection  12.1860 | 0/1     0/0     0/0     | []      []      []      []     | main_close    +0.00
+10-19 06:13:07  Buy   15 zone_rejection  12.1470 | 0/0     0/0     0/0     | []      []      []      []     | stop          +0.00
+10-19 06:34:33  Sell  15 in_zone         12.1750 | 0/1     0/0     0/0     | []      []      []      []     | stop          +0.00
+10-19 07:40:21  Sell  15 zone_rejection  12.2170 | 0/0     0/0     0/0     | []      []      []      []     | stop          +0.00
+10-19 07:47:17  Buy   15 zone_rejection  12.2190 | 1/0     0/0     0/0     | []      []      []      []     | open          +0.00
+10-19 08:11:39  Buy   15 in_zone         12.1720 | 1/0     0/0     0/0     | []      []      []      []     | skipped/not placed
+10-19 08:20:14  Sell  15 in_zone         12.2050 | 0/1     0/0     0/0     | []      []      []      []     | target        +0.00
+10-19 08:36:02  Buy   15 zone_rejection  12.1670 | 1/0     0/0     0/0     | []      []      []      []     | target        +0.00
+10-19 08:54:58  Buy   15 in_zone         12.1710 | 1/0     0/0     0/0     | []      []      []      []     | main_close    +0.00
+10-19 09:19:03  Sell  15 zone_rejection  12.1800 | 0/1     0/0     0/0     | []      []      []      []     | target        +0.00
+10-19 09:32:00  Sell  15 in_zone         12.1820 | 0/1     0/0     0/0     | []      []      []      []     | skipped/not placed
+10-19 10:08:04  Sell  15 zone_rejection  12.1540 | 0/1     0/0     0/0     | []      []      []      []     | target        +0.00
+10-19 10:24:10  Buy   15 in_zone         12.1190 | 1/0     0/0     0/0     | []      []      []      []     | main_close    +0.00
+10-19 10:29:20  Buy  240 in_zone         12.0670 | 1/0     1/0     1/0     | []      []      []      []     | skipped/not placed
+10-19 10:39:55  Sell  15 in_zone         12.0650 | 0/1     1/0     1/0     | [60, 240] []      [60, 240] [240]  | target        +0.00
+10-19 11:32:21  Buy   60 zone_rejection  12.0030 | 0/0     0/0     1/0     | []      [240]   []      []     | target        +0.00
+10-19 11:53:58  Sell  15 in_zone         12.0500 | 0/1     0/0     1/0     | [240]   []      [240]   [60, 240]| open          +0.00
+10-19 12:11:05  Sell  60 in_zone         12.0820 | 0/1     0/1     0/0     | []      []      []      []     | open          +0.00
+10-19 12:33:00  Sell  15 zone_rejection  12.1270 | 0/1     0/1     0/0     | []      [60]    []      []     | skipped/not placed
+10-19 15:50:02  Buy   60 zone_rejection  11.9630 | 0/0     1/0     0/0     | []      []      []      []     | main_close   +11.70
+10-19 16:17:41  Sell  15 in_zone         11.9760 | 0/1     0/0     0/0     | []      []      []      []     | target        +9.60
+10-19 17:21:56  Buy   15 in_zone         11.9630 | 1/0     0/0     0/0     | []      []      []      []     | main_close   -23.41
+10-19 17:32:40  Buy   60 in_zone         11.9300 | 1/0     1/0     0/0     | []      []      []      []     | skipped/not placed
+10-19 18:02:32  Sell  60 zone_rejection  11.9340 | 0/1     0/0     0/0     | []      []      []      []     | target       +32.26
+10-19 18:03:36  Sell  15 in_zone         11.9170 | 0/1     0/0     0/0     | []      []      []      []     | skipped/not placed
+10-19 18:35:01  Sell  15 in_zone         11.8660 | 0/1     0/0     0/0     | []      []      []      []     | open          +0.00
+10-19 19:20:50  Sell  15 in_zone         11.9200 | 0/1     0/0     0/0     | []      []      []      []     | skipped/not placed
+
+fires by tf {15: 33, 60: 8, 240: 2}; with a higher tf in the OPPOSITE zone: 3; in the SAME zone: 5; price beyond a higher opposite zone line: 3; higher tf fired opposite on its current zone: 10
+
+ACTUAL recorded in window: closed positions 29  net +30.16  stop 15  target 9  main_close(reversal) 5
+REPRODUCTION (sim 'none' vs actual): actual positions matched by opening decision 25/29; same stop 25/25; same close reason 13/25; sim opens with no actual position 1
+  10-18 23:10:03 buy  actual stop 11.8429 stop       pnl    +0.00 | sim stop 11.8429 target     pnl   +39.71
+  10-19 00:17:10 buy  actual stop 11.9151 stop       pnl    +0.00 | sim stop 11.9151 target     pnl   +15.37
+  10-19 02:11:24 sell actual stop 12.3498 stop       pnl    +0.00 | sim stop 12.3498 reversal   pnl   +23.31
+  10-19 02:19:36 buy  actual stop 12.0735 stop       pnl    +0.00 | sim stop 12.0735 target     pnl   +39.77
+  10-19 03:04:07 buy  actual stop 12.0666 stop       pnl    +0.00 | sim stop 12.0666 reversal   pnl   -37.33
+  10-19 03:56:00 buy  actual stop 12.0547 stop       pnl    +0.00 | sim: NOT OPENED
+  10-19 04:13:24 buy  actual stop 12.0330 stop       pnl    +0.00 | sim: NOT OPENED
+  10-19 04:30:20 buy  actual stop 11.9904 stop       pnl    +0.00 | sim: NOT OPENED
+  10-19 04:51:09 sell actual stop 12.2831 stop       pnl    +0.00 | sim stop 12.2831 reversal   pnl   +38.24
+  10-19 05:03:01 buy  actual stop 11.9943 stop       pnl    +0.00 | sim stop 11.9943 reversal   pnl   +18.57
+  10-19 05:18:04 sell actual stop 12.2589 stop       pnl    +0.00 | sim stop 12.2589 target     pnl    +7.00
+  10-19 05:33:08 sell actual stop 12.2861 stop       pnl    +0.00 | sim stop 12.2861 reversal   pnl   +14.39
+  10-19 06:03:12 sell actual stop 12.3084 main_close pnl    +0.00 | sim: NOT OPENED
+  10-19 06:13:07 buy  actual stop 12.0260 stop       pnl    +0.00 | sim stop 12.0260 reversal   pnl   +22.64
+  10-19 06:34:33 sell actual stop 12.2973 stop       pnl    +0.00 | sim stop 12.2973 target     pnl   -11.09
+  10-19 07:40:22 sell actual stop 12.3387 stop       pnl    +0.00 | sim stop 12.3387 target     pnl    -6.96
+  sim-only open 10-18 21:21:00 Sell tf 15 stop       pnl  -100.02
+
+=== none (as live) ===
+trades 30  net +340.99  gross win +589.28 (22)  gross loss -248.29 (8)  win rate 73%  PF 2.37  median hold 16.1 min  vetoed 0  same-side skips 13  lower-rev skips 0
+  open_at_end  n=  1  pnl=-13.06
+  reversal     n= 11  pnl=+19.05
+  stop         n=  1  pnl=-100.02
+  target       n= 17  pnl=+435.02
+  sum R +3.4  mean R +0.11  bootstrap 90% CI [+22, +646]  P(net<0) 0.04  top-2 +153  net w/o top-2 +188
+
+=== veto: higher tf in-zone OPPOSITE side ===
+trades 27  net +197.92  gross win +502.32 (19)  gross loss -304.41 (8)  win rate 70%  PF 1.65  median hold 20.6 min  vetoed 3  same-side skips 13  lower-rev skips 0
+  open_at_end  n=  1  pnl=-13.06
+  reversal     n= 10  pnl=+63.19
+  stop         n=  2  pnl=-200.28
+  target       n= 14  pnl=+348.06
+  sum R +2.0  mean R +0.07  bootstrap 90% CI [-157, +541]  P(net<0) 0.17  top-2 +153  net w/o top-2 +45
+
+=== veto: higher tf in-zone EITHER side ===
+trades 25  net +269.19  gross win +473.58 (18)  gross loss -204.39 (7)  win rate 72%  PF 2.32  median hold 20.6 min  vetoed 8  same-side skips 10  lower-rev skips 0
+  open_at_end  n=  1  pnl=-13.06
+  reversal     n= 10  pnl=+63.19
+  stop         n=  1  pnl=-100.26
+  target       n= 13  pnl=+319.32
+  sum R +2.7  mean R +0.11  bootstrap 90% CI [-24, +560]  P(net<0) 0.07  top-2 +153  net w/o top-2 +116
+
+=== veto: price beyond higher tf's opposite zone line ===
+trades 27  net +197.92  gross win +502.32 (19)  gross loss -304.41 (8)  win rate 70%  PF 1.65  median hold 20.6 min  vetoed 3  same-side skips 13  lower-rev skips 0
+  open_at_end  n=  1  pnl=-13.06
+  reversal     n= 10  pnl=+63.19
+  stop         n=  2  pnl=-200.28
+  target       n= 14  pnl=+348.06
+  sum R +2.0  mean R +0.07  bootstrap 90% CI [-157, +541]  P(net<0) 0.17  top-2 +153  net w/o top-2 +45
+
+=== veto: higher tf fired opposite on its current zone ===
+trades 23  net +233.10  gross win +500.18 (16)  gross loss -267.08 (7)  win rate 70%  PF 1.87  median hold 24.1 min  vetoed 10  same-side skips 10  lower-rev skips 0
+  open_at_end  n=  1  pnl=-13.06
+  reversal     n=  7  pnl=+97.73
+  stop         n=  2  pnl=-200.28
+  target       n= 13  pnl=+348.71
+  sum R +2.3  mean R +0.10  bootstrap 90% CI [-120, +572]  P(net<0) 0.14  top-2 +172  net w/o top-2 +61
+
+=== lower tf cannot reverse a higher-tf position ===
+trades 8  net -35.99  gross win +218.60 (4)  gross loss -254.59 (4)  win rate 50%  PF 0.86  median hold 86.0 min  vetoed 17  same-side skips 18  lower-rev skips 17
+  open_at_end  n=  1  pnl=-13.06
+  reversal     n=  2  pnl=+106.60
+  stop         n=  2  pnl=-216.86
+  target       n=  3  pnl=+87.34
+  sum R -0.4  mean R -0.04  bootstrap 90% CI [-389, +323]  P(net<0) 0.56  top-2 +171  net w/o top-2 -207
+
+fill model: stop fills at the crossing trade price; placeholder 1 % before 10-20 20:25:00, 0.2 % after
+
+PER-TF (variant none): opening tf -> trades, net, by reason
+  tf  15: n= 24 net  +114.69  open_at_end 1/-13  reversal 8/-33  stop 1/-100  target 14/+261
+  tf  60: n=  5 net  +202.99  reversal 2/+29  target 3/+174
+  tf 240: n=  1 net   +23.31  reversal 1/+23
+  reversal closes by the tf that reversed: {15: 9, 60: 2, 240: 0}  P&L of positions reversed by tf 15: +4.64
+
+SUMMARY
+variant                                              trades       net    PF  win%  stop target  rev vetoed           90% CI   P<0   top2   sumR
+none (as live)                                           30   +340.99  2.37    73     1     17   11      0 [   +22,  +646]  0.04   +153   +3.4
+veto: higher tf in-zone OPPOSITE side                    27   +197.92  1.65    70     2     14   10      3 [  -157,  +541]  0.17   +153   +2.0
+veto: higher tf in-zone EITHER side                      25   +269.19  2.32    72     1     13   10      8 [   -24,  +560]  0.07   +153   +2.7
+veto: price beyond higher tf's opposite zone line        27   +197.92  1.65    70     2     14   10      3 [  -157,  +541]  0.17   +153   +2.0
+veto: higher tf fired opposite on its current zone       23   +233.10  1.87    70     2     13    7     10 [  -120,  +572]  0.14   +172   +2.3
+lower tf cannot reverse a higher-tf position              8    -35.99  0.86    50     2      3    2     17 [  -389,  +323]  0.56   +171   -0.4
+
+TRANSITIONS none -> opp_zone (matched by opening event)
+  open_at_end -> open_at_end n= 1  pnl none   -13.06  opp_zone   -13.06  delta    +0.00
+  reversal    -> reversal    n=10  pnl none   +63.19  opp_zone   +63.19  delta    +0.00
+  reversal    -> stop        n= 1  pnl none   -44.15  opp_zone  -100.26  delta   -56.11
+  stop        -> stop        n= 1  pnl none  -100.02  opp_zone  -100.02  delta    +0.00
+  target      -> not_opened  n= 3  pnl none   +86.96  opp_zone    +0.00  delta   -86.96
+  target      -> target      n=14  pnl none  +348.06  opp_zone  +348.06  delta    +0.00
+  vetoed events (3) and their fate under 'none':
+    10-18 23:10:03 Buy  tf  15 zone_rejection higher [240]      | none: opened -> target     pnl   +39.71 hold   15.0 min
+    10-19 10:39:55 Sell tf  15 in_zone        higher [60, 240]  | none: opened -> target     pnl   +33.56 hold   38.4 min
+    10-19 11:53:58 Sell tf  15 in_zone        higher [240]      | none: opened -> target     pnl   +13.69 hold    6.5 min
+
+TRANSITIONS none -> any_zone (matched by opening event)
+  open_at_end -> open_at_end n= 1  pnl none   -13.06  any_zone   -13.06  delta    +0.00
+  reversal    -> reversal    n=10  pnl none   +63.19  any_zone   +63.19  delta    +0.00
+  reversal    -> stop        n= 1  pnl none   -44.15  any_zone  -100.26  delta   -56.11
+  stop        -> not_opened  n= 1  pnl none  -100.02  any_zone    +0.00  delta  +100.02
+  target      -> not_opened  n= 4  pnl none  +115.70  any_zone    +0.00  delta  -115.70
+  target      -> target      n=13  pnl none  +319.32  any_zone  +319.32  delta    +0.00
+  vetoed events (8) and their fate under 'none':
+    10-18 21:21:00 Sell tf  15 zone_rejection higher [240]      | none: opened -> stop       pnl  -100.02 hold   39.6 min
+    10-18 21:36:03 Sell tf  60 zone_rejection higher [240]      | none: not opened (same-side skip)
+    10-18 21:54:23 Sell tf  15 in_zone        higher [60, 240]  | none: not opened (same-side skip)
+    10-18 23:10:03 Buy  tf  15 zone_rejection higher [240]      | none: opened -> target     pnl   +39.71 hold   15.0 min
+    10-19 10:39:55 Sell tf  15 in_zone        higher [60, 240]  | none: opened -> target     pnl   +33.56 hold   38.4 min
+    10-19 11:32:21 Buy  tf  60 zone_rejection higher [240]      | none: opened -> target     pnl   +28.74 hold   13.3 min
+    10-19 11:53:58 Sell tf  15 in_zone        higher [240]      | none: opened -> target     pnl   +13.69 hold    6.5 min
+    10-19 12:33:00 Sell tf  15 zone_rejection higher [60]       | none: not opened (same-side skip)
+
+TRANSITIONS none -> opp_price (matched by opening event)
+  open_at_end -> open_at_end n= 1  pnl none   -13.06  opp_price   -13.06  delta    +0.00
+  reversal    -> reversal    n=10  pnl none   +63.19  opp_price   +63.19  delta    +0.00
+  reversal    -> stop        n= 1  pnl none   -44.15  opp_price  -100.26  delta   -56.11
+  stop        -> stop        n= 1  pnl none  -100.02  opp_price  -100.02  delta    +0.00
+  target      -> not_opened  n= 3  pnl none   +86.96  opp_price    +0.00  delta   -86.96
+  target      -> target      n=14  pnl none  +348.06  opp_price  +348.06  delta    +0.00
+  vetoed events (3) and their fate under 'none':
+    10-18 23:10:03 Buy  tf  15 zone_rejection higher [240]      | none: opened -> target     pnl   +39.71 hold   15.0 min
+    10-19 10:39:55 Sell tf  15 in_zone        higher [60, 240]  | none: opened -> target     pnl   +33.56 hold   38.4 min
+    10-19 11:53:58 Sell tf  15 in_zone        higher [240]      | none: opened -> target     pnl   +13.69 hold    6.5 min
+
+TRANSITIONS none -> opp_fire (matched by opening event)
+  not_opened  -> reversal    n= 1  pnl none    +0.00  opp_fire   +32.41  delta   +32.41
+  not_opened  -> target      n= 1  pnl none    +0.00  opp_fire   +19.33  delta   +19.33
+  open_at_end -> open_at_end n= 1  pnl none   -13.06  opp_fire   -13.06  delta    +0.00
+  reversal    -> not_opened  n= 3  pnl none   +15.29  opp_fire    +0.00  delta   -15.29
+  reversal    -> reversal    n= 6  pnl none   +29.33  opp_fire   +65.32  delta   +35.98
+  reversal    -> stop        n= 1  pnl none   -44.15  opp_fire  -100.26  delta   -56.11
+  reversal    -> target      n= 1  pnl none   +18.57  opp_fire   +40.03  delta   +21.46
+  stop        -> stop        n= 1  pnl none  -100.02  opp_fire  -100.02  delta    +0.00
+  target      -> not_opened  n= 6  pnl none  +145.67  opp_fire    +0.00  delta  -145.67
+  target      -> target      n=11  pnl none  +289.35  opp_fire  +289.35  delta    +0.00
+  vetoed events (10) and their fate under 'none':
+    10-18 23:10:03 Buy  tf  15 zone_rejection higher [240]      | none: opened -> target     pnl   +39.71 hold   15.0 min
+    10-19 02:19:36 Buy  tf  15 in_zone        higher [240]      | none: opened -> target     pnl   +39.77 hold   30.9 min
+    10-19 03:04:07 Buy  tf  15 zone_rejection higher [240]      | none: opened -> reversal   pnl   -37.33 hold   92.0 min
+    10-19 03:56:00 Buy  tf  15 zone_rejection higher [240]      | none: not opened (same-side skip)
+    10-19 04:36:09 Sell tf  15 in_zone        higher [60]       | none: opened -> target     pnl   +11.94 hold    4.0 min
+    10-19 04:51:09 Sell tf  15 zone_rejection higher [60]       | none: opened -> reversal   pnl   +38.24 hold   11.9 min
+    10-19 05:18:03 Sell tf  15 in_zone        higher [60]       | none: opened -> target     pnl    +7.00 hold    4.2 min
+    10-19 05:33:08 Sell tf  15 in_zone        higher [60]       | none: opened -> reversal   pnl   +14.39 hold   40.0 min
+    10-19 10:39:55 Sell tf  15 in_zone        higher [240]      | none: opened -> target     pnl   +33.56 hold   38.4 min
+    10-19 11:53:58 Sell tf  15 in_zone        higher [60, 240]  | none: opened -> target     pnl   +13.69 hold    6.5 min
+
+TRANSITIONS none -> no_lower_rev (matched by opening event)
+  not_opened  -> stop        n= 1  pnl none    +0.00  no_lower_rev  -116.85  delta  -116.85
+  open_at_end -> open_at_end n= 1  pnl none   -13.06  no_lower_rev   -13.06  delta    +0.00
+  reversal    -> not_opened  n= 9  pnl none   -14.71  no_lower_rev    +0.00  delta   +14.71
+  reversal    -> reversal    n= 2  pnl none   +33.76  no_lower_rev  +106.60  delta   +72.85
+  stop        -> stop        n= 1  pnl none  -100.02  no_lower_rev  -100.02  delta    +0.00
+  target      -> not_opened  n=14  pnl none  +347.69  no_lower_rev    +0.00  delta  -347.69
+  target      -> target      n= 3  pnl none   +87.34  no_lower_rev   +87.34  delta    +0.00
+  vetoed events (17) and their fate under 'none':
+    10-19 02:19:36 Buy  tf  15 in_zone        higher lower-tf reversal | none: opened -> target     pnl   +39.77 hold   30.9 min
+    10-19 03:04:07 Buy  tf  15 zone_rejection higher lower-tf reversal | none: opened -> reversal   pnl   -37.33 hold   92.0 min
+    10-19 03:56:00 Buy  tf  15 zone_rejection higher lower-tf reversal | none: not opened (same-side skip)
+    10-19 04:13:23 Buy  tf  15 zone_rejection higher lower-tf reversal | none: not opened (same-side skip)
+    10-19 04:30:20 Buy  tf  60 in_zone        higher lower-tf reversal | none: not opened (same-side skip)
+    10-19 05:03:01 Buy  tf  60 zone_rejection higher lower-tf reversal | none: opened -> reversal   pnl   +18.57 hold   15.0 min
+    10-19 06:13:07 Buy  tf  15 zone_rejection higher lower-tf reversal | none: opened -> reversal   pnl   +22.64 hold   21.4 min
+    10-19 07:47:17 Buy  tf  15 zone_rejection higher lower-tf reversal | none: opened -> reversal   pnl   -11.87 hold   32.9 min
+    10-19 08:11:39 Buy  tf  15 in_zone        higher lower-tf reversal | none: not opened (same-side skip)
+    10-19 08:36:02 Buy  tf  15 zone_rejection higher lower-tf reversal | none: opened -> target     pnl   +21.78 hold    6.9 min
+    10-19 08:54:58 Buy  tf  15 in_zone        higher lower-tf reversal | none: opened -> reversal   pnl    +8.63 hold   24.1 min
+    10-19 10:24:10 Buy  tf  15 in_zone        higher lower-tf reversal | none: opened -> reversal   pnl   -44.15 hold   15.7 min
+    10-19 10:39:55 Sell tf  15 in_zone        higher lower-tf reversal | none: opened -> target     pnl   +33.56 hold   38.4 min
+    10-19 11:53:58 Sell tf  15 in_zone        higher lower-tf reversal | none: opened -> target     pnl   +13.69 hold    6.5 min
+    10-19 12:11:05 Sell tf  60 in_zone        higher lower-tf reversal | none: opened -> target     pnl  +112.97 hold  144.4 min
+    10-19 12:33:00 Sell tf  15 zone_rejection higher lower-tf reversal | none: not opened (same-side skip)
+    10-19 16:17:41 Sell tf  15 in_zone        higher lower-tf reversal | none: opened -> target     pnl   +10.44 hold    5.5 min
+
+PER-TRADE (none | opp_zone)
+open            side  tf    entry |     stop reason          pnl   hold | reason          pnl   hold
+10-18 21:21:00  Sell  15  11.6980 |  11.8150 stop        -100.02   39.6 | stop        -100.02   39.6
+10-18 23:10:03  Buy   15  11.9625 |  11.8429 target       +39.71   15.0 |                           (not opened)
+10-19 00:17:10  Buy   15  12.0355 |  11.9151 target       +15.37   20.6 | target       +15.37   20.6
+10-19 02:11:23  Sell 240  12.2275 |  12.3498 reversal     +23.31    8.2 | reversal     +23.31    8.2
+10-19 02:19:36  Buy   15  12.1955 |  12.0735 target       +39.77   30.9 | target       +39.77   30.9
+10-19 03:04:07  Buy   15  12.1885 |  12.0666 reversal     -37.33   92.0 | reversal     -37.33   92.0
+10-19 04:36:09  Sell  15  12.1425 |  12.2639 target       +11.94    4.0 | target       +11.94    4.0
+10-19 04:51:09  Sell  15  12.1615 |  12.2831 reversal     +38.24   11.9 | reversal     +38.24   11.9
+10-19 05:03:01  Buy   60  12.1155 |  11.9943 reversal     +18.57   15.0 | reversal     +18.57   15.0
+10-19 05:18:03  Sell  15  12.1375 |  12.2589 target        +7.00    4.2 | target        +7.00    4.2
+10-19 05:33:08  Sell  15  12.1645 |  12.2861 reversal     +14.39   40.0 | reversal     +14.39   40.0
+10-19 06:13:07  Buy   15  12.1475 |  12.0260 reversal     +22.64   21.4 | reversal     +22.64   21.4
+10-19 06:34:33  Sell  15  12.1755 |  12.2973 target       -11.09    5.9 | target       -11.09    5.9
+10-19 07:40:21  Sell  15  12.2165 |  12.3387 target        -6.96    1.2 | target        -6.96    1.2
+10-19 07:47:17  Buy   15  12.2195 |  12.0973 reversal     -11.87   32.9 | reversal     -11.87   32.9
+10-19 08:20:14  Sell  15  12.2055 |  12.3276 target       +18.43    9.9 | target       +18.43    9.9
+10-19 08:36:02  Buy   15  12.1665 |  12.0448 target       +21.78    6.9 | target       +21.78    6.9
+10-19 08:54:58  Buy   15  12.1695 |  12.0478 reversal      +8.63   24.1 | reversal      +8.63   24.1
+10-19 09:19:03  Sell  15  12.1795 |  12.3013 target       +34.07   42.7 | target       +34.07   42.7
+10-19 10:08:04  Sell  15  12.1545 |  12.2760 target       +33.32   15.4 | target       +33.32   15.4
+10-19 10:24:10  Buy   15  12.1185 |  11.9973 reversal     -44.15   15.7 | stop        -100.26   67.6
+10-19 10:39:55  Sell  15  12.0675 |  12.1882 target       +33.56   38.4 |                           (not opened)
+10-19 11:32:21  Buy   60  12.0035 |  11.8835 target       +28.74   13.3 | target       +28.74   13.3
+10-19 11:53:58  Sell  15  12.0505 |  12.1710 target       +13.69    6.5 |                           (not opened)
+10-19 12:11:05  Sell  60  12.0825 |  12.2033 target      +112.97  144.4 | target      +112.97  144.4
+10-19 15:50:02  Buy   60  11.9635 |  11.8439 reversal     +10.45   27.7 | reversal     +10.45   27.7
+10-19 16:17:41  Sell  15  11.9745 |  12.0942 target       +10.44    5.5 | target       +10.44    5.5
+10-19 17:21:56  Buy   15  11.9625 |  11.8429 reversal     -23.82   40.6 | reversal     -23.82   40.6
+10-19 18:02:32  Sell  60  11.9345 |  12.0538 target       +32.26   16.5 | target       +32.26   16.5
+10-19 18:35:01  Sell  15  11.8655 |  11.9842 open_at_end   -13.06  161.9 | open_at_end   -13.06  161.9
