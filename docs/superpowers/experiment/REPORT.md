@@ -30,6 +30,8 @@ decision-grade) · `negative` (hypothesis died) · `running` · `not started`
 | 2026-10-20 | [overshoot_ma_signal](overshoot_ma_signal.md) → [run report](../../../executor/runs/2026-10-20-overshoot-ma-replay.md) | In overshoot-vetoed zone minutes, take the side from a 3-/5-min trade-price MA class instead of skipping; replay the paper run's 58 h → [results](results/overshoot_ma_signal_results.md) | negative (ma3 +11 trades −74, ma5 +6 trades −127, no veto +19 trades −613; system net unchanged) | no branch (read-only replay over the executor DB); script + outputs in `executor/runs/` |
 | 2026-10-20 | ma_window_by_tf_replay ([run report](../../../executor/runs/2026-10-20-ma-window-by-tf-replay.md)) | Replay the CB-era paper run (10-18 → 10-20) with the entry's trend MA lengthened to 3 / 5 min for the 60- and 240-min zones (15-min zone keeps 1 min); entry-only and entry+exit variants | negative (57.7 h, 135 positions: net +2 489 → +2 482 (3 min) → +2 128 (5 min); tf 60+240 subset +772 → +572 → +242, all inside the bootstrap noise; the slower MA fires the same zones 0.6–1.8 min later at a worse price and hands 6–8 trades to the 15-min target; follow-up 10 / 15 min on the 240 zone alone: +2 226 / +1 861, tf 240 +667 → +541 → +310, same keys up to 43 min later) | no branch (read-only replay; script + output beside the run report) — keep the 1-min class |
 | 2026-10-20 | [extdone_stop_move](extdone_stop_move.md) → [results](results/extdone_stop_move_results.md), [run report](../../../executor/runs/2026-10-20-extdone-stop-move-replay.md) | While a CB zone position is open, the 15/60-min `extdone` of the entry bound (opposite to the target) moves the stop to entry ∓ Y·ATR(1 min), Y ∈ [0, 5]; replay the paper run, per position tf | partial (58 h, 136 positions: no trig-15/60 cell distinguishable from live +2 447 — t15 Y0 +0, Y1.5 +182, CIs ±900; Y ≥ 3 no-op vs the 2–2.5-ATR candle stop; tf-15 positions +67…+350 at every Y 0–3, tf-60 positions −71…−220 with the 15-min state, 60/240 states never on inside a position; profit-side lock-in negative on 58 h and 24 h) | no branch (read-only replay; script + outputs in executor/runs); candidate toggle = own-tf state, tf 15 only, Y ≈ 1.5 adverse side |
+| 2026-10-21 | [trend_ma_length](trend_ma_length.md) → [results](results/trend_ma_length_results.md), [run report](../../../executor/runs/2026-10-21-trend-ma-length-replay.md) | CB zone trend filter from the EMA-7 / EMA-14 slope class instead of the EMA-25 (forming class, 2y-frozen thresholds); paper-run replay + 2y / oos2m entry stand-in | negative (EMA-14 Δ +168 / −3.8 k / −1.9 k inside noise; EMA-7 −383 / −22.8 k (P 0.95) / −10.5 k (P 0.97); side: no flag +968 / +71.6 k / +10.6 k, closed-candle class ≥ forming) | no branch (read-only replay over the executor DB + host run over the frames); scripts + outputs in `executor/runs/` |
+| 2026-10-21 | [rule2_removal](rule2_removal.md) → [results](results/rule2_removal_results.md), [run report](../../../executor/runs/2026-10-21-rule2-removal-replay.md) | Remove the CB zone entry's rule 2 (previous 1-min candle wick crossed the zone and closed back, MA neutral-or-direction) and keep rule 1 only; fire-re-deriving replay of the paper run 10-18 → 10-21 (70.4 h), plus rule-2-only ablation | negative (no measurable change: +2 694 → +3 073, paired Δ +378 CI [−788, +1 542] P 0.29, 16 % fewer trades, PF 1.42 → 1.62; last 24 h −258, candle-stop era −167, previous 24 h +50 — sign flips by window; rule 2 fires the same zones a few minutes earlier, only 30/183 keys are rule-2-only, worth +289) | no branch (read-only replay; script + outputs in executor/runs) — keep rule 2 |
 | — | [color_prediction](color_prediction.md) | Predict next candle colour | not started | n/a |
 | — | [nn_signal_validation](nn_signal_validation.md) | Validate NN signals end to end | not started | n/a (spec empty) |
 
@@ -147,3 +149,26 @@ hold 8 min vs a 4–10 ATR ladder). `trans` (flip required) −330; `repl` (loos
 (`entry + Y·ATR` once reached) is negative on 58 h and on the last 24 h at every Y ≤ 1.5 and ≥ 3 (−216 … −751, the
 Y 2 cell +47 / +118 is a spike between −723 and −504): the lock-in turns targets into stop-outs. Report
 `results/extdone_stop_move_results.md`.
+
+### 2026-10-21 · rule2_removal — negative (70.4 h replay, executor paper data)
+
+The CB zone entry without rule 2 (previous 1-min candle wick crossed the zone and closed back, MA neutral-or-direction):
+fire-re-deriving replay of the paper run 10-18 11:41Z → 10-21 10:05Z, 181/188 recorded fires reproduced. Rule 1 only:
+168 → 141 positions, net +2 694 → +3 073 (paired 6-h-block Δ +378, 90 % CI [−788, +1 542], P(Δ<0) 0.29), PF 1.42 → 1.62;
+candle-stop era −167, last 24 h −258, previous 24 h +50 — the sign flips by window. Rule 2 alone +2 094 (full) but the best
+variant in the candle-stop era. Mechanism: 153 of the 183 live fire keys also fire by rule 1 (117 same minute, 36 up to
+12.6 min later); the 30 rule-2-only zones are worth +289; rule 2 = "the same zone a few minutes earlier, before the MA
+confirms". Keep rule 2; the only consistent effect of removal is 16 % fewer trades (fee exposure). Report
+`results/rule2_removal_results.md`, run report `executor/runs/2026-10-21-rule2-removal-replay.md`.
+
+### 2026-10-21 · trend_ma_length — negative (84 h paper replay + 2y / oos2m entry stand-in)
+
+The CB zone trend filter (`cb_f_trend`, forming EMA-25 slope class) rebuilt from the EMA-14 / EMA-7 with the same
+2y-frozen ±0.5σ recipe. EMA-14: +168 USDT on the paper run (CI90 [−825, +1 201]), −3.8 k / −1.9 k over 2y / oos2m —
+noise everywhere. EMA-7: −383 on the paper run, −22.8 k (P 0.95) / −10.5 k (P 0.97) over 2y / oos2m, worst on the
+15-min zones (the fast class vetoes the bounce while its slope still points against). Gates: 177/188 recorded fires
+reproduced, flag reconstruction 99.1–99.9 % per cell, live `EMA_SLOPE_STATS` reproduced to 1e-16 (mean) from the
+stored 2y EMA. Side findings: every weakening of the veto beats live (no flag +968 / +71.6 k CI90 [+39.7 k, +105.6 k] /
++10.6 k; X 1.0 +0.9…+1.1 k), sign-only loses 1.9–2.6 k; the closed-candle EMA-25 class beats the forming one (+22.4 k
+P 0.01 / +5.3 k P 0.06 / ±0). Report `results/trend_ma_length_results.md`.
+
