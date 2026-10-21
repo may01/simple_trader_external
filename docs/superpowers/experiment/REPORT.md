@@ -29,6 +29,7 @@ decision-grade) · `negative` (hypothesis died) · `running` · `not started`
 | 2026-10-20 | [trend_x_sweep](trend_x_sweep.md) → [results](results/trend_x_sweep_results.md) | Sweep X in "1-min trade-MA slope outside ±X·σ is a trend" (today 0.7) through the paper executor's open gate and trend-flip exit on the recorded 4 days | partial (0.7 on the 0.6–0.85 plateau, nothing beats it; only X ≥ 1.5 / ∞ clearly worse; fee breakeven 0.021 %/side dominates) | no branch (read-only replay; script + output in executor/runs) |
 | 2026-10-20 | [overshoot_ma_signal](overshoot_ma_signal.md) → [run report](../../../executor/runs/2026-10-20-overshoot-ma-replay.md) | In overshoot-vetoed zone minutes, take the side from a 3-/5-min trade-price MA class instead of skipping; replay the paper run's 58 h → [results](results/overshoot_ma_signal_results.md) | negative (ma3 +11 trades −74, ma5 +6 trades −127, no veto +19 trades −613; system net unchanged) | no branch (read-only replay over the executor DB); script + outputs in `executor/runs/` |
 | 2026-10-20 | ma_window_by_tf_replay ([run report](../../../executor/runs/2026-10-20-ma-window-by-tf-replay.md)) | Replay the CB-era paper run (10-18 → 10-20) with the entry's trend MA lengthened to 3 / 5 min for the 60- and 240-min zones (15-min zone keeps 1 min); entry-only and entry+exit variants | negative (57.7 h, 135 positions: net +2 489 → +2 482 (3 min) → +2 128 (5 min); tf 60+240 subset +772 → +572 → +242, all inside the bootstrap noise; the slower MA fires the same zones 0.6–1.8 min later at a worse price and hands 6–8 trades to the 15-min target; follow-up 10 / 15 min on the 240 zone alone: +2 226 / +1 861, tf 240 +667 → +541 → +310, same keys up to 43 min later) | no branch (read-only replay; script + output beside the run report) — keep the 1-min class |
+| 2026-10-20 | [extdone_stop_move](extdone_stop_move.md) → [results](results/extdone_stop_move_results.md), [run report](../../../executor/runs/2026-10-20-extdone-stop-move-replay.md) | While a CB zone position is open, the 15/60-min `extdone` of the entry bound (opposite to the target) moves the stop to entry ∓ Y·ATR(1 min), Y ∈ [0, 5]; replay the paper run, per position tf | partial (58 h, 136 positions: no trig-15/60 cell distinguishable from live +2 447 — t15 Y0 +0, Y1.5 +182, CIs ±900; Y ≥ 3 no-op vs the 2–2.5-ATR candle stop; tf-15 positions +67…+350 at every Y 0–3, tf-60 positions −71…−220 with the 15-min state, 60/240 states never on inside a position; profit-side lock-in negative on 58 h and 24 h) | no branch (read-only replay; script + outputs in executor/runs); candidate toggle = own-tf state, tf 15 only, Y ≈ 1.5 adverse side |
 | — | [color_prediction](color_prediction.md) | Predict next candle colour | not started | n/a |
 | — | [nn_signal_validation](nn_signal_validation.md) | Validate NN signals end to end | not started | n/a (spec empty) |
 
@@ -132,3 +133,17 @@ every X loses ~13 k over the window. Report `results/trend_x_sweep_results.md`.
 ### 2026-10-20 · ma_window_by_tf_replay — negative (57.7 h replay, executor paper data)
 
 A slower trade-price MA as the entry class for the higher-tf CB zones: 3 / 5 min on tf 60 + 240 → net +2 489 → +2 482 / +2 128, the tf 60+240 positions +772 → +572 / +242; 10 / 15 min on tf 240 alone → +2 226 / +1 861 (tf 240 +667 → +541 / +310). All inside the bootstrap noise, mechanism uniform: the same (side, tf, zone) keys fire 0.6–1.8 min later (up to +43 min) at a worse price, the 15-min-anchored stop does not move, 6–8 tf-60 trades are taken first by the 15 zone and inherit its nearer target; slower MA on every tf is clearly worse (+1 723 / +1 042). Keep the 1-min class. Report `external/executor/runs/2026-10-20-ma-window-by-tf-replay.md`, summary `experiment/results/ma_window_by_tf_results.md`.
+
+### 2026-10-20 · extdone_stop_move — partial (58 h replay, executor paper data)
+
+Once the entry-side `extdone` (15 / 60 / own tf) is on, move the stop to entry ∓ Y·ATR(1 min), tighten only. The live
+15-min candle stop already sits 2–2.5 ATR from the entry, so Y ≥ 3 is a no-op and the sweep is Y ∈ [0, 2]. Whole system:
++2 275 … +2 695 vs live +2 447, every trig-15/60 paired CI straddling zero (Y 0 turns 42 stop-outs into breakeven exits
+but forfeits 10 targets + 9 reversals → net 0; Y 0.5–1 worst; Y 1.5–2 ±100). Per tf: tf-15 positions +67…+350 with the
+15-min state at every Y (peak Y 1.5, one cell of 24 with a CI excluding zero, halves +1001/+1694 vs +797/+1650);
+tf-60 positions −71…−220 (15-min state too early), and the 60-/240-min states never turn on inside a position (median
+hold 8 min vs a 4–10 ATR ladder). `trans` (flip required) −330; `repl` (looser allowed) +150…+390 = the candle stop is
+~0.5–1 ATR too tight, a separate hypothesis. Candidate forward toggle only: own-tf state, tf 15, Y ≈ 1.5. Follow-up 2026-10-21: moving the stop *into profit*
+(`entry + Y·ATR` once reached) is negative on 58 h and on the last 24 h at every Y ≤ 1.5 and ≥ 3 (−216 … −751, the
+Y 2 cell +47 / +118 is a spike between −723 and −504): the lock-in turns targets into stop-outs. Report
+`results/extdone_stop_move_results.md`.
