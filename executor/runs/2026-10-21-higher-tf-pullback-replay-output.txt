@@ -1,0 +1,579 @@
+trades 748276  10-16 22:29:05 -> 10-21 10:07:36
+trade feed gaps > 60 s: 19 [('10-16 23:52:38', 138), ('10-17 00:43:46', 72), ('10-17 02:46:08', 60), ('10-17 03:48:42', 71), ('10-17 07:10:46', 73), ('10-17 10:32:51', 75), ('10-17 10:51:10', 66), ('10-17 11:26:05', 73), ('10-17 11:39:01', 62), ('10-17 19:33:42', 97), ('10-18 01:53:20', 80), ('10-18 04:26:26', 72), ('10-18 04:27:38', 101), ('10-18 04:49:44', 88), ('10-18 05:08:21', 62), ('10-19 13:01:46', 5564), ('10-19 20:01:34', 9432), ('10-20 16:13:10', 305), ('10-21 02:55:41', 66)]
+tf  15: 4315 closed klines 09-06 11:00:00 -> 10-21 09:30:00; stats N7 +0.00198/0.17060, N14 +0.00190/0.11939, N25 +0.00187/0.08855
+tf  60: 2878 closed klines 06-23 11:00:00 -> 10-21 08:00:00; stats N7 +0.00791/0.33307, N14 +0.00767/0.23355, N25 +0.00759/0.17366
+tf 240: 2398 closed klines 09-16 12:00:00 -> 10-21 00:00:00; stats N7 +0.03173/0.65677, N14 +0.03081/0.46243, N25 +0.03083/0.34433
+
+=== FLAG GATE: reconstructed forming EMA-25 flag vs the stored cb_f_trend at every trade (stored present) ===
+tf  15 long : stored present 98.2%, pass stored 0.732 e25 0.732 | agreement e25 vs stored 0.9935
+tf  15 short: stored present 98.2%, pass stored 0.779 e25 0.779 | agreement e25 vs stored 0.9911
+tf  60 long : stored present 98.2%, pass stored 0.718 e25 0.718 | agreement e25 vs stored 0.9959
+tf  60 short: stored present 98.2%, pass stored 0.769 e25 0.768 | agreement e25 vs stored 0.9916
+tf 240 long : stored present 98.2%, pass stored 0.505 e25 0.505 | agreement e25 vs stored 0.9971
+tf 240 short: stored present 98.2%, pass stored 0.994 e25 0.994 | agreement e25 vs stored 0.9992
+trend cache loaded
+
+trades from 10-17 22:00:00: 600032; trades where some (tf, side) passes geometry + 1-min class: 92497
+
+=== STORED STATE GATE: extdone_high/low per trade in the window (mean), cb_f_extdone == NOT extdone (agreement) ===
+tf  15: present 0.979 | extdone_high 0.207 low 0.234 | f_long == !high 1.0000  f_short == !low 1.0000
+tf  60: present 0.979 | extdone_high 0.145 low 0.189 | f_long == !high 1.0000  f_short == !low 1.0000
+tf 240: present 0.979 | extdone_high 0.153 low 0.133 | f_long == !high 1.0000  f_short == !low 1.0000
+
+=== PULL-BACK STATE RATES over the window's trades (share of trades with the veto on), per H and vetoed side ===
+  fam |  15 B |  15 S |  60 B |  60 S | 240 B | 240 S
+   xd | 0.202 | 0.229 | 0.142 | 0.185 | 0.149 | 0.130
+  cf0 | 0.048 | 0.034 | 0.083 | 0.045 | 0.000 | 0.026
+  cf- | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000
+  ovc | 0.155 | 0.128 | 0.121 | 0.085 | 0.125 | 0.097
+ ov30 | 0.417 | 0.287 | 0.107 | 0.057 | 0.023 | 0.044
+  any | 0.342 | 0.344 | 0.279 | 0.285 | 0.255 | 0.232
+ xdcf | 0.022 | 0.012 | 0.024 | 0.017 | 0.000 | 0.012
+  mir | 0.229 | 0.202 | 0.185 | 0.142 | 0.130 | 0.149
+  sh+ | 0.180 | 0.180 | 0.130 | 0.160 | 0.125 | 0.130
+  sh- | 0.112 | 0.126 | 0.076 | 0.119 | 0.084 | 0.091
+overlap of the veto sets on the window's trades, tf-60 for long: static (class -1) vs xd / cf0 / ovc — Jaccard
+  H  60 Buy  static 0.212 xd   0.142 both 0.051 jaccard 0.170
+  H  60 Buy  static 0.212 cf0  0.083 both 0.000 jaccard 0.000
+  H  60 Buy  static 0.212 ovc  0.121 both 0.007 jaccard 0.023
+  H  60 Buy  static 0.212 any  0.279 both 0.057 jaccard 0.131
+  H  60 Sell static 0.284 xd   0.185 both 0.092 jaccard 0.244
+  H  60 Sell static 0.284 cf0  0.045 both 0.000 jaccard 0.000
+  H  60 Sell static 0.284 ovc  0.085 both 0.016 jaccard 0.046
+  H  60 Sell static 0.284 any  0.285 both 0.103 jaccard 0.220
+  H 240 Buy  static 0.370 xd   0.149 both 0.072 jaccard 0.161
+  H 240 Buy  static 0.370 cf0  0.000 both 0.000 jaccard 0.000
+  H 240 Buy  static 0.370 ovc  0.125 both 0.000 jaccard 0.000
+  H 240 Buy  static 0.370 any  0.255 both 0.072 jaccard 0.131
+  H 240 Sell static 0.007 xd   0.130 both 0.000 jaccard 0.001
+  H 240 Sell static 0.007 cf0  0.026 both 0.000 jaccard 0.000
+  H 240 Sell static 0.007 ovc  0.097 both 0.000 jaccard 0.000
+  H 240 Sell static 0.007 any  0.232 both 0.000 jaccard 0.001
+simulated live: 211 positions
+simulated e25: 212 positions
+simulated none: 262 positions
+simulated hx15<60: 186 positions
+simulated xd15<60: 186 positions
+simulated xd15<240: 193 positions
+simulated xd60<240: 207 positions
+simulated xdladder: 167 positions
+simulated cf015<60: 204 positions
+simulated cf015<240: 212 positions
+simulated cf060<240: 212 positions
+simulated cf0ladder: 204 positions
+simulated cf-15<60: 212 positions
+simulated cf-15<240: 212 positions
+simulated cf-60<240: 212 positions
+simulated cf-ladder: 212 positions
+simulated ovc15<60: 193 positions
+simulated ovc15<240: 193 positions
+simulated ovc60<240: 211 positions
+simulated ovcladder: 173 positions
+simulated ov3015<60: 191 positions
+simulated ov3015<240: 207 positions
+simulated ov3060<240: 211 positions
+simulated ov30ladder: 188 positions
+simulated any15<60: 167 positions
+simulated any15<240: 177 positions
+simulated any60<240: 207 positions
+simulated anyladder: 136 positions
+simulated xdcf15<60: 209 positions
+simulated xdcf15<240: 212 positions
+simulated xdcf60<240: 212 positions
+simulated xdcfladder: 209 positions
+simulated mir15<60: 199 positions
+simulated mir60<240: 209 positions
+simulated mirladder: 176 positions
+simulated sh+15<60: 190 positions
+simulated sh+60<240: 210 positions
+simulated sh+ladder: 175 positions
+simulated sh-15<60: 198 positions
+simulated sh-60<240: 211 positions
+simulated sh-ladder: 189 positions
+
+=== REPRODUCTION GATE (live flags): recorded CbZoneEntry 188, exact 177, within ±120 s 4, unmatched 7 ===
+
+=== VARIANTS, window 10-17 22:00:00 -> 10-21 10:07:36, paper (no fees); veto ANDed into e25, everything else live ===
+     live | n 211 | net   +3732 | PF  1.47 | wr  52% | R  +56.5 | hold   7.5m | risk   83 | CI90 [ +1148, +6391] P<0 0.01 | top2  +804 | stop=99/-7822 targ=74/+7036 reve=37/+4505 open=1/+13 | fires 237 (179/46/12) skip 26
+      e25 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+     none | n 262 | net   +4751 | PF  1.49 | wr  53% | R  +66.9 | hold   7.2m | risk   85 | CI90 [ +1919, +7659] P<0 0.00 | top2  +796 | stop=120/-9558 targ=73/+6137 reve=68/+8160 open=1/+13 | fires 294 (220/58/16) skip 32
+  hx15<60 | n 186 | net   +2731 | PF  1.39 | wr  51% | R  +40.6 | hold   7.1m | risk   83 | CI90 [  +334, +5120] P<0 0.03 | top2  +733 | stop=90/-7031 targ=69/+7107 reve=26/+2643 open=1/+12 | fires 216 (158/46/12) skip 30
+  xd15<60 | n 186 | net   +3507 | PF  1.52 | wr  53% | R  +52.5 | hold   7.2m | risk   84 | CI90 [ +1109, +5956] P<0 0.01 | top2  +805 | stop=85/-6695 targ=68/+6342 reve=32/+3848 open=1/+13 | fires 204 (146/46/12) skip 18
+ xd15<240 | n 193 | net   +2838 | PF  1.39 | wr  51% | R  +40.3 | hold   7.3m | risk   83 | CI90 [  +449, +5247] P<0 0.02 | top2  +750 | stop=92/-7221 targ=69/+6409 reve=31/+3638 open=1/+13 | fires 217 (159/46/12) skip 24
+ xd60<240 | n 207 | net   +3712 | PF  1.49 | wr  52% | R  +53.0 | hold   7.5m | risk   83 | CI90 [ +1184, +6175] P<0 0.01 | top2  +804 | stop=96/-7485 targ=74/+6947 reve=36/+4237 open=1/+13 | fires 232 (180/40/12) skip 25
+ xdladder | n 167 | net   +2658 | PF  1.44 | wr  53% | R  +34.5 | hold   7.2m | risk   85 | CI90 [  +493, +4898] P<0 0.02 | top2  +749 | stop=76/-5955 targ=63/+5632 reve=27/+2969 open=1/+12 | fires 182 (130/40/12) skip 15
+ cf015<60 | n 204 | net   +3961 | PF  1.53 | wr  52% | R  +57.8 | hold   7.5m | risk   84 | CI90 [ +1418, +6560] P<0 0.01 | top2  +805 | stop=94/-7387 targ=74/+7123 reve=35/+4213 open=1/+13 | fires 225 (167/46/12) skip 21
+cf015<240 | n 212 | net   +3624 | PF  1.45 | wr  51% | R  +54.7 | hold   7.4m | risk   82 | CI90 [ +1016, +6249] P<0 0.01 | top2  +805 | stop=101/-7918 targ=73/+7019 reve=37/+4510 open=1/+13 | fires 238 (180/46/12) skip 26
+cf060<240 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+cf0ladder | n 204 | net   +3802 | PF  1.50 | wr  52% | R  +56.3 | hold   7.5m | risk   84 | CI90 [ +1254, +6424] P<0 0.01 | top2  +805 | stop=95/-7484 targ=73/+7064 reve=35/+4210 open=1/+13 | fires 225 (167/46/12) skip 21
+ cf-15<60 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+cf-15<240 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+cf-60<240 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+cf-ladder | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+ ovc15<60 | n 193 | net   +3473 | PF  1.48 | wr  52% | R  +51.3 | hold   7.3m | risk   83 | CI90 [ +1010, +5989] P<0 0.01 | top2  +804 | stop=91/-7147 targ=67/+6214 reve=34/+4393 open=1/+13 | fires 217 (159/46/12) skip 24
+ovc15<240 | n 193 | net   +3149 | PF  1.44 | wr  51% | R  +45.6 | hold   7.5m | risk   79 | CI90 [  +825, +5578] P<0 0.01 | top2  +751 | stop=91/-7032 targ=68/+6151 reve=33/+4017 open=1/+13 | fires 214 (156/46/12) skip 21
+ovc60<240 | n 211 | net   +3758 | PF  1.48 | wr  52% | R  +56.0 | hold   7.5m | risk   80 | CI90 [ +1253, +6402] P<0 0.01 | top2  +804 | stop=99/-7716 targ=74/+6978 reve=37/+4483 open=1/+13 | fires 233 (180/41/12) skip 22
+ovcladder | n 173 | net   +2966 | PF  1.46 | wr  51% | R  +45.8 | hold   7.5m | risk   78 | CI90 [  +709, +5272] P<0 0.01 | top2  +750 | stop=82/-6374 targ=60/+5292 reve=30/+4036 open=1/+13 | fires 192 (139/41/12) skip 19
+ov3015<60 | n 191 | net   +3272 | PF  1.46 | wr  52% | R  +46.7 | hold   7.5m | risk   83 | CI90 [  +888, +5660] P<0 0.01 | top2  +734 | stop=90/-7034 targ=67/+6406 reve=33/+3887 open=1/+13 | fires 217 (159/46/12) skip 26
+ov3015<240 | n 207 | net   +3453 | PF  1.46 | wr  52% | R  +49.5 | hold   7.3m | risk   80 | CI90 [  +984, +5916] P<0 0.01 | top2  +803 | stop=97/-7505 targ=73/+6627 reve=36/+4318 open=1/+13 | fires 232 (174/46/12) skip 25
+ov3060<240 | n 211 | net   +3846 | PF  1.49 | wr  52% | R  +57.2 | hold   7.5m | risk   83 | CI90 [ +1292, +6493] P<0 0.01 | top2  +805 | stop=99/-7751 targ=73/+7103 reve=38/+4481 open=1/+13 | fires 237 (179/46/12) skip 26
+ov30ladder | n 188 | net   +3406 | PF  1.50 | wr  53% | R  +48.8 | hold   7.8m | risk   81 | CI90 [ +1134, +5696] P<0 0.01 | top2  +734 | stop=87/-6770 targ=67/+6274 reve=33/+3889 open=1/+13 | fires 213 (155/46/12) skip 25
+ any15<60 | n 167 | net   +3486 | PF  1.58 | wr  54% | R  +49.9 | hold   7.7m | risk   85 | CI90 [ +1262, +5820] P<0 0.01 | top2  +804 | stop=74/-5932 targ=64/+5881 reve=28/+3525 open=1/+13 | fires 179 (121/46/12) skip 12
+any15<240 | n 177 | net   +2368 | PF  1.35 | wr  50% | R  +35.8 | hold   7.3m | risk   79 | CI90 [  +195, +4678] P<0 0.04 | top2  +748 | stop=86/-6681 targ=63/+5857 reve=27/+3180 open=1/+12 | fires 196 (138/46/12) skip 19
+any60<240 | n 207 | net   +3583 | PF  1.48 | wr  52% | R  +51.7 | hold   7.5m | risk   83 | CI90 [ +1050, +6048] P<0 0.01 | top2  +804 | stop=96/-7481 targ=74/+6846 reve=36/+4205 open=1/+13 | fires 228 (180/36/12) skip 21
+anyladder | n 136 | net   +2028 | PF  1.40 | wr  53% | R  +29.2 | hold   7.0m | risk   84 | CI90 [   +82, +4094] P<0 0.04 | top2  +746 | stop=63/-4994 targ=52/+4603 reve=20/+2406 open=1/+12 | fires 141 (93/36/12) skip 5
+xdcf15<60 | n 209 | net   +3831 | PF  1.50 | wr  52% | R  +57.0 | hold   7.3m | risk   80 | CI90 [ +1275, +6386] P<0 0.01 | top2  +805 | stop=98/-7650 targ=73/+6951 reve=37/+4516 open=1/+13 | fires 234 (176/46/12) skip 25
+xdcf15<240 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+xdcf60<240 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+xdcfladder | n 209 | net   +3831 | PF  1.50 | wr  52% | R  +57.0 | hold   7.3m | risk   80 | CI90 [ +1275, +6386] P<0 0.01 | top2  +805 | stop=98/-7650 targ=73/+6951 reve=37/+4516 open=1/+13 | fires 234 (176/46/12) skip 25
+ mir15<60 | n 199 | net   +3447 | PF  1.46 | wr  51% | R  +53.1 | hold   7.5m | risk   83 | CI90 [  +918, +5956] P<0 0.01 | top2  +804 | stop=94/-7419 targ=70/+6564 reve=34/+4289 open=1/+13 | fires 227 (169/46/12) skip 28
+mir60<240 | n 209 | net   +3784 | PF  1.49 | wr  52% | R  +55.4 | hold   7.5m | risk   83 | CI90 [ +1195, +6327] P<0 0.01 | top2  +805 | stop=98/-7669 targ=74/+7079 reve=36/+4362 open=1/+13 | fires 235 (180/43/12) skip 26
+mirladder | n 176 | net   +2647 | PF  1.39 | wr  51% | R  +40.2 | hold   7.8m | risk   84 | CI90 [  +290, +4997] P<0 0.03 | top2  +801 | stop=84/-6721 targ=61/+5762 reve=30/+3593 open=1/+12 | fires 202 (147/43/12) skip 26
+ sh+15<60 | n 190 | net   +3220 | PF  1.45 | wr  51% | R  +48.8 | hold   7.2m | risk   83 | CI90 [  +826, +5623] P<0 0.01 | top2  +803 | stop=91/-7071 targ=66/+6267 reve=32/+4012 open=1/+13 | fires 211 (153/46/12) skip 21
+sh+60<240 | n 210 | net   +3806 | PF  1.50 | wr  52% | R  +55.4 | hold   7.5m | risk   81 | CI90 [ +1302, +6318] P<0 0.01 | top2  +804 | stop=98/-7603 targ=75/+7098 reve=36/+4299 open=1/+13 | fires 234 (180/42/12) skip 24
+sh+ladder | n 175 | net   +2822 | PF  1.43 | wr  50% | R  +39.5 | hold   7.3m | risk   83 | CI90 [  +580, +5175] P<0 0.02 | top2  +753 | stop=84/-6462 targ=63/+5905 reve=27/+3366 open=1/+13 | fires 195 (141/42/12) skip 20
+ sh-15<60 | n 198 | net   +4695 | PF  1.67 | wr  54% | R  +67.8 | hold   7.6m | risk   84 | CI90 [ +2183, +7262] P<0 0.00 | top2  +805 | stop=88/-6967 targ=77/+7494 reve=32/+4156 open=1/+13 | fires 221 (163/46/12) skip 23
+sh-60<240 | n 211 | net   +3694 | PF  1.48 | wr  52% | R  +54.3 | hold   7.3m | risk   83 | CI90 [ +1161, +6264] P<0 0.01 | top2  +804 | stop=99/-7712 targ=75/+7096 reve=36/+4297 open=1/+13 | fires 236 (180/44/12) skip 25
+sh-ladder | n 189 | net   +4362 | PF  1.64 | wr  53% | R  +62.5 | hold   7.8m | risk   85 | CI90 [ +1891, +6916] P<0 0.00 | top2  +804 | stop=85/-6703 targ=74/+7319 reve=29/+3733 open=1/+13 | fires 210 (154/44/12) skip 21
+
+--- by the opening fire's tf: n, net, PF ---
+     live | tf15: 160, +2021, PF 1.34 | tf60: 40, +611, PF 1.39 | tf240: 11, +1100, PF 4.24
+      e25 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+     none | tf15: 197, +2374, PF 1.33 | tf60: 50, +1656, PF 1.93 | tf240: 15, +720, PF 2.15
+  hx15<60 | tf15: 134, +1566, PF 1.31 | tf60: 41, +565, PF 1.34 | tf240: 11, +601, PF 2.42
+  xd15<60 | tf15: 134, +1969, PF 1.41 | tf60: 41, +437, PF 1.27 | tf240: 11, +1101, PF 4.24
+ xd15<240 | tf15: 142, +1278, PF 1.24 | tf60: 40, +492, PF 1.31 | tf240: 11, +1068, PF 4.16
+ xd60<240 | tf15: 163, +2041, PF 1.34 | tf60: 33, +571, PF 1.49 | tf240: 11, +1100, PF 4.24
+ xdladder | tf15: 121, +1363, PF 1.32 | tf60: 35, +227, PF 1.17 | tf240: 11, +1068, PF 4.16
+ cf015<60 | tf15: 152, +2127, PF 1.38 | tf60: 41, +732, PF 1.46 | tf240: 11, +1103, PF 4.24
+cf015<240 | tf15: 161, +1937, PF 1.32 | tf60: 40, +587, PF 1.37 | tf240: 11, +1100, PF 4.24
+cf060<240 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+cf0ladder | tf15: 152, +1969, PF 1.35 | tf60: 41, +731, PF 1.46 | tf240: 11, +1102, PF 4.24
+ cf-15<60 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+cf-15<240 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+cf-60<240 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+cf-ladder | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+ ovc15<60 | tf15: 140, +2160, PF 1.44 | tf60: 42, +334, PF 1.18 | tf240: 11, +979, PF 3.27
+ovc15<240 | tf15: 141, +1785, PF 1.36 | tf60: 41, +749, PF 1.48 | tf240: 11, +615, PF 2.18
+ovc60<240 | tf15: 164, +2231, PF 1.37 | tf60: 36, +426, PF 1.29 | tf240: 11, +1101, PF 4.24
+ovcladder | tf15: 124, +2017, PF 1.48 | tf60: 38, +172, PF 1.10 | tf240: 11, +777, PF 2.49
+ov3015<60 | tf15: 137, +2294, PF 1.48 | tf60: 43, +496, PF 1.27 | tf240: 11, +482, PF 1.93
+ov3015<240 | tf15: 156, +2048, PF 1.37 | tf60: 40, +586, PF 1.37 | tf240: 11, +818, PF 2.90
+ov3060<240 | tf15: 160, +2119, PF 1.36 | tf60: 40, +626, PF 1.41 | tf240: 11, +1101, PF 4.24
+ov30ladder | tf15: 134, +2338, PF 1.52 | tf60: 43, +585, PF 1.33 | tf240: 11, +483, PF 1.93
+ any15<60 | tf15: 112, +2179, PF 1.60 | tf60: 44, +328, PF 1.17 | tf240: 11, +979, PF 3.27
+any15<240 | tf15: 125, +1099, PF 1.24 | tf60: 41, +655, PF 1.42 | tf240: 11, +615, PF 2.18
+any60<240 | tf15: 166, +2177, PF 1.36 | tf60: 30, +307, PF 1.26 | tf240: 11, +1100, PF 4.24
+anyladder | tf15: 90, +1399, PF 1.48 | tf60: 35, -147, PF 0.91 | tf240: 11, +776, PF 2.50
+xdcf15<60 | tf15: 158, +2142, PF 1.37 | tf60: 40, +587, PF 1.37 | tf240: 11, +1102, PF 4.24
+xdcf15<240 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+xdcf60<240 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+xdcfladder | tf15: 158, +2142, PF 1.37 | tf60: 40, +587, PF 1.37 | tf240: 11, +1102, PF 4.24
+ mir15<60 | tf15: 148, +1907, PF 1.35 | tf60: 40, +436, PF 1.27 | tf240: 11, +1103, PF 4.25
+mir60<240 | tf15: 161, +2095, PF 1.35 | tf60: 37, +588, PF 1.41 | tf240: 11, +1101, PF 4.24
+mirladder | tf15: 128, +1482, PF 1.30 | tf60: 37, +345, PF 1.23 | tf240: 11, +819, PF 2.90
+ sh+15<60 | tf15: 139, +1529, PF 1.29 | tf60: 40, +586, PF 1.37 | tf240: 11, +1104, PF 4.25
+sh+60<240 | tf15: 163, +2042, PF 1.34 | tf60: 36, +663, PF 1.52 | tf240: 11, +1101, PF 4.24
+sh+ladder | tf15: 128, +1252, PF 1.26 | tf60: 36, +465, PF 1.35 | tf240: 11, +1104, PF 4.26
+ sh-15<60 | tf15: 147, +2949, PF 1.58 | tf60: 40, +641, PF 1.41 | tf240: 11, +1105, PF 4.23
+sh-60<240 | tf15: 162, +2117, PF 1.36 | tf60: 38, +476, PF 1.32 | tf240: 11, +1101, PF 4.24
+sh-ladder | tf15: 140, +2728, PF 1.55 | tf60: 38, +530, PF 1.36 | tf240: 11, +1104, PF 4.24
+
+--- by side: n, net ---
+     live | Buy: 97, +1010 | Sell: 114, +2722
+      e25 | Buy: 97, +1048 | Sell: 115, +2735
+     none | Buy: 121, +1681 | Sell: 141, +3069
+  hx15<60 | Buy: 92, +740 | Sell: 94, +1992
+  xd15<60 | Buy: 88, +1272 | Sell: 98, +2235
+ xd15<240 | Buy: 90, +666 | Sell: 103, +2172
+ xd60<240 | Buy: 94, +1051 | Sell: 113, +2662
+ xdladder | Buy: 80, +951 | Sell: 87, +1707
+ cf015<60 | Buy: 91, +1013 | Sell: 113, +2948
+cf015<240 | Buy: 97, +1048 | Sell: 115, +2576
+cf060<240 | Buy: 97, +1048 | Sell: 115, +2735
+cf0ladder | Buy: 91, +1012 | Sell: 113, +2790
+ cf-15<60 | Buy: 97, +1048 | Sell: 115, +2735
+cf-15<240 | Buy: 97, +1048 | Sell: 115, +2735
+cf-60<240 | Buy: 97, +1048 | Sell: 115, +2735
+cf-ladder | Buy: 97, +1048 | Sell: 115, +2735
+ ovc15<60 | Buy: 84, +1048 | Sell: 109, +2425
+ovc15<240 | Buy: 89, +1129 | Sell: 104, +2020
+ovc60<240 | Buy: 97, +1060 | Sell: 114, +2698
+ovcladder | Buy: 75, +1074 | Sell: 98, +1892
+ov3015<60 | Buy: 83, +1077 | Sell: 108, +2195
+ov3015<240 | Buy: 96, +997 | Sell: 111, +2456
+ov3060<240 | Buy: 96, +1111 | Sell: 115, +2735
+ov30ladder | Buy: 82, +1319 | Sell: 106, +2087
+ any15<60 | Buy: 74, +1452 | Sell: 93, +2034
+any15<240 | Buy: 83, +730 | Sell: 94, +1638
+any60<240 | Buy: 94, +1062 | Sell: 113, +2522
+anyladder | Buy: 60, +1148 | Sell: 76, +879
+xdcf15<60 | Buy: 95, +992 | Sell: 114, +2839
+xdcf15<240 | Buy: 97, +1048 | Sell: 115, +2735
+xdcf60<240 | Buy: 97, +1048 | Sell: 115, +2735
+xdcfladder | Buy: 95, +992 | Sell: 114, +2839
+ mir15<60 | Buy: 92, +1117 | Sell: 107, +2330
+mir60<240 | Buy: 95, +999 | Sell: 114, +2785
+mirladder | Buy: 79, +929 | Sell: 97, +1718
+ sh+15<60 | Buy: 91, +985 | Sell: 99, +2234
+sh+60<240 | Buy: 96, +1156 | Sell: 114, +2651
+sh+ladder | Buy: 86, +1215 | Sell: 89, +1607
+ sh-15<60 | Buy: 93, +1383 | Sell: 105, +3312
+sh-60<240 | Buy: 96, +1151 | Sell: 115, +2542
+sh-ladder | Buy: 88, +1346 | Sell: 101, +3017
+
+--- fees: net after f %/side ---
+     live | gross   +3732 | 0.01%   +1737 | 0.02%    -257 | 0.05%   -6241 | breakeven 0.019 %
+      e25 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+     none | gross   +4751 | 0.01%   +2308 | 0.02%    -135 | 0.05%   -7464 | breakeven 0.019 %
+  hx15<60 | gross   +2731 | 0.01%    +990 | 0.02%    -752 | 0.05%   -5978 | breakeven 0.016 %
+  xd15<60 | gross   +3507 | 0.01%   +1749 | 0.02%      -9 | 0.05%   -5283 | breakeven 0.020 %
+ xd15<240 | gross   +2838 | 0.01%   +1018 | 0.02%    -801 | 0.05%   -6261 | breakeven 0.016 %
+ xd60<240 | gross   +3712 | 0.01%   +1758 | 0.02%    -196 | 0.05%   -6059 | breakeven 0.019 %
+ xdladder | gross   +2658 | 0.01%   +1093 | 0.02%    -471 | 0.05%   -5165 | breakeven 0.017 %
+ cf015<60 | gross   +3961 | 0.01%   +2037 | 0.02%    +112 | 0.05%   -5661 | breakeven 0.021 %
+cf015<240 | gross   +3624 | 0.01%   +1623 | 0.02%    -378 | 0.05%   -6381 | breakeven 0.018 %
+cf060<240 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+cf0ladder | gross   +3802 | 0.01%   +1884 | 0.02%     -34 | 0.05%   -5788 | breakeven 0.020 %
+ cf-15<60 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+cf-15<240 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+cf-60<240 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+cf-ladder | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+ ovc15<60 | gross   +3473 | 0.01%   +1631 | 0.02%    -210 | 0.05%   -5733 | breakeven 0.019 %
+ovc15<240 | gross   +3149 | 0.01%   +1317 | 0.02%    -515 | 0.05%   -6011 | breakeven 0.017 %
+ovc60<240 | gross   +3758 | 0.01%   +1763 | 0.02%    -231 | 0.05%   -6215 | breakeven 0.019 %
+ovcladder | gross   +2966 | 0.01%   +1313 | 0.02%    -339 | 0.05%   -5298 | breakeven 0.018 %
+ov3015<60 | gross   +3272 | 0.01%   +1462 | 0.02%    -348 | 0.05%   -5778 | breakeven 0.018 %
+ov3015<240 | gross   +3453 | 0.01%   +1486 | 0.02%    -481 | 0.05%   -6381 | breakeven 0.018 %
+ov3060<240 | gross   +3846 | 0.01%   +1848 | 0.02%    -149 | 0.05%   -6143 | breakeven 0.019 %
+ov30ladder | gross   +3406 | 0.01%   +1620 | 0.02%    -165 | 0.05%   -5521 | breakeven 0.019 %
+ any15<60 | gross   +3486 | 0.01%   +1916 | 0.02%    +346 | 0.05%   -4364 | breakeven 0.022 %
+any15<240 | gross   +2368 | 0.01%    +696 | 0.02%    -977 | 0.05%   -5993 | breakeven 0.014 %
+any60<240 | gross   +3583 | 0.01%   +1633 | 0.02%    -317 | 0.05%   -6168 | breakeven 0.018 %
+anyladder | gross   +2028 | 0.01%    +756 | 0.02%    -516 | 0.05%   -4332 | breakeven 0.016 %
+xdcf15<60 | gross   +3831 | 0.01%   +1844 | 0.02%    -142 | 0.05%   -6101 | breakeven 0.019 %
+xdcf15<240 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+xdcf60<240 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+xdcfladder | gross   +3831 | 0.01%   +1844 | 0.02%    -142 | 0.05%   -6101 | breakeven 0.019 %
+ mir15<60 | gross   +3447 | 0.01%   +1554 | 0.02%    -338 | 0.05%   -6015 | breakeven 0.018 %
+mir60<240 | gross   +3784 | 0.01%   +1802 | 0.02%    -179 | 0.05%   -6125 | breakeven 0.019 %
+mirladder | gross   +2647 | 0.01%    +985 | 0.02%    -677 | 0.05%   -5663 | breakeven 0.016 %
+ sh+15<60 | gross   +3220 | 0.01%   +1412 | 0.02%    -395 | 0.05%   -5817 | breakeven 0.018 %
+sh+60<240 | gross   +3806 | 0.01%   +1821 | 0.02%    -165 | 0.05%   -6122 | breakeven 0.019 %
+sh+ladder | gross   +2822 | 0.01%   +1170 | 0.02%    -482 | 0.05%   -5438 | breakeven 0.017 %
+ sh-15<60 | gross   +4695 | 0.01%   +2818 | 0.02%    +942 | 0.05%   -4689 | breakeven 0.025 %
+sh-60<240 | gross   +3694 | 0.01%   +1699 | 0.02%    -296 | 0.05%   -6279 | breakeven 0.019 %
+sh-ladder | gross   +4362 | 0.01%   +2581 | 0.02%    +799 | 0.05%   -4546 | breakeven 0.024 %
+
+--- paired vs e25: trades matched by (open trade, side); unmatched enter as (pnl − 0) ---
+     live | shared 201 | only-    live  10 | only-e25  11 | Δnet     -51 | CI90 [  -719,   +598] | P(Δ<0) 0.56
+      e25 | shared 212 | only-     e25   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+     none | shared 201 | only-    none  61 | only-e25  11 | Δnet    +968 | CI90 [  -572,  +2526] | P(Δ<0) 0.16
+  hx15<60 | shared 183 | only- hx15<60   3 | only-e25  29 | Δnet   -1051 | CI90 [ -2364,    +75] | P(Δ<0) 0.93
+  xd15<60 | shared 182 | only- xd15<60   4 | only-e25  30 | Δnet    -276 | CI90 [ -1251,   +632] | P(Δ<0) 0.69
+ xd15<240 | shared 190 | only-xd15<240   3 | only-e25  22 | Δnet    -945 | CI90 [ -1984,    +37] | P(Δ<0) 0.94
+ xd60<240 | shared 203 | only-xd60<240   4 | only-e25   9 | Δnet     -71 | CI90 [  -765,   +578] | P(Δ<0) 0.56
+ xdladder | shared 157 | only-xdladder  10 | only-e25  55 | Δnet   -1125 | CI90 [ -2625,   +391] | P(Δ<0) 0.89
+ cf015<60 | shared 198 | only-cf015<60   6 | only-e25  14 | Δnet    +178 | CI90 [  -448,   +795] | P(Δ<0) 0.30
+cf015<240 | shared 211 | only-cf015<240   1 | only-e25   1 | Δnet    -159 | CI90 [  -363,     -1] | P(Δ<0) 0.99
+cf060<240 | shared 212 | only-cf060<240   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+cf0ladder | shared 197 | only-cf0ladder   7 | only-e25  15 | Δnet     +19 | CI90 [  -622,   +676] | P(Δ<0) 0.47
+ cf-15<60 | shared 212 | only-cf-15<60   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+cf-15<240 | shared 212 | only-cf-15<240   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+cf-60<240 | shared 212 | only-cf-60<240   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+cf-ladder | shared 212 | only-cf-ladder   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+ ovc15<60 | shared 190 | only-ovc15<60   3 | only-e25  22 | Δnet    -310 | CI90 [ -1308,   +685] | P(Δ<0) 0.69
+ovc15<240 | shared 191 | only-ovc15<240   2 | only-e25  21 | Δnet    -634 | CI90 [ -1886,   +498] | P(Δ<0) 0.81
+ovc60<240 | shared 208 | only-ovc60<240   3 | only-e25   4 | Δnet     -25 | CI90 [  -368,   +311] | P(Δ<0) 0.54
+ovcladder | shared 170 | only-ovcladder   3 | only-e25  42 | Δnet    -817 | CI90 [ -2202,   +502] | P(Δ<0) 0.84
+ov3015<60 | shared 187 | only-ov3015<60   4 | only-e25  25 | Δnet    -511 | CI90 [ -1888,   +763] | P(Δ<0) 0.74
+ov3015<240 | shared 205 | only-ov3015<240   2 | only-e25   7 | Δnet    -330 | CI90 [ -1138,   +435] | P(Δ<0) 0.72
+ov3060<240 | shared 211 | only-ov3060<240   0 | only-e25   1 | Δnet     +63 | CI90 [   -19,   +208] | P(Δ<0) 0.24
+ov30ladder | shared 183 | only-ov30ladder   5 | only-e25  29 | Δnet    -377 | CI90 [ -1834,   +984] | P(Δ<0) 0.67
+ any15<60 | shared 154 | only-any15<60  13 | only-e25  58 | Δnet    -297 | CI90 [ -1714,  +1097] | P(Δ<0) 0.62
+any15<240 | shared 172 | only-any15<240   5 | only-e25  40 | Δnet   -1415 | CI90 [ -2839,    -73] | P(Δ<0) 0.96
+any60<240 | shared 200 | only-any60<240   7 | only-e25  12 | Δnet    -200 | CI90 [  -956,   +530] | P(Δ<0) 0.67
+anyladder | shared 119 | only-anyladder  17 | only-e25  93 | Δnet   -1755 | CI90 [ -3652,   +159] | P(Δ<0) 0.94
+xdcf15<60 | shared 209 | only-xdcf15<60   0 | only-e25   3 | Δnet     +48 | CI90 [  -262,   +353] | P(Δ<0) 0.37
+xdcf15<240 | shared 212 | only-xdcf15<240   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+xdcf60<240 | shared 212 | only-xdcf60<240   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+xdcfladder | shared 209 | only-xdcfladder   0 | only-e25   3 | Δnet     +48 | CI90 [  -261,   +329] | P(Δ<0) 0.38
+ mir15<60 | shared 196 | only-mir15<60   3 | only-e25  16 | Δnet    -336 | CI90 [ -1097,   +438] | P(Δ<0) 0.76
+mir60<240 | shared 209 | only-mir60<240   0 | only-e25   3 | Δnet      +1 | CI90 [  -303,   +305] | P(Δ<0) 0.41
+mirladder | shared 173 | only-mirladder   3 | only-e25  39 | Δnet   -1136 | CI90 [ -2278,     -9] | P(Δ<0) 0.95
+ sh+15<60 | shared 187 | only-sh+15<60   3 | only-e25  25 | Δnet    -563 | CI90 [ -1397,   +238] | P(Δ<0) 0.87
+sh+60<240 | shared 207 | only-sh+60<240   3 | only-e25   5 | Δnet     +24 | CI90 [  -473,   +467] | P(Δ<0) 0.45
+sh+ladder | shared 170 | only-sh+ladder   5 | only-e25  42 | Δnet    -961 | CI90 [ -2314,   +317] | P(Δ<0) 0.89
+ sh-15<60 | shared 194 | only-sh-15<60   4 | only-e25  18 | Δnet    +912 | CI90 [  +207,  +1668] | P(Δ<0) 0.01
+sh-60<240 | shared 209 | only-sh-60<240   2 | only-e25   3 | Δnet     -89 | CI90 [  -549,   +328] | P(Δ<0) 0.61
+sh-ladder | shared 183 | only-sh-ladder   6 | only-e25  29 | Δnet    +579 | CI90 [  -684,  +1922] | P(Δ<0) 0.22
+
+--- paired vs live: trades matched by (open trade, side); unmatched enter as (pnl − 0) ---
+     live | shared 211 | only-    live   0 | only-live   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+      e25 | shared 201 | only-     e25  11 | only-live  10 | Δnet     +51 | CI90 [  -612,   +698] | P(Δ<0) 0.46
+     none | shared 200 | only-    none  62 | only-live  11 | Δnet   +1019 | CI90 [  -489,  +2620] | P(Δ<0) 0.14
+  hx15<60 | shared 179 | only- hx15<60   7 | only-live  32 | Δnet   -1000 | CI90 [ -2362,   +216] | P(Δ<0) 0.91
+  xd15<60 | shared 173 | only- xd15<60  13 | only-live  38 | Δnet    -225 | CI90 [ -1245,   +788] | P(Δ<0) 0.63
+ xd15<240 | shared 182 | only-xd15<240  11 | only-live  29 | Δnet    -894 | CI90 [ -2106,   +233] | P(Δ<0) 0.90
+ xd60<240 | shared 192 | only-xd60<240  15 | only-live  19 | Δnet     -20 | CI90 [  -992,   +909] | P(Δ<0) 0.51
+ xdladder | shared 150 | only-xdladder  17 | only-live  61 | Δnet   -1074 | CI90 [ -2630,   +406] | P(Δ<0) 0.88
+ cf015<60 | shared 187 | only-cf015<60  17 | only-live  24 | Δnet    +229 | CI90 [  -655,  +1147] | P(Δ<0) 0.34
+cf015<240 | shared 200 | only-cf015<240  12 | only-live  11 | Δnet    -108 | CI90 [  -807,   +620] | P(Δ<0) 0.60
+cf060<240 | shared 201 | only-cf060<240  11 | only-live  10 | Δnet     +51 | CI90 [  -620,   +725] | P(Δ<0) 0.45
+cf0ladder | shared 186 | only-cf0ladder  18 | only-live  25 | Δnet     +70 | CI90 [  -832,  +1020] | P(Δ<0) 0.43
+ cf-15<60 | shared 201 | only-cf-15<60  11 | only-live  10 | Δnet     +51 | CI90 [  -613,   +711] | P(Δ<0) 0.45
+cf-15<240 | shared 201 | only-cf-15<240  11 | only-live  10 | Δnet     +51 | CI90 [  -604,   +742] | P(Δ<0) 0.46
+cf-60<240 | shared 201 | only-cf-60<240  11 | only-live  10 | Δnet     +51 | CI90 [  -586,   +731] | P(Δ<0) 0.46
+cf-ladder | shared 201 | only-cf-ladder  11 | only-live  10 | Δnet     +51 | CI90 [  -586,   +727] | P(Δ<0) 0.43
+ ovc15<60 | shared 179 | only-ovc15<60  14 | only-live  32 | Δnet    -259 | CI90 [ -1415,   +907] | P(Δ<0) 0.63
+ovc15<240 | shared 180 | only-ovc15<240  13 | only-live  31 | Δnet    -583 | CI90 [ -1948,   +759] | P(Δ<0) 0.75
+ovc60<240 | shared 197 | only-ovc60<240  14 | only-live  14 | Δnet     +26 | CI90 [  -722,   +768] | P(Δ<0) 0.49
+ovcladder | shared 159 | only-ovcladder  14 | only-live  52 | Δnet    -766 | CI90 [ -2264,   +713] | P(Δ<0) 0.79
+ov3015<60 | shared 176 | only-ov3015<60  15 | only-live  35 | Δnet    -460 | CI90 [ -1934,  +1017] | P(Δ<0) 0.67
+ov3015<240 | shared 194 | only-ov3015<240  13 | only-live  17 | Δnet    -279 | CI90 [ -1374,   +700] | P(Δ<0) 0.67
+ov3060<240 | shared 200 | only-ov3060<240  11 | only-live  11 | Δnet    +114 | CI90 [  -550,   +792] | P(Δ<0) 0.40
+ov30ladder | shared 172 | only-ov30ladder  16 | only-live  39 | Δnet    -326 | CI90 [ -1918,  +1137] | P(Δ<0) 0.64
+ any15<60 | shared 145 | only-any15<60  22 | only-live  66 | Δnet    -246 | CI90 [ -1760,  +1206] | P(Δ<0) 0.61
+any15<240 | shared 164 | only-any15<240  13 | only-live  47 | Δnet   -1364 | CI90 [ -2931,    +76] | P(Δ<0) 0.94
+any60<240 | shared 189 | only-any60<240  18 | only-live  22 | Δnet    -149 | CI90 [ -1164,   +856] | P(Δ<0) 0.60
+anyladder | shared 112 | only-anyladder  24 | only-live  99 | Δnet   -1704 | CI90 [ -3634,   +153] | P(Δ<0) 0.93
+xdcf15<60 | shared 198 | only-xdcf15<60  11 | only-live  13 | Δnet     +99 | CI90 [  -616,   +820] | P(Δ<0) 0.41
+xdcf15<240 | shared 201 | only-xdcf15<240  11 | only-live  10 | Δnet     +51 | CI90 [  -583,   +728] | P(Δ<0) 0.45
+xdcf60<240 | shared 201 | only-xdcf60<240  11 | only-live  10 | Δnet     +51 | CI90 [  -599,   +720] | P(Δ<0) 0.46
+xdcfladder | shared 198 | only-xdcfladder  11 | only-live  13 | Δnet     +99 | CI90 [  -615,   +850] | P(Δ<0) 0.42
+ mir15<60 | shared 186 | only-mir15<60  13 | only-live  25 | Δnet    -285 | CI90 [ -1312,   +716] | P(Δ<0) 0.66
+mir60<240 | shared 198 | only-mir60<240  11 | only-live  13 | Δnet     +52 | CI90 [  -671,   +783] | P(Δ<0) 0.46
+mirladder | shared 164 | only-mirladder  12 | only-live  47 | Δnet   -1085 | CI90 [ -2354,   +166] | P(Δ<0) 0.92
+ sh+15<60 | shared 179 | only-sh+15<60  11 | only-live  32 | Δnet    -512 | CI90 [ -1506,   +472] | P(Δ<0) 0.80
+sh+60<240 | shared 196 | only-sh+60<240  14 | only-live  15 | Δnet     +75 | CI90 [  -725,   +879] | P(Δ<0) 0.44
+sh+ladder | shared 162 | only-sh+ladder  13 | only-live  49 | Δnet    -910 | CI90 [ -2375,   +476] | P(Δ<0) 0.85
+ sh-15<60 | shared 183 | only-sh-15<60  15 | only-live  28 | Δnet    +963 | CI90 [   -17,  +1956] | P(Δ<0) 0.05
+sh-60<240 | shared 198 | only-sh-60<240  13 | only-live  13 | Δnet     -38 | CI90 [  -846,   +761] | P(Δ<0) 0.53
+sh-ladder | shared 172 | only-sh-ladder  17 | only-live  39 | Δnet    +630 | CI90 [  -841,  +2125] | P(Δ<0) 0.24
+
+--- stability: net by half (split 10-19 16:03:48) and by UTC day ---
+  variant |      H1   n |      H2   n |  10-17 n |  10-18 n |  10-19 n |  10-20 n |  10-21 n
+     live |   +1733 101 |   +1999 110 |    +69  5 |  +1463 64 |   +334 40 |  +1692 74 |   +173 28
+      e25 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+     none |   +1919 132 |   +2832 130 |   +328  7 |  +1157 80 |   +674 60 |  +1920 82 |   +672 33
+  hx15<60 |    +691  84 |   +2041 102 |   -203  2 |   +794 57 |   +236 33 |  +1680 72 |   +225 22
+  xd15<60 |   +2139  85 |   +1368 101 |    +29  4 |  +1910 56 |   +338 33 |  +1245 69 |    -16 24
+ xd15<240 |   +1087  90 |   +1752 103 |    -81  2 |   +879 58 |   +368 38 |  +1461 69 |   +212 26
+ xd60<240 |   +1589  99 |   +2123 108 |   +130  5 |  +1278 64 |   +320 38 |  +1864 72 |   +121 28
+ xdladder |   +1120  74 |   +1538  93 |    -81  2 |  +1034 50 |   +246 30 |  +1442 62 |    +18 23
+ cf015<60 |   +2184  97 |   +1777 107 |   +130  5 |  +1634 62 |   +559 38 |  +1431 74 |   +207 25
+cf015<240 |   +1822 101 |   +1802 111 |   +130  5 |  +1464 64 |   +209 40 |  +1700 75 |   +121 28
+cf060<240 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+cf0ladder |   +2184  97 |   +1618 107 |   +130  5 |  +1634 62 |   +401 38 |  +1430 74 |   +206 25
+ cf-15<60 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+cf-15<240 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+cf-60<240 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+cf-ladder |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+ ovc15<60 |   +1513  96 |   +1959  97 |   +130  5 |  +1182 59 |   -124 39 |  +2201 64 |    +83 26
+ovc15<240 |   +1483  90 |   +1666 103 |   +130  5 |  +1045 57 |    -17 35 |  +1870 68 |   +120 28
+ovc60<240 |   +1723 101 |   +2035 110 |   +130  5 |  +1366 64 |   +366 40 |  +1776 74 |   +121 28
+ovcladder |   +1155  84 |   +1811  89 |   +130  5 |   +744 51 |    -43 35 |  +2052 56 |    +83 26
+ov3015<60 |   +1002  93 |   +2270  98 |   +130  5 |   +672 56 |   -123 39 |  +2336 65 |   +258 26
+ov3015<240 |   +1755  99 |   +1698 108 |   +130  5 |  +1267 62 |    +33 39 |  +1903 73 |   +121 28
+ov3060<240 |   +1822 101 |   +2024 110 |   +130  5 |  +1464 64 |   +366 40 |  +1765 74 |   +121 28
+ov30ladder |   +1022  91 |   +2384  97 |   +130  5 |   +562 54 |     +7 39 |  +2449 64 |   +258 26
+ any15<60 |   +1913  79 |   +1574  88 |    +29  4 |  +1595 51 |    -38 31 |  +1768 61 |   +132 20
+any15<240 |   +1098  81 |   +1270  96 |    -81  2 |   +855 52 |   -157 34 |  +1540 63 |   +211 26
+any60<240 |   +1491  99 |   +2092 108 |   +130  5 |  +1180 64 |   +319 38 |  +1834 72 |   +121 28
+anyladder |    +617  60 |   +1410  76 |    -81  2 |   +504 40 |   -284 25 |  +1787 49 |   +103 20
+xdcf15<60 |   +2000  99 |   +1831 110 |   +130  5 |  +1567 63 |   +442 39 |  +1571 74 |   +121 28
+xdcf15<240 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+xdcf60<240 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+xdcfladder |   +2000  99 |   +1831 110 |   +130  5 |  +1567 63 |   +442 39 |  +1571 74 |   +121 28
+ mir15<60 |   +1630  97 |   +1816 102 |   +130  5 |  +1273 60 |   +392 40 |  +1780 70 |   -128 24
+mir60<240 |   +1822 101 |   +1962 108 |   +130  5 |  +1464 64 |   +366 40 |  +1703 72 |   +121 28
+mirladder |   +1314  84 |   +1333  92 |    -81  2 |  +1094 54 |    +92 34 |  +1856 64 |   -314 22
+ sh+15<60 |   +1930  87 |   +1290 103 |    +29  4 |  +1673 55 |   +366 36 |  +1260 69 |   -109 26
+sh+60<240 |   +1738 100 |   +2069 110 |   +130  5 |  +1278 64 |   +468 39 |  +1810 74 |   +121 28
+sh+ladder |   +1706  80 |   +1115  95 |   +101  3 |  +1223 51 |   +508 34 |  +1199 62 |   -208 25
+ sh-15<60 |   +2761  92 |   +1934 106 |   +101  3 |  +2061 59 |   +740 38 |  +1672 70 |   +121 28
+sh-60<240 |   +1733 100 |   +1960 111 |   +130  5 |  +1274 64 |   +468 39 |  +1701 75 |   +121 28
+sh-ladder |   +2500  84 |   +1862 105 |   +101  3 |  +1698 52 |   +841 37 |  +1601 69 |   +121 28
+
+--- fire-level vs e25: lost fires (veto True there), new fires; by tf ---
+     none: e25 fires 238, shared 225, lost 13 (veto at 0), new 69; lost by tf {15: 11, 60: 2, 240: 0}, new by tf {15: 51, 60: 14, 240: 4}
+  hx15<60: e25 fires 238, shared 213, lost 25 (veto at 24), new 3; lost by tf {15: 24, 60: 1, 240: 0}, new by tf {15: 2, 60: 1, 240: 0}
+  xd15<60: e25 fires 238, shared 200, lost 38 (veto at 37), new 4; lost by tf {15: 37, 60: 1, 240: 0}, new by tf {15: 3, 60: 1, 240: 0}
+ xd15<240: e25 fires 238, shared 213, lost 25 (veto at 25), new 4; lost by tf {15: 25, 60: 0, 240: 0}, new by tf {15: 4, 60: 0, 240: 0}
+ xd60<240: e25 fires 238, shared 227, lost 11 (veto at 9), new 5; lost by tf {15: 2, 60: 9, 240: 0}, new by tf {15: 2, 60: 3, 240: 0}
+ xdladder: e25 fires 238, shared 172, lost 66 (veto at 65), new 10; lost by tf {15: 56, 60: 10, 240: 0}, new by tf {15: 6, 60: 4, 240: 0}
+ cf015<60: e25 fires 238, shared 218, lost 20 (veto at 20), new 7; lost by tf {15: 20, 60: 0, 240: 0}, new by tf {15: 7, 60: 0, 240: 0}
+cf015<240: e25 fires 238, shared 237, lost 1 (veto at 1), new 1; lost by tf {15: 1, 60: 0, 240: 0}, new by tf {15: 1, 60: 0, 240: 0}
+cf060<240: e25 fires 238, shared 238, lost 0 (veto at 0), new 0; lost by tf {15: 0, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+cf0ladder: e25 fires 238, shared 217, lost 21 (veto at 21), new 8; lost by tf {15: 21, 60: 0, 240: 0}, new by tf {15: 8, 60: 0, 240: 0}
+ cf-15<60: e25 fires 238, shared 238, lost 0 (veto at 0), new 0; lost by tf {15: 0, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+cf-15<240: e25 fires 238, shared 238, lost 0 (veto at 0), new 0; lost by tf {15: 0, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+cf-60<240: e25 fires 238, shared 238, lost 0 (veto at 0), new 0; lost by tf {15: 0, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+cf-ladder: e25 fires 238, shared 238, lost 0 (veto at 0), new 0; lost by tf {15: 0, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+ ovc15<60: e25 fires 238, shared 216, lost 22 (veto at 22), new 1; lost by tf {15: 22, 60: 0, 240: 0}, new by tf {15: 1, 60: 0, 240: 0}
+ovc15<240: e25 fires 238, shared 213, lost 25 (veto at 25), new 1; lost by tf {15: 25, 60: 0, 240: 0}, new by tf {15: 1, 60: 0, 240: 0}
+ovc60<240: e25 fires 238, shared 231, lost 7 (veto at 5), new 2; lost by tf {15: 2, 60: 5, 240: 0}, new by tf {15: 2, 60: 0, 240: 0}
+ovcladder: e25 fires 238, shared 191, lost 47 (veto at 47), new 1; lost by tf {15: 42, 60: 5, 240: 0}, new by tf {15: 1, 60: 0, 240: 0}
+ov3015<60: e25 fires 238, shared 216, lost 22 (veto at 22), new 1; lost by tf {15: 22, 60: 0, 240: 0}, new by tf {15: 1, 60: 0, 240: 0}
+ov3015<240: e25 fires 238, shared 230, lost 8 (veto at 8), new 2; lost by tf {15: 8, 60: 0, 240: 0}, new by tf {15: 2, 60: 0, 240: 0}
+ov3060<240: e25 fires 238, shared 236, lost 2 (veto at 1), new 1; lost by tf {15: 1, 60: 1, 240: 0}, new by tf {15: 0, 60: 1, 240: 0}
+ov30ladder: e25 fires 238, shared 210, lost 28 (veto at 27), new 3; lost by tf {15: 27, 60: 1, 240: 0}, new by tf {15: 2, 60: 1, 240: 0}
+ any15<60: e25 fires 238, shared 167, lost 71 (veto at 70), new 12; lost by tf {15: 70, 60: 1, 240: 0}, new by tf {15: 11, 60: 1, 240: 0}
+any15<240: e25 fires 238, shared 191, lost 47 (veto at 47), new 5; lost by tf {15: 47, 60: 0, 240: 0}, new by tf {15: 5, 60: 0, 240: 0}
+any60<240: e25 fires 238, shared 221, lost 17 (veto at 13), new 7; lost by tf {15: 4, 60: 13, 240: 0}, new by tf {15: 4, 60: 3, 240: 0}
+anyladder: e25 fires 238, shared 126, lost 112 (veto at 111), new 15; lost by tf {15: 98, 60: 14, 240: 0}, new by tf {15: 11, 60: 4, 240: 0}
+xdcf15<60: e25 fires 238, shared 234, lost 4 (veto at 4), new 0; lost by tf {15: 4, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+xdcf15<240: e25 fires 238, shared 238, lost 0 (veto at 0), new 0; lost by tf {15: 0, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+xdcf60<240: e25 fires 238, shared 238, lost 0 (veto at 0), new 0; lost by tf {15: 0, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+xdcfladder: e25 fires 238, shared 234, lost 4 (veto at 4), new 0; lost by tf {15: 4, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+ mir15<60: e25 fires 238, shared 224, lost 14 (veto at 14), new 3; lost by tf {15: 14, 60: 0, 240: 0}, new by tf {15: 3, 60: 0, 240: 0}
+mir60<240: e25 fires 238, shared 235, lost 3 (veto at 3), new 0; lost by tf {15: 0, 60: 3, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+mirladder: e25 fires 238, shared 199, lost 39 (veto at 39), new 3; lost by tf {15: 36, 60: 3, 240: 0}, new by tf {15: 3, 60: 0, 240: 0}
+ sh+15<60: e25 fires 238, shared 207, lost 31 (veto at 31), new 4; lost by tf {15: 31, 60: 0, 240: 0}, new by tf {15: 4, 60: 0, 240: 0}
+sh+60<240: e25 fires 238, shared 231, lost 7 (veto at 5), new 3; lost by tf {15: 2, 60: 5, 240: 0}, new by tf {15: 2, 60: 1, 240: 0}
+sh+ladder: e25 fires 238, shared 189, lost 49 (veto at 49), new 6; lost by tf {15: 44, 60: 5, 240: 0}, new by tf {15: 5, 60: 1, 240: 0}
+ sh-15<60: e25 fires 238, shared 217, lost 21 (veto at 21), new 4; lost by tf {15: 21, 60: 0, 240: 0}, new by tf {15: 4, 60: 0, 240: 0}
+sh-60<240: e25 fires 238, shared 234, lost 4 (veto at 3), new 2; lost by tf {15: 1, 60: 3, 240: 0}, new by tf {15: 1, 60: 1, 240: 0}
+sh-ladder: e25 fires 238, shared 203, lost 35 (veto at 35), new 7; lost by tf {15: 32, 60: 3, 240: 0}, new by tf {15: 6, 60: 1, 240: 0}
+
+--- e25 POSITIONS by opening tf, split by the higher tf's pull-back state at the open (True = would be vetoed): n, net, PF, stop share, wr, mean ---
+tf  15 by H  60 xd   = True : n  29, net   +320, PF 1.28, stop 52%, wr 48%, mean   +11
+tf  15 by H  60 xd   = False: n 132, net  +1775, PF 1.37, stop 47%, wr 52%, mean   +13
+tf  15 by H  60 cf0  = True : n  14, net    -92, PF 0.85, stop 57%, wr 43%, mean    -7
+tf  15 by H  60 cf0  = False: n 147, net  +2187, PF 1.41, stop 47%, wr 52%, mean   +15
+tf  15 by H  60 cf-  = True : n 0
+tf  15 by H  60 cf-  = False: n 161, net  +2095, PF 1.35, stop 48%, wr 51%, mean   +13
+tf  15 by H  60 ovc  = True : n  22, net     +1, PF 1.00, stop 59%, wr 41%, mean    +0
+tf  15 by H  60 ovc  = False: n 139, net  +2094, PF 1.42, stop 46%, wr 53%, mean   +15
+tf  15 by H  60 ov30 = True : n  22, net   +138, PF 1.15, stop 55%, wr 45%, mean    +6
+tf  15 by H  60 ov30 = False: n 139, net  +1957, PF 1.39, stop 47%, wr 52%, mean   +14
+tf  15 by H  60 any  = True : n  57, net   +115, PF 1.05, stop 56%, wr 44%, mean    +2
+tf  15 by H  60 any  = False: n 104, net  +1980, PF 1.56, stop 43%, wr 55%, mean   +19
+tf  15 by H  60 xdcf = True : n   3, net    -46, PF 0.74, stop 67%, wr 33%, mean   -15
+tf  15 by H  60 xdcf = False: n 158, net  +2141, PF 1.37, stop 47%, wr 51%, mean   +14
+tf  15 by H  60 mir  = True : n  14, net   +161, PF 1.31, stop 57%, wr 43%, mean   +12
+tf  15 by H  60 mir  = False: n 147, net  +1934, PF 1.36, stop 47%, wr 52%, mean   +13
+tf  15 by H  60 sh+  = True : n  25, net   +385, PF 1.42, stop 48%, wr 52%, mean   +15
+tf  15 by H  60 sh+  = False: n 136, net  +1710, PF 1.34, stop 48%, wr 51%, mean   +13
+tf  15 by H  60 sh-  = True : n  17, net   -503, PF 0.43, stop 71%, wr 29%, mean   -30
+tf  15 by H  60 sh-  = False: n 144, net  +2598, PF 1.51, stop 45%, wr 53%, mean   +18
+tf  15 by H 240 xd   = True : n  22, net  +1050, PF 2.80, stop 36%, wr 59%, mean   +48
+tf  15 by H 240 xd   = False: n 139, net  +1045, PF 1.19, stop 50%, wr 50%, mean    +8
+tf  15 by H 240 cf0  = True : n   1, net    +56, PF  inf, stop 0%, wr 100%, mean   +56
+tf  15 by H 240 cf0  = False: n 160, net  +2039, PF 1.34, stop 48%, wr 51%, mean   +13
+tf  15 by H 240 cf-  = True : n 0
+tf  15 by H 240 cf-  = False: n 161, net  +2095, PF 1.35, stop 48%, wr 51%, mean   +13
+tf  15 by H 240 ovc  = True : n  21, net   +404, PF 1.42, stop 52%, wr 48%, mean   +19
+tf  15 by H 240 ovc  = False: n 140, net  +1691, PF 1.34, stop 47%, wr 51%, mean   +12
+tf  15 by H 240 ov30 = True : n   7, net   +180, PF 1.45, stop 57%, wr 43%, mean   +26
+tf  15 by H 240 ov30 = False: n 154, net  +1915, PF 1.34, stop 47%, wr 51%, mean   +12
+tf  15 by H 240 any  = True : n  40, net  +1071, PF 1.77, stop 42%, wr 55%, mean   +27
+tf  15 by H 240 any  = False: n 121, net  +1024, PF 1.22, stop 50%, wr 50%, mean    +8
+tf  15 by H 240 xdcf = True : n 0
+tf  15 by H 240 xdcf = False: n 161, net  +2095, PF 1.35, stop 48%, wr 51%, mean   +13
+tf  15 by H 240 mir  = True : n  23, net   +509, PF 1.71, stop 43%, wr 57%, mean   +22
+tf  15 by H 240 mir  = False: n 138, net  +1586, PF 1.30, stop 49%, wr 50%, mean   +11
+tf  15 by H 240 sh+  = True : n  20, net   +490, PF 1.64, stop 50%, wr 50%, mean   +24
+tf  15 by H 240 sh+  = False: n 141, net  +1606, PF 1.31, stop 48%, wr 51%, mean   +11
+tf  15 by H 240 sh-  = True : n  13, net   +599, PF 2.67, stop 38%, wr 62%, mean   +46
+tf  15 by H 240 sh-  = False: n 148, net  +1497, PF 1.27, stop 49%, wr 50%, mean   +10
+tf  60 by H 240 xd   = True : n   9, net   +241, PF 1.60, stop 56%, wr 44%, mean   +27
+tf  60 by H 240 xd   = False: n  31, net   +346, PF 1.30, stop 45%, wr 52%, mean   +11
+tf  60 by H 240 cf0  = True : n 0
+tf  60 by H 240 cf0  = False: n  40, net   +587, PF 1.37, stop 48%, wr 50%, mean   +15
+tf  60 by H 240 cf-  = True : n 0
+tf  60 by H 240 cf-  = False: n  40, net   +587, PF 1.37, stop 48%, wr 50%, mean   +15
+tf  60 by H 240 ovc  = True : n   4, net   +161, PF 2.56, stop 25%, wr 75%, mean   +40
+tf  60 by H 240 ovc  = False: n  36, net   +426, PF 1.29, stop 50%, wr 47%, mean   +12
+tf  60 by H 240 ov30 = True : n   1, net    -72, PF 0.00, stop 100%, wr 0%, mean   -72
+tf  60 by H 240 ov30 = False: n  39, net   +659, PF 1.44, stop 46%, wr 51%, mean   +17
+tf  60 by H 240 any  = True : n  12, net   +505, PF 2.25, stop 42%, wr 58%, mean   +42
+tf  60 by H 240 any  = False: n  28, net    +82, PF 1.07, stop 50%, wr 46%, mean    +3
+tf  60 by H 240 xdcf = True : n 0
+tf  60 by H 240 xdcf = False: n  40, net   +587, PF 1.37, stop 48%, wr 50%, mean   +15
+tf  60 by H 240 mir  = True : n   3, net     -1, PF 0.99, stop 67%, wr 33%, mean    -0
+tf  60 by H 240 mir  = False: n  37, net   +588, PF 1.41, stop 46%, wr 51%, mean   +16
+tf  60 by H 240 sh+  = True : n   5, net   -123, PF 0.63, stop 80%, wr 20%, mean   -25
+tf  60 by H 240 sh+  = False: n  35, net   +710, PF 1.57, stop 43%, wr 54%, mean   +20
+tf  60 by H 240 sh-  = True : n   3, net     +8, PF 1.04, stop 67%, wr 33%, mean    +3
+tf  60 by H 240 sh-  = False: n  37, net   +579, PF 1.42, stop 46%, wr 51%, mean   +16
+
+--- e25 tf-15 positions: cross-tab of the static tf-60 veto (class against) x xd / cf0 / ovc state at the open: n, net ---
+H  60 xd  : static False PB False: n 113 +1280; static False PB True: n 24 -90; static True PB False: n 19 +496; static True PB True: n 5 +410
+H  60 cf0 : static False PB False: n 123 +1281; static False PB True: n 14 -92; static True PB False: n 24 +906
+H  60 ovc : static False PB False: n 115 +1188; static False PB True: n 22 +1; static True PB False: n 24 +906
+H  60 any : static False PB False: n 85 +1484; static False PB True: n 52 -295; static True PB False: n 19 +496; static True PB True: n 5 +410
+H 240 xd  : static False PB False: n 122 +858; static False PB True: n 20 +833; static True PB False: n 17 +187; static True PB True: n 2 +217
+H 240 cf0 : static False PB False: n 141 +1634; static False PB True: n 1 +56; static True PB False: n 19 +404
+H 240 ovc : static False PB False: n 121 +1287; static False PB True: n 21 +404; static True PB False: n 19 +404
+H 240 any : static False PB False: n 104 +837; static False PB True: n 38 +854; static True PB False: n 17 +187; static True PB True: n 2 +217
+
+--- e25 positions that xd15<60 / cf015<60 / ovc15<60 would veto: list (open, side, tf, reason, pnl, hold min) ---
+xd: n 29 net +320
+   10-17 23:58:00 Sell reversal   +100 hold  12.0 cls60 -1
+   10-18 02:35:00 Sell stop       -102 hold  25.0 cls60 +0
+   10-18 03:44:26 Sell stop        -59 hold   0.9 cls60 +0
+   10-18 05:29:36 Buy  stop        -84 hold   3.2 cls60 +0
+   10-18 05:38:31 Buy  target      +59 hold   5.4 cls60 -1
+   10-18 15:55:01 Sell target     +164 hold  38.9 cls60 -1
+   10-18 16:57:27 Sell stop       -102 hold   3.2 cls60 -1
+   10-18 18:46:50 Sell stop        -69 hold   3.2 cls60 -1
+   10-18 20:50:32 Sell stop       -102 hold   9.5 cls60 -1
+   10-18 21:54:23 Sell stop       -100 hold   5.8 cls60 -1
+   10-19 03:56:00 Buy  stop        -46 hold   4.7 cls60 +1
+   10-19 04:51:01 Sell reversal   +162 hold  12.0 cls60 +1
+   10-19 05:33:08 Sell stop        -96 hold   7.0 cls60 +1
+   10-19 07:47:17 Buy  stop        -37 hold   2.0 cls60 +1
+   10-19 08:54:58 Buy  stop        -75 hold   5.7 cls60 +0
+   10-19 09:32:00 Sell target      +63 hold  21.0 cls60 +0
+   10-19 11:53:58 Sell target      +68 hold   6.5 cls60 +0
+   10-19 12:33:00 Sell target      +46 hold   8.0 cls60 +0
+   10-20 01:48:13 Sell reversal   +101 hold  15.8 cls60 +0
+   10-20 04:54:21 Buy  stop        -72 hold  14.8 cls60 +0
+   10-20 05:38:12 Buy  target     +131 hold   6.0 cls60 +0
+   10-20 05:46:52 Sell target     +127 hold   8.6 cls60 +0
+   10-20 09:58:03 Sell stop        -52 hold  10.4 cls60 +0
+   10-20 15:46:32 Buy  target     +132 hold  15.1 cls60 +0
+   10-20 17:57:50 Buy  target      +27 hold   3.0 cls60 +1
+   10-20 23:47:00 Sell reversal   +143 hold  15.6 cls60 +1
+   10-21 02:51:05 Sell target     +142 hold  12.0 cls60 +1
+   10-21 05:43:07 Buy  stop        -89 hold  18.5 cls60 +0
+   10-21 06:54:20 Buy  stop        -59 hold   5.7 cls60 +0
+cf0: n 14 net -92
+   10-18 00:29:01 Sell stop        -71 hold  34.0 cls60 +0
+   10-18 02:24:00 Sell stop        -72 hold   9.3 cls60 +0
+   10-18 02:35:00 Sell stop       -102 hold  25.0 cls60 +0
+   10-19 00:17:10 Buy  stop        -93 hold   1.8 cls60 +0
+   10-19 06:13:07 Buy  stop        -59 hold  12.8 cls60 +0
+   10-19 08:11:39 Buy  target      +42 hold   2.0 cls60 +0
+   10-19 08:36:02 Buy  target     +109 hold   6.9 cls60 +0
+   10-19 08:54:58 Buy  stop        -75 hold   5.7 cls60 +0
+   10-20 15:46:32 Buy  target     +132 hold  15.1 cls60 +0
+   10-20 18:08:10 Buy  target      +39 hold   3.4 cls60 +0
+   10-21 02:24:04 Buy  reversal   +109 hold  14.0 cls60 +0
+   10-21 03:18:01 Buy  stop        -63 hold   1.9 cls60 +0
+   10-21 08:35:50 Buy  target     +101 hold   8.8 cls60 +0
+   10-21 09:40:40 Buy  stop        -88 hold   7.8 cls60 +0
+ovc: n 22 net +1
+   10-18 09:24:44 Buy  target      +76 hold   6.7 cls60 +0
+   10-18 10:04:05 Buy  stop        -76 hold  12.8 cls60 +0
+   10-18 10:20:02 Buy  stop        -55 hold   0.1 cls60 +0
+   10-18 14:28:17 Sell target     +185 hold   4.2 cls60 -1
+   10-18 20:28:20 Sell target      +76 hold  11.2 cls60 -1
+   10-18 20:50:32 Sell stop       -102 hold   9.5 cls60 -1
+   10-18 23:10:03 Buy  stop        -76 hold   7.9 cls60 +0
+   10-19 10:39:55 Sell target      +95 hold  38.4 cls60 +0
+   10-19 23:17:04 Buy  target     +182 hold  19.6 cls60 +0
+   10-20 00:34:10 Sell stop        -85 hold   1.8 cls60 +0
+   10-20 01:20:11 Sell stop       -102 hold  12.3 cls60 +0
+   10-20 01:35:30 Sell stop       -101 hold  11.1 cls60 +0
+   10-20 01:48:13 Sell reversal   +101 hold  15.8 cls60 +0
+   10-20 04:13:09 Buy  target      +76 hold  10.0 cls60 +0
+   10-20 04:54:21 Buy  stop        -72 hold  14.8 cls60 +0
+   10-20 11:46:00 Buy  stop        -47 hold   0.3 cls60 +0
+   10-20 12:31:55 Buy  stop       -101 hold   3.0 cls60 +0
+   10-20 12:51:40 Buy  stop       -101 hold   9.9 cls60 +0
+   10-20 15:46:32 Buy  target     +132 hold  15.1 cls60 +0
+   10-20 21:26:04 Buy  stop        -42 hold   6.5 cls60 +1
+   10-21 08:01:04 Buy  stop        -63 hold   1.4 cls60 +1
+   10-21 08:35:50 Buy  target     +101 hold   8.8 cls60 +0
