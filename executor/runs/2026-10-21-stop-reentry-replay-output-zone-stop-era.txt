@@ -1,0 +1,287 @@
+trades 753117 (10-16 22:29:05 -> 10-21 11:16:04); replay 10-20 20:25:00 -> 10-21 11:16:04: 87416 trades; indicator names 42, rows 470989, expiry non-monotone steps 0
+trade feed gaps > 60 s in the replay window: 1 [('10-21 02:55:41', 66)]
+pre-candidate trades (filters pass, zone+target present, inzone or rejection): {'15_long': 8295, '15_short': 7243, '60_long': 8164, '60_short': 1820, '240_long': 2553, '240_short': 11964} any: 34460
+simulated live: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37338
+simulated anc2: 41 fires, 37 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37338
+simulated roll15: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37338
+simulated zs: 41 fires, 33 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37887
+simulated zsw: 41 fires, 33 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37887
+simulated zsw15: 41 fires, 31 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37895
+
+REPRODUCTION (live variant vs recorded fires, same side+tf within 60 s): recorded 42, simulated 41, matched 40, missed 2, extra 1
+  candle-stop port: 39/40 recorded stops reproduced within half a tick
+  candle-stop era: recorded positions 38 net +169, pairs W15 4 (P1 -273, P2 +312); sim-live positions 38 net +237, pairs W15 8 (P1 -526, P2 +474)
+
+SUMMARY (same simulator, same window for every variant; pairs = stop -> same side better re-entry within 15 min)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 38 | +237 | -3508 | 1.17 | 45% | 21 / -68 | 9 | 7 | 8.6 | 71 | [-709, +1219] | 0.35 | 8 (38%) | -526 | +474 |
+| anc2 | 37 | +245 | -3356 | 1.18 | 46% | 20 / -68 | 8 | 8 | 8.5 | 73 | [-653, +1203] | 0.34 | 7 (35%) | -433 | +337 |
+| roll15 | 38 | +237 | -3508 | 1.17 | 45% | 21 / -68 | 9 | 7 | 8.6 | 71 | [-709, +1219] | 0.35 | 8 (38%) | -526 | +474 |
+| zs | 33 | +183 | -2194 | 1.19 | 61% | 11 / -86 | 9 | 12 | 13.2 | 100 | [-514, +907] | 0.34 | 5 (45%) | -409 | -131 |
+| zsw | 33 | +162 | -2213 | 1.16 | 61% | 11 / -87 | 9 | 12 | 13.2 | 100 | [-543, +890] | 0.35 | 5 (45%) | -417 | -131 |
+| zsw15 | 31 | +352 | -1664 | 1.45 | 68% | 8 / -95 | 10 | 12 | 14.0 | 100 | [-309, +1031] | 0.19 | 3 (38%) | -292 | +49 |
+
+PAIR STATS ON LIVE SIM BY WINDOW
+  W<= 5: pairs 7 of 21 stop-outs (33%); P1 -477 (mean -68), P2 +348 (mean +50), P2 outcomes {'reversal': 2, 'stop': 2, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 0.94, P2 beyond P1 stop 3/7; gap median 1.5 min; P2 rule {'zone_rejection': 4, 'in_zone': 3}, P2 tf {60: 2, 15: 5}
+  W<=15: pairs 8 of 21 stop-outs (38%); P1 -526 (mean -66), P2 +474 (mean +59), P2 outcomes {'reversal': 3, 'stop': 2, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.06, P2 beyond P1 stop 4/8; gap median 1.5 min; P2 rule {'zone_rejection': 4, 'in_zone': 4}, P2 tf {60: 3, 15: 5}
+  W<=30: pairs 11 of 21 stop-outs (52%); P1 -754 (mean -69), P2 +275 (mean +25), P2 outcomes {'reversal': 3, 'stop': 5, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.38, P2 beyond P1 stop 7/11; gap median 1.8 min; P2 rule {'zone_rejection': 7, 'in_zone': 4}, P2 tf {60: 5, 15: 6}
+  W<=60: pairs 11 of 21 stop-outs (52%); P1 -754 (mean -69), P2 +275 (mean +25), P2 outcomes {'reversal': 3, 'stop': 5, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.38, P2 beyond P1 stop 7/11; gap median 1.8 min; P2 rule {'zone_rejection': 7, 'in_zone': 4}, P2 tf {60: 5, 15: 6}
+  live sim: re-entry-flagged positions 14, pnl +250; others 24, pnl -13
+
+PAIRED 6-H BLOCK BOOTSTRAP vs live (3 blocks, 5000 resamples)
+  anc2    - live: delta     +7, 90 % CI [    -0,    +15], P(delta<0) 0.27; blocks > 1, < 1, = 1
+  roll15  - live: delta     +0, 90 % CI [    +0,     +0], P(delta<0) 0.00; blocks > 0, < 0, = 3
+  zs      - live: delta    -54, 90 % CI [  -254,   +146], P(delta<0) 0.63; blocks > 1, < 2, = 0
+  zsw     - live: delta    -76, 90 % CI [  -255,   +104], P(delta<0) 0.62; blocks > 1, < 2, = 0
+  zsw15   - live: delta   +115, 90 % CI [   +54,   +176], P(delta<0) 0.04; blocks > 2, < 1, = 0
+
+PER-DAY NET (UTC day of the opening fire)
+| day | live | anc2 | roll15 | zs | zsw | zsw15 |
+|---|---|---|---|---|---|---|
+| 10-20 | 7 / +289 | 7 / +289 | 7 / +289 | 5 / +172 | 5 / +172 | 5 / +344 |
+| 10-21 | 31 / -52 | 30 / -44 | 31 / -52 | 28 / +11 | 28 / -10 | 26 / +8 |
+
+PER-TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf15 | 30 | +144 | -2798 | 1.12 | 43% | 17 / -69 | 9 | 4 | 7.7 | 72 | [-695, +1073] | 0.40 | 3 (18%) | -262 | +178 |
+| live tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| live tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| anc2 tf15 | 29 | +152 | -2646 | 1.14 | 45% | 16 / -69 | 8 | 5 | 7.5 | 77 | [-645, +1032] | 0.39 | 2 (12%) | -168 | +41 |
+| anc2 tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| anc2 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| roll15 tf15 | 30 | +144 | -2798 | 1.12 | 43% | 17 / -69 | 9 | 4 | 7.7 | 72 | [-695, +1073] | 0.40 | 3 (18%) | -262 | +178 |
+| roll15 tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| roll15 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| zs tf15 | 26 | +47 | -2035 | 1.05 | 58% | 11 / -86 | 8 | 7 | 12.3 | 100 | [-646, +775] | 0.44 | 2 (18%) | -158 | -183 |
+| zs tf60 | 6 | +123 | -155 | 5.81 | 67% | 0 / +0 | 1 | 4 | 27.5 | 100 | [+6, +242] | 0.03 | 0 (0%) | +0 | +0 |
+| zs tf240 | 1 | +14 | -4 | inf | 100% | 0 / +0 | 0 | 1 | 25.1 | 100 | [+14, +14] | 0.00 | 0 (0%) | +0 | +0 |
+| zsw tf15 | 26 | +25 | -2055 | 1.03 | 58% | 11 / -87 | 8 | 7 | 12.3 | 100 | [-671, +762] | 0.47 | 2 (18%) | -166 | -183 |
+| zsw tf60 | 6 | +123 | -155 | 5.81 | 67% | 0 / +0 | 1 | 4 | 27.5 | 100 | [+6, +242] | 0.03 | 0 (0%) | +0 | +0 |
+| zsw tf240 | 1 | +14 | -4 | inf | 100% | 0 / +0 | 0 | 1 | 25.1 | 100 | [+14, +14] | 0.00 | 0 (0%) | +0 | +0 |
+| zsw15 tf15 | 24 | +225 | -1518 | 1.29 | 67% | 8 / -95 | 9 | 7 | 12.6 | 100 | [-431, +904] | 0.30 | 0 (0%) | +0 | +0 |
+| zsw15 tf60 | 6 | +114 | -142 | 5.86 | 67% | 0 / +0 | 1 | 4 | 27.5 | 100 | [+6, +226] | 0.04 | 0 (0%) | +0 | +0 |
+| zsw15 tf240 | 1 | +13 | -4 | inf | 100% | 0 / +0 | 0 | 1 | 25.1 | 100 | [+13, +13] | 0.00 | 0 (0%) | +0 | +0 |
+
+TRADES live
+  10-20 20:25:01 Buy  tf15  zone_rejection e 12.2040 s 12.1857 candle      anchor 12.196 size 4097 target      x 12.2720   +279 hold 12.1
+  10-20 21:01:00 Sell tf240 zone_rejection e 12.3170 s 12.3293 candle      anchor 12.32 size 4071 stop        x 12.3300    -53 hold 14.7
+  10-20 21:26:04 Buy  tf15  zone_rejection e 12.2980 s 12.2880 candle      anchor 12.296 size 4075 stop        x 12.2880    -41 hold 6.5
+  10-20 23:03:55 Buy  tf15  in_zone        e 12.3070 s 12.2931 candle      anchor 12.301 size 4070 stop        x 12.2930    -57 hold 3.7
+  10-20 23:09:00 Buy  tf60  zone_rejection e 12.2860 s 12.2736 candle      anchor 12.281 size 4075 reversal    x 12.3220   +147 hold 14.9
+  10-20 23:23:51 Sell tf15  in_zone        e 12.3220 s 12.3481 candle      anchor 12.34 size 3829 stop        x 12.3490   -103 hold 22.0
+  10-20 23:47:07 Sell tf15  zone_rejection e 12.3390 s 12.3611 candle      anchor 12.353 size 4059 reversal    x 12.3100   +118 hold 15.5
+  10-21 00:02:36 Buy  tf15  in_zone        e 12.3100 s 12.2921 candle      anchor 12.3 size 4073 reversal    x 12.3510   +167 hold 12.6
+  10-21 00:15:10 Sell tf15  zone_rejection e 12.3510 s 12.3669 candle      anchor 12.359 size 4067 stop        x 12.3670    -65 hold 0.8
+  10-21 00:19:14 Sell tf15  zone_rejection e 12.3560 s 12.3750 candle      anchor 12.367 size 4062 stop        x 12.3750    -77 hold 11.8
+  10-21 01:02:05 Buy  tf15  in_zone        e 12.3620 s 12.3442 candle      anchor 12.352 size 4057 stop        x 12.3440    -73 hold 6.4
+  10-21 01:24:15 Sell tf15  zone_rejection e 12.3550 s 12.3753 candle      anchor 12.366 size 4057 stop        x 12.3760    -85 hold 3.8
+  10-21 02:24:04 Buy  tf15  zone_rejection e 12.3350 s 12.3206 candle      anchor 12.332 size 4060 reversal    x 12.3610   +106 hold 14.0
+  10-21 02:38:06 Sell tf15  zone_rejection e 12.3610 s 12.3834 candle      anchor 12.373 size 4056 stop        x 12.3840    -93 hold 11.9
+  10-21 02:51:05 Sell tf15  zone_rejection e 12.3820 s 12.3946 candle      anchor 12.385 size 4045 target      x 12.3480   +138 hold 12.0
+  10-21 03:18:01 Buy  tf15  in_zone        e 12.3420 s 12.3271 candle      anchor 12.335 size 4064 stop        x 12.3270    -61 hold 1.9
+  10-21 03:34:02 Sell tf15  zone_rejection e 12.3670 s 12.3795 candle      anchor 12.372 size 4053 target      x 12.3430    +97 hold 6.6
+  10-21 03:52:06 Sell tf15  zone_rejection e 12.3570 s 12.3735 candle      anchor 12.366 size 4060 target      x 12.3360    +85 hold 8.1
+  10-21 04:10:40 Sell tf15  in_zone        e 12.3480 s 12.3683 candle      anchor 12.36 size 4067 target      x 12.3450    +12 hold 7.5
+  10-21 05:03:21 Sell tf15  in_zone        e 12.3620 s 12.3791 candle      anchor 12.371 size 4062 target      x 12.3540    +32 hold 6.3
+  10-21 05:16:51 Buy  tf15  in_zone        e 12.3320 s 12.3130 candle      anchor 12.321 size 4074 target      x 12.3420    +41 hold 2.4
+  10-21 05:36:00 Sell tf15  zone_rejection e 12.3410 s 12.3587 candle      anchor 12.351 size 4072 reversal    x 12.3100   +126 hold 5.3
+  10-21 05:41:20 Buy  tf60  zone_rejection e 12.3100 s 12.2973 candle      anchor 12.305 size 4088 stop        x 12.2970    -53 hold 0.2
+  10-21 05:43:07 Buy  tf15  in_zone        e 12.2910 s 12.2707 candle      anchor 12.279 size 4092 stop        x 12.2700    -86 hold 18.5
+  10-21 06:17:02 Sell tf15  zone_rejection e 12.3010 s 12.3124 candle      anchor 12.304 size 4085 stop        x 12.3130    -49 hold 12.0
+  10-21 06:35:32 Sell tf60  in_zone        e 12.3500 s 12.3665 candle      anchor 12.358 size 4067 reversal    x 12.3190   +126 hold 18.8
+  10-21 06:54:20 Buy  tf15  in_zone        e 12.3190 s 12.3059 candle      anchor 12.313 size 4082 stop        x 12.3050    -57 hold 5.7
+  10-21 07:12:34 Sell tf15  in_zone        e 12.3370 s 12.3502 candle      anchor 12.343 size 4074 stop        x 12.3510    -57 hold 9.3
+  10-21 08:01:04 Buy  tf15  zone_rejection e 12.4150 s 12.4006 candle      anchor 12.41 size 4046 stop        x 12.4000    -61 hold 1.4
+  10-21 08:18:07 Buy  tf60  zone_rejection e 12.3780 s 12.3632 candle      anchor 12.373 size 4056 stop        x 12.3630    -61 hold 15.9
+  10-21 08:35:50 Buy  tf15  in_zone        e 12.3670 s 12.3479 candle      anchor 12.357 size 4057 target      x 12.3910    +97 hold 8.8
+  10-21 08:52:08 Sell tf15  zone_rejection e 12.3870 s 12.4519 candle      anchor 12.442 size 1542 target      x 12.3720    +23 hold 5.2
+  10-21 09:17:33 Sell tf60  zone_rejection e 12.4060 s 12.4261 candle      anchor 12.416 size 4049 reversal    x 12.3890    +69 hold 23.1
+  10-21 09:40:40 Buy  tf15  in_zone        e 12.3890 s 12.3682 candle      anchor 12.379 size 4057 stop        x 12.3680    -85 hold 7.8
+  10-21 10:04:13 Buy  tf60  zone_rejection e 12.3320 s 12.3090 candle      anchor 12.317 size 4073 stop        x 12.3090    -94 hold 10.3
+  10-21 10:36:11 Sell tf15  in_zone        e 12.3290 s 12.3486 candle      anchor 12.341 size 4070 stop        x 12.3490    -81 hold 8.5
+  10-21 11:02:00 Sell tf15  zone_rejection e 12.3560 s 12.3662 candle      anchor 12.358 size 4058 stop        x 12.3670    -45 hold 2.5
+  10-21 11:06:01 Sell tf60  in_zone        e 12.3680 s 12.3867 candle      anchor 12.379 size 4052 open_at_end x 12.3650    +12 hold 10.1
+
+TRADES anc2
+  10-20 20:25:01 Buy  tf15  zone_rejection e 12.2040 s 12.1847 candle      anchor 12.195 size 4097 target      x 12.2720   +279 hold 12.1
+  10-20 21:01:00 Sell tf240 zone_rejection e 12.3170 s 12.3293 candle      anchor 12.32 size 4071 stop        x 12.3300    -53 hold 14.7
+  10-20 21:26:04 Buy  tf15  zone_rejection e 12.2980 s 12.2880 candle      anchor 12.296 size 4075 stop        x 12.2880    -41 hold 6.5
+  10-20 23:03:55 Buy  tf15  in_zone        e 12.3070 s 12.2931 candle      anchor 12.301 size 4070 stop        x 12.2930    -57 hold 3.7
+  10-20 23:09:00 Buy  tf60  zone_rejection e 12.2860 s 12.2736 candle      anchor 12.281 size 4075 reversal    x 12.3220   +147 hold 14.9
+  10-20 23:23:51 Sell tf15  in_zone        e 12.3220 s 12.3481 candle      anchor 12.34 size 3829 stop        x 12.3490   -103 hold 22.0
+  10-20 23:47:07 Sell tf15  zone_rejection e 12.3390 s 12.3611 candle      anchor 12.353 size 4059 reversal    x 12.3100   +118 hold 15.5
+  10-21 00:02:36 Buy  tf15  in_zone        e 12.3100 s 12.2921 candle      anchor 12.3 size 4073 reversal    x 12.3510   +167 hold 12.6
+  10-21 00:15:10 Sell tf15  zone_rejection e 12.3510 s 12.3669 candle      anchor 12.359 size 4067 stop        x 12.3670    -65 hold 0.8
+  10-21 00:19:14 Sell tf15  zone_rejection e 12.3560 s 12.3750 candle      anchor 12.367 size 4062 stop        x 12.3750    -77 hold 11.8
+  10-21 01:02:05 Buy  tf15  in_zone        e 12.3620 s 12.3442 candle      anchor 12.352 size 4057 stop        x 12.3440    -73 hold 6.4
+  10-21 01:24:15 Sell tf15  zone_rejection e 12.3550 s 12.3893 candle      anchor 12.38 size 2917 stop        x 12.3900   -102 hold 4.8
+  10-21 02:24:04 Buy  tf15  zone_rejection e 12.3350 s 12.3206 candle      anchor 12.332 size 4059 reversal    x 12.3610   +106 hold 14.0
+  10-21 02:38:06 Sell tf15  zone_rejection e 12.3610 s 12.3884 candle      anchor 12.378 size 3654 reversal    x 12.3420    +69 hold 39.9
+  10-21 03:18:01 Buy  tf15  in_zone        e 12.3420 s 12.3271 candle      anchor 12.335 size 4064 stop        x 12.3270    -61 hold 1.9
+  10-21 03:34:02 Sell tf15  zone_rejection e 12.3670 s 12.3795 candle      anchor 12.372 size 4053 target      x 12.3430    +97 hold 6.6
+  10-21 03:52:06 Sell tf15  zone_rejection e 12.3570 s 12.3795 candle      anchor 12.372 size 4060 target      x 12.3360    +85 hold 8.1
+  10-21 04:10:40 Sell tf15  in_zone        e 12.3480 s 12.3743 candle      anchor 12.366 size 3802 target      x 12.3450    +11 hold 7.5
+  10-21 05:03:21 Sell tf15  in_zone        e 12.3620 s 12.3791 candle      anchor 12.371 size 4063 target      x 12.3540    +33 hold 6.3
+  10-21 05:16:51 Buy  tf15  in_zone        e 12.3320 s 12.3130 candle      anchor 12.321 size 4074 target      x 12.3420    +41 hold 2.4
+  10-21 05:36:00 Sell tf15  zone_rejection e 12.3410 s 12.3607 candle      anchor 12.353 size 4073 reversal    x 12.3100   +126 hold 5.3
+  10-21 05:41:20 Buy  tf60  zone_rejection e 12.3100 s 12.2973 candle      anchor 12.305 size 4088 stop        x 12.2970    -53 hold 0.2
+  10-21 05:43:07 Buy  tf15  in_zone        e 12.2910 s 12.2707 candle      anchor 12.279 size 4092 stop        x 12.2700    -86 hold 18.5
+  10-21 06:17:02 Sell tf15  zone_rejection e 12.3010 s 12.3124 candle      anchor 12.304 size 4085 stop        x 12.3130    -49 hold 12.0
+  10-21 06:35:32 Sell tf60  in_zone        e 12.3500 s 12.3665 candle      anchor 12.358 size 4067 reversal    x 12.3190   +126 hold 18.8
+  10-21 06:54:20 Buy  tf15  in_zone        e 12.3190 s 12.3059 candle      anchor 12.313 size 4082 stop        x 12.3050    -57 hold 5.7
+  10-21 07:12:34 Sell tf15  in_zone        e 12.3370 s 12.3502 candle      anchor 12.343 size 4074 stop        x 12.3510    -57 hold 9.3
+  10-21 08:01:04 Buy  tf15  zone_rejection e 12.4150 s 12.4006 candle      anchor 12.41 size 4046 stop        x 12.4000    -61 hold 1.4
+  10-21 08:18:07 Buy  tf60  zone_rejection e 12.3780 s 12.3632 candle      anchor 12.373 size 4056 stop        x 12.3630    -61 hold 15.9
+  10-21 08:35:50 Buy  tf15  in_zone        e 12.3670 s 12.3479 candle      anchor 12.357 size 4057 target      x 12.3910    +97 hold 8.8
+  10-21 08:52:08 Sell tf15  zone_rejection e 12.3870 s 12.4519 candle      anchor 12.442 size 1542 target      x 12.3720    +23 hold 5.2
+  10-21 09:17:33 Sell tf60  zone_rejection e 12.4060 s 12.4261 candle      anchor 12.416 size 4049 reversal    x 12.3890    +69 hold 23.1
+  10-21 09:40:40 Buy  tf15  in_zone        e 12.3890 s 12.3682 candle      anchor 12.379 size 4058 stop        x 12.3680    -85 hold 7.8
+  10-21 10:04:13 Buy  tf60  zone_rejection e 12.3320 s 12.3090 candle      anchor 12.317 size 4073 stop        x 12.3090    -94 hold 10.3
+  10-21 10:36:11 Sell tf15  in_zone        e 12.3290 s 12.3486 candle      anchor 12.341 size 4070 stop        x 12.3490    -81 hold 8.5
+  10-21 11:02:00 Sell tf15  zone_rejection e 12.3560 s 12.3662 candle      anchor 12.358 size 4058 stop        x 12.3670    -45 hold 2.5
+  10-21 11:06:01 Sell tf60  in_zone        e 12.3680 s 12.3867 candle      anchor 12.379 size 4052 open_at_end x 12.3650    +12 hold 10.1
+
+TRADES roll15
+  10-20 20:25:01 Buy  tf15  zone_rejection e 12.2040 s 12.1857 candle      anchor 12.196 size 4097 target      x 12.2720   +279 hold 12.1
+  10-20 21:01:00 Sell tf240 zone_rejection e 12.3170 s 12.3293 candle      anchor 12.32 size 4071 stop        x 12.3300    -53 hold 14.7
+  10-20 21:26:04 Buy  tf15  zone_rejection e 12.2980 s 12.2880 candle      anchor 12.296 size 4075 stop        x 12.2880    -41 hold 6.5
+  10-20 23:03:55 Buy  tf15  in_zone        e 12.3070 s 12.2931 candle      anchor 12.301 size 4070 stop        x 12.2930    -57 hold 3.7
+  10-20 23:09:00 Buy  tf60  zone_rejection e 12.2860 s 12.2736 candle      anchor 12.281 size 4075 reversal    x 12.3220   +147 hold 14.9
+  10-20 23:23:51 Sell tf15  in_zone        e 12.3220 s 12.3481 candle      anchor 12.34 size 3829 stop        x 12.3490   -103 hold 22.0
+  10-20 23:47:07 Sell tf15  zone_rejection e 12.3390 s 12.3611 candle      anchor 12.353 size 4059 reversal    x 12.3100   +118 hold 15.5
+  10-21 00:02:36 Buy  tf15  in_zone        e 12.3100 s 12.2921 candle      anchor 12.3 size 4073 reversal    x 12.3510   +167 hold 12.6
+  10-21 00:15:10 Sell tf15  zone_rejection e 12.3510 s 12.3669 candle      anchor 12.359 size 4067 stop        x 12.3670    -65 hold 0.8
+  10-21 00:19:14 Sell tf15  zone_rejection e 12.3560 s 12.3750 candle      anchor 12.367 size 4062 stop        x 12.3750    -77 hold 11.8
+  10-21 01:02:05 Buy  tf15  in_zone        e 12.3620 s 12.3442 candle      anchor 12.352 size 4057 stop        x 12.3440    -73 hold 6.4
+  10-21 01:24:15 Sell tf15  zone_rejection e 12.3550 s 12.3753 candle      anchor 12.366 size 4057 stop        x 12.3760    -85 hold 3.8
+  10-21 02:24:04 Buy  tf15  zone_rejection e 12.3350 s 12.3206 candle      anchor 12.332 size 4060 reversal    x 12.3610   +106 hold 14.0
+  10-21 02:38:06 Sell tf15  zone_rejection e 12.3610 s 12.3834 candle      anchor 12.373 size 4056 stop        x 12.3840    -93 hold 11.9
+  10-21 02:51:05 Sell tf15  zone_rejection e 12.3820 s 12.3946 candle      anchor 12.385 size 4045 target      x 12.3480   +138 hold 12.0
+  10-21 03:18:01 Buy  tf15  in_zone        e 12.3420 s 12.3271 candle      anchor 12.335 size 4064 stop        x 12.3270    -61 hold 1.9
+  10-21 03:34:02 Sell tf15  zone_rejection e 12.3670 s 12.3795 candle      anchor 12.372 size 4053 target      x 12.3430    +97 hold 6.6
+  10-21 03:52:06 Sell tf15  zone_rejection e 12.3570 s 12.3735 candle      anchor 12.366 size 4060 target      x 12.3360    +85 hold 8.1
+  10-21 04:10:40 Sell tf15  in_zone        e 12.3480 s 12.3683 candle      anchor 12.36 size 4067 target      x 12.3450    +12 hold 7.5
+  10-21 05:03:21 Sell tf15  in_zone        e 12.3620 s 12.3791 candle      anchor 12.371 size 4062 target      x 12.3540    +32 hold 6.3
+  10-21 05:16:51 Buy  tf15  in_zone        e 12.3320 s 12.3130 candle      anchor 12.321 size 4074 target      x 12.3420    +41 hold 2.4
+  10-21 05:36:00 Sell tf15  zone_rejection e 12.3410 s 12.3587 candle      anchor 12.351 size 4072 reversal    x 12.3100   +126 hold 5.3
+  10-21 05:41:20 Buy  tf60  zone_rejection e 12.3100 s 12.2973 candle      anchor 12.305 size 4088 stop        x 12.2970    -53 hold 0.2
+  10-21 05:43:07 Buy  tf15  in_zone        e 12.2910 s 12.2707 candle      anchor 12.279 size 4092 stop        x 12.2700    -86 hold 18.5
+  10-21 06:17:02 Sell tf15  zone_rejection e 12.3010 s 12.3124 candle      anchor 12.304 size 4085 stop        x 12.3130    -49 hold 12.0
+  10-21 06:35:32 Sell tf60  in_zone        e 12.3500 s 12.3665 candle      anchor 12.358 size 4067 reversal    x 12.3190   +126 hold 18.8
+  10-21 06:54:20 Buy  tf15  in_zone        e 12.3190 s 12.3059 candle      anchor 12.313 size 4082 stop        x 12.3050    -57 hold 5.7
+  10-21 07:12:34 Sell tf15  in_zone        e 12.3370 s 12.3502 candle      anchor 12.343 size 4074 stop        x 12.3510    -57 hold 9.3
+  10-21 08:01:04 Buy  tf15  zone_rejection e 12.4150 s 12.4006 candle      anchor 12.41 size 4046 stop        x 12.4000    -61 hold 1.4
+  10-21 08:18:07 Buy  tf60  zone_rejection e 12.3780 s 12.3632 candle      anchor 12.373 size 4056 stop        x 12.3630    -61 hold 15.9
+  10-21 08:35:50 Buy  tf15  in_zone        e 12.3670 s 12.3479 candle      anchor 12.357 size 4057 target      x 12.3910    +97 hold 8.8
+  10-21 08:52:08 Sell tf15  zone_rejection e 12.3870 s 12.4519 candle      anchor 12.442 size 1542 target      x 12.3720    +23 hold 5.2
+  10-21 09:17:33 Sell tf60  zone_rejection e 12.4060 s 12.4261 candle      anchor 12.416 size 4049 reversal    x 12.3890    +69 hold 23.1
+  10-21 09:40:40 Buy  tf15  in_zone        e 12.3890 s 12.3682 candle      anchor 12.379 size 4057 stop        x 12.3680    -85 hold 7.8
+  10-21 10:04:13 Buy  tf60  zone_rejection e 12.3320 s 12.3090 candle      anchor 12.317 size 4073 stop        x 12.3090    -94 hold 10.3
+  10-21 10:36:11 Sell tf15  in_zone        e 12.3290 s 12.3486 candle      anchor 12.341 size 4070 stop        x 12.3490    -81 hold 8.5
+  10-21 11:02:00 Sell tf15  zone_rejection e 12.3560 s 12.3662 candle      anchor 12.358 size 4058 stop        x 12.3670    -45 hold 2.5
+  10-21 11:06:01 Sell tf60  in_zone        e 12.3680 s 12.3867 candle      anchor 12.379 size 4052 open_at_end x 12.3650    +12 hold 10.1
+
+TRADES zs
+  10-20 20:25:01 Buy  tf15  zone_rejection e 12.2040 s 12.1695 bound       anchor 12.1798 size 2900 target      x 12.2720   +197 hold 12.1
+  10-20 21:01:00 Sell tf240 zone_rejection e 12.3170 s 12.4548 bound       anchor 12.4455 size 726 reversal    x 12.2980    +14 hold 25.1
+  10-20 21:26:04 Buy  tf15  zone_rejection e 12.2980 s 12.2780 bound       anchor 12.286 size 4074 stop        x 12.2770    -86 hold 22.0
+  10-20 23:03:55 Buy  tf15  in_zone        e 12.3070 s 12.2717 bound       anchor 12.2796 size 2833 target      x 12.3100     +8 hold 12.7
+  10-20 23:23:51 Sell tf15  in_zone        e 12.3220 s 12.3538 bound       anchor 12.3456 size 3149 reversal    x 12.3100    +38 hold 38.7
+  10-21 00:02:36 Buy  tf15  in_zone        e 12.3100 s 12.2692 bound       anchor 12.2771 size 2451 reversal    x 12.3510   +100 hold 12.6
+  10-21 00:15:10 Sell tf15  zone_rejection e 12.3510 s 12.3650 bound       anchor 12.3571 size 4059 stop        x 12.3650    -57 hold 0.8
+  10-21 00:19:14 Sell tf15  zone_rejection e 12.3560 s 12.3873 bound       anchor 12.3793 size 3196 stop        x 12.3880   -102 hold 16.1
+  10-21 01:02:05 Buy  tf15  in_zone        e 12.3620 s 12.3322 bound       anchor 12.34 size 3352 stop        x 12.3320   -101 hold 8.0
+  10-21 01:24:15 Sell tf15  zone_rejection e 12.3550 s 12.3724 bound       anchor 12.3631 size 4047 stop        x 12.3730    -73 hold 3.3
+  10-21 02:24:04 Buy  tf15  zone_rejection e 12.3350 s 12.2994 bound       anchor 12.3109 size 2812 reversal    x 12.3610    +73 hold 14.0
+  10-21 02:38:06 Sell tf15  zone_rejection e 12.3610 s 12.3930 bound       anchor 12.3827 size 3122 reversal    x 12.3420    +59 hold 39.9
+  10-21 03:18:01 Buy  tf15  in_zone        e 12.3420 s 12.3056 bound       anchor 12.3135 size 2749 reversal    x 12.3670    +69 hold 16.0
+  10-21 03:34:02 Sell tf15  zone_rejection e 12.3670 s 12.3944 bound       anchor 12.3869 size 3648 target      x 12.3430    +88 hold 6.6
+  10-21 03:52:06 Sell tf15  zone_rejection e 12.3570 s 12.3858 bound       anchor 12.3784 size 3467 target      x 12.3360    +73 hold 8.1
+  10-21 04:10:40 Sell tf15  in_zone        e 12.3480 s 12.3873 bound       anchor 12.379 size 2546 target      x 12.3450     +8 hold 7.5
+  10-21 05:03:21 Sell tf15  in_zone        e 12.3620 s 12.3964 bound       anchor 12.3884 size 2904 target      x 12.3540    +23 hold 6.3
+  10-21 05:16:51 Buy  tf15  in_zone        e 12.3320 s 12.2952 bound       anchor 12.3032 size 2721 target      x 12.3420    +27 hold 2.4
+  10-21 05:36:00 Sell tf15  zone_rejection e 12.3410 s 12.3651 bound       anchor 12.3574 size 4066 reversal    x 12.3100   +126 hold 5.3
+  10-21 05:41:20 Buy  tf60  zone_rejection e 12.3100 s 12.2659 bound       anchor 12.2736 size 2268 reversal    x 12.3010    -20 hold 35.7
+  10-21 06:17:02 Sell tf15  zone_rejection e 12.3010 s 12.3174 bound       anchor 12.309 size 4084 stop        x 12.3180    -69 hold 13.2
+  10-21 06:35:32 Sell tf60  in_zone        e 12.3500 s 12.4120 bound       anchor 12.4036 size 1612 reversal    x 12.3190    +50 hold 18.8
+  10-21 06:54:20 Buy  tf15  in_zone        e 12.3190 s 12.2945 bound       anchor 12.3016 size 4077 reversal    x 12.3370    +73 hold 18.2
+  10-21 07:12:34 Sell tf15  in_zone        e 12.3370 s 12.3784 bound       anchor 12.3712 size 2418 stop        x 12.3790   -102 hold 14.0
+  10-21 08:01:04 Buy  tf15  zone_rejection e 12.4150 s 12.3987 bound       anchor 12.4081 size 4044 stop        x 12.3980    -69 hold 1.4
+  10-21 08:18:07 Buy  tf60  zone_rejection e 12.3780 s 12.3054 bound       anchor 12.3151 size 1377 target      x 12.4210    +59 hold 33.2
+  10-21 08:52:08 Sell tf15  zone_rejection e 12.3870 s 12.4489 bound       anchor 12.439 size 1616 target      x 12.3720    +24 hold 5.2
+  10-21 09:17:33 Sell tf60  zone_rejection e 12.4060 s 12.4598 bound       anchor 12.4496 size 1860 reversal    x 12.3890    +32 hold 23.1
+  10-21 09:40:40 Buy  tf15  in_zone        e 12.3890 s 12.3461 bound       anchor 12.3568 size 2330 stop        x 12.3460   -100 hold 19.0
+  10-21 10:04:13 Buy  tf60  zone_rejection e 12.3320 s 12.2730 bound       anchor 12.2809 size 1694 reversal    x 12.3290     -5 hold 32.0
+  10-21 10:36:11 Sell tf15  in_zone        e 12.3290 s 12.3566 bound       anchor 12.349 size 3621 stop        x 12.3570   -101 hold 13.6
+  10-21 11:02:00 Sell tf15  zone_rejection e 12.3560 s 12.3755 bound       anchor 12.3674 size 4057 stop        x 12.3760    -81 hold 3.1
+  10-21 11:06:01 Sell tf60  in_zone        e 12.3680 s 12.4095 bound       anchor 12.4018 size 2410 open_at_end x 12.3650     +7 hold 10.1
+
+TRADES zsw
+  10-20 20:25:01 Buy  tf15  zone_rejection e 12.2040 s 12.1695 bound       anchor 12.1798 size 2900 target      x 12.2720   +197 hold 12.1
+  10-20 21:01:00 Sell tf240 zone_rejection e 12.3170 s 12.4548 bound       anchor 12.4455 size 726 reversal    x 12.2980    +14 hold 25.1
+  10-20 21:26:04 Buy  tf15  zone_rejection e 12.2980 s 12.2780 bound       anchor 12.286 size 4074 stop        x 12.2770    -86 hold 22.0
+  10-20 23:03:55 Buy  tf15  in_zone        e 12.3070 s 12.2717 bound       anchor 12.2796 size 2833 target      x 12.3100     +8 hold 12.7
+  10-20 23:23:51 Sell tf15  in_zone        e 12.3220 s 12.3538 bound       anchor 12.3456 size 3149 reversal    x 12.3100    +38 hold 38.7
+  10-21 00:02:36 Buy  tf15  in_zone        e 12.3100 s 12.2692 bound       anchor 12.2771 size 2451 reversal    x 12.3510   +100 hold 12.6
+  10-21 00:15:10 Sell tf15  zone_rejection e 12.3510 s 12.3669 candle      anchor 12.359 size 4059 stop        x 12.3670    -65 hold 0.8
+  10-21 00:19:14 Sell tf15  zone_rejection e 12.3560 s 12.3873 bound       anchor 12.3793 size 3196 stop        x 12.3880   -102 hold 16.1
+  10-21 01:02:05 Buy  tf15  in_zone        e 12.3620 s 12.3322 bound       anchor 12.34 size 3352 stop        x 12.3320   -101 hold 8.0
+  10-21 01:24:15 Sell tf15  zone_rejection e 12.3550 s 12.3753 candle      anchor 12.366 size 4047 stop        x 12.3760    -85 hold 3.8
+  10-21 02:24:04 Buy  tf15  zone_rejection e 12.3350 s 12.2994 bound       anchor 12.3109 size 2812 reversal    x 12.3610    +73 hold 14.0
+  10-21 02:38:06 Sell tf15  zone_rejection e 12.3610 s 12.3930 bound       anchor 12.3827 size 3122 reversal    x 12.3420    +59 hold 39.9
+  10-21 03:18:01 Buy  tf15  in_zone        e 12.3420 s 12.3056 bound       anchor 12.3135 size 2749 reversal    x 12.3670    +69 hold 16.0
+  10-21 03:34:02 Sell tf15  zone_rejection e 12.3670 s 12.3944 bound       anchor 12.3869 size 3648 target      x 12.3430    +88 hold 6.6
+  10-21 03:52:06 Sell tf15  zone_rejection e 12.3570 s 12.3858 bound       anchor 12.3784 size 3467 target      x 12.3360    +73 hold 8.1
+  10-21 04:10:40 Sell tf15  in_zone        e 12.3480 s 12.3873 bound       anchor 12.379 size 2546 target      x 12.3450     +8 hold 7.5
+  10-21 05:03:21 Sell tf15  in_zone        e 12.3620 s 12.3964 bound       anchor 12.3884 size 2904 target      x 12.3540    +23 hold 6.3
+  10-21 05:16:51 Buy  tf15  in_zone        e 12.3320 s 12.2952 bound       anchor 12.3032 size 2721 target      x 12.3420    +27 hold 2.4
+  10-21 05:36:00 Sell tf15  zone_rejection e 12.3410 s 12.3651 bound       anchor 12.3574 size 4065 reversal    x 12.3100   +126 hold 5.3
+  10-21 05:41:20 Buy  tf60  zone_rejection e 12.3100 s 12.2659 bound       anchor 12.2736 size 2268 reversal    x 12.3010    -20 hold 35.7
+  10-21 06:17:02 Sell tf15  zone_rejection e 12.3010 s 12.3174 bound       anchor 12.309 size 4083 stop        x 12.3180    -69 hold 13.2
+  10-21 06:35:32 Sell tf60  in_zone        e 12.3500 s 12.4120 bound       anchor 12.4036 size 1612 reversal    x 12.3190    +50 hold 18.8
+  10-21 06:54:20 Buy  tf15  in_zone        e 12.3190 s 12.2945 bound       anchor 12.3016 size 4076 reversal    x 12.3370    +73 hold 18.2
+  10-21 07:12:34 Sell tf15  in_zone        e 12.3370 s 12.3784 bound       anchor 12.3712 size 2418 stop        x 12.3790   -102 hold 14.0
+  10-21 08:01:04 Buy  tf15  zone_rejection e 12.4150 s 12.3987 bound       anchor 12.4081 size 4043 stop        x 12.3980    -69 hold 1.4
+  10-21 08:18:07 Buy  tf60  zone_rejection e 12.3780 s 12.3054 bound       anchor 12.3151 size 1377 target      x 12.4210    +59 hold 33.2
+  10-21 08:52:08 Sell tf15  zone_rejection e 12.3870 s 12.4519 candle      anchor 12.442 size 1542 target      x 12.3720    +23 hold 5.2
+  10-21 09:17:33 Sell tf60  zone_rejection e 12.4060 s 12.4598 bound       anchor 12.4496 size 1860 reversal    x 12.3890    +32 hold 23.1
+  10-21 09:40:40 Buy  tf15  in_zone        e 12.3890 s 12.3461 bound       anchor 12.3568 size 2330 stop        x 12.3460   -100 hold 19.0
+  10-21 10:04:13 Buy  tf60  zone_rejection e 12.3320 s 12.2730 bound       anchor 12.2809 size 1694 reversal    x 12.3290     -5 hold 32.0
+  10-21 10:36:11 Sell tf15  in_zone        e 12.3290 s 12.3566 bound       anchor 12.349 size 3621 stop        x 12.3570   -101 hold 13.6
+  10-21 11:02:00 Sell tf15  zone_rejection e 12.3560 s 12.3755 bound       anchor 12.3674 size 4056 stop        x 12.3760    -81 hold 3.1
+  10-21 11:06:01 Sell tf60  in_zone        e 12.3680 s 12.4095 bound       anchor 12.4018 size 2410 open_at_end x 12.3650     +7 hold 10.1
+
+TRADES zsw15
+  10-20 20:25:01 Buy  tf15  zone_rejection e 12.2040 s 12.1644 bound       anchor 12.1798 size 2524 target      x 12.2720   +172 hold 12.1
+  10-20 21:01:00 Sell tf240 zone_rejection e 12.3170 s 12.4595 bound       anchor 12.4455 size 702 reversal    x 12.2980    +13 hold 25.1
+  10-20 21:26:04 Buy  tf15  zone_rejection e 12.2980 s 12.2740 bound       anchor 12.286 size 4073 target      x 12.3270   +118 hold 30.1
+  10-20 23:03:55 Buy  tf15  in_zone        e 12.3070 s 12.2677 bound       anchor 12.2796 size 2547 target      x 12.3100     +8 hold 12.7
+  10-20 23:23:51 Sell tf15  in_zone        e 12.3220 s 12.3578 bound       anchor 12.3456 size 2792 reversal    x 12.3100    +34 hold 38.7
+  10-21 00:02:36 Buy  tf15  in_zone        e 12.3100 s 12.2653 bound       anchor 12.2771 size 2235 reversal    x 12.3510    +92 hold 12.6
+  10-21 00:15:10 Sell tf15  zone_rejection e 12.3510 s 12.3709 candle      anchor 12.359 size 4066 stop        x 12.3710    -81 hold 15.7
+  10-21 01:02:05 Buy  tf15  in_zone        e 12.3620 s 12.3282 bound       anchor 12.34 size 2963 stop        x 12.3280   -101 hold 8.4
+  10-21 01:24:15 Sell tf15  zone_rejection e 12.3550 s 12.3799 candle      anchor 12.366 size 4012 stop        x 12.3800   -100 hold 4.2
+  10-21 02:24:04 Buy  tf15  zone_rejection e 12.3350 s 12.2937 bound       anchor 12.3109 size 2423 reversal    x 12.3610    +63 hold 14.0
+  10-21 02:38:06 Sell tf15  zone_rejection e 12.3610 s 12.3982 bound       anchor 12.3827 size 2687 reversal    x 12.3420    +51 hold 39.9
+  10-21 03:18:01 Buy  tf15  in_zone        e 12.3420 s 12.3017 bound       anchor 12.3135 size 2480 reversal    x 12.3670    +62 hold 16.0
+  10-21 03:34:02 Sell tf15  zone_rejection e 12.3670 s 12.3982 bound       anchor 12.3869 size 3209 target      x 12.3430    +77 hold 6.6
+  10-21 03:52:06 Sell tf15  zone_rejection e 12.3570 s 12.3896 bound       anchor 12.3784 size 3069 target      x 12.3360    +64 hold 8.1
+  10-21 04:10:40 Sell tf15  in_zone        e 12.3480 s 12.3914 bound       anchor 12.379 size 2302 target      x 12.3450     +7 hold 7.5
+  10-21 05:03:21 Sell tf15  in_zone        e 12.3620 s 12.4005 bound       anchor 12.3884 size 2600 target      x 12.3540    +21 hold 6.3
+  10-21 05:16:51 Buy  tf15  in_zone        e 12.3320 s 12.2913 bound       anchor 12.3032 size 2454 target      x 12.3420    +25 hold 2.4
+  10-21 05:36:00 Sell tf15  zone_rejection e 12.3410 s 12.3690 bound       anchor 12.3574 size 3574 reversal    x 12.3100   +111 hold 5.3
+  10-21 05:41:20 Buy  tf60  zone_rejection e 12.3100 s 12.2620 bound       anchor 12.2736 size 2085 reversal    x 12.3010    -19 hold 35.7
+  10-21 06:17:02 Sell tf15  zone_rejection e 12.3010 s 12.3216 bound       anchor 12.309 size 4090 stop        x 12.3220    -86 hold 13.7
+  10-21 06:35:32 Sell tf60  in_zone        e 12.3500 s 12.4162 bound       anchor 12.4036 size 1510 reversal    x 12.3190    +47 hold 18.8
+  10-21 06:54:20 Buy  tf15  in_zone        e 12.3190 s 12.2909 bound       anchor 12.3016 size 3565 reversal    x 12.3370    +64 hold 18.2
+  10-21 07:12:34 Sell tf15  in_zone        e 12.3370 s 12.3820 bound       anchor 12.3712 size 2224 stop        x 12.3820   -100 hold 14.4
+  10-21 08:01:04 Buy  tf15  zone_rejection e 12.4150 s 12.3940 bound       anchor 12.4081 size 4049 stop        x 12.3930    -89 hold 1.7
+  10-21 08:18:07 Buy  tf60  zone_rejection e 12.3780 s 12.3005 bound       anchor 12.3151 size 1290 target      x 12.4210    +55 hold 33.2
+  10-21 08:52:08 Sell tf15  zone_rejection e 12.3870 s 12.4568 candle      anchor 12.442 size 1433 target      x 12.3720    +21 hold 5.2
+  10-21 09:17:33 Sell tf60  zone_rejection e 12.4060 s 12.4648 bound       anchor 12.4496 size 1700 reversal    x 12.3890    +29 hold 23.1
+  10-21 09:40:40 Buy  tf15  in_zone        e 12.3890 s 12.3407 bound       anchor 12.3568 size 2070 stop        x 12.3400   -101 hold 21.3
+  10-21 10:04:13 Buy  tf60  zone_rejection e 12.3320 s 12.2690 bound       anchor 12.2809 size 1587 reversal    x 12.3290     -5 hold 32.0
+  10-21 10:36:11 Sell tf15  in_zone        e 12.3290 s 12.3604 bound       anchor 12.349 size 3183 stop        x 12.3620   -105 hold 27.8
+  10-21 11:06:01 Sell tf60  in_zone        e 12.3680 s 12.4134 bound       anchor 12.4018 size 2205 open_at_end x 12.3650     +7 hold 10.1

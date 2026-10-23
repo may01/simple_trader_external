@@ -1,0 +1,201 @@
+trades 748276  10-16 22:29:05 -> 10-21 10:07:36
+trade feed gaps > 60 s: 19 [('10-16 23:52:38', 138), ('10-17 00:43:46', 72), ('10-17 02:46:08', 60), ('10-17 03:48:42', 71), ('10-17 07:10:46', 73), ('10-17 10:32:51', 75), ('10-17 10:51:10', 66), ('10-17 11:26:05', 73), ('10-17 11:39:01', 62), ('10-17 19:33:42', 97), ('10-18 01:53:20', 80), ('10-18 04:26:26', 72), ('10-18 04:27:38', 101), ('10-18 04:49:44', 88), ('10-18 05:08:21', 62), ('10-19 13:01:46', 5564), ('10-19 20:01:34', 9432), ('10-20 16:13:10', 305), ('10-21 02:55:41', 66)]
+tf  15: 4315 closed klines 09-06 11:00:00 -> 10-21 09:30:00; stats N7 +0.00198/0.17060, N14 +0.00190/0.11939, N25 +0.00187/0.08855
+tf  60: 2878 closed klines 06-23 11:00:00 -> 10-21 08:00:00; stats N7 +0.00791/0.33307, N14 +0.00767/0.23355, N25 +0.00759/0.17366
+tf 240: 2398 closed klines 09-16 12:00:00 -> 10-21 00:00:00; stats N7 +0.03173/0.65677, N14 +0.03081/0.46243, N25 +0.03083/0.34433
+
+=== FLAG GATE: reconstructed forming EMA-25 flag vs the stored cb_f_trend at every trade (stored present) ===
+tf  15 long : stored present 98.2%, pass stored 0.732 e25 0.732 e14 0.745 e7 0.763 | agreement e25 vs stored 0.9935
+tf  15 short: stored present 98.2%, pass stored 0.779 e25 0.779 e14 0.793 e7 0.806 | agreement e25 vs stored 0.9911
+tf  60 long : stored present 98.2%, pass stored 0.718 e25 0.718 e14 0.730 e7 0.749 | agreement e25 vs stored 0.9959
+tf  60 short: stored present 98.2%, pass stored 0.769 e25 0.768 e14 0.764 e7 0.804 | agreement e25 vs stored 0.9916
+tf 240 long : stored present 98.2%, pass stored 0.505 e25 0.505 e14 0.652 e7 0.726 | agreement e25 vs stored 0.9971
+tf 240 short: stored present 98.2%, pass stored 0.994 e25 0.994 e14 0.872 e7 0.758 | agreement e25 vs stored 0.9992
+trend computed in 108 s
+
+trades from 10-17 22:00:00: 600032; trades where some (tf, side) passes geometry + 1-min class: 92497
+
+=== REPRODUCTION GATE (live flags, X = 0.7) ===
+recorded CbZoneEntry fires: 188 (10-18 11:41:10 -> 10-21 10:05:15); sim fires in the span: 183
+  exact (same ms, side, tf): 177/188; within ±120 s: 4; unmatched: 7; class agrees 176/177, rule agrees 176/177
+    unmatched recorded: 10-18 11:41:10 Buy  tf  15 in_zone        up
+    unmatched recorded: 10-19 22:43:33 Sell tf 240 in_zone        down
+    unmatched recorded: 10-19 22:50:10 Sell tf  60 in_zone        down
+    unmatched recorded: 10-19 23:52:05 Sell tf 240 in_zone        down
+    unmatched recorded: 10-20 00:21:27 Buy  tf  15 in_zone        up
+    unmatched recorded: 10-20 20:26:46 Buy  tf  15 zone_rejection up
+    unmatched recorded: 10-20 20:31:49 Sell tf  60 in_zone        down
+
+=== VARIANTS, window 10-17 22:00:00 -> 10-21 10:07:36, paper (no fees); flag source changes, everything else live ===
+     live | n 211 | net   +3732 | PF  1.47 | wr  52% | R  +56.5 | hold   7.5m | risk   83 | CI90 [ +1148, +6391] P<0 0.01 | top2  +804 | stop=99/-7822 targ=74/+7036 reve=37/+4505 open=1/+13 | fires 237 (179/46/12) skip 26 | r1 136 r2 101
+      e25 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26 | r1 139 r2 99
+      e14 | n 221 | net   +3951 | PF  1.49 | wr  52% | R  +59.1 | hold   7.0m | risk   83 | CI90 [ +1376, +6468] P<0 0.01 | top2  +741 | stop=101/-7917 targ=73/+6754 reve=46/+5102 open=1/+13 | fires 246 (186/47/13) skip 25 | r1 145 r2 101
+       e7 | n 223 | net   +3400 | PF  1.42 | wr  52% | R  +51.5 | hold   6.7m | risk   84 | CI90 [  +881, +5964] P<0 0.01 | top2  +740 | stop=102/-8052 targ=71/+6011 reve=49/+5428 open=1/+13 | fires 247 (190/45/12) skip 24 | r1 143 r2 104
+     none | n 262 | net   +4751 | PF  1.49 | wr  53% | R  +66.9 | hold   7.2m | risk   85 | CI90 [ +1919, +7659] P<0 0.00 | top2  +796 | stop=120/-9558 targ=73/+6137 reve=68/+8160 open=1/+13 | fires 294 (220/58/16) skip 32 | r1 174 r2 120
+      c25 | n 212 | net   +3784 | PF  1.48 | wr  52% | R  +57.7 | hold   7.5m | risk   83 | CI90 [ +1245, +6386] P<0 0.01 | top2  +805 | stop=100/-7896 targ=71/+6903 reve=40/+4765 open=1/+13 | fires 237 (179/46/12) skip 25 | r1 143 r2 94
+      c14 | n 226 | net   +3382 | PF  1.39 | wr  50% | R  +52.3 | hold   7.2m | risk   81 | CI90 [  +740, +6032] P<0 0.02 | top2  +740 | stop=109/-8587 targ=70/+6337 reve=46/+5619 open=1/+13 | fires 250 (189/47/14) skip 24 | r1 150 r2 100
+       c7 | n 230 | net   +3833 | PF  1.45 | wr  52% | R  +58.4 | hold   7.4m | risk   84 | CI90 [ +1241, +6488] P<0 0.01 | top2  +742 | stop=107/-8459 targ=69/+6110 reve=53/+6170 open=1/+13 | fires 255 (192/48/15) skip 25 | r1 153 r2 102
+    e25x1 | n 248 | net   +4709 | PF  1.52 | wr  53% | R  +66.7 | hold   7.3m | risk   84 | CI90 [ +1995, +7437] P<0 0.00 | top2  +796 | stop=113/-8954 targ=73/+6176 reve=61/+7474 open=1/+13 | fires 279 (206/58/15) skip 31 | r1 167 r2 112
+    e14x1 | n 248 | net   +4848 | PF  1.54 | wr  53% | R  +69.6 | hold   7.3m | risk   84 | CI90 [ +2058, +7580] P<0 0.00 | top2  +797 | stop=112/-8921 targ=73/+6200 reve=62/+7557 open=1/+13 | fires 279 (208/56/15) skip 31 | r1 167 r2 112
+     e7x1 | n 254 | net   +4630 | PF  1.50 | wr  53% | R  +66.6 | hold   7.1m | risk   84 | CI90 [ +1930, +7456] P<0 0.00 | top2  +796 | stop=115/-9125 targ=73/+5973 reve=65/+7769 open=1/+13 | fires 285 (215/55/15) skip 31 | r1 168 r2 117
+  e25sign | n 126 | net   +1846 | PF  1.40 | wr  51% | R  +23.9 | hold   7.8m | risk   87 | CI90 [   -49, +3780] P<0 0.06 | top2  +688 | stop=59/-4516 targ=55/+5450 reve=11/+900 open=1/+12 | fires 147 (113/26/8) skip 21 | r1 82 r2 65
+  e14sign | n 126 | net   +1377 | PF  1.30 | wr  52% | R  +16.0 | hold   7.5m | risk   87 | CI90 [  -469, +3228] P<0 0.10 | top2  +686 | stop=58/-4488 targ=57/+5051 reve=10/+801 open=1/+12 | fires 140 (108/25/7) skip 14 | r1 80 r2 60
+   e7sign | n 119 | net   +1191 | PF  1.27 | wr  51% | R  +15.8 | hold   7.5m | risk   95 | CI90 [  -589, +2953] P<0 0.13 | top2  +678 | stop=52/-4256 targ=54/+4802 reve=12/+650 open=1/-4 | fires 131 (103/21/7) skip 12 | r1 75 r2 56
+   e14@15 | n 219 | net   +3992 | PF  1.50 | wr  52% | R  +58.2 | hold   7.3m | risk   83 | CI90 [ +1335, +6645] P<0 0.01 | top2  +805 | stop=101/-7901 targ=73/+6758 reve=44/+5122 open=1/+13 | fires 243 (185/46/12) skip 24 | r1 144 r2 99
+   e14@60 | n 213 | net   +3690 | PF  1.46 | wr  51% | R  +55.6 | hold   7.3m | risk   80 | CI90 [ +1204, +6246] P<0 0.01 | top2  +740 | stop=101/-7892 targ=73/+7015 reve=38/+4555 open=1/+13 | fires 238 (179/47/12) skip 25 | r1 140 r2 98
+  e14@240 | n 213 | net   +3826 | PF  1.49 | wr  52% | R  +57.2 | hold   7.2m | risk   83 | CI90 [ +1271, +6372] P<0 0.01 | top2  +805 | stop=99/-7767 targ=74/+7078 reve=39/+4502 open=1/+13 | fires 239 (180/46/13) skip 26 | r1 139 r2 100
+    e7@15 | n 224 | net   +3725 | PF  1.45 | wr  52% | R  +55.0 | hold   7.2m | risk   84 | CI90 [ +1263, +6269] P<0 0.01 | top2  +760 | stop=103/-8149 targ=71/+6172 reve=49/+5690 open=1/+13 | fires 248 (190/46/12) skip 24 | r1 143 r2 105
+    e7@60 | n 211 | net   +3586 | PF  1.46 | wr  51% | R  +53.0 | hold   7.2m | risk   80 | CI90 [ +1152, +6114] P<0 0.01 | top2  +740 | stop=99/-7684 targ=73/+6862 reve=38/+4396 open=1/+13 | fires 236 (179/45/12) skip 25 | r1 139 r2 97
+   e7@240 | n 212 | net   +3600 | PF  1.45 | wr  51% | R  +54.8 | hold   7.1m | risk   83 | CI90 [ +1063, +6132] P<0 0.01 | top2  +804 | stop=100/-7859 targ=74/+7072 reve=37/+4374 open=1/+13 | fires 238 (180/46/12) skip 26 | r1 139 r2 99
+
+--- by the opening fire's tf: n, net, PF ---
+     live | tf15: 160, +2021, PF 1.34 | tf60: 40, +611, PF 1.39 | tf240: 11, +1100, PF 4.24
+      e25 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+      e14 | tf15: 167, +2242, PF 1.37 | tf60: 42, +664, PF 1.40 | tf240: 12, +1045, PF 4.33
+       e7 | tf15: 172, +2066, PF 1.33 | tf60: 40, +564, PF 1.38 | tf240: 11, +770, PF 2.89
+     none | tf15: 197, +2374, PF 1.33 | tf60: 50, +1656, PF 1.93 | tf240: 15, +720, PF 2.15
+      c25 | tf15: 160, +2127, PF 1.36 | tf60: 41, +556, PF 1.33 | tf240: 11, +1101, PF 4.24
+      c14 | tf15: 171, +2139, PF 1.34 | tf60: 42, +475, PF 1.27 | tf240: 13, +767, PF 2.47
+       c7 | tf15: 174, +2565, PF 1.41 | tf60: 42, +446, PF 1.25 | tf240: 14, +823, PF 2.58
+    e25x1 | tf15: 185, +2307, PF 1.34 | tf60: 50, +1633, PF 1.92 | tf240: 13, +769, PF 2.47
+    e14x1 | tf15: 187, +2319, PF 1.34 | tf60: 48, +1759, PF 2.06 | tf240: 13, +770, PF 2.47
+     e7x1 | tf15: 193, +2290, PF 1.33 | tf60: 47, +1518, PF 1.92 | tf240: 14, +822, PF 2.58
+  e25sign | tf15: 98, +1072, PF 1.31 | tf60: 21, +267, PF 1.30 | tf240: 7, +507, PF 3.85
+  e14sign | tf15: 100, +890, PF 1.25 | tf60: 20, +91, PF 1.11 | tf240: 6, +396, PF 3.23
+   e7sign | tf15: 96, +968, PF 1.28 | tf60: 16, +167, PF 1.26 | tf240: 7, +56, PF 1.20
+   e14@15 | tf15: 167, +2243, PF 1.37 | tf60: 41, +647, PF 1.41 | tf240: 11, +1102, PF 4.24
+   e14@60 | tf15: 160, +2035, PF 1.34 | tf60: 42, +654, PF 1.40 | tf240: 11, +1001, PF 3.95
+  e14@240 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 12, +1145, PF 4.64
+    e7@15 | tf15: 172, +2074, PF 1.33 | tf60: 41, +646, PF 1.41 | tf240: 11, +1005, PF 3.96
+    e7@60 | tf15: 160, +2029, PF 1.34 | tf60: 40, +557, PF 1.38 | tf240: 11, +1001, PF 3.95
+   e7@240 | tf15: 161, +2094, PF 1.35 | tf60: 40, +586, PF 1.37 | tf240: 11, +920, PF 3.26
+
+--- by side: n, net ---
+     live | Buy: 97, +1010 | Sell: 114, +2722 | in_: 122, +2619 | zon: 89, +1112
+      e25 | Buy: 97, +1048 | Sell: 115, +2735 | in_: 125, +2886 | zon: 87, +897
+      e14 | Buy: 102, +1223 | Sell: 119, +2728 | in_: 132, +2948 | zon: 89, +1004
+       e7 | Buy: 103, +753 | Sell: 120, +2647 | in_: 132, +2838 | zon: 91, +561
+     none | Buy: 121, +1681 | Sell: 141, +3069 | in_: 155, +4488 | zon: 107, +262
+      c25 | Buy: 98, +1219 | Sell: 114, +2565 | in_: 129, +2944 | zon: 83, +840
+      c14 | Buy: 103, +903 | Sell: 123, +2479 | in_: 137, +3028 | zon: 89, +354
+       c7 | Buy: 104, +985 | Sell: 126, +2848 | in_: 139, +3147 | zon: 91, +686
+    e25x1 | Buy: 115, +1426 | Sell: 133, +3283 | in_: 148, +4521 | zon: 100, +188
+    e14x1 | Buy: 115, +1605 | Sell: 133, +3243 | in_: 148, +4299 | zon: 100, +550
+     e7x1 | Buy: 116, +1444 | Sell: 138, +3186 | in_: 150, +4196 | zon: 104, +434
+  e25sign | Buy: 59, +354 | Sell: 67, +1492 | in_: 74, +1551 | zon: 52, +295
+  e14sign | Buy: 53, -10 | Sell: 73, +1387 | in_: 75, +1179 | zon: 51, +198
+   e7sign | Buy: 49, -25 | Sell: 70, +1217 | in_: 71, +526 | zon: 48, +666
+   e14@15 | Buy: 101, +1191 | Sell: 118, +2801 | in_: 131, +3111 | zon: 88, +881
+   e14@60 | Buy: 97, +1102 | Sell: 116, +2588 | in_: 126, +2715 | zon: 87, +975
+  e14@240 | Buy: 98, +1019 | Sell: 115, +2808 | in_: 125, +2886 | zon: 88, +940
+    e7@15 | Buy: 102, +986 | Sell: 122, +2739 | in_: 132, +3125 | zon: 92, +600
+    e7@60 | Buy: 96, +930 | Sell: 115, +2656 | in_: 125, +2759 | zon: 86, +827
+   e7@240 | Buy: 99, +926 | Sell: 113, +2674 | in_: 125, +2672 | zon: 87, +928
+
+--- fees: net after f %/side; bp = gross per trade in bp of median notional ---
+  variant |   gross | notional | bp/trade |   0.01% |   0.02% |   0.05% |   0.10% | breakeven
+     live |   +3732 |    50649 |     +3.5 |   +1737 |    -257 |   -6241 |  -16214 | 0.019 %
+      e25 |   +3783 |    50695 |     +3.5 |   +1775 |    -232 |   -6254 |  -16292 | 0.019 %
+      e14 |   +3951 |    50547 |     +3.5 |   +1879 |    -194 |   -6412 |  -16776 | 0.019 %
+       e7 |   +3400 |    50481 |     +3.0 |   +1317 |    -765 |   -7012 |  -17424 | 0.016 %
+     none |   +4751 |    50579 |     +3.6 |   +2308 |    -135 |   -7464 |  -19679 | 0.019 %
+      c25 |   +3784 |    50695 |     +3.5 |   +1775 |    -233 |   -6259 |  -16301 | 0.019 %
+      c14 |   +3382 |    50610 |     +3.0 |   +1252 |    -878 |   -7267 |  -17915 | 0.016 %
+       c7 |   +3833 |    50744 |     +3.3 |   +1655 |    -523 |   -7058 |  -17950 | 0.018 %
+    e25x1 |   +4709 |    50619 |     +3.8 |   +2374 |     +39 |   -6967 |  -18643 | 0.020 %
+    e14x1 |   +4848 |    50688 |     +3.9 |   +2517 |    +186 |   -6808 |  -18465 | 0.021 %
+     e7x1 |   +4630 |    50635 |     +3.6 |   +2244 |    -143 |   -7303 |  -19237 | 0.019 %
+  e25sign |   +1846 |    49926 |     +2.9 |    +725 |    -396 |   -3759 |   -9364 | 0.016 %
+  e14sign |   +1377 |    49849 |     +2.2 |    +254 |    -868 |   -4234 |   -9845 | 0.012 %
+   e7sign |   +1191 |    49798 |     +2.0 |    +158 |    -874 |   -3973 |   -9137 | 0.012 %
+   e14@15 |   +3992 |    50700 |     +3.6 |   +1927 |    -138 |   -6333 |  -16658 | 0.019 %
+   e14@60 |   +3690 |    50604 |     +3.4 |   +1678 |    -334 |   -6370 |  -16431 | 0.018 %
+  e14@240 |   +3826 |    50630 |     +3.5 |   +1816 |    -195 |   -6226 |  -16279 | 0.019 %
+    e7@15 |   +3725 |    50663 |     +3.3 |   +1610 |    -506 |   -6853 |  -17430 | 0.018 %
+    e7@60 |   +3586 |    50591 |     +3.4 |   +1604 |    -378 |   -6324 |  -16233 | 0.018 %
+   e7@240 |   +3600 |    50577 |     +3.4 |   +1601 |    -399 |   -6396 |  -16393 | 0.018 %
+
+--- paired vs e25: trades matched by (open trade, side); unmatched enter as (pnl − 0) ---
+     live | shared 201 | only-   live  10 | only-e25  11 | Δnet     -51 | CI90 [  -711,   +600] | P(Δ<0) 0.55
+      e25 | shared 212 | only-    e25   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+      e14 | shared 197 | only-    e14  24 | only-e25  15 | Δnet    +168 | CI90 [  -825,  +1201] | P(Δ<0) 0.40
+       e7 | shared 183 | only-     e7  40 | only-e25  29 | Δnet    -383 | CI90 [ -1821,  +1058] | P(Δ<0) 0.67
+     none | shared 201 | only-   none  61 | only-e25  11 | Δnet    +968 | CI90 [  -609,  +2601] | P(Δ<0) 0.17
+      c25 | shared 201 | only-    c25  11 | only-e25  11 | Δnet      +1 | CI90 [  -692,   +681] | P(Δ<0) 0.50
+      c14 | shared 202 | only-    c14  24 | only-e25  10 | Δnet    -401 | CI90 [ -1333,   +553] | P(Δ<0) 0.76
+       c7 | shared 199 | only-     c7  31 | only-e25  13 | Δnet     +51 | CI90 [ -1063,  +1192] | P(Δ<0) 0.48
+    e25x1 | shared 201 | only-  e25x1  47 | only-e25  11 | Δnet    +926 | CI90 [  -557,  +2394] | P(Δ<0) 0.15
+    e14x1 | shared 201 | only-  e14x1  47 | only-e25  11 | Δnet   +1065 | CI90 [  -391,  +2557] | P(Δ<0) 0.12
+     e7x1 | shared 200 | only-   e7x1  54 | only-e25  12 | Δnet    +847 | CI90 [  -669,  +2344] | P(Δ<0) 0.18
+  e25sign | shared 110 | only-e25sign  16 | only-e25 102 | Δnet   -1937 | CI90 [ -3923,   +128] | P(Δ<0) 0.94
+  e14sign | shared 106 | only-e14sign  20 | only-e25 106 | Δnet   -2406 | CI90 [ -4558,   -411] | P(Δ<0) 0.98
+   e7sign | shared  83 | only- e7sign  36 | only-e25 129 | Δnet   -2592 | CI90 [ -5068,   -186] | P(Δ<0) 0.96
+   e14@15 | shared 200 | only- e14@15  19 | only-e25  12 | Δnet    +209 | CI90 [  -693,  +1147] | P(Δ<0) 0.35
+   e14@60 | shared 209 | only- e14@60   4 | only-e25   3 | Δnet     -93 | CI90 [  -519,   +325] | P(Δ<0) 0.63
+  e14@240 | shared 211 | only-e14@240   2 | only-e25   1 | Δnet     +44 | CI90 [   -51,   +164] | P(Δ<0) 0.27
+    e7@15 | shared 193 | only-  e7@15  31 | only-e25  19 | Δnet     -58 | CI90 [ -1185,  +1161] | P(Δ<0) 0.52
+    e7@60 | shared 203 | only-  e7@60   8 | only-e25   9 | Δnet    -197 | CI90 [  -959,   +579] | P(Δ<0) 0.66
+   e7@240 | shared 210 | only- e7@240   2 | only-e25   2 | Δnet    -183 | CI90 [  -474,    +52] | P(Δ<0) 0.89
+
+--- paired vs live: trades matched by (open trade, side); unmatched enter as (pnl − 0) ---
+     live | shared 211 | only-   live   0 | only-live   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+      e25 | shared 201 | only-    e25  11 | only-live  10 | Δnet     +51 | CI90 [  -606,   +701] | P(Δ<0) 0.44
+      e14 | shared 195 | only-    e14  26 | only-live  16 | Δnet    +219 | CI90 [  -792,  +1272] | P(Δ<0) 0.35
+       e7 | shared 182 | only-     e7  41 | only-live  29 | Δnet    -332 | CI90 [ -1785,  +1059] | P(Δ<0) 0.66
+     none | shared 200 | only-   none  62 | only-live  11 | Δnet   +1019 | CI90 [  -550,  +2662] | P(Δ<0) 0.14
+      c25 | shared 201 | only-    c25  11 | only-live  10 | Δnet     +52 | CI90 [  -618,   +695] | P(Δ<0) 0.45
+      c14 | shared 201 | only-    c14  25 | only-live  10 | Δnet    -350 | CI90 [ -1285,   +608] | P(Δ<0) 0.74
+       c7 | shared 198 | only-     c7  32 | only-live  13 | Δnet    +102 | CI90 [  -964,  +1198] | P(Δ<0) 0.45
+    e25x1 | shared 200 | only-  e25x1  48 | only-live  11 | Δnet    +977 | CI90 [  -434,  +2449] | P(Δ<0) 0.15
+    e14x1 | shared 200 | only-  e14x1  48 | only-live  11 | Δnet   +1116 | CI90 [  -340,  +2644] | P(Δ<0) 0.11
+     e7x1 | shared 199 | only-   e7x1  55 | only-live  12 | Δnet    +898 | CI90 [  -596,  +2489] | P(Δ<0) 0.17
+  e25sign | shared 110 | only-e25sign  16 | only-live 101 | Δnet   -1886 | CI90 [ -3911,   +115] | P(Δ<0) 0.94
+  e14sign | shared 106 | only-e14sign  20 | only-live 105 | Δnet   -2355 | CI90 [ -4386,   -343] | P(Δ<0) 0.97
+   e7sign | shared  83 | only- e7sign  36 | only-live 128 | Δnet   -2541 | CI90 [ -5096,   -215] | P(Δ<0) 0.97
+   e14@15 | shared 197 | only- e14@15  22 | only-live  14 | Δnet    +260 | CI90 [  -689,  +1206] | P(Δ<0) 0.32
+   e14@60 | shared 199 | only- e14@60  14 | only-live  12 | Δnet     -42 | CI90 [  -831,   +775] | P(Δ<0) 0.53
+  e14@240 | shared 200 | only-e14@240  13 | only-live  11 | Δnet     +95 | CI90 [  -557,   +749] | P(Δ<0) 0.40
+    e7@15 | shared 191 | only-  e7@15  33 | only-live  20 | Δnet      -7 | CI90 [ -1173,  +1210] | P(Δ<0) 0.50
+    e7@60 | shared 193 | only-  e7@60  18 | only-live  18 | Δnet    -146 | CI90 [ -1154,   +882] | P(Δ<0) 0.59
+   e7@240 | shared 199 | only- e7@240  13 | only-live  12 | Δnet    -132 | CI90 [  -840,   +584] | P(Δ<0) 0.62
+
+--- stability: net by half (split 10-19 16:03:48) and by UTC day, no fees ---
+  variant |      H1   n |      H2   n |  10-17 n |  10-18 n |  10-19 n |  10-20 n |  10-21 n
+     live |   +1733 101 |   +1999 110 |    +69  5 |  +1463 64 |   +334 40 |  +1692 74 |   +173 28
+      e25 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+      e14 |   +1730 105 |   +2222 116 |   +231  6 |  +1304 66 |   +455 42 |  +1927 77 |    +35 30
+       e7 |   +1646 107 |   +1754 116 |   +278  7 |  +1289 68 |   +162 43 |  +1609 74 |    +62 31
+     none |   +1919 132 |   +2832 130 |   +328  7 |  +1157 80 |   +674 60 |  +1920 82 |   +672 33
+      c25 |   +1782 101 |   +2002 111 |   +156  5 |  +1602 65 |    +78 40 |  +1770 76 |   +178 26
+      c14 |   +1671 106 |   +1711 120 |   +156  5 |  +1320 68 |   +214 44 |  +1736 80 |    -44 29
+       c7 |   +2072 109 |   +1762 121 |   +328  7 |  +1534 68 |   +229 45 |  +1786 81 |    -44 29
+    e25x1 |   +1886 118 |   +2823 130 |   +422  7 |   +941 73 |   +763 53 |  +1911 82 |   +672 33
+    e14x1 |   +2015 118 |   +2833 130 |   +422  7 |  +1180 74 |   +654 52 |  +1920 82 |   +673 33
+     e7x1 |   +1849 124 |   +2781 130 |   +328  7 |  +1192 75 |   +569 57 |  +1869 82 |   +672 33
+  e25sign |    +721  61 |   +1125  65 |   -203  2 |   +776 42 |   +485 23 |   +690 45 |    +98 14
+  e14sign |    +345  60 |   +1031  66 |   -203  2 |   +459 40 |   +425 24 |   +566 44 |   +129 16
+   e7sign |    +248  56 |    +943  63 |   -203  2 |   +359 36 |   +225 23 |   +823 40 |    -13 18
+   e14@15 |   +1873 104 |   +2119 115 |   +231  6 |  +1447 65 |   +381 42 |  +1854 77 |    +79 29
+   e14@60 |   +1670 102 |   +2020 111 |   +130  5 |  +1313 65 |   +470 39 |  +1701 75 |    +77 29
+  e14@240 |   +1822 101 |   +2005 112 |   +130  5 |  +1464 64 |   +337 41 |  +1775 75 |   +121 28
+    e7@15 |   +2061 106 |   +1664 118 |   +274  6 |  +1515 66 |   +274 45 |  +1556 77 |   +106 30
+    e7@60 |   +1566 102 |   +2020 109 |   +133  6 |  +1284 65 |   +391 38 |  +1702 73 |    +77 29
+   e7@240 |   +1609 101 |   +1991 111 |   +130  5 |  +1364 65 |   +231 40 |  +1754 74 |   +121 28
+
+--- fire-level mechanism vs e25: fires of e25 absent in the variant because its flag was False there, and the variant's own new fires ---
+  e14: e25 fires 238, shared 219, lost 19 (flag False in e14 at 10), new 27 (flag False in e25 at 21); lost by tf {15: 14, 60: 4, 240: 1}, new by tf {15: 20, 60: 5, 240: 2}
+   e7: e25 fires 238, shared 202, lost 36 (flag False in e7 at 24), new 45 (flag False in e25 at 34); lost by tf {15: 25, 60: 9, 240: 2}, new by tf {15: 35, 60: 8, 240: 2}
+ none: e25 fires 238, shared 225, lost 13 (flag False in none at 0), new 69 (flag False in e25 at 69); lost by tf {15: 11, 60: 2, 240: 0}, new by tf {15: 51, 60: 14, 240: 4}
+  c25: e25 fires 238, shared 224, lost 14 (flag False in c25 at 7), new 13 (flag False in e25 at 13); lost by tf {15: 12, 60: 2, 240: 0}, new by tf {15: 11, 60: 2, 240: 0}
+  c14: e25 fires 238, shared 225, lost 13 (flag False in c14 at 3), new 25 (flag False in e25 at 25); lost by tf {15: 11, 60: 2, 240: 0}, new by tf {15: 20, 60: 3, 240: 2}
+   c7: e25 fires 238, shared 221, lost 17 (flag False in c7 at 6), new 34 (flag False in e25 at 34); lost by tf {15: 14, 60: 3, 240: 0}, new by tf {15: 26, 60: 5, 240: 3}
+
+--- positions of e25 -> their counterpart in the variant (same side, opened −5…+40 min): Δ pnl by outcome ---
+e14: tf15 -> tf15 earlier: n 6 +189 -> +362 (Δ +174); tf15 -> tf15 later: n 4 +303 -> +210 (Δ -94); tf15 -> tf15 same: n 147 +1604 -> +1657 (Δ +53); tf15 -> tf60 later: n 2 -151 -> +109 (Δ +261); tf15 -> tf60 same: n 1 +59 -> +89 (Δ +29); tf15 not opened: n 1 +92 -> +0 (Δ -92); tf60 -> tf60 earlier: n 1 +27 -> +84 (Δ +56); tf60 -> tf60 later: n 1 -102 -> -102 (Δ +0); tf60 -> tf60 same: n 35 +655 -> +664 (Δ +9); tf60 not opened: n 3 +7 -> +0 (Δ -7); tf240 -> tf240 later: n 1 -55 -> +18 (Δ +73); tf240 -> tf240 same: n 10 +1156 -> +1056 (Δ -99); variant-only positions 13: -196
+e7: tf15 -> tf15 earlier: n 7 +260 -> +276 (Δ +16); tf15 -> tf15 later: n 7 +323 -> +126 (Δ -197); tf15 -> tf15 same: n 139 +1509 -> +1756 (Δ +248); tf15 -> tf240 later: n 1 +132 -> +244 (Δ +113); tf15 -> tf60 later: n 1 -59 -> +183 (Δ +242); tf15 -> tf60 same: n 1 +59 -> +89 (Δ +29); tf15 not opened: n 5 -128 -> +0 (Δ +128); tf60 -> tf15 later: n 1 -103 -> +16 (Δ +119); tf60 -> tf60 earlier: n 1 +27 -> +83 (Δ +56); tf60 -> tf60 later: n 1 -101 -> -101 (Δ +0); tf60 -> tf60 same: n 32 +505 -> +513 (Δ +8); tf60 not opened: n 5 +258 -> +0 (Δ -258); tf240 -> tf15 later: n 1 +112 -> -87 (Δ -199); tf240 -> tf240 same: n 8 +748 -> +648 (Δ -100); tf240 not opened: n 2 +241 -> +0 (Δ -241); variant-only positions 23: -346
+none: tf15 -> tf15 earlier: n 7 +260 -> +276 (Δ +16); tf15 -> tf15 same: n 151 +1866 -> +1896 (Δ +30); tf15 -> tf60 earlier: n 1 -17 -> +157 (Δ +174); tf15 -> tf60 later: n 1 -73 -> +102 (Δ +175); tf15 -> tf60 same: n 1 +59 -> +89 (Δ +30); tf60 -> tf15 earlier: n 1 -103 -> -90 (Δ +13); tf60 -> tf60 earlier: n 1 +27 -> +84 (Δ +57); tf60 -> tf60 same: n 37 +560 -> +578 (Δ +18); tf60 not opened: n 1 +102 -> +0 (Δ -102); tf240 -> tf240 same: n 11 +1101 -> +951 (Δ -150); variant-only positions 51: +707
+
+--- forming class of each N at the e25 fires (per fire's tf, long: -1 = would be vetoed; short: +1) ---
+N7: Buy -1: 11, Buy +0: 90, Buy +1: 5, Sell -1: 9, Sell +0: 110, Sell +1: 13
+N14: Buy -1: 6, Buy +0: 89, Buy +1: 11, Sell -1: 19, Sell +0: 108, Sell +1: 5
+N25: Buy -1: 0, Buy +0: 94, Buy +1: 12, Sell -1: 22, Sell +0: 110, Sell +1: 0

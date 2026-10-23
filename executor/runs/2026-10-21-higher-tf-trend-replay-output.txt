@@ -1,0 +1,252 @@
+trades 748276  10-16 22:29:05 -> 10-21 10:07:36
+trade feed gaps > 60 s: 19 [('10-16 23:52:38', 138), ('10-17 00:43:46', 72), ('10-17 02:46:08', 60), ('10-17 03:48:42', 71), ('10-17 07:10:46', 73), ('10-17 10:32:51', 75), ('10-17 10:51:10', 66), ('10-17 11:26:05', 73), ('10-17 11:39:01', 62), ('10-17 19:33:42', 97), ('10-18 01:53:20', 80), ('10-18 04:26:26', 72), ('10-18 04:27:38', 101), ('10-18 04:49:44', 88), ('10-18 05:08:21', 62), ('10-19 13:01:46', 5564), ('10-19 20:01:34', 9432), ('10-20 16:13:10', 305), ('10-21 02:55:41', 66)]
+tf  15: 4315 closed klines 09-06 11:00:00 -> 10-21 09:30:00; stats N7 +0.00198/0.17060, N14 +0.00190/0.11939, N25 +0.00187/0.08855
+tf  60: 2878 closed klines 06-23 11:00:00 -> 10-21 08:00:00; stats N7 +0.00791/0.33307, N14 +0.00767/0.23355, N25 +0.00759/0.17366
+tf 240: 2398 closed klines 09-16 12:00:00 -> 10-21 00:00:00; stats N7 +0.03173/0.65677, N14 +0.03081/0.46243, N25 +0.03083/0.34433
+
+=== FLAG GATE: reconstructed forming EMA-25 flag vs the stored cb_f_trend at every trade (stored present) ===
+tf  15 long : stored present 98.2%, pass stored 0.732 e25 0.732 | agreement e25 vs stored 0.9935
+tf  15 short: stored present 98.2%, pass stored 0.779 e25 0.779 | agreement e25 vs stored 0.9911
+tf  60 long : stored present 98.2%, pass stored 0.718 e25 0.718 | agreement e25 vs stored 0.9959
+tf  60 short: stored present 98.2%, pass stored 0.769 e25 0.768 | agreement e25 vs stored 0.9916
+tf 240 long : stored present 98.2%, pass stored 0.505 e25 0.505 | agreement e25 vs stored 0.9971
+tf 240 short: stored present 98.2%, pass stored 0.994 e25 0.994 | agreement e25 vs stored 0.9992
+trend cache loaded
+
+trades from 10-17 22:00:00: 600032; trades where some (tf, side) passes geometry + 1-min class: 92497
+
+=== REPRODUCTION GATE (live flags, X = 0.7) ===
+recorded CbZoneEntry fires: 188 (10-18 11:41:10 -> 10-21 10:05:15); sim fires in the span: 183
+  exact (same ms, side, tf): 177/188; within ±120 s: 4; unmatched: 7; class agrees 176/177, rule agrees 176/177
+    unmatched recorded: 10-18 11:41:10 Buy  tf  15 in_zone        up
+    unmatched recorded: 10-19 22:43:33 Sell tf 240 in_zone        down
+    unmatched recorded: 10-19 22:50:10 Sell tf  60 in_zone        down
+    unmatched recorded: 10-19 23:52:05 Sell tf 240 in_zone        down
+    unmatched recorded: 10-20 00:21:27 Buy  tf  15 in_zone        up
+    unmatched recorded: 10-20 20:26:46 Buy  tf  15 zone_rejection up
+    unmatched recorded: 10-20 20:31:49 Sell tf  60 in_zone        down
+
+=== VARIANTS, window 10-17 22:00:00 -> 10-21 10:07:36, paper (no fees); flag source changes, everything else live ===
+     live | n 211 | net   +3732 | PF  1.47 | wr  52% | R  +56.5 | hold   7.5m | risk   83 | CI90 [ +1148, +6391] P<0 0.01 | top2  +804 | stop=99/-7822 targ=74/+7036 reve=37/+4505 open=1/+13 | fires 237 (179/46/12) skip 26 | r1 136 r2 101
+      e25 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26 | r1 139 r2 99
+     none | n 262 | net   +4751 | PF  1.49 | wr  53% | R  +66.9 | hold   7.2m | risk   85 | CI90 [ +1919, +7659] P<0 0.00 | top2  +796 | stop=120/-9558 targ=73/+6137 reve=68/+8160 open=1/+13 | fires 294 (220/58/16) skip 32 | r1 174 r2 120
+  hx15<60 | n 186 | net   +2731 | PF  1.39 | wr  51% | R  +40.6 | hold   7.1m | risk   83 | CI90 [  +334, +5120] P<0 0.03 | top2  +733 | stop=90/-7031 targ=69/+7107 reve=26/+2643 open=1/+12 | fires 216 (158/46/12) skip 30 | r1 127 r2 89
+ hx15<240 | n 190 | net   +2944 | PF  1.40 | wr  51% | R  +44.4 | hold   7.4m | risk   83 | CI90 [  +498, +5440] P<0 0.02 | top2  +735 | stop=92/-7228 targ=68/+6658 reve=29/+3501 open=1/+13 | fires 217 (159/46/12) skip 27 | r1 126 r2 91
+ hx60<240 | n 209 | net   +3895 | PF  1.51 | wr  52% | R  +56.9 | hold   7.5m | risk   80 | CI90 [ +1397, +6438] P<0 0.01 | top2  +805 | stop=98/-7637 targ=74/+7080 reve=36/+4439 open=1/+13 | fires 231 (180/39/12) skip 22 | r1 136 r2 95
+   ladder | n 161 | net   +3458 | PF  1.57 | wr  52% | R  +49.2 | hold   7.1m | risk   85 | CI90 [ +1085, +5932] P<0 0.01 | top2  +753 | stop=76/-6014 targ=66/+7454 reve=18/+2005 open=1/+13 | fires 194 (143/39/12) skip 33 | r1 113 r2 81
+  all<240 | n 177 | net   +3494 | PF  1.52 | wr  51% | R  +50.7 | hold   7.1m | risk   84 | CI90 [ +1085, +5985] P<0 0.01 | top2  +753 | stop=84/-6629 targ=67/+7094 reve=25/+3017 open=1/+13 | fires 210 (159/39/12) skip 33 | r1 122 r2 88
+  rp15=60 | n 194 | net   +2820 | PF  1.38 | wr  51% | R  +41.5 | hold   7.2m | risk   85 | CI90 [  +449, +5220] P<0 0.03 | top2  +734 | stop=93/-7316 targ=69/+6989 reve=31/+3135 open=1/+13 | fires 227 (169/46/12) skip 33 | r1 134 r2 93
+ rp15=240 | n 211 | net   +3059 | PF  1.38 | wr  51% | R  +47.6 | hold   7.3m | risk   84 | CI90 [  +505, +5721] P<0 0.03 | top2  +735 | stop=102/-8103 targ=67/+6232 reve=41/+4917 open=1/+13 | fires 241 (183/46/12) skip 30 | r1 140 r2 101
+ rp60=240 | n 217 | net   +4479 | PF  1.55 | wr  52% | R  +62.5 | hold   7.8m | risk   80 | CI90 [ +1898, +7223] P<0 0.00 | top2  +859 | stop=103/-8036 targ=72/+6809 reve=41/+5694 open=1/+13 | fires 240 (180/48/12) skip 23 | r1 143 r2 97
+rpall=240 | n 204 | net   +4281 | PF  1.55 | wr  52% | R  +60.5 | hold   7.4m | risk   85 | CI90 [ +1632, +7056] P<0 0.00 | top2  +845 | stop=97/-7739 targ=65/+6612 reve=41/+5395 open=1/+13 | fires 243 (183/48/12) skip 39 | r1 143 r2 100
+  al15<60 | n  88 | net    +747 | PF  1.17 | wr  40% | R  +13.3 | hold  11.3m | risk   91 | CI90 [ -1249, +2746] P<0 0.26 | top2  +733 | stop=53/-4340 targ=28/+3789 reve=6/+1286 open=1/+12 | fires 101 (43/46/12) skip 13 | r1 57 r2 44
+ al15<240 | n  91 | net    +373 | PF  1.08 | wr  38% | R  +14.1 | hold  10.2m | risk   87 | CI90 [ -1515, +2460] P<0 0.38 | top2  +731 | stop=56/-4685 targ=28/+3981 reve=6/+1064 open=1/+12 | fires 109 (51/46/12) skip 18 | r1 64 r2 45
+ al60<240 | n 190 | net   +4140 | PF  1.63 | wr  53% | R  +55.2 | hold   7.6m | risk   83 | CI90 [ +1757, +6475] P<0 0.00 | top2  +805 | stop=85/-6541 targ=79/+7512 reve=26/+3169 | fires 205 (183/10/12) skip 15 | r1 126 r2 79
+ alladder | n  36 | net    +994 | PF  1.53 | wr  42% | R  +12.2 | hold  13.6m | risk  100 | CI90 [  -532, +2527] P<0 0.15 | top2  +753 | stop=20/-1860 targ=15/+2857 open=1/-4 | fires 47 (25/10/12) skip 11 | r1 32 r2 15
+  cl15<60 | n 182 | net   +2534 | PF  1.36 | wr  49% | R  +39.0 | hold   7.2m | risk   82 | CI90 [  +161, +4909] P<0 0.04 | top2  +733 | stop=90/-7029 targ=67/+7031 reve=24/+2519 open=1/+12 | fires 213 (155/46/12) skip 31 | r1 126 r2 87
+ clladder | n 155 | net   +2892 | PF  1.48 | wr  50% | R  +39.4 | hold   7.2m | risk   84 | CI90 [  +595, +5258] P<0 0.02 | top2  +753 | stop=76/-5990 targ=62/+7130 reve=16/+1739 open=1/+13 | fires 188 (137/39/12) skip 33 | r1 111 r2 77
+  nladder | n 180 | net   +3716 | PF  1.53 | wr  51% | R  +51.5 | hold   7.2m | risk   86 | CI90 [ +1158, +6399] P<0 0.01 | top2  +845 | stop=87/-6984 targ=62/+6533 reve=30/+4155 open=1/+13 | fires 215 (151/48/16) skip 35 | r1 129 r2 86
+   n15<60 | n 212 | net   +3548 | PF  1.43 | wr  50% | R  +49.3 | hold   7.4m | risk   85 | CI90 [  +884, +6232] P<0 0.01 | top2  +844 | stop=103/-8171 targ=68/+6652 reve=40/+5054 open=1/+13 | fires 244 (170/58/16) skip 32 | r1 146 r2 98
+livex15<60 | n 186 | net   +2725 | PF  1.38 | wr  51% | R  +40.8 | hold   7.1m | risk   83 | CI90 [  +331, +5103] P<0 0.03 | top2  +733 | stop=90/-7048 targ=69/+7093 reve=26/+2667 open=1/+12 | fires 216 (158/46/12) skip 30 | r1 127 r2 89
+livexladder | n 161 | net   +3479 | PF  1.58 | wr  52% | R  +49.7 | hold   7.1m | risk   84 | CI90 [ +1094, +5966] P<0 0.01 | top2  +753 | stop=76/-6023 targ=66/+7441 reve=18/+2048 open=1/+13 | fires 194 (143/39/12) skip 33 | r1 114 r2 80
+
+--- by the opening fire's tf: n, net, PF ---
+     live | tf15: 160, +2021, PF 1.34 | tf60: 40, +611, PF 1.39 | tf240: 11, +1100, PF 4.24
+      e25 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+     none | tf15: 197, +2374, PF 1.33 | tf60: 50, +1656, PF 1.93 | tf240: 15, +720, PF 2.15
+  hx15<60 | tf15: 134, +1566, PF 1.31 | tf60: 41, +565, PF 1.34 | tf240: 11, +601, PF 2.42
+ hx15<240 | tf15: 137, +1899, PF 1.38 | tf60: 42, +412, PF 1.23 | tf240: 11, +633, PF 2.49
+ hx60<240 | tf15: 163, +1978, PF 1.33 | tf60: 35, +816, PF 1.64 | tf240: 11, +1101, PF 4.24
+   ladder | tf15: 116, +1846, PF 1.44 | tf60: 34, +670, PF 1.46 | tf240: 11, +941, PF 3.21
+  all<240 | tf15: 132, +2028, PF 1.42 | tf60: 34, +524, PF 1.36 | tf240: 11, +942, PF 3.21
+  rp15=60 | tf15: 143, +1550, PF 1.29 | tf60: 40, +668, PF 1.43 | tf240: 11, +601, PF 2.42
+ rp15=240 | tf15: 158, +2066, PF 1.35 | tf60: 42, +412, PF 1.23 | tf240: 11, +581, PF 2.37
+ rp60=240 | tf15: 162, +1997, PF 1.33 | tf60: 44, +1380, PF 1.83 | tf240: 11, +1102, PF 4.24
+rpall=240 | tf15: 152, +2138, PF 1.38 | tf60: 41, +1252, PF 1.75 | tf240: 11, +890, PF 3.09
+  al15<60 | tf15: 34, +261, PF 1.17 | tf60: 43, -27, PF 0.99 | tf240: 11, +513, PF 1.99
+ al15<240 | tf15: 36, +164, PF 1.09 | tf60: 44, -102, PF 0.96 | tf240: 11, +310, PF 1.51
+ al60<240 | tf15: 171, +2417, PF 1.39 | tf60: 8, +642, PF 7.30 | tf240: 11, +1081, PF 4.18
+ alladder | tf15: 17, +421, PF 1.48 | tf60: 7, +352, PF 2.23 | tf240: 12, +221, PF 1.32
+  cl15<60 | tf15: 131, +1409, PF 1.28 | tf60: 40, +524, PF 1.31 | tf240: 11, +601, PF 2.42
+ clladder | tf15: 110, +1545, PF 1.38 | tf60: 34, +688, PF 1.48 | tf240: 11, +659, PF 2.27
+  nladder | tf15: 122, +1774, PF 1.40 | tf60: 43, +1231, PF 1.67 | tf240: 15, +711, PF 2.00
+   n15<60 | tf15: 145, +1380, PF 1.25 | tf60: 52, +1401, PF 1.69 | tf240: 15, +767, PF 2.24
+livex15<60 | tf15: 134, +1534, PF 1.31 | tf60: 41, +590, PF 1.35 | tf240: 11, +601, PF 2.42
+livexladder | tf15: 116, +1816, PF 1.43 | tf60: 34, +722, PF 1.50 | tf240: 11, +941, PF 3.21
+
+--- by side: n, net ---
+     live | Buy: 97, +1010 | Sell: 114, +2722 | in_: 122, +2619 | zon: 89, +1112
+      e25 | Buy: 97, +1048 | Sell: 115, +2735 | in_: 125, +2886 | zon: 87, +897
+     none | Buy: 121, +1681 | Sell: 141, +3069 | in_: 155, +4488 | zon: 107, +262
+  hx15<60 | Buy: 92, +740 | Sell: 94, +1992 | in_: 112, +1909 | zon: 74, +823
+ hx15<240 | Buy: 80, +629 | Sell: 110, +2314 | in_: 113, +1905 | zon: 77, +1038
+ hx60<240 | Buy: 94, +1160 | Sell: 115, +2735 | in_: 124, +2885 | zon: 85, +1010
+   ladder | Buy: 73, +1069 | Sell: 88, +2389 | in_: 95, +2259 | zon: 66, +1199
+  all<240 | Buy: 73, +873 | Sell: 104, +2621 | in_: 104, +2196 | zon: 73, +1298
+  rp15=60 | Buy: 95, +994 | Sell: 99, +1825 | in_: 117, +1996 | zon: 77, +823
+ rp15=240 | Buy: 81, +829 | Sell: 130, +2230 | in_: 126, +2331 | zon: 85, +728
+ rp60=240 | Buy: 94, +1160 | Sell: 123, +3320 | in_: 131, +3518 | zon: 86, +961
+rpall=240 | Buy: 74, +1073 | Sell: 130, +3207 | in_: 121, +3358 | zon: 83, +922
+  al15<60 | Buy: 46, +60 | Sell: 42, +687 | in_: 51, +840 | zon: 37, -93
+ al15<240 | Buy: 30, +144 | Sell: 61, +229 | in_: 56, +518 | zon: 35, -145
+ al60<240 | Buy: 82, +1204 | Sell: 108, +2936 | in_: 119, +3129 | zon: 71, +1010
+ alladder | Buy: 6, -90 | Sell: 30, +1084 | in_: 27, +758 | zon: 9, +236
+  cl15<60 | Buy: 92, +758 | Sell: 90, +1776 | in_: 111, +1851 | zon: 71, +683
+ clladder | Buy: 71, +1003 | Sell: 84, +1889 | in_: 93, +2006 | zon: 62, +886
+  nladder | Buy: 78, +933 | Sell: 102, +2784 | in_: 110, +2636 | zon: 70, +1081
+   n15<60 | Buy: 102, +934 | Sell: 110, +2614 | in_: 129, +3125 | zon: 83, +423
+livex15<60 | Buy: 92, +703 | Sell: 94, +2022 | in_: 112, +1890 | zon: 74, +835
+livexladder | Buy: 73, +1059 | Sell: 88, +2420 | in_: 96, +2291 | zon: 65, +1188
+
+--- fees: net after f %/side; bp = gross per trade in bp of median notional ---
+  variant |   gross | notional | bp/trade |   0.01% |   0.02% |   0.05% |   0.10% | breakeven
+     live |   +3732 |    50649 |     +3.5 |   +1737 |    -257 |   -6241 |  -16214 | 0.019 %
+      e25 |   +3783 |    50695 |     +3.5 |   +1775 |    -232 |   -6254 |  -16292 | 0.019 %
+     none |   +4751 |    50579 |     +3.6 |   +2308 |    -135 |   -7464 |  -19679 | 0.019 %
+  hx15<60 |   +2731 |    50192 |     +2.9 |    +990 |    -752 |   -5978 |  -14687 | 0.016 %
+ hx15<240 |   +2944 |    50349 |     +3.1 |   +1167 |    -610 |   -5940 |  -14823 | 0.017 %
+ hx60<240 |   +3895 |    50719 |     +3.7 |   +1918 |     -59 |   -5990 |  -15875 | 0.020 %
+   ladder |   +3458 |    50573 |     +4.2 |   +1960 |    +463 |   -4028 |  -11514 | 0.023 %
+  all<240 |   +3494 |    50617 |     +3.9 |   +1843 |    +192 |   -4761 |  -13016 | 0.021 %
+  rp15=60 |   +2820 |    50149 |     +2.9 |   +1003 |    -814 |   -6265 |  -15350 | 0.016 %
+ rp15=240 |   +3059 |    50290 |     +2.9 |   +1088 |    -883 |   -6796 |  -16652 | 0.016 %
+ rp60=240 |   +4479 |    50721 |     +4.1 |   +2420 |    +361 |   -5815 |  -16110 | 0.022 %
+rpall=240 |   +4281 |    50561 |     +4.2 |   +2376 |    +471 |   -5244 |  -14769 | 0.022 %
+  al15<60 |    +747 |    50083 |     +1.7 |     -41 |    -829 |   -3194 |   -7134 | 0.009 %
+ al15<240 |    +373 |    50031 |     +0.8 |    -449 |   -1271 |   -3737 |   -7846 | 0.005 %
+ al60<240 |   +4140 |    50593 |     +4.3 |   +2341 |    +543 |   -4851 |  -13842 | 0.023 %
+ alladder |    +994 |    42384 |     +6.5 |    +694 |    +394 |    -506 |   -2006 | 0.033 %
+  cl15<60 |   +2534 |    50179 |     +2.8 |    +827 |    -880 |   -6001 |  -14536 | 0.015 %
+ clladder |   +2892 |    50481 |     +3.7 |   +1449 |      +6 |   -4322 |  -11536 | 0.020 %
+  nladder |   +3716 |    50481 |     +4.1 |   +2050 |    +384 |   -4616 |  -12948 | 0.022 %
+   n15<60 |   +3548 |    50242 |     +3.3 |   +1566 |    -417 |   -6364 |  -16276 | 0.018 %
+livex15<60 |   +2725 |    50178 |     +2.9 |    +982 |    -760 |   -5988 |  -14701 | 0.016 %
+livexladder |   +3479 |    50569 |     +4.3 |   +1981 |    +483 |   -4011 |  -11501 | 0.023 %
+
+--- paired vs e25: trades matched by (open trade, side); unmatched enter as (pnl − 0) ---
+     live | shared 201 | only-   live  10 | only-e25  11 | Δnet     -51 | CI90 [  -721,   +604] | P(Δ<0) 0.55
+      e25 | shared 212 | only-    e25   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+     none | shared 201 | only-   none  61 | only-e25  11 | Δnet    +968 | CI90 [  -628,  +2582] | P(Δ<0) 0.15
+  hx15<60 | shared 183 | only-hx15<60   3 | only-e25  29 | Δnet   -1051 | CI90 [ -2396,   +149] | P(Δ<0) 0.92
+ hx15<240 | shared 188 | only-hx15<240   2 | only-e25  24 | Δnet    -839 | CI90 [ -2075,   +244] | P(Δ<0) 0.89
+ hx60<240 | shared 205 | only-hx60<240   4 | only-e25   7 | Δnet    +112 | CI90 [  -328,   +553] | P(Δ<0) 0.34
+   ladder | shared 157 | only- ladder   4 | only-e25  55 | Δnet    -325 | CI90 [ -1930,  +1242] | P(Δ<0) 0.62
+  all<240 | shared 175 | only-all<240   2 | only-e25  37 | Δnet    -289 | CI90 [ -1708,  +1080] | P(Δ<0) 0.61
+  rp15=60 | shared 179 | only-rp15=60  15 | only-e25  33 | Δnet    -963 | CI90 [ -2436,   +333] | P(Δ<0) 0.87
+ rp15=240 | shared 180 | only-rp15=240  31 | only-e25  32 | Δnet    -724 | CI90 [ -2264,   +788] | P(Δ<0) 0.77
+ rp60=240 | shared 203 | only-rp60=240  14 | only-e25   9 | Δnet    +696 | CI90 [  -217,  +1769] | P(Δ<0) 0.12
+rpall=240 | shared 166 | only-rpall=240  38 | only-e25  46 | Δnet    +498 | CI90 [ -1385,  +2448] | P(Δ<0) 0.33
+  al15<60 | shared  81 | only-al15<60   7 | only-e25 131 | Δnet   -3036 | CI90 [ -5424,   -801] | P(Δ<0) 0.99
+ al15<240 | shared  85 | only-al15<240   6 | only-e25 127 | Δnet   -3410 | CI90 [ -5745,  -1261] | P(Δ<0) 0.99
+ al60<240 | shared 182 | only-al60<240   8 | only-e25  30 | Δnet    +357 | CI90 [  -598,  +1298] | P(Δ<0) 0.27
+ alladder | shared  34 | only-alladder   2 | only-e25 178 | Δnet   -2789 | CI90 [ -5304,   -324] | P(Δ<0) 0.97
+  cl15<60 | shared 182 | only-cl15<60   0 | only-e25  30 | Δnet   -1249 | CI90 [ -2523,    -40] | P(Δ<0) 0.96
+ clladder | shared 155 | only-clladder   0 | only-e25  57 | Δnet    -891 | CI90 [ -2601,   +738] | P(Δ<0) 0.81
+  nladder | shared 153 | only-nladder  27 | only-e25  59 | Δnet     -66 | CI90 [ -2023,  +1870] | P(Δ<0) 0.52
+   n15<60 | shared 181 | only- n15<60  31 | only-e25  31 | Δnet    -235 | CI90 [ -1676,  +1317] | P(Δ<0) 0.61
+livex15<60 | shared 180 | only-livex15<60   6 | only-e25  32 | Δnet   -1058 | CI90 [ -2429,   +188] | P(Δ<0) 0.92
+livexladder | shared 155 | only-livexladder   6 | only-e25  57 | Δnet    -304 | CI90 [ -1928,  +1253] | P(Δ<0) 0.63
+
+--- paired vs live: trades matched by (open trade, side); unmatched enter as (pnl − 0) ---
+     live | shared 211 | only-   live   0 | only-live   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+      e25 | shared 201 | only-    e25  11 | only-live  10 | Δnet     +51 | CI90 [  -572,   +703] | P(Δ<0) 0.45
+     none | shared 200 | only-   none  62 | only-live  11 | Δnet   +1019 | CI90 [  -515,  +2635] | P(Δ<0) 0.14
+  hx15<60 | shared 179 | only-hx15<60   7 | only-live  32 | Δnet   -1000 | CI90 [ -2340,   +197] | P(Δ<0) 0.92
+ hx15<240 | shared 178 | only-hx15<240  12 | only-live  33 | Δnet    -788 | CI90 [ -2153,   +436] | P(Δ<0) 0.84
+ hx60<240 | shared 194 | only-hx60<240  15 | only-live  17 | Δnet    +163 | CI90 [  -613,   +949] | P(Δ<0) 0.35
+   ladder | shared 153 | only- ladder   8 | only-live  58 | Δnet    -274 | CI90 [ -1878,  +1201] | P(Δ<0) 0.61
+  all<240 | shared 165 | only-all<240  12 | only-live  46 | Δnet    -238 | CI90 [ -1815,  +1274] | P(Δ<0) 0.60
+  rp15=60 | shared 178 | only-rp15=60  16 | only-live  33 | Δnet    -912 | CI90 [ -2335,   +408] | P(Δ<0) 0.87
+ rp15=240 | shared 178 | only-rp15=240  33 | only-live  33 | Δnet    -673 | CI90 [ -2221,   +773] | P(Δ<0) 0.76
+ rp60=240 | shared 194 | only-rp60=240  23 | only-live  17 | Δnet    +747 | CI90 [  -375,  +1998] | P(Δ<0) 0.15
+rpall=240 | shared 165 | only-rpall=240  39 | only-live  46 | Δnet    +549 | CI90 [ -1412,  +2440] | P(Δ<0) 0.33
+  al15<60 | shared  80 | only-al15<60   8 | only-live 131 | Δnet   -2985 | CI90 [ -5262,   -825] | P(Δ<0) 0.99
+ al15<240 | shared  84 | only-al15<240   7 | only-live 127 | Δnet   -3359 | CI90 [ -5630,  -1179] | P(Δ<0) 0.99
+ al60<240 | shared 172 | only-al60<240  18 | only-live  39 | Δnet    +408 | CI90 [  -731,  +1599] | P(Δ<0) 0.27
+ alladder | shared  34 | only-alladder   2 | only-live 177 | Δnet   -2738 | CI90 [ -5211,   -245] | P(Δ<0) 0.96
+  cl15<60 | shared 178 | only-cl15<60   4 | only-live  33 | Δnet   -1198 | CI90 [ -2568,     +2] | P(Δ<0) 0.95
+ clladder | shared 152 | only-clladder   3 | only-live  59 | Δnet    -840 | CI90 [ -2527,   +738] | P(Δ<0) 0.81
+  nladder | shared 153 | only-nladder  27 | only-live  58 | Δnet     -15 | CI90 [ -1865,  +1883] | P(Δ<0) 0.50
+   n15<60 | shared 181 | only- n15<60  31 | only-live  30 | Δnet    -184 | CI90 [ -1662,  +1315] | P(Δ<0) 0.58
+livex15<60 | shared 184 | only-livex15<60   2 | only-live  27 | Δnet   -1007 | CI90 [ -2295,   +125] | P(Δ<0) 0.92
+livexladder | shared 159 | only-livexladder   2 | only-live  52 | Δnet    -253 | CI90 [ -1863,  +1234] | P(Δ<0) 0.61
+
+--- stability: net by half (split 10-19 16:03:48) and by UTC day, no fees ---
+  variant |      H1   n |      H2   n |  10-17 n |  10-18 n |  10-19 n |  10-20 n |  10-21 n
+     live |   +1733 101 |   +1999 110 |    +69  5 |  +1463 64 |   +334 40 |  +1692 74 |   +173 28
+      e25 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+     none |   +1919 132 |   +2832 130 |   +328  7 |  +1157 80 |   +674 60 |  +1920 82 |   +672 33
+  hx15<60 |    +691  84 |   +2041 102 |   -203  2 |   +794 57 |   +236 33 |  +1680 72 |   +225 22
+ hx15<240 |    +992  79 |   +1952 111 |   -203  2 |   +967 45 |   +364 40 |  +1695 75 |   +120 28
+ hx60<240 |   +1838  99 |   +2057 110 |   +130  5 |  +1481 62 |   +470 39 |  +1694 75 |   +121 28
+   ladder |   +1314  60 |   +2143 101 |   -203  2 |  +1417 33 |   +341 32 |  +1676 72 |   +226 22
+  all<240 |   +1441  67 |   +2053 110 |   -203  2 |  +1417 33 |   +468 39 |  +1691 75 |   +121 28
+  rp15=60 |    +660  88 |   +2160 106 |   -203  2 |   +693 58 |   +382 39 |  +1722 73 |   +225 22
+ rp15=240 |    +954  90 |   +2105 121 |   -203  2 |   +866 46 |   +343 51 |  +1791 81 |   +261 31
+ rp60=240 |   +2059 102 |   +2420 115 |   +130  5 |  +1481 62 |   +691 42 |  +1712 77 |   +466 31
+rpall=240 |   +1546  81 |   +2734 123 |   -203  2 |  +1316 34 |   +590 53 |  +1906 82 |   +671 33
+  al15<60 |    +930  46 |    -183  42 |   -203  2 |  +1170 29 |   -232 19 |   +131 29 |   -120  9
+ al15<240 |    +691  54 |    -319  37 |   -203  2 |   +967 45 |   -456 13 |   +245 25 |   -181  6
+ al60<240 |   +1901  94 |   +2239  96 |   +130  5 |  +1481 62 |   +533 34 |  +1802 64 |   +195 25
+ alladder |    +858  26 |    +136  10 |   -203  2 |  +1255 22 |   -286  5 |   +231  6 |     -4  1
+  cl15<60 |    +649  83 |   +1885  99 |   -203  2 |   +803 57 |   +186 32 |  +1614 71 |   +135 20
+ clladder |   +1265  59 |   +1627  96 |   -203  2 |  +1417 33 |    -74 29 |  +1616 71 |   +135 20
+  nladder |   +1338  71 |   +2378 109 |   -150  3 |  +1114 36 |   +449 41 |  +1733 75 |   +570 25
+   n15<60 |   +1051  99 |   +2497 113 |   -150  3 |   +828 64 |   +561 45 |  +1740 75 |   +570 25
+livex15<60 |    +660  84 |   +2065 102 |   -203  2 |   +776 57 |   +217 33 |  +1667 72 |   +268 22
+livexladder |   +1302  60 |   +2177 101 |   -203  2 |  +1417 33 |   +323 32 |  +1672 72 |   +269 22
+
+--- fire-level mechanism vs e25: fires of e25 absent in the variant because its flag was False there, and the variant's own new fires ---
+ none: e25 fires 238, shared 225, lost 13 (flag False in none at 0), new 69 (flag False in e25 at 69); lost by tf {15: 11, 60: 2, 240: 0}, new by tf {15: 51, 60: 14, 240: 4}
+hx15<60: e25 fires 238, shared 213, lost 25 (flag False in hx15<60 at 24), new 3 (flag False in e25 at 0); lost by tf {15: 24, 60: 1, 240: 0}, new by tf {15: 2, 60: 1, 240: 0}
+hx15<240: e25 fires 238, shared 216, lost 22 (flag False in hx15<240 at 21), new 1 (flag False in e25 at 0); lost by tf {15: 21, 60: 1, 240: 0}, new by tf {15: 0, 60: 1, 240: 0}
+hx60<240: e25 fires 238, shared 228, lost 10 (flag False in hx60<240 at 9), new 3 (flag False in e25 at 0); lost by tf {15: 1, 60: 9, 240: 0}, new by tf {15: 1, 60: 2, 240: 0}
+ladder: e25 fires 238, shared 190, lost 48 (flag False in ladder at 48), new 4 (flag False in e25 at 0); lost by tf {15: 39, 60: 9, 240: 0}, new by tf {15: 2, 60: 2, 240: 0}
+all<240: e25 fires 238, shared 208, lost 30 (flag False in all<240 at 30), new 2 (flag False in e25 at 0); lost by tf {15: 21, 60: 9, 240: 0}, new by tf {15: 0, 60: 2, 240: 0}
+rp15=60: e25 fires 238, shared 209, lost 29 (flag False in rp15=60 at 24), new 18 (flag False in e25 at 15); lost by tf {15: 28, 60: 1, 240: 0}, new by tf {15: 17, 60: 1, 240: 0}
+rp15=240: e25 fires 238, shared 207, lost 31 (flag False in rp15=240 at 21), new 34 (flag False in e25 at 33); lost by tf {15: 30, 60: 1, 240: 0}, new by tf {15: 33, 60: 1, 240: 0}
+rp60=240: e25 fires 238, shared 227, lost 11 (flag False in rp60=240 at 9), new 13 (flag False in e25 at 10); lost by tf {15: 1, 60: 10, 240: 0}, new by tf {15: 1, 60: 12, 240: 0}
+rpall=240: e25 fires 238, shared 198, lost 40 (flag False in rpall=240 at 30), new 45 (flag False in e25 at 43); lost by tf {15: 30, 60: 10, 240: 0}, new by tf {15: 33, 60: 12, 240: 0}
+al15<60: e25 fires 238, shared 93, lost 145 (flag False in al15<60 at 144), new 8 (flag False in e25 at 0); lost by tf {15: 144, 60: 1, 240: 0}, new by tf {15: 7, 60: 1, 240: 0}
+al15<240: e25 fires 238, shared 106, lost 132 (flag False in al15<240 at 131), new 3 (flag False in e25 at 0); lost by tf {15: 131, 60: 1, 240: 0}, new by tf {15: 2, 60: 1, 240: 0}
+al60<240: e25 fires 238, shared 198, lost 40 (flag False in al60<240 at 36), new 7 (flag False in e25 at 0); lost by tf {15: 4, 60: 36, 240: 0}, new by tf {15: 7, 60: 0, 240: 0}
+alladder: e25 fires 238, shared 43, lost 195 (flag False in alladder at 194), new 4 (flag False in e25 at 0); lost by tf {15: 158, 60: 36, 240: 1}, new by tf {15: 3, 60: 0, 240: 1}
+cl15<60: e25 fires 238, shared 213, lost 25 (flag False in cl15<60 at 25), new 0 (flag False in e25 at 0); lost by tf {15: 25, 60: 0, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+clladder: e25 fires 238, shared 188, lost 50 (flag False in clladder at 50), new 0 (flag False in e25 at 0); lost by tf {15: 43, 60: 7, 240: 0}, new by tf {15: 0, 60: 0, 240: 0}
+nladder: e25 fires 238, shared 185, lost 53 (flag False in nladder at 48), new 30 (flag False in e25 at 26); lost by tf {15: 43, 60: 10, 240: 0}, new by tf {15: 14, 60: 12, 240: 4}
+n15<60: e25 fires 238, shared 208, lost 30 (flag False in n15<60 at 24), new 36 (flag False in e25 at 33); lost by tf {15: 28, 60: 2, 240: 0}, new by tf {15: 18, 60: 14, 240: 4}
+livex15<60: e25 fires 238, shared 210, lost 28 (flag False in livex15<60 at 26), new 6 (flag False in e25 at 1); lost by tf {15: 26, 60: 2, 240: 0}, new by tf {15: 4, 60: 2, 240: 0}
+livexladder: e25 fires 238, shared 188, lost 50 (flag False in livexladder at 49), new 6 (flag False in e25 at 1); lost by tf {15: 41, 60: 9, 240: 0}, new by tf {15: 4, 60: 2, 240: 0}
+
+--- positions of e25 -> their counterpart in the variant (same side, opened −5…+40 min): Δ pnl by outcome ---
+hx15<60: tf15 -> tf15 later: n 5 +366 -> +187 (Δ -179); tf15 -> tf15 same: n 129 +1334 -> +1379 (Δ +45); tf15 -> tf60 later: n 3 -70 -> +361 (Δ +431); tf15 not opened: n 24 +466 -> +0 (Δ -466); tf60 -> tf240 later: n 1 +100 -> -87 (Δ -187); tf60 -> tf60 same: n 38 +274 -> +204 (Δ -70); tf60 not opened: n 1 +213 -> +0 (Δ -213); tf240 -> tf240 same: n 10 +693 -> +688 (Δ -5); tf240 not opened: n 1 +408 -> +0 (Δ -408); variant-only positions 0: +0
+ladder: tf15 -> tf15 later: n 5 +366 -> +187 (Δ -178); tf15 -> tf15 same: n 111 +1612 -> +1659 (Δ +47); tf15 -> tf60 later: n 2 -130 -> +426 (Δ +556); tf15 not opened: n 43 +247 -> +0 (Δ -247); tf60 -> tf240 later: n 1 +100 -> -87 (Δ -187); tf60 -> tf60 later: n 2 -170 -> -179 (Δ -8); tf60 -> tf60 same: n 30 +573 -> +423 (Δ -150); tf60 not opened: n 7 +84 -> +0 (Δ -84); tf240 -> tf240 same: n 10 +693 -> +1028 (Δ +336); tf240 not opened: n 1 +408 -> +0 (Δ -408); variant-only positions 0: +0
+al15<60: tf15 -> tf15 later: n 4 +96 -> +21 (Δ -75); tf15 -> tf15 same: n 30 +189 -> +240 (Δ +50); tf15 -> tf240 later: n 5 +38 -> +813 (Δ +775); tf15 -> tf60 later: n 27 -11 -> -437 (Δ -426); tf15 not opened: n 95 +1782 -> +0 (Δ -1782); tf60 -> tf240 later: n 1 +100 -> -87 (Δ -187); tf60 -> tf60 later: n 1 -51 -> -87 (Δ -36); tf60 -> tf60 same: n 15 +376 -> +496 (Δ +120); tf60 not opened: n 23 +162 -> +0 (Δ -162); tf240 -> tf240 same: n 5 +66 -> -213 (Δ -279); tf240 not opened: n 6 +1035 -> +0 (Δ -1035); variant-only positions 0: +0
+rp15=60: tf15 -> tf15 earlier: n 2 -27 -> -178 (Δ -151); tf15 -> tf15 later: n 5 +366 -> +187 (Δ -179); tf15 -> tf15 same: n 126 +1434 -> +1517 (Δ +84); tf15 -> tf60 later: n 4 -143 -> +463 (Δ +607); tf15 not opened: n 24 +466 -> +0 (Δ -466); tf60 -> tf15 earlier: n 1 -103 -> -89 (Δ +14); tf60 -> tf240 later: n 1 +100 -> -87 (Δ -187); tf60 -> tf60 same: n 36 +275 -> +205 (Δ -70); tf60 not opened: n 2 +315 -> +0 (Δ -315); tf240 -> tf240 same: n 10 +693 -> +689 (Δ -4); tf240 not opened: n 1 +408 -> +0 (Δ -408); variant-only positions 9: +113
+none: tf15 -> tf15 earlier: n 7 +260 -> +276 (Δ +16); tf15 -> tf15 same: n 151 +1866 -> +1896 (Δ +30); tf15 -> tf60 earlier: n 1 -17 -> +157 (Δ +174); tf15 -> tf60 later: n 1 -73 -> +102 (Δ +175); tf15 -> tf60 same: n 1 +59 -> +89 (Δ +30); tf60 -> tf15 earlier: n 1 -103 -> -90 (Δ +13); tf60 -> tf60 earlier: n 1 +27 -> +84 (Δ +57); tf60 -> tf60 same: n 37 +560 -> +578 (Δ +18); tf60 not opened: n 1 +102 -> +0 (Δ -102); tf240 -> tf240 same: n 11 +1101 -> +951 (Δ -150); variant-only positions 51: +707
+nladder: tf15 -> tf15 earlier: n 2 -27 -> -179 (Δ -152); tf15 -> tf15 later: n 5 +366 -> +188 (Δ -178); tf15 -> tf15 same: n 108 +1712 -> +1798 (Δ +86); tf15 -> tf240 later: n 2 -54 -> -202 (Δ -148); tf15 -> tf60 earlier: n 1 -17 -> +156 (Δ +173); tf15 -> tf60 later: n 6 -366 -> +1034 (Δ +1400); tf15 not opened: n 37 +481 -> +0 (Δ -481); tf60 -> tf240 later: n 1 +100 -> -87 (Δ -187); tf60 -> tf60 earlier: n 1 +27 -> +84 (Δ +56); tf60 -> tf60 later: n 2 -170 -> -179 (Δ -8); tf60 -> tf60 same: n 28 +443 -> +292 (Δ -151); tf60 not opened: n 8 +187 -> +0 (Δ -187); tf240 -> tf240 same: n 10 +693 -> +1028 (Δ +335); tf240 not opened: n 1 +408 -> +0 (Δ -408); variant-only positions 14: -216
+
+--- e25 fires: forming EMA-25 class of each tf at the fire (long: -1 = would be vetoed, +1 = aligned; short mirrored) ---
+fire tf  15, class of tf  15: Buy -1:   0, Buy +0:  66, Buy +1:  10, Sell -1:  15, Sell +0:  89, Sell +1:   0
+fire tf  15, class of tf  60: Buy -1:   6, Buy +0:  56, Buy +1:  14, Sell -1:  22, Sell +0:  64, Sell +1:  18
+fire tf  15, class of tf 240: Buy -1:  21, Buy +0:  55, Buy +1:   0, Sell -1:  49, Sell +0:  55, Sell +1:   0
+fire tf  60, class of tf  15: Buy -1:   5, Buy +0:  19, Buy +1:   1, Sell -1:   2, Sell +0:  16, Sell +1:   3
+fire tf  60, class of tf  60: Buy -1:   0, Buy +0:  23, Buy +1:   2, Sell -1:   4, Sell +0:  17, Sell +1:   0
+fire tf  60, class of tf 240: Buy -1:   9, Buy +0:  16, Buy +1:   0, Sell -1:  10, Sell +0:  11, Sell +1:   0
+fire tf 240, class of tf  15: Buy -1:   1, Buy +0:   4, Buy +1:   0, Sell -1:   0, Sell +0:   4, Sell +1:   3
+fire tf 240, class of tf  60: Buy -1:   0, Buy +0:   5, Buy +1:   0, Sell -1:   1, Sell +0:   4, Sell +1:   2
+fire tf 240, class of tf 240: Buy -1:   0, Buy +0:   5, Buy +1:   0, Sell -1:   3, Sell +0:   4, Sell +1:   0
+
+--- e25 POSITIONS by opening tf, split by the higher tf's flag / alignment at the open: n, net, PF, stop share ---
+tf  15 by tf  60 veto pass = True : n 137, net  +1189, PF 1.22, stop 50%, wr 49%, mean    +9
+tf  15 by tf  60 veto pass = False: n  24, net   +906, PF 2.43, stop 33%, wr 62%, mean   +38
+tf  15 by tf  60 aligned   = True : n  32, net   +218, PF 1.15, stop 59%, wr 41%, mean    +7
+tf  15 by tf  60 aligned   = False: n 129, net  +1877, PF 1.42, stop 45%, wr 53%, mean   +15
+tf  15 by tf 240 veto pass = True : n 142, net  +1691, PF 1.31, stop 49%, wr 50%, mean   +12
+tf  15 by tf 240 veto pass = False: n  19, net   +404, PF 1.68, stop 42%, wr 58%, mean   +21
+tf  15 by tf 240 aligned   = True : n  39, net   +153, PF 1.08, stop 59%, wr 41%, mean    +4
+tf  15 by tf 240 aligned   = False: n 122, net  +1942, PF 1.48, stop 44%, wr 54%, mean   +16
+tf  60 by tf 240 veto pass = True : n  33, net   +995, PF 1.91, stop 39%, wr 58%, mean   +30
+tf  60 by tf 240 veto pass = False: n   7, net   -408, PF 0.16, stop 86%, wr 14%, mean   -58
+tf  60 by tf 240 aligned   = True : n   8, net   +642, PF 7.30, stop 12%, wr 75%, mean   +80
+tf  60 by tf 240 aligned   = False: n  32, net    -55, PF 0.96, stop 56%, wr 44%, mean    -2

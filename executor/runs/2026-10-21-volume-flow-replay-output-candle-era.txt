@@ -1,0 +1,1809 @@
+trades 832623 (10-16 22:29:05 -> 10-21 18:04:23); replay 10-20 20:25:00 -> 10-21 18:04:23: 166922 trades; indicator names 42, rows 502687, expiry non-monotone steps 0
+trade feed gaps > 60 s in the replay window: 2 [('10-21 02:55:41', 66), ('10-21 16:27:12', 303)]
+pre-candidate trades (filters pass, zone+target present, inzone or rejection): {'15_long': 14893, '15_short': 10505, '60_long': 13200, '60_short': 5324, '240_long': 2553, '240_short': 25253} any: 61764
+depletion rows {15: 52452, 60: 191617, 240: 453184}
+simulated live: 57 fires, 53 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/0/0/0, trend cache 67107
+simulated adv1_lt-0.1: 57 fires, 31 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 23/0/0/0, trend cache 67107
+simulated adv1_gt0.1: 57 fires, 28 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 29/0/0/0, trend cache 67448
+simulated adv1_lt-0.2: 57 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 16/0/0/0, trend cache 67448
+simulated adv1_gt0.2: 57 fires, 32 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 25/0/0/0, trend cache 67448
+simulated adv1_lt-0.3: 57 fires, 40 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 14/0/0/0, trend cache 67448
+simulated adv1_gt0.3: 57 fires, 34 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 22/0/0/0, trend cache 67448
+simulated adv1_lt-0.5: 57 fires, 45 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 9/0/0/0, trend cache 67448
+simulated adv1_gt0.5: 57 fires, 40 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 15/0/0/0, trend cache 67448
+simulated adv5_lt-0.1: 57 fires, 21 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 34/0/0/0, trend cache 67751
+simulated adv5_gt0.1: 57 fires, 44 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 11/0/0/0, trend cache 67751
+simulated adv5_lt-0.2: 57 fires, 25 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 28/0/0/0, trend cache 67751
+simulated adv5_gt0.2: 57 fires, 46 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 8/0/0/0, trend cache 67751
+simulated adv5_lt-0.3: 57 fires, 32 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 22/0/0/0, trend cache 67751
+simulated adv5_gt0.3: 57 fires, 48 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 5/0/0/0, trend cache 67751
+simulated adv5_lt-0.5: 57 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 16/0/0/0, trend cache 68258
+simulated adv5_gt0.5: 57 fires, 52 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 1/0/0/0, trend cache 68258
+simulated adv15_lt-0.1: 57 fires, 26 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 27/0/0/0, trend cache 68258
+simulated adv15_gt0.1: 57 fires, 36 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 19/0/0/0, trend cache 68258
+simulated adv15_lt-0.2: 57 fires, 31 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 22/0/0/0, trend cache 68258
+simulated adv15_gt0.2: 57 fires, 43 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 12/0/0/0, trend cache 68258
+simulated adv15_lt-0.3: 57 fires, 32 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 21/0/0/0, trend cache 68258
+simulated adv15_gt0.3: 57 fires, 47 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 6/0/0/0, trend cache 68258
+simulated adv15_lt-0.5: 57 fires, 39 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 15/0/0/0, trend cache 68258
+simulated adv15_gt0.5: 57 fires, 52 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 1/0/0/0, trend cache 68258
+simulated rv1_gt1.5: 57 fires, 31 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 25/0/0/0, trend cache 68365
+simulated rv1_gt2.0: 57 fires, 33 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 22/0/0/0, trend cache 68365
+simulated rv1_gt3.0: 57 fires, 37 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 17/0/0/0, trend cache 68365
+simulated rv1_lt0.5: 57 fires, 45 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 7/0/0/0, trend cache 68365
+simulated rv1_lt0.7: 57 fires, 43 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 11/0/0/0, trend cache 68365
+simulated rv5_gt1.5: 57 fires, 32 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 22/0/0/0, trend cache 68365
+simulated rv5_gt2.0: 57 fires, 36 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 17/0/0/0, trend cache 68365
+simulated rv5_gt3.0: 57 fires, 43 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 10/0/0/0, trend cache 68365
+simulated rv5_lt0.5: 57 fires, 49 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 3/0/0/0, trend cache 68365
+simulated rv5_lt0.7: 57 fires, 49 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 3/0/0/0, trend cache 68365
+simulated rv15_gt1.5: 57 fires, 37 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 16/0/0/0, trend cache 68365
+simulated rv15_gt2.0: 57 fires, 44 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 9/0/0/0, trend cache 68365
+simulated rv15_gt3.0: 57 fires, 47 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 6/0/0/0, trend cache 68365
+simulated rv15_lt0.5: 57 fires, 47 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 5/0/0/0, trend cache 68365
+simulated rv15_lt0.7: 57 fires, 40 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 15/0/0/0, trend cache 68365
+simulated dep15_on: 57 fires, 45 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 8/0/0/0, trend cache 68365
+simulated dep15_agree: 57 fires, 52 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 1/0/0/0, trend cache 68365
+simulated dep15_oppose: 57 fires, 46 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 7/0/0/0, trend cache 68365
+simulated dep60_on: 57 fires, 33 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 20/0/0/0, trend cache 68365
+simulated dep60_agree: 57 fires, 51 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 2/0/0/0, trend cache 68365
+simulated dep60_oppose: 57 fires, 35 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 18/0/0/0, trend cache 68365
+simulated dep240_on: 57 fires, 20 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 37/0/0/0, trend cache 68365
+simulated dep240_agree: 57 fires, 48 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 5/0/0/0, trend cache 68365
+simulated dep240_oppose: 57 fires, 25 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 32/0/0/0, trend cache 68365
+simulated depany_on: 57 fires, 16 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 41/0/0/0, trend cache 68365
+simulated depany_agree: 57 fires, 49 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 4/0/0/0, trend cache 68365
+simulated depany_oppose: 57 fires, 20 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 37/0/0/0, trend cache 68365
+simulated adv5_lt-0.2&rv5_gt1.5: 57 fires, 39 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 14/0/0/0, trend cache 68365
+simulated adv5_lt-0.2|dep15_on: 57 fires, 24 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 29/0/0/0, trend cache 68365
+simulated adv5_abs_gt0.3: 57 fires, 27 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 27/0/0/0, trend cache 68365
+simulated depany_move_gt3.0: 57 fires, 25 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 29/0/0/0, trend cache 68365
+simulated depany_move_gt5.0: 57 fires, 30 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 24/0/0/0, trend cache 68365
+simulated depany_move_gt10.0: 57 fires, 39 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 14/0/0/0, trend cache 68365
+simulated rv5_gt1.5|depany_on: 57 fires, 14 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 43/0/0/0, trend cache 68365
+simulated sh24_adv5_lt-0.2: 57 fires, 30 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 24/0/0/0, trend cache 68365
+simulated sh24_adv5_gt0.2: 57 fires, 42 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 12/0/0/0, trend cache 68365
+simulated sh24_rv5_gt1.5: 57 fires, 36 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 18/0/0/0, trend cache 68365
+simulated sh24_dep15_on: 57 fires, 51 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 3/0/0/0, trend cache 68365
+simulated sh24_dep60_on: 57 fires, 45 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 9/0/0/0, trend cache 68365
+simulated sh24_dep240_oppose: 57 fires, 33 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 20/0/0/0, trend cache 68365
+simulated rand10_s0: 57 fires, 47 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 7/0/0/0, trend cache 68365
+simulated rand10_s1: 57 fires, 50 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 4/0/0/0, trend cache 68365
+simulated rand10_s2: 57 fires, 50 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 3/0/0/0, trend cache 68365
+simulated rand10_s3: 57 fires, 47 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 5/0/0/0, trend cache 68365
+simulated rand10_s4: 57 fires, 52 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 2/0/0/0, trend cache 68365
+simulated rand10_s5: 57 fires, 45 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 9/0/0/0, trend cache 68365
+simulated rand10_s6: 57 fires, 49 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 6/0/0/0, trend cache 68365
+simulated rand10_s7: 57 fires, 47 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 7/0/0/0, trend cache 68365
+simulated rand20_s0: 57 fires, 43 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 11/0/0/0, trend cache 68365
+simulated rand20_s1: 57 fires, 42 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 11/0/0/0, trend cache 68365
+simulated rand20_s2: 57 fires, 44 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 9/0/0/0, trend cache 68365
+simulated rand20_s3: 57 fires, 44 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 9/0/0/0, trend cache 68365
+simulated rand20_s4: 57 fires, 47 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 7/0/0/0, trend cache 68365
+simulated rand20_s5: 57 fires, 44 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 10/0/0/0, trend cache 68365
+simulated rand20_s6: 57 fires, 44 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 12/0/0/0, trend cache 68365
+simulated rand20_s7: 57 fires, 43 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 11/0/0/0, trend cache 68365
+simulated rand30_s0: 57 fires, 40 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 15/0/0/0, trend cache 68365
+simulated rand30_s1: 57 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 16/0/0/0, trend cache 68365
+simulated rand30_s2: 57 fires, 39 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 14/0/0/0, trend cache 68365
+simulated rand30_s3: 57 fires, 36 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 18/0/0/0, trend cache 68365
+simulated rand30_s4: 57 fires, 42 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 12/0/0/0, trend cache 68365
+simulated rand30_s5: 57 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 17/0/0/0, trend cache 68365
+simulated rand30_s6: 57 fires, 41 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 16/0/0/0, trend cache 68365
+simulated rand30_s7: 57 fires, 37 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 18/0/0/0, trend cache 68365
+simulated rand50_s0: 57 fires, 30 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 26/0/0/0, trend cache 68365
+simulated rand50_s1: 57 fires, 30 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 25/0/0/0, trend cache 68365
+simulated rand50_s2: 57 fires, 30 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 26/0/0/0, trend cache 68365
+simulated rand50_s3: 57 fires, 29 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 28/0/0/0, trend cache 68365
+simulated rand50_s4: 57 fires, 31 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 25/0/0/0, trend cache 68365
+simulated rand50_s5: 57 fires, 28 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 29/0/0/0, trend cache 68365
+simulated rand50_s6: 57 fires, 28 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 29/0/0/0, trend cache 68365
+simulated rand50_s7: 57 fires, 29 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 28/0/0/0, trend cache 68365
+
+REPRODUCTION (live variant vs recorded fires, same side+tf within 60 s): recorded 58, simulated 57, matched 56, missed 2, extra 1
+  candle-stop port: 54/55 recorded stops reproduced within half a tick
+  candle-stop era: recorded positions 54 net +438, pairs W15 8 (P1 -528, P2 +232); sim-live positions 53 net +411, pairs W15 11 (P1 -784, P2 +374)
+
+SUMMARY (same simulator, same window for every variant; pairs = stop -> same side better re-entry within 15 min)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 53 | +411 | -4530 | 1.22 | 49% | 26 / -73 | 18 | 9 | 7.5 | 75 | [-678, +1518] | 0.27 | 11 (42%) | -784 | +374 |
+| adv1_lt-0.1 | 31 | +913 | -2027 | 2.10 | 61% | 11 / -74 | 18 | 2 | 7.0 | 74 | [+52, +1796] | 0.04 | 1 (9%) | -77 | -101 |
+| adv1_gt0.1 | 28 | +214 | -2346 | 1.18 | 43% | 16 / -73 | 7 | 5 | 8.9 | 78 | [-751, +1217] | 0.38 | 3 (19%) | -213 | -121 |
+| adv1_lt-0.2 | 38 | +531 | -2961 | 1.42 | 55% | 16 / -77 | 20 | 2 | 7.2 | 76 | [-396, +1495] | 0.18 | 3 (19%) | -284 | +50 |
+| adv1_gt0.2 | 32 | +182 | -2780 | 1.14 | 44% | 18 / -74 | 9 | 5 | 7.9 | 77 | [-792, +1218] | 0.40 | 3 (17%) | -213 | -121 |
+| adv1_lt-0.3 | 40 | +748 | -2949 | 1.60 | 57% | 16 / -77 | 20 | 4 | 7.3 | 76 | [-225, +1768] | 0.10 | 4 (25%) | -341 | +197 |
+| adv1_gt0.3 | 34 | +334 | -2830 | 1.25 | 47% | 18 / -74 | 11 | 5 | 7.6 | 77 | [-677, +1396] | 0.30 | 3 (17%) | -213 | -121 |
+| adv1_lt-0.5 | 45 | +789 | -3354 | 1.55 | 56% | 19 / -75 | 21 | 5 | 7.5 | 77 | [-233, +1838] | 0.11 | 6 (32%) | -451 | +420 |
+| adv1_gt0.5 | 40 | -6 | -3770 | 1.00 | 45% | 22 / -73 | 11 | 7 | 7.7 | 76 | [-993, +993] | 0.50 | 6 (27%) | -446 | -189 |
+| adv5_lt-0.1 | 21 | +652 | -1162 | 2.16 | 62% | 7 / -78 | 12 | 2 | 7.0 | 82 | [-56, +1405] | 0.07 | 1 (14%) | -49 | -69 |
+| adv5_gt0.1 | 44 | +49 | -4069 | 1.03 | 48% | 23 / -75 | 15 | 6 | 7.9 | 75 | [-944, +1063] | 0.47 | 9 (39%) | -678 | +102 |
+| adv5_lt-0.2 | 25 | +924 | -1280 | 2.54 | 64% | 8 / -73 | 13 | 4 | 7.0 | 82 | [+111, +1787] | 0.03 | 1 (12%) | -49 | -69 |
+| adv5_gt0.2 | 46 | +327 | -3982 | 1.19 | 50% | 23 / -75 | 15 | 8 | 7.9 | 75 | [-697, +1417] | 0.31 | 9 (39%) | -678 | +102 |
+| adv5_lt-0.3 | 32 | +872 | -1993 | 1.95 | 59% | 12 / -76 | 15 | 5 | 7.2 | 81 | [-29, +1789] | 0.06 | 3 (25%) | -199 | +410 |
+| adv5_gt0.3 | 48 | +389 | -4120 | 1.22 | 50% | 24 / -74 | 16 | 8 | 7.9 | 75 | [-645, +1456] | 0.28 | 10 (42%) | -727 | +228 |
+| adv5_lt-0.5 | 38 | +756 | -2689 | 1.65 | 58% | 15 / -76 | 17 | 6 | 7.4 | 82 | [-160, +1695] | 0.09 | 4 (27%) | -303 | +443 |
+| adv5_gt0.5 | 52 | +343 | -4498 | 1.18 | 48% | 26 / -73 | 18 | 8 | 7.6 | 74 | [-744, +1458] | 0.31 | 11 (42%) | -784 | +374 |
+| adv15_lt-0.1 | 26 | +1060 | -1298 | 2.69 | 65% | 8 / -77 | 15 | 3 | 7.2 | 77 | [+226, +1980] | 0.02 | 2 (25%) | -150 | +284 |
+| adv15_gt0.1 | 36 | -128 | -3481 | 0.92 | 42% | 21 / -73 | 10 | 5 | 8.3 | 76 | [-1018, +802] | 0.60 | 7 (33%) | -507 | -92 |
+| adv15_lt-0.2 | 31 | +1056 | -1740 | 2.33 | 65% | 10 / -78 | 18 | 3 | 7.3 | 82 | [+143, +1964] | 0.03 | 3 (30%) | -254 | +318 |
+| adv15_gt0.2 | 43 | +71 | -3928 | 1.04 | 47% | 23 / -73 | 14 | 6 | 7.8 | 75 | [-893, +1074] | 0.46 | 10 (43%) | -726 | +227 |
+| adv15_lt-0.3 | 32 | +1175 | -1724 | 2.47 | 66% | 10 / -78 | 18 | 4 | 7.3 | 82 | [+248, +2091] | 0.02 | 3 (30%) | -254 | +318 |
+| adv15_gt0.3 | 47 | +178 | -4226 | 1.10 | 47% | 25 / -74 | 15 | 7 | 8.1 | 75 | [-869, +1278] | 0.39 | 10 (40%) | -726 | +228 |
+| adv15_lt-0.5 | 39 | +1236 | -2371 | 2.16 | 62% | 14 / -75 | 19 | 6 | 7.7 | 78 | [+220, +2247] | 0.02 | 4 (29%) | -316 | +416 |
+| adv15_gt0.5 | 52 | +425 | -4484 | 1.22 | 50% | 26 / -73 | 17 | 9 | 7.6 | 74 | [-650, +1533] | 0.26 | 11 (42%) | -784 | +374 |
+| rv1_gt1.5 | 31 | +1020 | -1911 | 2.24 | 65% | 11 / -75 | 16 | 4 | 8.2 | 77 | [+128, +1880] | 0.03 | 3 (27%) | -214 | +184 |
+| rv1_gt2.0 | 33 | +1094 | -2063 | 2.23 | 64% | 12 / -74 | 17 | 4 | 8.2 | 75 | [+199, +1991] | 0.02 | 4 (33%) | -308 | +322 |
+| rv1_gt3.0 | 37 | +806 | -2739 | 1.74 | 59% | 15 / -73 | 18 | 4 | 7.8 | 75 | [-93, +1761] | 0.07 | 4 (27%) | -307 | +322 |
+| rv1_lt0.5 | 45 | +12 | -4119 | 1.01 | 47% | 23 / -74 | 15 | 7 | 7.3 | 77 | [-932, +939] | 0.50 | 9 (39%) | -641 | +199 |
+| rv1_lt0.7 | 43 | +40 | -3890 | 1.02 | 47% | 22 / -75 | 14 | 7 | 7.3 | 77 | [-865, +1004] | 0.48 | 8 (36%) | -580 | +102 |
+| rv5_gt1.5 | 32 | +809 | -2276 | 1.83 | 56% | 14 / -69 | 14 | 4 | 7.6 | 73 | [-125, +1775] | 0.08 | 3 (21%) | -254 | +318 |
+| rv5_gt2.0 | 36 | +817 | -2628 | 1.74 | 56% | 16 / -69 | 14 | 6 | 7.4 | 73 | [-92, +1799] | 0.07 | 4 (25%) | -304 | +444 |
+| rv5_gt3.0 | 43 | +822 | -3245 | 1.61 | 53% | 19 / -71 | 16 | 8 | 7.4 | 73 | [-184, +1850] | 0.09 | 7 (37%) | -486 | +521 |
+| rv5_lt0.5 | 49 | +355 | -4186 | 1.20 | 49% | 24 / -73 | 19 | 6 | 7.5 | 75 | [-673, +1436] | 0.29 | 10 (42%) | -691 | +41 |
+| rv5_lt0.7 | 49 | +355 | -4186 | 1.20 | 49% | 24 / -73 | 19 | 6 | 7.5 | 75 | [-673, +1436] | 0.29 | 10 (42%) | -691 | +41 |
+| rv15_gt1.5 | 37 | +637 | -2905 | 1.52 | 54% | 17 / -72 | 14 | 6 | 7.7 | 73 | [-291, +1603] | 0.13 | 7 (41%) | -494 | +134 |
+| rv15_gt2.0 | 44 | +511 | -3674 | 1.34 | 52% | 21 / -72 | 17 | 6 | 7.6 | 74 | [-489, +1515] | 0.21 | 10 (48%) | -682 | +257 |
+| rv15_gt3.0 | 47 | +612 | -3874 | 1.39 | 53% | 22 / -71 | 18 | 7 | 7.7 | 74 | [-400, +1652] | 0.16 | 10 (45%) | -682 | +257 |
+| rv15_lt0.5 | 47 | +260 | -4133 | 1.15 | 47% | 24 / -73 | 17 | 6 | 7.7 | 76 | [-758, +1313] | 0.35 | 10 (42%) | -690 | +41 |
+| rv15_lt0.7 | 40 | +343 | -3320 | 1.23 | 48% | 20 / -74 | 18 | 2 | 7.6 | 77 | [-664, +1390] | 0.30 | 7 (35%) | -531 | +49 |
+| dep15_on | 45 | +670 | -3546 | 1.44 | 53% | 21 / -73 | 16 | 8 | 7.4 | 75 | [-362, +1750] | 0.15 | 7 (33%) | -483 | +378 |
+| dep15_agree | 52 | +425 | -4484 | 1.22 | 50% | 26 / -73 | 17 | 9 | 7.6 | 74 | [-650, +1533] | 0.26 | 11 (42%) | -784 | +374 |
+| dep15_oppose | 46 | +657 | -3592 | 1.43 | 52% | 21 / -73 | 17 | 8 | 7.3 | 76 | [-347, +1747] | 0.15 | 7 (33%) | -483 | +378 |
+| dep60_on | 33 | +920 | -2294 | 1.92 | 58% | 14 / -71 | 14 | 5 | 7.8 | 72 | [-24, +1879] | 0.05 | 3 (21%) | -200 | +412 |
+| dep60_agree | 51 | +498 | -4313 | 1.27 | 51% | 25 / -73 | 17 | 9 | 7.7 | 75 | [-605, +1591] | 0.23 | 11 (44%) | -784 | +374 |
+| dep60_oppose | 35 | +833 | -2513 | 1.77 | 54% | 15 / -71 | 15 | 5 | 7.7 | 73 | [-111, +1818] | 0.08 | 3 (20%) | -200 | +411 |
+| dep240_on | 20 | +519 | -1361 | 1.99 | 65% | 7 / -75 | 10 | 3 | 7.9 | 71 | [-126, +1168] | 0.10 | 1 (14%) | -49 | +53 |
+| dep240_agree | 48 | +292 | -4232 | 1.16 | 50% | 24 / -74 | 16 | 8 | 7.7 | 74 | [-779, +1364] | 0.33 | 10 (42%) | -728 | +228 |
+| dep240_oppose | 25 | +639 | -1661 | 1.96 | 60% | 9 / -73 | 13 | 3 | 7.5 | 72 | [-93, +1383] | 0.07 | 2 (22%) | -106 | +199 |
+| depany_on | 16 | +550 | -936 | 2.49 | 69% | 5 / -74 | 9 | 2 | 7.6 | 71 | [-36, +1141] | 0.06 | 1 (20%) | -49 | +53 |
+| depany_agree | 49 | +444 | -4168 | 1.25 | 51% | 24 / -74 | 16 | 9 | 7.8 | 75 | [-624, +1520] | 0.25 | 10 (42%) | -728 | +228 |
+| depany_oppose | 20 | +517 | -1301 | 2.01 | 60% | 7 / -71 | 11 | 2 | 7.2 | 72 | [-122, +1173] | 0.09 | 2 (29%) | -106 | +199 |
+| adv5_lt-0.2&rv5_gt1.5 | 39 | +963 | -2630 | 1.83 | 56% | 16 / -72 | 17 | 6 | 7.4 | 73 | [-56, +2001] | 0.06 | 4 (25%) | -304 | +445 |
+| adv5_lt-0.2|dep15_on | 24 | +938 | -1233 | 2.60 | 67% | 8 / -73 | 12 | 4 | 7.2 | 77 | [+122, +1752] | 0.03 | 1 (12%) | -49 | -69 |
+| adv5_abs_gt0.3 | 27 | +850 | -1582 | 2.09 | 63% | 10 / -78 | 13 | 4 | 7.5 | 82 | [-10, +1742] | 0.05 | 2 (20%) | -142 | +263 |
+| depany_move_gt3.0 | 25 | +812 | -1514 | 2.37 | 64% | 9 / -66 | 13 | 3 | 7.5 | 69 | [+75, +1575] | 0.04 | 2 (22%) | -106 | +273 |
+| depany_move_gt5.0 | 30 | +565 | -2263 | 1.61 | 57% | 13 / -72 | 13 | 4 | 7.7 | 72 | [-278, +1388] | 0.14 | 3 (23%) | -199 | +410 |
+| depany_move_gt10.0 | 39 | +820 | -2798 | 1.65 | 54% | 17 / -74 | 16 | 6 | 7.7 | 73 | [-178, +1847] | 0.09 | 3 (18%) | -200 | +411 |
+| rv5_gt1.5|depany_on | 14 | +457 | -828 | 2.24 | 64% | 5 / -74 | 7 | 2 | 7.6 | 71 | [-130, +1048] | 0.10 | 0 (0%) | +0 | +0 |
+| sh24_adv5_lt-0.2 | 30 | +243 | -2475 | 1.21 | 43% | 16 / -73 | 10 | 4 | 7.5 | 74 | [-641, +1171] | 0.33 | 2 (12%) | -114 | -146 |
+| sh24_adv5_gt0.2 | 42 | +1007 | -3020 | 1.73 | 55% | 19 / -72 | 16 | 7 | 7.4 | 74 | [-57, +2133] | 0.06 | 5 (26%) | -403 | -113 |
+| sh24_rv5_gt1.5 | 36 | +604 | -2709 | 1.50 | 56% | 15 / -80 | 15 | 6 | 7.4 | 78 | [-324, +1542] | 0.14 | 5 (33%) | -395 | +223 |
+| sh24_dep15_on | 51 | +435 | -4333 | 1.23 | 49% | 25 / -74 | 17 | 9 | 7.7 | 75 | [-630, +1538] | 0.26 | 9 (36%) | -623 | +194 |
+| sh24_dep60_on | 45 | +374 | -3897 | 1.22 | 47% | 23 / -73 | 15 | 7 | 7.8 | 73 | [-651, +1444] | 0.28 | 7 (30%) | -481 | -69 |
+| sh24_dep240_oppose | 33 | +148 | -2932 | 1.11 | 42% | 18 / -72 | 11 | 4 | 7.8 | 73 | [-740, +1069] | 0.41 | 2 (11%) | -114 | +49 |
+| rand10_s0 | 47 | +631 | -3793 | 1.39 | 51% | 22 / -73 | 16 | 9 | 8.1 | 75 | [-410, +1695] | 0.17 | 9 (41%) | -624 | +195 |
+| rand10_s1 | 50 | +413 | -4205 | 1.23 | 50% | 24 / -74 | 17 | 9 | 7.6 | 74 | [-647, +1517] | 0.27 | 9 (38%) | -675 | +528 |
+| rand10_s2 | 50 | +149 | -4500 | 1.08 | 48% | 25 / -74 | 19 | 6 | 7.4 | 75 | [-885, +1171] | 0.42 | 10 (40%) | -726 | +227 |
+| rand10_s3 | 47 | -67 | -4390 | 0.96 | 47% | 24 / -74 | 16 | 7 | 7.4 | 77 | [-990, +862] | 0.56 | 9 (38%) | -664 | -65 |
+| rand10_s4 | 52 | +468 | -4375 | 1.25 | 50% | 25 / -74 | 18 | 9 | 7.6 | 75 | [-615, +1562] | 0.25 | 10 (40%) | -727 | +227 |
+| rand10_s5 | 45 | +649 | -3551 | 1.41 | 51% | 21 / -74 | 19 | 5 | 7.7 | 77 | [-408, +1698] | 0.16 | 7 (33%) | -548 | +292 |
+| rand10_s6 | 49 | +678 | -3878 | 1.40 | 51% | 23 / -72 | 18 | 8 | 7.8 | 77 | [-425, +1766] | 0.15 | 10 (43%) | -708 | +475 |
+| rand10_s7 | 47 | +613 | -3730 | 1.39 | 51% | 22 / -71 | 18 | 7 | 7.4 | 73 | [-394, +1697] | 0.17 | 6 (27%) | -386 | +313 |
+| rand20_s0 | 43 | +244 | -3772 | 1.15 | 47% | 22 / -73 | 12 | 9 | 8.1 | 73 | [-726, +1274] | 0.35 | 7 (32%) | -469 | -40 |
+| rand20_s1 | 42 | +620 | -3299 | 1.45 | 55% | 18 / -76 | 16 | 8 | 7.9 | 75 | [-376, +1655] | 0.16 | 7 (39%) | -510 | +202 |
+| rand20_s2 | 44 | +126 | -3973 | 1.08 | 48% | 22 / -73 | 17 | 5 | 7.5 | 74 | [-817, +1096] | 0.43 | 9 (41%) | -623 | -85 |
+| rand20_s3 | 44 | -143 | -4229 | 0.92 | 48% | 23 / -74 | 16 | 5 | 7.3 | 77 | [-1006, +735] | 0.62 | 8 (35%) | -599 | +12 |
+| rand20_s4 | 47 | +310 | -4026 | 1.18 | 49% | 23 / -74 | 19 | 5 | 7.4 | 77 | [-714, +1377] | 0.32 | 8 (35%) | -597 | +414 |
+| rand20_s5 | 44 | +731 | -3370 | 1.49 | 52% | 20 / -74 | 19 | 5 | 7.5 | 76 | [-300, +1748] | 0.13 | 7 (35%) | -548 | +292 |
+| rand20_s6 | 44 | +491 | -3603 | 1.32 | 50% | 21 / -73 | 17 | 6 | 8.2 | 79 | [-524, +1520] | 0.22 | 9 (43%) | -642 | +479 |
+| rand20_s7 | 43 | +483 | -3520 | 1.32 | 49% | 21 / -72 | 15 | 7 | 7.8 | 73 | [-543, +1549] | 0.22 | 5 (24%) | -341 | +390 |
+| rand30_s0 | 40 | +313 | -3403 | 1.21 | 48% | 20 / -73 | 11 | 9 | 8.2 | 74 | [-645, +1344] | 0.31 | 6 (30%) | -392 | +60 |
+| rand30_s1 | 38 | +413 | -3101 | 1.30 | 50% | 18 / -76 | 13 | 7 | 8.6 | 74 | [-547, +1412] | 0.25 | 7 (39%) | -510 | +203 |
+| rand30_s2 | 39 | +39 | -3621 | 1.03 | 51% | 19 / -75 | 15 | 5 | 7.7 | 76 | [-807, +882] | 0.47 | 8 (42%) | -557 | -8 |
+| rand30_s3 | 36 | -343 | -3633 | 0.78 | 44% | 20 / -78 | 13 | 3 | 7.5 | 77 | [-1168, +479] | 0.76 | 6 (30%) | -451 | +56 |
+| rand30_s4 | 42 | +333 | -3502 | 1.22 | 50% | 20 / -75 | 18 | 4 | 7.4 | 77 | [-657, +1398] | 0.29 | 7 (35%) | -552 | +491 |
+| rand30_s5 | 38 | +595 | -2973 | 1.45 | 53% | 18 / -74 | 18 | 2 | 7.7 | 76 | [-400, +1600] | 0.17 | 7 (39%) | -548 | +220 |
+| rand30_s6 | 41 | +297 | -3561 | 1.19 | 49% | 21 / -73 | 14 | 6 | 8.5 | 78 | [-655, +1324] | 0.32 | 9 (43%) | -642 | +479 |
+| rand30_s7 | 37 | +1035 | -2372 | 1.89 | 54% | 16 / -72 | 14 | 7 | 8.1 | 73 | [-33, +2134] | 0.06 | 3 (19%) | -207 | +187 |
+| rand50_s0 | 30 | +494 | -2296 | 1.40 | 43% | 16 / -77 | 7 | 7 | 9.3 | 74 | [-559, +1578] | 0.22 | 3 (19%) | -222 | -45 |
+| rand50_s1 | 30 | +9 | -2701 | 1.01 | 47% | 15 / -73 | 12 | 3 | 7.6 | 76 | [-762, +836] | 0.51 | 4 (27%) | -255 | -198 |
+| rand50_s2 | 30 | +582 | -2225 | 1.60 | 57% | 13 / -75 | 13 | 4 | 7.5 | 77 | [-277, +1520] | 0.14 | 4 (31%) | -291 | +240 |
+| rand50_s3 | 29 | -313 | -2971 | 0.75 | 45% | 16 / -79 | 11 | 2 | 7.8 | 79 | [-1035, +396] | 0.77 | 4 (25%) | -295 | +146 |
+| rand50_s4 | 31 | +175 | -2610 | 1.15 | 48% | 15 / -75 | 15 | 1 | 7.4 | 77 | [-682, +1093] | 0.38 | 4 (27%) | -307 | +110 |
+| rand50_s5 | 28 | +587 | -2092 | 1.65 | 54% | 13 / -70 | 14 | 1 | 8.2 | 74 | [-266, +1470] | 0.13 | 3 (23%) | -219 | +89 |
+| rand50_s6 | 28 | +243 | -2324 | 1.22 | 54% | 13 / -83 | 12 | 3 | 8.2 | 83 | [-590, +1149] | 0.32 | 4 (31%) | -350 | +342 |
+| rand50_s7 | 29 | +1011 | -1671 | 2.18 | 55% | 12 / -70 | 15 | 2 | 8.2 | 73 | [+79, +1995] | 0.04 | 2 (17%) | -142 | +190 |
+
+PAIR STATS ON LIVE SIM BY WINDOW
+  W<= 5: pairs 8 of 26 stop-outs (31%); P1 -554 (mean -69), P2 +158 (mean +20), P2 outcomes {'reversal': 2, 'stop': 4, 'target': 2}; Δentry/P1 stop-dist median 1.06, P2 beyond P1 stop 4/8; gap median 1.5 min; P2 rule {'zone_rejection': 4, 'in_zone': 4}, P2 tf {60: 2, 15: 5, 240: 1}
+  W<=15: pairs 11 of 26 stop-outs (42%); P1 -784 (mean -71), P2 +374 (mean +34), P2 outcomes {'reversal': 3, 'stop': 4, 'target': 4}; Δentry/P1 stop-dist median 1.49, P2 beyond P1 stop 7/11; gap median 1.6 min; P2 rule {'zone_rejection': 4, 'in_zone': 7}, P2 tf {60: 3, 15: 7, 240: 1}
+  W<=30: pairs 14 of 26 stop-outs (54%); P1 -1011 (mean -72), P2 +175 (mean +12), P2 outcomes {'reversal': 3, 'stop': 7, 'target': 4}; Δentry/P1 stop-dist median 1.50, P2 beyond P1 stop 10/14; gap median 2.5 min; P2 rule {'zone_rejection': 7, 'in_zone': 7}, P2 tf {60: 5, 15: 8, 240: 1}
+  W<=60: pairs 14 of 26 stop-outs (54%); P1 -1011 (mean -72), P2 +175 (mean +12), P2 outcomes {'reversal': 3, 'stop': 7, 'target': 4}; Δentry/P1 stop-dist median 1.50, P2 beyond P1 stop 10/14; gap median 2.5 min; P2 rule {'zone_rejection': 7, 'in_zone': 7}, P2 tf {60: 5, 15: 8, 240: 1}
+  live sim: re-entry-flagged positions 19, pnl +221; others 34, pnl +190
+
+PAIRED 6-H BLOCK BOOTSTRAP vs live (5 blocks, 5000 resamples)
+  adv1_lt-0.1 - live: delta   +502, 90 % CI [   -56,  +1116], P(delta<0) 0.08; blocks > 3, < 1, = 1
+  adv1_gt0.1 - live: delta   -197, 90 % CI [  -538,    +48], P(delta<0) 0.88; blocks > 1, < 3, = 1
+  adv1_lt-0.2 - live: delta   +120, 90 % CI [  -614,   +878], P(delta<0) 0.39; blocks > 2, < 2, = 1
+  adv1_gt0.2 - live: delta   -229, 90 % CI [  -390,    -80], P(delta<0) 1.00; blocks > 0, < 4, = 1
+  adv1_lt-0.3 - live: delta   +337, 90 % CI [  -467,  +1125], P(delta<0) 0.24; blocks > 2, < 1, = 2
+  adv1_gt0.3 - live: delta    -78, 90 % CI [  -288,   +160], P(delta<0) 0.72; blocks > 1, < 3, = 1
+  adv1_lt-0.5 - live: delta   +378, 90 % CI [    +0,   +756], P(delta<0) 0.00; blocks > 3, < 0, = 2
+  adv1_gt0.5 - live: delta   -417, 90 % CI [ -1089,    +84], P(delta<0) 0.87; blocks > 2, < 2, = 1
+  adv5_lt-0.1 - live: delta   +241, 90 % CI [  -695,  +1120], P(delta<0) 0.31; blocks > 2, < 2, = 1
+  adv5_gt0.1 - live: delta   -362, 90 % CI [  -799,    +21], P(delta<0) 0.93; blocks > 1, < 3, = 1
+  adv5_lt-0.2 - live: delta   +513, 90 % CI [  -697,  +1646], P(delta<0) 0.19; blocks > 3, < 1, = 1
+  adv5_gt0.2 - live: delta    -84, 90 % CI [  -263,    +90], P(delta<0) 0.79; blocks > 1, < 3, = 1
+  adv5_lt-0.3 - live: delta   +461, 90 % CI [  -392,  +1341], P(delta<0) 0.20; blocks > 3, < 1, = 1
+  adv5_gt0.3 - live: delta    -22, 90 % CI [  -180,   +128], P(delta<0) 0.60; blocks > 2, < 2, = 1
+  adv5_lt-0.5 - live: delta   +345, 90 % CI [  -160,   +866], P(delta<0) 0.13; blocks > 3, < 1, = 1
+  adv5_gt0.5 - live: delta    -69, 90 % CI [  -206,     +0], P(delta<0) 0.68; blocks > 1, < 1, = 3
+  adv15_lt-0.1 - live: delta   +649, 90 % CI [  -269,  +1567], P(delta<0) 0.12; blocks > 3, < 1, = 1
+  adv15_gt0.1 - live: delta   -539, 90 % CI [  -841,   -282], P(delta<0) 1.00; blocks > 0, < 4, = 1
+  adv15_lt-0.2 - live: delta   +645, 90 % CI [  +267,  +1024], P(delta<0) 0.00; blocks > 4, < 0, = 1
+  adv15_gt0.2 - live: delta   -340, 90 % CI [  -748,    +67], P(delta<0) 0.93; blocks > 1, < 3, = 1
+  adv15_lt-0.3 - live: delta   +764, 90 % CI [  +425,  +1100], P(delta<0) 0.00; blocks > 4, < 0, = 1
+  adv15_gt0.3 - live: delta   -233, 90 % CI [  -676,   +114], P(delta<0) 0.82; blocks > 2, < 2, = 1
+  adv15_lt-0.5 - live: delta   +825, 90 % CI [  +464,  +1104], P(delta<0) 0.00; blocks > 4, < 0, = 1
+  adv15_gt0.5 - live: delta    +13, 90 % CI [    +0,    +40], P(delta<0) 0.00; blocks > 1, < 0, = 4
+  rv1_gt1.5 - live: delta   +609, 90 % CI [  +275,   +916], P(delta<0) 0.00; blocks > 4, < 0, = 1
+  rv1_gt2.0 - live: delta   +682, 90 % CI [  +371,   +949], P(delta<0) 0.00; blocks > 4, < 0, = 1
+  rv1_gt3.0 - live: delta   +394, 90 % CI [  +150,   +682], P(delta<0) 0.00; blocks > 4, < 0, = 1
+  rv1_lt0.5 - live: delta   -400, 90 % CI [ -1017,   +130], P(delta<0) 0.86; blocks > 2, < 2, = 1
+  rv1_lt0.7 - live: delta   -371, 90 % CI [  -928,    +93], P(delta<0) 0.87; blocks > 2, < 2, = 1
+  rv5_gt1.5 - live: delta   +398, 90 % CI [  -302,  +1118], P(delta<0) 0.16; blocks > 3, < 1, = 1
+  rv5_gt2.0 - live: delta   +406, 90 % CI [   +69,   +743], P(delta<0) 0.02; blocks > 3, < 1, = 1
+  rv5_gt3.0 - live: delta   +411, 90 % CI [  +109,   +712], P(delta<0) 0.01; blocks > 3, < 1, = 1
+  rv5_lt0.5 - live: delta    -56, 90 % CI [  -356,   +187], P(delta<0) 0.56; blocks > 2, < 1, = 2
+  rv5_lt0.7 - live: delta    -56, 90 % CI [  -356,   +187], P(delta<0) 0.55; blocks > 2, < 1, = 2
+  rv15_gt1.5 - live: delta   +226, 90 % CI [   -90,   +588], P(delta<0) 0.15; blocks > 3, < 1, = 1
+  rv15_gt2.0 - live: delta    +99, 90 % CI [  -102,   +421], P(delta<0) 0.33; blocks > 1, < 3, = 1
+  rv15_gt3.0 - live: delta   +201, 90 % CI [   +10,   +385], P(delta<0) 0.05; blocks > 3, < 1, = 1
+  rv15_lt0.5 - live: delta   -151, 90 % CI [  -292,    -10], P(delta<0) 0.99; blocks > 0, < 3, = 2
+  rv15_lt0.7 - live: delta    -69, 90 % CI [  -732,   +600], P(delta<0) 0.57; blocks > 1, < 3, = 1
+  dep15_on - live: delta   +259, 90 % CI [   -38,   +547], P(delta<0) 0.07; blocks > 3, < 1, = 1
+  dep15_agree - live: delta    +13, 90 % CI [    +0,    +40], P(delta<0) 0.00; blocks > 1, < 0, = 4
+  dep15_oppose - live: delta   +246, 90 % CI [   -40,   +544], P(delta<0) 0.07; blocks > 3, < 1, = 1
+  dep60_on - live: delta   +509, 90 % CI [  -118,  +1362], P(delta<0) 0.13; blocks > 3, < 1, = 1
+  dep60_agree - live: delta    +86, 90 % CI [    -0,   +220], P(delta<0) 0.07; blocks > 2, < 1, = 2
+  dep60_oppose - live: delta   +422, 90 % CI [  -158,  +1128], P(delta<0) 0.12; blocks > 3, < 1, = 1
+  dep240_on - live: delta   +108, 90 % CI [  -571,   +732], P(delta<0) 0.39; blocks > 3, < 1, = 1
+  dep240_agree - live: delta   -119, 90 % CI [  -619,   +245], P(delta<0) 0.66; blocks > 2, < 2, = 1
+  dep240_oppose - live: delta   +227, 90 % CI [  -666,  +1002], P(delta<0) 0.32; blocks > 3, < 1, = 1
+  depany_on - live: delta   +139, 90 % CI [  -228,   +467], P(delta<0) 0.27; blocks > 3, < 1, = 1
+  depany_agree - live: delta    +33, 90 % CI [  -196,   +245], P(delta<0) 0.39; blocks > 2, < 2, = 1
+  depany_oppose - live: delta   +106, 90 % CI [  -375,   +529], P(delta<0) 0.33; blocks > 3, < 1, = 1
+  adv5_lt-0.2&rv5_gt1.5 - live: delta   +552, 90 % CI [  +115,  +1049], P(delta<0) 0.01; blocks > 3, < 1, = 1
+  adv5_lt-0.2|dep15_on - live: delta   +527, 90 % CI [  -696,  +1582], P(delta<0) 0.20; blocks > 3, < 1, = 1
+  adv5_abs_gt0.3 - live: delta   +438, 90 % CI [  -251,  +1167], P(delta<0) 0.15; blocks > 3, < 1, = 1
+  depany_move_gt3.0 - live: delta   +401, 90 % CI [  -450,  +1320], P(delta<0) 0.23; blocks > 3, < 1, = 1
+  depany_move_gt5.0 - live: delta   +154, 90 % CI [  -636,  +1065], P(delta<0) 0.43; blocks > 2, < 2, = 1
+  depany_move_gt10.0 - live: delta   +409, 90 % CI [    -8,   +943], P(delta<0) 0.06; blocks > 3, < 1, = 1
+  rv5_gt1.5|depany_on - live: delta    +45, 90 % CI [  -269,   +347], P(delta<0) 0.38; blocks > 3, < 1, = 1
+  sh24_adv5_lt-0.2 - live: delta   -169, 90 % CI [  -452,   +114], P(delta<0) 0.85; blocks > 2, < 2, = 1
+  sh24_adv5_gt0.2 - live: delta   +596, 90 % CI [  +206,  +1170], P(delta<0) 0.00; blocks > 4, < 0, = 1
+  sh24_rv5_gt1.5 - live: delta   +193, 90 % CI [  -302,   +646], P(delta<0) 0.24; blocks > 3, < 1, = 1
+  sh24_dep15_on - live: delta    +24, 90 % CI [   -66,   +138], P(delta<0) 0.38; blocks > 2, < 2, = 1
+  sh24_dep60_on - live: delta    -37, 90 % CI [  -315,   +221], P(delta<0) 0.57; blocks > 2, < 2, = 1
+  sh24_dep240_oppose - live: delta   -263, 90 % CI [  -435,   -111], P(delta<0) 1.00; blocks > 0, < 4, = 1
+  rand10_s0 - live: delta   +220, 90 % CI [   +69,   +362], P(delta<0) 0.01; blocks > 3, < 1, = 1
+  rand10_s1 - live: delta     +2, 90 % CI [  -222,   +227], P(delta<0) 0.44; blocks > 2, < 1, = 2
+  rand10_s2 - live: delta   -262, 90 % CI [  -623,    +57], P(delta<0) 0.90; blocks > 2, < 2, = 1
+  rand10_s3 - live: delta   -478, 90 % CI [ -1276,    -33], P(delta<0) 0.99; blocks > 1, < 3, = 1
+  rand10_s4 - live: delta    +57, 90 % CI [    -0,   +171], P(delta<0) 0.13; blocks > 2, < 2, = 1
+  rand10_s5 - live: delta   +238, 90 % CI [  -271,   +746], P(delta<0) 0.24; blocks > 3, < 1, = 1
+  rand10_s6 - live: delta   +267, 90 % CI [  -207,   +753], P(delta<0) 0.14; blocks > 2, < 1, = 2
+  rand10_s7 - live: delta   +201, 90 % CI [  -333,   +736], P(delta<0) 0.28; blocks > 2, < 2, = 1
+  rand20_s0 - live: delta   -167, 90 % CI [  -459,   +154], P(delta<0) 0.81; blocks > 1, < 3, = 1
+  rand20_s1 - live: delta   +208, 90 % CI [   +54,   +429], P(delta<0) 0.00; blocks > 4, < 0, = 1
+  rand20_s2 - live: delta   -285, 90 % CI [  -399,   -161], P(delta<0) 1.00; blocks > 0, < 4, = 1
+  rand20_s3 - live: delta   -554, 90 % CI [ -1263,    -25], P(delta<0) 0.97; blocks > 1, < 3, = 1
+  rand20_s4 - live: delta   -101, 90 % CI [  -411,   +191], P(delta<0) 0.71; blocks > 2, < 2, = 1
+  rand20_s5 - live: delta   +319, 90 % CI [  -241,   +865], P(delta<0) 0.17; blocks > 3, < 1, = 1
+  rand20_s6 - live: delta    +80, 90 % CI [  -251,   +411], P(delta<0) 0.36; blocks > 2, < 1, = 2
+  rand20_s7 - live: delta    +71, 90 % CI [  -311,   +454], P(delta<0) 0.41; blocks > 2, < 2, = 1
+  rand30_s0 - live: delta    -98, 90 % CI [  -574,   +361], P(delta<0) 0.64; blocks > 2, < 2, = 1
+  rand30_s1 - live: delta     +2, 90 % CI [  -106,   +109], P(delta<0) 0.44; blocks > 3, < 1, = 1
+  rand30_s2 - live: delta   -373, 90 % CI [  -880,    -76], P(delta<0) 1.00; blocks > 0, < 4, = 1
+  rand30_s3 - live: delta   -754, 90 % CI [ -1274,   -287], P(delta<0) 1.00; blocks > 0, < 4, = 1
+  rand30_s4 - live: delta    -79, 90 % CI [  -355,   +181], P(delta<0) 0.70; blocks > 2, < 2, = 1
+  rand30_s5 - live: delta   +183, 90 % CI [  -231,   +702], P(delta<0) 0.28; blocks > 2, < 2, = 1
+  rand30_s6 - live: delta   -115, 90 % CI [  -375,   +151], P(delta<0) 0.75; blocks > 1, < 2, = 2
+  rand30_s7 - live: delta   +624, 90 % CI [   +91,  +1227], P(delta<0) 0.03; blocks > 3, < 1, = 1
+  rand50_s0 - live: delta    +82, 90 % CI [  -515,   +679], P(delta<0) 0.39; blocks > 2, < 2, = 1
+  rand50_s1 - live: delta   -402, 90 % CI [ -1298,    +83], P(delta<0) 0.67; blocks > 2, < 2, = 1
+  rand50_s2 - live: delta   +170, 90 % CI [  -650,   +996], P(delta<0) 0.37; blocks > 2, < 2, = 1
+  rand50_s3 - live: delta   -725, 90 % CI [ -1422,   -100], P(delta<0) 0.97; blocks > 1, < 3, = 1
+  rand50_s4 - live: delta   -237, 90 % CI [  -638,   +216], P(delta<0) 0.81; blocks > 1, < 3, = 1
+  rand50_s5 - live: delta   +176, 90 % CI [  -192,   +665], P(delta<0) 0.26; blocks > 3, < 1, = 1
+  rand50_s6 - live: delta   -168, 90 % CI [  -573,   +250], P(delta<0) 0.77; blocks > 1, < 3, = 1
+  rand50_s7 - live: delta   +600, 90 % CI [  -225,  +1424], P(delta<0) 0.11; blocks > 3, < 1, = 1
+
+PER-DAY NET (UTC day of the opening fire)
+| day | live | adv1_lt-0.1 | adv1_gt0.1 | adv1_lt-0.2 | adv1_gt0.2 | adv1_lt-0.3 | adv1_gt0.3 | adv1_lt-0.5 | adv1_gt0.5 | adv5_lt-0.1 | adv5_gt0.1 | adv5_lt-0.2 | adv5_gt0.2 | adv5_lt-0.3 | adv5_gt0.3 | adv5_lt-0.5 | adv5_gt0.5 | adv15_lt-0.1 | adv15_gt0.1 | adv15_lt-0.2 | adv15_gt0.2 | adv15_lt-0.3 | adv15_gt0.3 | adv15_lt-0.5 | adv15_gt0.5 | rv1_gt1.5 | rv1_gt2.0 | rv1_gt3.0 | rv1_lt0.5 | rv1_lt0.7 | rv5_gt1.5 | rv5_gt2.0 | rv5_gt3.0 | rv5_lt0.5 | rv5_lt0.7 | rv15_gt1.5 | rv15_gt2.0 | rv15_gt3.0 | rv15_lt0.5 | rv15_lt0.7 | dep15_on | dep15_agree | dep15_oppose | dep60_on | dep60_agree | dep60_oppose | dep240_on | dep240_agree | dep240_oppose | depany_on | depany_agree | depany_oppose | adv5_lt-0.2&rv5_gt1.5 | adv5_lt-0.2|dep15_on | adv5_abs_gt0.3 | depany_move_gt3.0 | depany_move_gt5.0 | depany_move_gt10.0 | rv5_gt1.5|depany_on | sh24_adv5_lt-0.2 | sh24_adv5_gt0.2 | sh24_rv5_gt1.5 | sh24_dep15_on | sh24_dep60_on | sh24_dep240_oppose | rand10_s0 | rand10_s1 | rand10_s2 | rand10_s3 | rand10_s4 | rand10_s5 | rand10_s6 | rand10_s7 | rand20_s0 | rand20_s1 | rand20_s2 | rand20_s3 | rand20_s4 | rand20_s5 | rand20_s6 | rand20_s7 | rand30_s0 | rand30_s1 | rand30_s2 | rand30_s3 | rand30_s4 | rand30_s5 | rand30_s6 | rand30_s7 | rand50_s0 | rand50_s1 | rand50_s2 | rand50_s3 | rand50_s4 | rand50_s5 | rand50_s6 | rand50_s7 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 10-20 | 7 / +289 | 4 / +299 | 4 / +269 | 6 / +142 | 4 / +269 | 7 / +289 | 4 / +269 | 7 / +289 | 6 / +346 | 1 / -57 | 6 / +346 | 2 / -98 | 6 / +346 | 3 / +49 | 6 / +346 | 4 / +166 | 7 / +289 | 3 / +49 | 5 / +199 | 4 / +328 | 5 / +199 | 5 / +445 | 6 / +346 | 5 / +445 | 7 / +289 | 4 / +490 | 4 / +490 | 4 / +490 | 6 / +10 | 6 / +10 | 5 / +445 | 5 / +445 | 5 / +445 | 7 / +289 | 7 / +289 | 5 / +445 | 5 / +445 | 6 / +392 | 7 / +289 | 5 / +199 | 5 / +445 | 7 / +289 | 5 / +445 | 6 / +392 | 7 / +289 | 6 / +392 | 3 / -10 | 6 / +346 | 4 / -67 | 1 / +147 | 6 / +346 | 2 / +90 | 5 / +445 | 2 / -98 | 2 / +106 | 4 / -4 | 4 / -4 | 6 / +392 | 1 / +147 | 4 / +128 | 6 / +346 | 4 / +104 | 6 / +346 | 6 / +346 | 5 / +246 | 5 / +387 | 7 / +289 | 6 / +346 | 5 / -136 | 6 / +346 | 6 / +142 | 7 / +289 | 6 / +171 | 5 / +387 | 6 / +330 | 5 / +228 | 5 / -136 | 6 / +346 | 6 / +142 | 7 / +289 | 6 / +171 | 4 / +440 | 6 / +330 | 3 / +2 | 4 / -84 | 6 / +346 | 5 / +199 | 7 / +289 | 5 / +228 | 4 / +440 | 4 / +286 | 3 / +2 | 2 / -98 | 5 / +450 | 3 / +185 | 4 / +440 | 4 / +82 |
+| 10-21 | 46 / +122 | 27 / +615 | 24 / -55 | 32 / +389 | 28 / -87 | 33 / +459 | 30 / +64 | 38 / +500 | 34 / -352 | 20 / +709 | 38 / -297 | 23 / +1022 | 40 / -19 | 29 / +823 | 42 / +43 | 34 / +590 | 45 / +54 | 23 / +1011 | 31 / -327 | 27 / +729 | 38 / -128 | 27 / +729 | 41 / -168 | 34 / +790 | 45 / +136 | 27 / +530 | 29 / +603 | 33 / +315 | 39 / +2 | 37 / +30 | 27 / +364 | 31 / +372 | 38 / +376 | 42 / +66 | 42 / +66 | 32 / +192 | 39 / +65 | 41 / +219 | 40 / -29 | 35 / +144 | 40 / +225 | 45 / +136 | 41 / +212 | 27 / +528 | 44 / +209 | 29 / +441 | 17 / +529 | 42 / -54 | 21 / +705 | 15 / +404 | 43 / +98 | 18 / +428 | 34 / +518 | 22 / +1035 | 25 / +744 | 21 / +816 | 26 / +569 | 33 / +428 | 13 / +310 | 26 / +115 | 36 / +661 | 32 / +500 | 45 / +89 | 39 / +28 | 28 / -98 | 42 / +244 | 43 / +125 | 44 / -197 | 42 / +70 | 46 / +122 | 39 / +507 | 42 / +389 | 41 / +441 | 38 / -142 | 36 / +290 | 39 / -103 | 39 / -6 | 41 / -36 | 38 / +589 | 37 / +202 | 37 / +311 | 36 / -127 | 32 / +83 | 36 / +36 | 32 / -260 | 36 / -13 | 33 / +396 | 34 / +8 | 32 / +806 | 26 / +53 | 26 / -277 | 27 / +579 | 27 / -216 | 26 / -275 | 25 / +402 | 24 / -197 | 25 / +929 |
+
+PER-TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf15 | 42 | +623 | -3335 | 1.46 | 55% | 19 / -71 | 17 | 6 | 7.3 | 74 | [-349, +1623] | 0.15 | 4 (21%) | -366 | +211 |
+| live tf60 | 9 | -58 | -841 | 0.85 | 33% | 5 / -77 | 1 | 3 | 14.9 | 76 | [-492, +410] | 0.59 | 0 (0%) | +0 | +0 |
+| live tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.1 tf15 | 27 | +995 | -1610 | 2.60 | 67% | 9 / -69 | 17 | 1 | 7.0 | 73 | [+219, +1776] | 0.02 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.1 tf60 | 3 | +19 | -215 | 1.18 | 33% | 1 / -94 | 1 | 1 | 10.3 | 94 | [-201, +239] | 0.40 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.1 tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| adv1_gt0.1 tf15 | 20 | +37 | -1775 | 1.05 | 45% | 11 / -75 | 6 | 3 | 7.6 | 81 | [-687, +845] | 0.48 | 2 (18%) | -169 | -44 |
+| adv1_gt0.1 tf60 | 7 | +230 | -418 | 1.79 | 43% | 4 / -73 | 1 | 2 | 14.9 | 76 | [-320, +838] | 0.25 | 0 (0%) | +0 | +0 |
+| adv1_gt0.1 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.2 tf15 | 32 | +768 | -2242 | 1.87 | 62% | 12 / -74 | 19 | 1 | 7.2 | 74 | [-82, +1634] | 0.07 | 2 (17%) | -207 | +151 |
+| adv1_lt-0.2 tf60 | 4 | -83 | -363 | 0.60 | 25% | 2 / -98 | 1 | 1 | 6.7 | 97 | [-383, +226] | 0.67 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.2 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv1_gt0.2 tf15 | 23 | +106 | -2008 | 1.12 | 48% | 12 / -73 | 8 | 3 | 7.5 | 77 | [-663, +946] | 0.43 | 2 (17%) | -169 | -44 |
+| adv1_gt0.2 tf60 | 7 | +230 | -418 | 1.79 | 43% | 4 / -73 | 1 | 2 | 14.9 | 76 | [-320, +838] | 0.25 | 0 (0%) | +0 | +0 |
+| adv1_gt0.2 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.3 tf15 | 32 | +769 | -2245 | 1.87 | 62% | 12 / -74 | 19 | 1 | 7.2 | 74 | [-82, +1636] | 0.07 | 2 (17%) | -207 | +151 |
+| adv1_lt-0.3 tf60 | 6 | +133 | -349 | 1.64 | 50% | 2 / -98 | 1 | 3 | 12.6 | 88 | [-258, +524] | 0.31 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.3 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv1_gt0.3 tf15 | 25 | +257 | -2058 | 1.29 | 52% | 12 / -73 | 10 | 3 | 6.9 | 77 | [-502, +1085] | 0.30 | 2 (17%) | -169 | -44 |
+| adv1_gt0.3 tf60 | 7 | +230 | -418 | 1.79 | 43% | 4 / -73 | 1 | 2 | 14.9 | 76 | [-321, +839] | 0.26 | 0 (0%) | +0 | +0 |
+| adv1_gt0.3 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.5 tf15 | 36 | +871 | -2489 | 1.86 | 61% | 14 / -73 | 20 | 2 | 7.3 | 76 | [-57, +1821] | 0.06 | 2 (14%) | -207 | +151 |
+| adv1_lt-0.5 tf60 | 7 | +72 | -510 | 1.27 | 43% | 3 / -86 | 1 | 3 | 14.9 | 82 | [-331, +493] | 0.39 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.5 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv1_gt0.5 tf15 | 32 | +225 | -2791 | 1.19 | 50% | 16 / -73 | 11 | 5 | 7.6 | 77 | [-642, +1156] | 0.35 | 3 (19%) | -272 | +74 |
+| adv1_gt0.5 tf60 | 6 | -77 | -625 | 0.74 | 33% | 4 / -73 | 0 | 2 | 15.4 | 68 | [-424, +301] | 0.65 | 0 (0%) | +0 | +0 |
+| adv1_gt0.5 tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.1 tf15 | 15 | +597 | -771 | 3.11 | 73% | 4 / -71 | 11 | 0 | 6.6 | 72 | [+68, +1134] | 0.03 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.1 tf60 | 6 | +56 | -391 | 1.20 | 33% | 3 / -88 | 1 | 2 | 9.7 | 97 | [-416, +552] | 0.42 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.1 tf240 | 0 |
+| adv5_gt0.1 tf15 | 34 | +247 | -2921 | 1.21 | 53% | 16 / -74 | 15 | 3 | 7.6 | 76 | [-620, +1151] | 0.33 | 4 (25%) | -366 | +211 |
+| adv5_gt0.1 tf60 | 8 | -45 | -794 | 0.88 | 38% | 5 / -77 | 0 | 3 | 15.4 | 71 | [-464, +419] | 0.57 | 0 (0%) | +0 | +0 |
+| adv5_gt0.1 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.2 tf15 | 19 | +725 | -998 | 3.24 | 74% | 5 / -65 | 12 | 2 | 6.9 | 72 | [+151, +1295] | 0.02 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.2 tf60 | 6 | +199 | -282 | 1.72 | 33% | 3 / -88 | 1 | 2 | 17.4 | 88 | [-409, +872] | 0.32 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.2 tf240 | 0 |
+| adv5_gt0.2 tf15 | 36 | +525 | -2833 | 1.45 | 56% | 16 / -74 | 15 | 5 | 7.6 | 76 | [-398, +1512] | 0.18 | 4 (25%) | -366 | +211 |
+| adv5_gt0.2 tf60 | 8 | -45 | -794 | 0.88 | 38% | 5 / -77 | 0 | 3 | 15.4 | 71 | [-464, +419] | 0.57 | 0 (0%) | +0 | +0 |
+| adv5_gt0.2 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.3 tf15 | 24 | +517 | -1666 | 1.85 | 62% | 9 / -68 | 13 | 2 | 7.0 | 73 | [-146, +1183] | 0.10 | 1 (11%) | -93 | +137 |
+| adv5_lt-0.3 tf60 | 7 | +456 | -125 | 3.18 | 57% | 2 / -98 | 2 | 3 | 11.6 | 83 | [-105, +1045] | 0.10 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.3 tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| adv5_gt0.3 tf15 | 38 | +587 | -2972 | 1.48 | 55% | 17 / -72 | 16 | 5 | 7.6 | 76 | [-357, +1563] | 0.15 | 4 (24%) | -366 | +211 |
+| adv5_gt0.3 tf60 | 8 | -45 | -794 | 0.88 | 38% | 5 / -77 | 0 | 3 | 15.4 | 71 | [-464, +419] | 0.57 | 0 (0%) | +0 | +0 |
+| adv5_gt0.3 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.5 tf15 | 29 | +692 | -1970 | 1.88 | 62% | 11 / -71 | 15 | 3 | 7.3 | 80 | [-92, +1509] | 0.07 | 2 (18%) | -197 | +171 |
+| adv5_lt-0.5 tf60 | 8 | +165 | -517 | 1.61 | 50% | 3 / -86 | 2 | 3 | 13.2 | 82 | [-270, +601] | 0.27 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.5 tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| adv5_gt0.5 tf15 | 41 | +554 | -3303 | 1.41 | 54% | 19 / -71 | 17 | 5 | 7.4 | 73 | [-405, +1534] | 0.18 | 4 (21%) | -366 | +211 |
+| adv5_gt0.5 tf60 | 9 | -58 | -841 | 0.85 | 33% | 5 / -77 | 1 | 3 | 14.9 | 76 | [-492, +410] | 0.59 | 0 (0%) | +0 | +0 |
+| adv5_gt0.5 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv15_lt-0.1 tf15 | 21 | +791 | -1133 | 2.75 | 71% | 6 / -75 | 13 | 2 | 6.9 | 73 | [+114, +1479] | 0.03 | 1 (17%) | -93 | +137 |
+| adv15_lt-0.1 tf60 | 5 | +269 | -165 | 2.53 | 40% | 2 / -82 | 2 | 1 | 14.9 | 82 | [-259, +823] | 0.20 | 0 (0%) | +0 | +0 |
+| adv15_lt-0.1 tf240 | 0 |
+| adv15_gt0.1 tf15 | 29 | +249 | -2457 | 1.23 | 48% | 15 / -72 | 10 | 4 | 8.1 | 77 | [-577, +1135] | 0.33 | 3 (20%) | -272 | +74 |
+| adv15_gt0.1 tf60 | 5 | -224 | -670 | 0.23 | 20% | 4 / -73 | 0 | 1 | 15.9 | 76 | [-410, +27] | 0.94 | 0 (0%) | +0 | +0 |
+| adv15_gt0.1 tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv15_lt-0.2 tf15 | 26 | +1017 | -1344 | 2.64 | 69% | 8 / -78 | 16 | 2 | 7.0 | 81 | [+167, +1873] | 0.02 | 2 (25%) | -197 | +171 |
+| adv15_lt-0.2 tf60 | 5 | +39 | -396 | 1.22 | 40% | 2 / -82 | 2 | 1 | 14.9 | 82 | [-282, +362] | 0.41 | 0 (0%) | +0 | +0 |
+| adv15_lt-0.2 tf240 | 0 |
+| adv15_gt0.2 tf15 | 35 | +322 | -2929 | 1.26 | 51% | 17 / -73 | 14 | 4 | 7.7 | 75 | [-601, +1248] | 0.29 | 4 (24%) | -365 | +211 |
+| adv15_gt0.2 tf60 | 6 | -98 | -645 | 0.66 | 33% | 4 / -73 | 0 | 2 | 16.4 | 71 | [-430, +259] | 0.69 | 0 (0%) | +0 | +0 |
+| adv15_gt0.2 tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv15_lt-0.3 tf15 | 27 | +1136 | -1327 | 2.83 | 70% | 8 / -78 | 16 | 3 | 7.0 | 83 | [+290, +1993] | 0.01 | 2 (25%) | -197 | +171 |
+| adv15_lt-0.3 tf60 | 5 | +39 | -397 | 1.22 | 40% | 2 / -82 | 2 | 1 | 14.9 | 82 | [-282, +362] | 0.41 | 0 (0%) | +0 | +0 |
+| adv15_lt-0.3 tf240 | 0 |
+| adv15_gt0.3 tf15 | 37 | +376 | -3079 | 1.29 | 51% | 18 / -72 | 15 | 4 | 7.7 | 75 | [-534, +1310] | 0.26 | 4 (22%) | -366 | +211 |
+| adv15_gt0.3 tf60 | 8 | -45 | -793 | 0.88 | 38% | 5 / -77 | 0 | 3 | 15.4 | 71 | [-464, +419] | 0.57 | 0 (0%) | +0 | +0 |
+| adv15_gt0.3 tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| adv15_lt-0.5 tf15 | 33 | +1062 | -2008 | 2.18 | 64% | 12 / -75 | 17 | 4 | 7.4 | 78 | [+112, +2011] | 0.03 | 2 (17%) | -197 | +171 |
+| adv15_lt-0.5 tf60 | 6 | +174 | -363 | 2.03 | 50% | 2 / -78 | 2 | 2 | 15.4 | 75 | [-197, +545] | 0.22 | 0 (0%) | +0 | +0 |
+| adv15_lt-0.5 tf240 | 0 |
+| adv15_gt0.5 tf15 | 42 | +623 | -3335 | 1.46 | 55% | 19 / -71 | 17 | 6 | 7.3 | 74 | [-349, +1623] | 0.15 | 4 (21%) | -366 | +211 |
+| adv15_gt0.5 tf60 | 8 | -45 | -794 | 0.88 | 38% | 5 / -77 | 0 | 3 | 15.4 | 71 | [-464, +419] | 0.57 | 0 (0%) | +0 | +0 |
+| adv15_gt0.5 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rv1_gt1.5 tf15 | 26 | +934 | -1553 | 2.54 | 69% | 8 / -76 | 15 | 3 | 7.6 | 77 | [+150, +1718] | 0.02 | 2 (25%) | -153 | +86 |
+| rv1_gt1.5 tf60 | 3 | +241 | -26 | 4.95 | 67% | 1 / -61 | 1 | 1 | 14.9 | 60 | [+25, +458] | 0.04 | 0 (0%) | +0 | +0 |
+| rv1_gt1.5 tf240 | 2 | -155 | -332 | 0.00 | 0% | 2 / -78 | 0 | 0 | 12.0 | 75 | [-205, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rv1_gt2.0 tf15 | 28 | +999 | -1690 | 2.47 | 68% | 9 / -75 | 16 | 3 | 7.6 | 76 | [+178, +1826] | 0.02 | 3 (33%) | -247 | +224 |
+| rv1_gt2.0 tf60 | 4 | +147 | -221 | 1.95 | 50% | 2 / -77 | 1 | 1 | 12.6 | 77 | [-277, +596] | 0.31 | 0 (0%) | +0 | +0 |
+| rv1_gt2.0 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rv1_gt3.0 tf15 | 32 | +798 | -2245 | 1.91 | 62% | 12 / -73 | 17 | 3 | 7.4 | 76 | [-67, +1673] | 0.07 | 3 (25%) | -246 | +224 |
+| rv1_gt3.0 tf60 | 4 | +61 | -341 | 1.39 | 50% | 2 / -77 | 1 | 1 | 15.4 | 71 | [-277, +380] | 0.36 | 0 (0%) | +0 | +0 |
+| rv1_gt3.0 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rv1_lt0.5 tf15 | 34 | +418 | -2731 | 1.38 | 56% | 15 / -74 | 14 | 5 | 6.8 | 77 | [-389, +1249] | 0.21 | 3 (20%) | -300 | +288 |
+| rv1_lt0.5 tf60 | 9 | -253 | -1034 | 0.46 | 22% | 6 / -76 | 1 | 2 | 14.9 | 76 | [-614, +168] | 0.85 | 0 (0%) | +0 | +0 |
+| rv1_lt0.5 tf240 | 2 | -153 | -353 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rv1_lt0.7 tf15 | 33 | +386 | -2663 | 1.35 | 55% | 15 / -74 | 13 | 5 | 6.9 | 77 | [-427, +1211] | 0.22 | 3 (20%) | -300 | +288 |
+| rv1_lt0.7 tf60 | 8 | -193 | -873 | 0.53 | 25% | 5 / -79 | 1 | 2 | 12.6 | 79 | [-546, +210] | 0.79 | 0 (0%) | +0 | +0 |
+| rv1_lt0.7 tf240 | 2 | -153 | -353 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rv5_gt1.5 tf15 | 28 | +749 | -1935 | 1.92 | 57% | 12 / -68 | 13 | 3 | 7.3 | 73 | [-116, +1637] | 0.08 | 2 (17%) | -197 | +171 |
+| rv5_gt1.5 tf60 | 4 | +61 | -342 | 1.39 | 50% | 2 / -78 | 1 | 1 | 15.4 | 71 | [-277, +379] | 0.36 | 0 (0%) | +0 | +0 |
+| rv5_gt1.5 tf240 | 0 |
+| rv5_gt2.0 tf15 | 30 | +683 | -2158 | 1.77 | 57% | 13 / -68 | 13 | 4 | 7.1 | 73 | [-165, +1541] | 0.10 | 2 (15%) | -197 | +171 |
+| rv5_gt2.0 tf60 | 6 | +134 | -470 | 1.64 | 50% | 3 / -69 | 1 | 2 | 15.4 | 64 | [-246, +534] | 0.30 | 0 (0%) | +0 | +0 |
+| rv5_gt2.0 tf240 | 0 |
+| rv5_gt3.0 tf15 | 34 | +879 | -2350 | 1.92 | 59% | 14 / -68 | 14 | 6 | 7.1 | 73 | [-4, +1813] | 0.05 | 2 (14%) | -197 | +171 |
+| rv5_gt3.0 tf60 | 8 | +44 | -694 | 1.15 | 38% | 4 / -71 | 2 | 2 | 15.4 | 72 | [-366, +470] | 0.44 | 0 (0%) | +0 | +0 |
+| rv5_gt3.0 tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| rv5_lt0.5 tf15 | 38 | +762 | -2795 | 1.66 | 58% | 16 / -72 | 18 | 4 | 7.1 | 74 | [-160, +1718] | 0.09 | 3 (19%) | -272 | +74 |
+| rv5_lt0.5 tf60 | 9 | -254 | -1036 | 0.46 | 22% | 6 / -76 | 1 | 2 | 14.9 | 76 | [-615, +169] | 0.84 | 0 (0%) | +0 | +0 |
+| rv5_lt0.5 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rv5_lt0.7 tf15 | 38 | +762 | -2795 | 1.66 | 58% | 16 / -72 | 18 | 4 | 7.1 | 74 | [-160, +1718] | 0.09 | 3 (19%) | -272 | +74 |
+| rv5_lt0.7 tf60 | 9 | -254 | -1036 | 0.46 | 22% | 6 / -76 | 1 | 2 | 14.9 | 76 | [-615, +169] | 0.84 | 0 (0%) | +0 | +0 |
+| rv5_lt0.7 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rv15_gt1.5 tf15 | 30 | +581 | -2258 | 1.62 | 57% | 13 / -72 | 13 | 4 | 7.1 | 74 | [-247, +1451] | 0.14 | 3 (23%) | -262 | +94 |
+| rv15_gt1.5 tf60 | 7 | +57 | -647 | 1.20 | 43% | 4 / -71 | 1 | 2 | 15.9 | 67 | [-338, +488] | 0.40 | 0 (0%) | +0 | +0 |
+| rv15_gt1.5 tf240 | 0 |
+| rv15_gt2.0 tf15 | 36 | +555 | -2825 | 1.49 | 56% | 16 / -70 | 16 | 4 | 7.1 | 74 | [-312, +1530] | 0.15 | 3 (19%) | -262 | +94 |
+| rv15_gt2.0 tf60 | 7 | +57 | -647 | 1.20 | 43% | 4 / -71 | 1 | 2 | 15.9 | 67 | [-338, +488] | 0.40 | 0 (0%) | +0 | +0 |
+| rv15_gt2.0 tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| rv15_gt3.0 tf15 | 38 | +709 | -2872 | 1.63 | 58% | 16 / -70 | 17 | 5 | 7.3 | 74 | [-206, +1655] | 0.10 | 3 (19%) | -262 | +94 |
+| rv15_gt3.0 tf60 | 7 | +57 | -647 | 1.20 | 43% | 4 / -71 | 1 | 2 | 15.9 | 67 | [-338, +488] | 0.40 | 0 (0%) | +0 | +0 |
+| rv15_gt3.0 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rv15_lt0.5 tf15 | 36 | +667 | -2744 | 1.58 | 56% | 16 / -72 | 16 | 4 | 7.4 | 76 | [-219, +1586] | 0.12 | 3 (19%) | -272 | +74 |
+| rv15_lt0.5 tf60 | 9 | -253 | -1035 | 0.46 | 22% | 6 / -76 | 1 | 2 | 14.9 | 76 | [-614, +169] | 0.84 | 0 (0%) | +0 | +0 |
+| rv15_lt0.5 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rv15_lt0.7 tf15 | 32 | +569 | -2437 | 1.58 | 56% | 14 / -70 | 16 | 2 | 7.4 | 76 | [-272, +1428] | 0.14 | 3 (21%) | -272 | +74 |
+| rv15_lt0.7 tf60 | 5 | +30 | -350 | 1.12 | 20% | 3 / -80 | 2 | 0 | 15.9 | 81 | [-393, +668] | 0.47 | 0 (0%) | +0 | +0 |
+| rv15_lt0.7 tf240 | 3 | -256 | -533 | 0.00 | 0% | 3 / -85 | 0 | 0 | 9.3 | 100 | [-306, -207] | 1.00 | 0 (0%) | +0 | +0 |
+| dep15_on tf15 | 37 | +739 | -2727 | 1.66 | 57% | 16 / -70 | 15 | 6 | 7.3 | 75 | [-180, +1674] | 0.10 | 3 (19%) | -262 | +94 |
+| dep15_on tf60 | 7 | +32 | -617 | 1.10 | 43% | 4 / -77 | 1 | 2 | 14.9 | 67 | [-379, +480] | 0.44 | 0 (0%) | +0 | +0 |
+| dep15_on tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| dep15_agree tf15 | 42 | +623 | -3335 | 1.46 | 55% | 19 / -71 | 17 | 6 | 7.3 | 74 | [-349, +1623] | 0.15 | 4 (21%) | -366 | +211 |
+| dep15_agree tf60 | 8 | -45 | -794 | 0.88 | 38% | 5 / -77 | 0 | 3 | 15.4 | 71 | [-464, +419] | 0.57 | 0 (0%) | +0 | +0 |
+| dep15_agree tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| dep15_oppose tf15 | 37 | +739 | -2727 | 1.66 | 57% | 16 / -70 | 15 | 6 | 7.3 | 75 | [-180, +1674] | 0.10 | 3 (19%) | -262 | +94 |
+| dep15_oppose tf60 | 8 | +19 | -664 | 1.06 | 38% | 4 / -77 | 2 | 2 | 12.6 | 74 | [-400, +467] | 0.48 | 0 (0%) | +0 | +0 |
+| dep15_oppose tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| dep60_on tf15 | 26 | +887 | -1623 | 2.29 | 62% | 10 / -69 | 13 | 3 | 7.4 | 73 | [+67, +1734] | 0.04 | 1 (10%) | -94 | +138 |
+| dep60_on tf60 | 5 | +187 | -316 | 2.21 | 60% | 2 / -78 | 1 | 2 | 15.9 | 67 | [-184, +539] | 0.21 | 0 (0%) | +0 | +0 |
+| dep60_on tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| dep60_agree tf15 | 41 | +696 | -3164 | 1.54 | 56% | 18 / -71 | 17 | 6 | 7.4 | 75 | [-265, +1698] | 0.12 | 4 (22%) | -366 | +211 |
+| dep60_agree tf60 | 8 | -45 | -795 | 0.88 | 38% | 5 / -77 | 0 | 3 | 15.4 | 71 | [-464, +419] | 0.58 | 0 (0%) | +0 | +0 |
+| dep60_agree tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| dep60_oppose tf15 | 27 | +813 | -1796 | 2.07 | 59% | 11 / -69 | 13 | 3 | 7.4 | 73 | [-36, +1699] | 0.06 | 1 (9%) | -94 | +138 |
+| dep60_oppose tf60 | 6 | +174 | -363 | 2.03 | 50% | 2 / -78 | 2 | 2 | 15.4 | 75 | [-197, +545] | 0.22 | 0 (0%) | +0 | +0 |
+| dep60_oppose tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| dep240_on tf15 | 16 | +373 | -1164 | 2.01 | 69% | 5 / -74 | 10 | 1 | 7.4 | 71 | [-147, +914] | 0.12 | 1 (20%) | -49 | +53 |
+| dep240_on tf60 | 2 | +302 | +135 | inf | 100% | 0 / +0 | 0 | 2 | 12.0 | 75 | [+293, +311] | 0.00 | 0 (0%) | +0 | +0 |
+| dep240_on tf240 | 2 | -155 | -332 | 0.00 | 0% | 2 / -78 | 0 | 0 | 12.0 | 75 | [-205, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| dep240_agree tf15 | 38 | +491 | -3083 | 1.40 | 55% | 17 / -72 | 16 | 5 | 7.4 | 74 | [-444, +1469] | 0.19 | 4 (24%) | -366 | +211 |
+| dep240_agree tf60 | 8 | -45 | -795 | 0.88 | 38% | 5 / -77 | 0 | 3 | 15.4 | 71 | [-464, +419] | 0.58 | 0 (0%) | +0 | +0 |
+| dep240_agree tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| dep240_oppose tf15 | 20 | +505 | -1418 | 2.01 | 65% | 7 / -71 | 12 | 1 | 7.2 | 72 | [-84, +1133] | 0.08 | 1 (14%) | -49 | +53 |
+| dep240_oppose tf60 | 3 | +288 | +89 | 22.61 | 67% | 0 / +0 | 1 | 2 | 9.1 | 100 | [+120, +457] | 0.04 | 0 (0%) | +0 | +0 |
+| dep240_oppose tf240 | 2 | -155 | -332 | 0.00 | 0% | 2 / -78 | 0 | 0 | 12.0 | 75 | [-205, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| depany_on tf15 | 13 | +351 | -892 | 2.31 | 69% | 4 / -67 | 8 | 1 | 7.3 | 69 | [-108, +817] | 0.11 | 1 (25%) | -49 | +53 |
+| depany_on tf60 | 2 | +302 | +135 | inf | 100% | 0 / +0 | 1 | 1 | 12.0 | 75 | [+293, +311] | 0.00 | 0 (0%) | +0 | +0 |
+| depany_on tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 | 0 (0%) | +0 | +0 |
+| depany_agree tf15 | 39 | +643 | -3018 | 1.52 | 56% | 17 / -72 | 16 | 6 | 7.5 | 75 | [-302, +1640] | 0.14 | 4 (24%) | -366 | +211 |
+| depany_agree tf60 | 8 | -45 | -795 | 0.88 | 38% | 5 / -77 | 0 | 3 | 15.4 | 71 | [-464, +419] | 0.58 | 0 (0%) | +0 | +0 |
+| depany_agree tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| depany_oppose tf15 | 16 | +331 | -1211 | 1.84 | 62% | 6 / -66 | 9 | 1 | 6.8 | 70 | [-204, +869] | 0.16 | 1 (17%) | -49 | +53 |
+| depany_oppose tf60 | 3 | +289 | +89 | 22.61 | 67% | 0 / +0 | 2 | 1 | 9.1 | 100 | [+120, +457] | 0.04 | 0 (0%) | +0 | +0 |
+| depany_oppose tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.2&rv5_gt1.5 tf15 | 32 | +891 | -2119 | 2.00 | 59% | 13 / -69 | 15 | 4 | 7.2 | 73 | [-3, +1838] | 0.05 | 2 (15%) | -197 | +171 |
+| adv5_lt-0.2&rv5_gt1.5 tf60 | 7 | +72 | -511 | 1.27 | 43% | 3 / -86 | 2 | 2 | 14.9 | 82 | [-331, +494] | 0.39 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.2&rv5_gt1.5 tf240 | 0 |
+| adv5_lt-0.2|dep15_on tf15 | 19 | +725 | -998 | 3.24 | 74% | 5 / -65 | 12 | 2 | 6.9 | 72 | [+151, +1295] | 0.02 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.2|dep15_on tf60 | 5 | +213 | -235 | 1.80 | 40% | 3 / -88 | 0 | 2 | 24.6 | 82 | [-428, +861] | 0.32 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.2|dep15_on tf240 | 0 |
+| adv5_abs_gt0.3 tf15 | 20 | +481 | -1302 | 2.00 | 65% | 7 / -69 | 12 | 1 | 7.2 | 77 | [-159, +1111] | 0.11 | 1 (14%) | -93 | +137 |
+| adv5_abs_gt0.3 tf60 | 6 | +470 | -78 | 3.40 | 67% | 2 / -98 | 1 | 3 | 13.2 | 82 | [-119, +1045] | 0.07 | 0 (0%) | +0 | +0 |
+| adv5_abs_gt0.3 tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| depany_move_gt3.0 tf15 | 21 | +686 | -1239 | 2.54 | 67% | 7 / -64 | 12 | 2 | 7.3 | 72 | [+27, +1364] | 0.04 | 0 (0%) | +0 | +0 |
+| depany_move_gt3.0 tf60 | 3 | +179 | -122 | 2.90 | 67% | 1 / -94 | 1 | 1 | 14.9 | 67 | [-61, +419] | 0.26 | 0 (0%) | +0 | +0 |
+| depany_move_gt3.0 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| depany_move_gt5.0 tf15 | 23 | +507 | -1618 | 1.81 | 61% | 9 / -69 | 12 | 2 | 7.4 | 73 | [-177, +1227] | 0.12 | 1 (11%) | -93 | +138 |
+| depany_move_gt5.0 tf60 | 5 | +211 | -291 | 2.37 | 60% | 2 / -77 | 1 | 2 | 14.9 | 67 | [-183, +599] | 0.17 | 0 (0%) | +0 | +0 |
+| depany_move_gt5.0 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| depany_move_gt10.0 tf15 | 30 | +902 | -1933 | 2.07 | 60% | 12 / -71 | 14 | 4 | 7.4 | 73 | [-15, +1848] | 0.05 | 1 (8%) | -94 | +138 |
+| depany_move_gt10.0 tf60 | 7 | +72 | -511 | 1.27 | 43% | 3 / -86 | 2 | 2 | 14.9 | 82 | [-331, +494] | 0.39 | 0 (0%) | +0 | +0 |
+| depany_move_gt10.0 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rv5_gt1.5|depany_on tf15 | 11 | +257 | -785 | 1.96 | 64% | 4 / -67 | 6 | 1 | 7.3 | 69 | [-199, +735] | 0.18 | 0 (0%) | +0 | +0 |
+| rv5_gt1.5|depany_on tf60 | 2 | +302 | +135 | inf | 100% | 0 / +0 | 1 | 1 | 12.0 | 75 | [+293, +311] | 0.00 | 0 (0%) | +0 | +0 |
+| rv5_gt1.5|depany_on tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 | 0 (0%) | +0 | +0 |
+| sh24_adv5_lt-0.2 tf15 | 23 | +718 | -1419 | 2.02 | 57% | 10 / -70 | 9 | 4 | 7.3 | 73 | [-103, +1561] | 0.07 | 1 (10%) | -65 | -77 |
+| sh24_adv5_lt-0.2 tf60 | 5 | -322 | -702 | 0.00 | 0% | 4 / -77 | 1 | 0 | 15.9 | 76 | [-419, -217] | 1.00 | 0 (0%) | +0 | +0 |
+| sh24_adv5_lt-0.2 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| sh24_adv5_gt0.2 tf15 | 35 | +735 | -2588 | 1.68 | 57% | 15 / -72 | 16 | 4 | 7.3 | 75 | [-168, +1673] | 0.09 | 3 (20%) | -272 | +74 |
+| sh24_adv5_gt0.2 tf60 | 5 | +426 | -77 | 3.89 | 60% | 2 / -74 | 0 | 3 | 14.9 | 67 | [-128, +974] | 0.07 | 0 (0%) | +0 | +0 |
+| sh24_adv5_gt0.2 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| sh24_rv5_gt1.5 tf15 | 29 | +572 | -2159 | 1.63 | 59% | 12 / -75 | 14 | 3 | 7.4 | 77 | [-215, +1371] | 0.12 | 3 (25%) | -262 | +178 |
+| sh24_rv5_gt1.5 tf60 | 6 | +133 | -349 | 1.63 | 50% | 2 / -98 | 1 | 3 | 12.6 | 88 | [-258, +523] | 0.31 | 0 (0%) | +0 | +0 |
+| sh24_rv5_gt1.5 tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| sh24_dep15_on tf15 | 40 | +647 | -3138 | 1.50 | 55% | 18 / -72 | 16 | 6 | 7.4 | 74 | [-310, +1674] | 0.14 | 3 (17%) | -262 | +178 |
+| sh24_dep15_on tf60 | 9 | -58 | -841 | 0.85 | 33% | 5 / -77 | 1 | 3 | 14.9 | 76 | [-492, +410] | 0.59 | 0 (0%) | +0 | +0 |
+| sh24_dep15_on tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| sh24_dep60_on tf15 | 34 | +586 | -2703 | 1.51 | 53% | 16 / -72 | 14 | 4 | 7.4 | 73 | [-298, +1527] | 0.14 | 2 (12%) | -168 | +41 |
+| sh24_dep60_on tf60 | 9 | -58 | -840 | 0.85 | 33% | 5 / -77 | 1 | 3 | 14.9 | 76 | [-492, +410] | 0.59 | 0 (0%) | +0 | +0 |
+| sh24_dep60_on tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| sh24_dep240_oppose tf15 | 26 | +421 | -2077 | 1.47 | 50% | 13 / -69 | 10 | 3 | 7.0 | 73 | [-412, +1292] | 0.22 | 1 (8%) | -65 | -77 |
+| sh24_dep240_oppose tf60 | 6 | -221 | -701 | 0.36 | 17% | 4 / -83 | 1 | 1 | 13.1 | 85 | [-495, +122] | 0.88 | 0 (0%) | +0 | +0 |
+| sh24_dep240_oppose tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rand10_s0 tf15 | 37 | +741 | -2746 | 1.63 | 57% | 16 / -73 | 15 | 6 | 7.7 | 75 | [-200, +1701] | 0.10 | 3 (19%) | -262 | +178 |
+| rand10_s0 tf60 | 8 | +44 | -693 | 1.15 | 38% | 4 / -71 | 1 | 3 | 15.4 | 72 | [-366, +470] | 0.45 | 0 (0%) | +0 | +0 |
+| rand10_s0 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand10_s1 tf15 | 39 | +634 | -3025 | 1.51 | 56% | 17 / -73 | 16 | 6 | 7.4 | 74 | [-294, +1603] | 0.14 | 3 (18%) | -301 | +288 |
+| rand10_s1 tf60 | 8 | +35 | -647 | 1.12 | 38% | 4 / -73 | 1 | 3 | 15.4 | 71 | [-368, +471] | 0.45 | 0 (0%) | +0 | +0 |
+| rand10_s1 tf240 | 3 | -256 | -534 | 0.00 | 0% | 3 / -85 | 0 | 0 | 9.3 | 100 | [-306, -207] | 1.00 | 0 (0%) | +0 | +0 |
+| rand10_s2 tf15 | 39 | +361 | -3306 | 1.28 | 54% | 18 / -72 | 18 | 3 | 7.3 | 75 | [-522, +1318] | 0.28 | 4 (22%) | -365 | +211 |
+| rand10_s2 tf60 | 9 | -58 | -840 | 0.85 | 33% | 5 / -77 | 1 | 3 | 14.9 | 76 | [-491, +409] | 0.59 | 0 (0%) | +0 | +0 |
+| rand10_s2 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand10_s3 tf15 | 38 | +425 | -3119 | 1.34 | 55% | 17 / -73 | 15 | 6 | 7.3 | 77 | [-426, +1304] | 0.22 | 4 (24%) | -365 | +210 |
+| rand10_s3 tf60 | 7 | -338 | -918 | 0.17 | 14% | 5 / -79 | 1 | 1 | 10.3 | 81 | [-555, -88] | 0.98 | 0 (0%) | +0 | +0 |
+| rand10_s3 tf240 | 2 | -153 | -353 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand10_s4 tf15 | 41 | +680 | -3180 | 1.52 | 56% | 18 / -72 | 17 | 6 | 7.4 | 75 | [-269, +1705] | 0.12 | 4 (22%) | -366 | +211 |
+| rand10_s4 tf60 | 9 | -58 | -841 | 0.85 | 33% | 5 / -77 | 1 | 3 | 14.9 | 76 | [-492, +410] | 0.59 | 0 (0%) | +0 | +0 |
+| rand10_s4 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand10_s5 tf15 | 37 | +637 | -2862 | 1.52 | 54% | 17 / -73 | 18 | 2 | 7.3 | 75 | [-306, +1617] | 0.13 | 3 (18%) | -300 | +288 |
+| rand10_s5 tf60 | 6 | +166 | -334 | 1.90 | 50% | 2 / -85 | 1 | 3 | 13.6 | 88 | [-229, +561] | 0.25 | 0 (0%) | +0 | +0 |
+| rand10_s5 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand10_s6 tf15 | 37 | +540 | -2966 | 1.44 | 54% | 17 / -72 | 17 | 3 | 7.4 | 77 | [-348, +1497] | 0.17 | 4 (24%) | -366 | +211 |
+| rand10_s6 tf60 | 11 | +191 | -759 | 1.48 | 45% | 5 / -77 | 1 | 5 | 11.6 | 82 | [-335, +739] | 0.29 | 0 (0%) | +0 | +0 |
+| rand10_s6 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rand10_s7 tf15 | 38 | +671 | -2890 | 1.57 | 55% | 17 / -69 | 17 | 4 | 7.0 | 73 | [-263, +1644] | 0.13 | 2 (12%) | -158 | +60 |
+| rand10_s7 tf60 | 8 | -5 | -687 | 0.99 | 38% | 4 / -83 | 1 | 3 | 15.4 | 79 | [-426, +447] | 0.51 | 0 (0%) | +0 | +0 |
+| rand10_s7 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rand20_s0 tf15 | 33 | +354 | -2727 | 1.30 | 52% | 16 / -73 | 11 | 6 | 7.7 | 73 | [-520, +1262] | 0.26 | 2 (12%) | -169 | +41 |
+| rand20_s0 tf60 | 8 | +44 | -691 | 1.15 | 38% | 4 / -71 | 1 | 3 | 15.4 | 71 | [-365, +470] | 0.44 | 0 (0%) | +0 | +0 |
+| rand20_s0 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand20_s1 tf15 | 33 | +873 | -2232 | 1.95 | 64% | 12 / -76 | 15 | 6 | 7.5 | 75 | [-14, +1786] | 0.05 | 2 (17%) | -197 | +255 |
+| rand20_s1 tf60 | 6 | +3 | -533 | 1.01 | 33% | 3 / -67 | 1 | 2 | 15.9 | 72 | [-312, +349] | 0.50 | 0 (0%) | +0 | +0 |
+| rand20_s1 tf240 | 3 | -256 | -534 | 0.00 | 0% | 3 / -85 | 0 | 0 | 9.3 | 100 | [-306, -207] | 1.00 | 0 (0%) | +0 | +0 |
+| rand20_s2 tf15 | 34 | +430 | -2733 | 1.39 | 56% | 15 / -73 | 16 | 3 | 7.1 | 74 | [-415, +1300] | 0.21 | 3 (20%) | -262 | +93 |
+| rand20_s2 tf60 | 8 | -151 | -886 | 0.59 | 25% | 5 / -71 | 1 | 2 | 15.4 | 71 | [-488, +238] | 0.76 | 0 (0%) | +0 | +0 |
+| rand20_s2 tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand20_s3 tf15 | 36 | +335 | -3006 | 1.29 | 56% | 16 / -73 | 16 | 4 | 7.1 | 77 | [-474, +1149] | 0.24 | 3 (19%) | -300 | +287 |
+| rand20_s3 tf60 | 6 | -325 | -871 | 0.17 | 17% | 5 / -79 | 0 | 1 | 13.6 | 78 | [-518, -50] | 0.98 | 0 (0%) | +0 | +0 |
+| rand20_s3 tf240 | 2 | -153 | -353 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-200, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand20_s4 tf15 | 37 | +468 | -2985 | 1.38 | 54% | 17 / -72 | 18 | 2 | 7.0 | 77 | [-448, +1435] | 0.21 | 4 (24%) | -365 | +211 |
+| rand20_s4 tf60 | 8 | -5 | -686 | 0.99 | 38% | 4 / -83 | 1 | 3 | 15.4 | 79 | [-426, +447] | 0.51 | 0 (0%) | +0 | +0 |
+| rand20_s4 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand20_s5 tf15 | 36 | +718 | -2681 | 1.62 | 56% | 16 / -72 | 18 | 2 | 7.2 | 74 | [-213, +1698] | 0.10 | 3 (19%) | -300 | +288 |
+| rand20_s5 tf60 | 6 | +166 | -335 | 1.90 | 50% | 2 / -85 | 1 | 3 | 13.6 | 88 | [-229, +561] | 0.25 | 0 (0%) | +0 | +0 |
+| rand20_s5 tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand20_s6 tf15 | 33 | +480 | -2665 | 1.44 | 55% | 15 / -73 | 16 | 2 | 7.7 | 78 | [-400, +1399] | 0.19 | 4 (27%) | -350 | +341 |
+| rand20_s6 tf60 | 10 | +65 | -784 | 1.16 | 40% | 5 / -77 | 1 | 4 | 10.9 | 82 | [-412, +591] | 0.43 | 0 (0%) | +0 | +0 |
+| rand20_s6 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rand20_s7 tf15 | 34 | +540 | -2680 | 1.48 | 53% | 16 / -70 | 14 | 4 | 7.3 | 73 | [-353, +1485] | 0.17 | 2 (12%) | -158 | +60 |
+| rand20_s7 tf60 | 8 | -5 | -687 | 0.99 | 38% | 4 / -83 | 1 | 3 | 15.4 | 79 | [-426, +447] | 0.51 | 0 (0%) | +0 | +0 |
+| rand20_s7 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rand30_s0 tf15 | 32 | +269 | -2711 | 1.23 | 50% | 16 / -73 | 10 | 6 | 7.6 | 74 | [-599, +1196] | 0.31 | 2 (12%) | -169 | +41 |
+| rand30_s0 tf60 | 8 | +44 | -691 | 1.15 | 38% | 4 / -71 | 1 | 3 | 15.4 | 71 | [-365, +470] | 0.44 | 0 (0%) | +0 | +0 |
+| rand30_s0 tf240 | 0 |
+| rand30_s1 tf15 | 29 | +666 | -2036 | 1.73 | 59% | 12 / -76 | 12 | 5 | 7.8 | 73 | [-173, +1525] | 0.10 | 2 (17%) | -197 | +255 |
+| rand30_s1 tf60 | 6 | +3 | -533 | 1.01 | 33% | 3 / -66 | 1 | 2 | 15.9 | 71 | [-311, +349] | 0.50 | 0 (0%) | +0 | +0 |
+| rand30_s1 tf240 | 3 | -256 | -533 | 0.00 | 0% | 3 / -85 | 0 | 0 | 9.3 | 100 | [-306, -207] | 1.00 | 0 (0%) | +0 | +0 |
+| rand30_s2 tf15 | 31 | +277 | -2583 | 1.28 | 58% | 13 / -75 | 15 | 3 | 7.3 | 77 | [-450, +988] | 0.27 | 2 (15%) | -197 | +170 |
+| rand30_s2 tf60 | 7 | -138 | -838 | 0.61 | 29% | 5 / -71 | 0 | 2 | 15.9 | 67 | [-483, +256] | 0.73 | 0 (0%) | +0 | +0 |
+| rand30_s2 tf240 | 1 | -100 | -201 | 0.00 | 0% | 1 / -100 | 0 | 0 | 2.2 | 99 | [-100, -100] | 1.00 | 0 (0%) | +0 | +0 |
+| rand30_s3 tf15 | 30 | +159 | -2608 | 1.15 | 53% | 14 / -75 | 13 | 3 | 7.5 | 77 | [-570, +897] | 0.36 | 2 (14%) | -196 | +254 |
+| rand30_s3 tf60 | 4 | -300 | -646 | 0.00 | 0% | 4 / -75 | 0 | 0 | 10.0 | 71 | [-357, -243] | 1.00 | 0 (0%) | +0 | +0 |
+| rand30_s3 tf240 | 2 | -203 | -379 | 0.00 | 0% | 2 / -101 | 0 | 0 | 5.7 | 100 | [-205, -200] | 1.00 | 0 (0%) | +0 | +0 |
+| rand30_s4 tf15 | 34 | +459 | -2694 | 1.41 | 56% | 15 / -75 | 17 | 2 | 7.2 | 77 | [-456, +1400] | 0.21 | 4 (27%) | -365 | +211 |
+| rand30_s4 tf60 | 7 | -74 | -655 | 0.79 | 29% | 4 / -83 | 1 | 2 | 14.9 | 76 | [-468, +366] | 0.64 | 0 (0%) | +0 | +0 |
+| rand30_s4 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rand30_s5 tf15 | 33 | +764 | -2336 | 1.76 | 58% | 14 / -72 | 18 | 1 | 7.4 | 75 | [-135, +1682] | 0.08 | 4 (29%) | -349 | +341 |
+| rand30_s5 tf60 | 3 | -15 | -282 | 0.91 | 33% | 2 / -85 | 0 | 1 | 10.3 | 93 | [-264, +234] | 0.63 | 0 (0%) | +0 | +0 |
+| rand30_s5 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand30_s6 tf15 | 31 | +271 | -2671 | 1.25 | 52% | 15 / -73 | 14 | 2 | 7.8 | 78 | [-588, +1150] | 0.32 | 4 (27%) | -350 | +341 |
+| rand30_s6 tf60 | 9 | +78 | -737 | 1.20 | 44% | 5 / -77 | 0 | 4 | 11.6 | 82 | [-395, +587] | 0.41 | 0 (0%) | +0 | +0 |
+| rand30_s6 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rand30_s7 tf15 | 29 | +631 | -2094 | 1.70 | 55% | 13 / -69 | 13 | 3 | 7.4 | 73 | [-235, +1525] | 0.12 | 2 (15%) | -158 | +60 |
+| rand30_s7 tf60 | 7 | +457 | -125 | 3.19 | 57% | 2 / -98 | 1 | 4 | 11.6 | 83 | [-105, +1046] | 0.10 | 0 (0%) | +0 | +0 |
+| rand30_s7 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| rand50_s0 tf15 | 23 | +183 | -1994 | 1.18 | 43% | 13 / -77 | 5 | 5 | 9.2 | 74 | [-655, +1042] | 0.38 | 2 (15%) | -169 | +41 |
+| rand50_s0 tf60 | 6 | +413 | -123 | 3.87 | 50% | 2 / -65 | 2 | 2 | 15.9 | 71 | [-87, +935] | 0.08 | 0 (0%) | +0 | +0 |
+| rand50_s0 tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 | 0 (0%) | +0 | +0 |
+| rand50_s1 tf15 | 21 | +311 | -1589 | 1.49 | 57% | 9 / -71 | 11 | 1 | 6.9 | 75 | [-353, +1048] | 0.23 | 0 (0%) | +0 | +0 |
+| rand50_s1 tf60 | 6 | -46 | -579 | 0.78 | 33% | 3 / -66 | 1 | 2 | 20.0 | 78 | [-310, +239] | 0.61 | 0 (0%) | +0 | +0 |
+| rand50_s1 tf240 | 3 | -256 | -533 | 0.00 | 0% | 3 / -85 | 0 | 0 | 9.3 | 99 | [-305, -206] | 1.00 | 0 (0%) | +0 | +0 |
+| rand50_s2 tf15 | 22 | +344 | -1661 | 1.58 | 64% | 8 / -74 | 13 | 1 | 6.8 | 77 | [-253, +929] | 0.18 | 2 (25%) | -153 | +86 |
+| rand50_s2 tf60 | 7 | +339 | -363 | 2.19 | 43% | 4 / -71 | 0 | 3 | 15.9 | 76 | [-254, +995] | 0.20 | 0 (0%) | +0 | +0 |
+| rand50_s2 tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 | 0 (0%) | +0 | +0 |
+| rand50_s3 tf15 | 24 | -25 | -2260 | 0.97 | 50% | 12 / -73 | 11 | 1 | 7.7 | 77 | [-647, +595] | 0.54 | 2 (17%) | -142 | +190 |
+| rand50_s3 tf60 | 3 | -85 | -332 | 0.52 | 33% | 2 / -89 | 0 | 1 | 11.6 | 82 | [-280, +109] | 0.74 | 0 (0%) | +0 | +0 |
+| rand50_s3 tf240 | 2 | -203 | -379 | 0.00 | 0% | 2 / -101 | 0 | 0 | 5.7 | 100 | [-205, -201] | 1.00 | 0 (0%) | +0 | +0 |
+| rand50_s4 tf15 | 22 | +412 | -1614 | 1.62 | 59% | 9 / -73 | 13 | 0 | 6.8 | 77 | [-304, +1191] | 0.18 | 2 (22%) | -169 | -44 |
+| rand50_s4 tf60 | 7 | -82 | -664 | 0.75 | 29% | 4 / -77 | 2 | 1 | 14.9 | 76 | [-444, +329] | 0.66 | 0 (0%) | +0 | +0 |
+| rand50_s4 tf240 | 2 | -155 | -332 | 0.00 | 0% | 2 / -78 | 0 | 0 | 12.0 | 75 | [-205, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand50_s5 tf15 | 23 | +623 | -1588 | 1.95 | 57% | 10 / -66 | 13 | 0 | 7.4 | 73 | [-139, +1439] | 0.10 | 2 (20%) | -142 | +190 |
+| rand50_s5 tf60 | 3 | +118 | -149 | 2.26 | 67% | 1 / -94 | 1 | 1 | 10.3 | 93 | [-94, +329] | 0.25 | 0 (0%) | +0 | +0 |
+| rand50_s5 tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| rand50_s6 tf15 | 23 | +42 | -2111 | 1.05 | 52% | 11 / -81 | 12 | 0 | 7.8 | 82 | [-689, +799] | 0.47 | 4 (36%) | -350 | +342 |
+| rand50_s6 tf60 | 5 | +200 | -214 | 2.03 | 60% | 2 / -98 | 0 | 3 | 10.3 | 93 | [-244, +645] | 0.23 | 0 (0%) | +0 | +0 |
+| rand50_s6 tf240 | 0 |
+| rand50_s7 tf15 | 24 | +778 | -1557 | 2.13 | 58% | 10 / -69 | 12 | 2 | 8.2 | 72 | [-7, +1583] | 0.05 | 2 (20%) | -142 | +190 |
+| rand50_s7 tf60 | 4 | +286 | +40 | 3.49 | 50% | 1 / -102 | 3 | 0 | 6.3 | 100 | [-187, +803] | 0.18 | 0 (0%) | +0 | +0 |
+| rand50_s7 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+
+PER-SIDE (positions by side)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live Buy | 24 | +355 | -1855 | 1.43 | 50% | 12 / -69 | 8 | 4 | 6.4 | 73 | [-432, +1154] | 0.24 | 3 (25%) | -171 | +158 |
+| live Sell | 29 | +56 | -2675 | 1.05 | 48% | 14 / -76 | 10 | 5 | 8.1 | 77 | [-670, +834] | 0.46 | 8 (57%) | -613 | +216 |
+| adv1_lt-0.1 Buy | 16 | +232 | -1330 | 1.42 | 50% | 8 / -69 | 7 | 1 | 6.7 | 74 | [-416, +934] | 0.30 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.1 Sell | 15 | +681 | -696 | 3.46 | 73% | 3 / -88 | 11 | 1 | 7.3 | 74 | [+134, +1216] | 0.02 | 1 (33%) | -77 | -101 |
+| adv1_gt0.1 Buy | 11 | +498 | -406 | 2.81 | 64% | 4 / -69 | 4 | 3 | 6.9 | 75 | [-97, +1132] | 0.09 | 0 (0%) | +0 | +0 |
+| adv1_gt0.1 Sell | 17 | -284 | -1940 | 0.68 | 29% | 12 / -74 | 3 | 2 | 9.3 | 80 | [-934, +481] | 0.75 | 3 (25%) | -213 | -121 |
+| adv1_lt-0.2 Buy | 18 | +135 | -1515 | 1.21 | 50% | 9 / -73 | 8 | 1 | 6.4 | 76 | [-534, +866] | 0.38 | 0 (0%) | +0 | +0 |
+| adv1_lt-0.2 Sell | 20 | +396 | -1445 | 1.67 | 60% | 7 / -83 | 12 | 1 | 7.4 | 78 | [-266, +1061] | 0.17 | 3 (43%) | -284 | +50 |
+| adv1_gt0.2 Buy | 13 | +482 | -623 | 2.45 | 62% | 5 / -67 | 5 | 3 | 5.7 | 73 | [-136, +1150] | 0.10 | 0 (0%) | +0 | +0 |
+| adv1_gt0.2 Sell | 19 | -300 | -2157 | 0.70 | 32% | 13 / -76 | 4 | 2 | 8.5 | 80 | [-1002, +488] | 0.75 | 3 (23%) | -213 | -121 |
+| adv1_lt-0.3 Buy | 19 | +282 | -1471 | 1.43 | 53% | 9 / -73 | 8 | 2 | 6.5 | 75 | [-428, +1015] | 0.28 | 1 (11%) | -57 | +147 |
+| adv1_lt-0.3 Sell | 21 | +466 | -1478 | 1.78 | 62% | 7 / -83 | 12 | 2 | 7.5 | 82 | [-180, +1136] | 0.12 | 3 (43%) | -284 | +50 |
+| adv1_gt0.3 Buy | 15 | +633 | -673 | 2.90 | 67% | 5 / -67 | 7 | 3 | 3.4 | 75 | [-3, +1305] | 0.05 | 0 (0%) | +0 | +0 |
+| adv1_gt0.3 Sell | 19 | -300 | -2157 | 0.70 | 32% | 13 / -76 | 4 | 2 | 8.5 | 80 | [-1002, +488] | 0.75 | 3 (23%) | -213 | -121 |
+| adv1_lt-0.5 Buy | 21 | +302 | -1609 | 1.42 | 52% | 10 / -72 | 9 | 2 | 6.5 | 75 | [-418, +1067] | 0.27 | 2 (20%) | -118 | +244 |
+| adv1_lt-0.5 Sell | 24 | +487 | -1745 | 1.67 | 58% | 9 / -79 | 12 | 3 | 7.9 | 81 | [-228, +1218] | 0.13 | 4 (44%) | -333 | +176 |
+| adv1_gt0.5 Buy | 18 | +433 | -1173 | 1.80 | 56% | 8 / -68 | 7 | 3 | 6.1 | 74 | [-262, +1171] | 0.17 | 1 (12%) | -53 | -86 |
+| adv1_gt0.5 Sell | 22 | -439 | -2597 | 0.59 | 36% | 14 / -76 | 4 | 4 | 8.9 | 78 | [-1048, +182] | 0.88 | 5 (36%) | -393 | -104 |
+| adv5_lt-0.1 Buy | 9 | +165 | -593 | 1.51 | 56% | 4 / -81 | 3 | 2 | 3.7 | 94 | [-344, +686] | 0.31 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.1 Sell | 12 | +487 | -569 | 3.07 | 67% | 3 / -74 | 9 | 0 | 7.4 | 77 | [-12, +1001] | 0.06 | 1 (33%) | -49 | -69 |
+| adv5_gt0.1 Buy | 21 | +375 | -1534 | 1.54 | 52% | 10 / -70 | 8 | 3 | 6.9 | 73 | [-385, +1163] | 0.22 | 2 (20%) | -114 | +11 |
+| adv5_gt0.1 Sell | 23 | -325 | -2535 | 0.68 | 43% | 13 / -78 | 7 | 3 | 8.5 | 77 | [-940, +305] | 0.80 | 7 (54%) | -564 | +90 |
+| adv5_lt-0.2 Buy | 11 | +81 | -866 | 1.22 | 55% | 5 / -73 | 4 | 2 | 6.4 | 82 | [-390, +580] | 0.40 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.2 Sell | 14 | +843 | -414 | 4.58 | 71% | 3 / -74 | 9 | 2 | 7.4 | 77 | [+227, +1518] | 0.01 | 1 (33%) | -49 | -69 |
+| adv5_gt0.2 Buy | 21 | +374 | -1536 | 1.53 | 52% | 10 / -70 | 8 | 3 | 6.9 | 73 | [-386, +1163] | 0.22 | 2 (20%) | -114 | +11 |
+| adv5_gt0.2 Sell | 25 | -47 | -2446 | 0.95 | 48% | 13 / -78 | 7 | 5 | 8.5 | 77 | [-753, +678] | 0.55 | 7 (54%) | -564 | +90 |
+| adv5_lt-0.3 Buy | 14 | +167 | -1039 | 1.39 | 57% | 6 / -71 | 6 | 2 | 6.0 | 77 | [-339, +665] | 0.31 | 1 (17%) | -57 | +146 |
+| adv5_lt-0.3 Sell | 18 | +706 | -953 | 2.41 | 61% | 6 / -81 | 9 | 3 | 7.6 | 81 | [-53, +1489] | 0.06 | 2 (33%) | -142 | +263 |
+| adv5_gt0.3 Buy | 22 | +485 | -1525 | 1.69 | 55% | 10 / -70 | 9 | 3 | 6.7 | 74 | [-286, +1285] | 0.16 | 2 (20%) | -114 | +11 |
+| adv5_gt0.3 Sell | 26 | -96 | -2595 | 0.91 | 46% | 14 / -76 | 7 | 5 | 8.9 | 77 | [-805, +634] | 0.58 | 8 (57%) | -613 | +216 |
+| adv5_lt-0.5 Buy | 18 | +129 | -1479 | 1.20 | 50% | 9 / -73 | 7 | 2 | 6.7 | 78 | [-504, +762] | 0.39 | 1 (11%) | -57 | +146 |
+| adv5_lt-0.5 Sell | 20 | +627 | -1209 | 2.26 | 65% | 6 / -81 | 10 | 4 | 7.6 | 82 | [-44, +1263] | 0.06 | 3 (50%) | -246 | +297 |
+| adv5_gt0.5 Buy | 24 | +355 | -1855 | 1.43 | 50% | 12 / -69 | 9 | 3 | 6.4 | 73 | [-432, +1153] | 0.24 | 3 (25%) | -171 | +158 |
+| adv5_gt0.5 Sell | 28 | -12 | -2644 | 0.99 | 46% | 14 / -76 | 9 | 5 | 8.3 | 77 | [-743, +722] | 0.51 | 8 (57%) | -613 | +216 |
+| adv15_lt-0.1 Buy | 11 | +346 | -655 | 2.31 | 64% | 4 / -66 | 6 | 1 | 6.5 | 72 | [-150, +860] | 0.13 | 1 (25%) | -57 | +146 |
+| adv15_lt-0.1 Sell | 15 | +714 | -643 | 2.96 | 67% | 4 / -88 | 9 | 2 | 7.4 | 82 | [+17, +1454] | 0.04 | 1 (25%) | -93 | +137 |
+| adv15_gt0.1 Buy | 18 | +316 | -1344 | 1.52 | 50% | 9 / -67 | 7 | 2 | 6.7 | 67 | [-390, +1049] | 0.23 | 2 (22%) | -114 | +11 |
+| adv15_gt0.1 Sell | 18 | -444 | -2137 | 0.52 | 33% | 12 / -77 | 3 | 3 | 9.5 | 80 | [-975, +139] | 0.90 | 5 (42%) | -393 | -104 |
+| adv15_lt-0.2 Buy | 14 | +621 | -641 | 2.77 | 64% | 5 / -70 | 8 | 1 | 6.7 | 74 | [-31, +1298] | 0.06 | 1 (20%) | -57 | +147 |
+| adv15_lt-0.2 Sell | 17 | +436 | -1100 | 1.97 | 65% | 5 / -87 | 10 | 2 | 7.4 | 82 | [-156, +1062] | 0.12 | 2 (40%) | -197 | +171 |
+| adv15_gt0.2 Buy | 20 | +249 | -1557 | 1.37 | 50% | 10 / -68 | 8 | 2 | 6.4 | 73 | [-465, +1000] | 0.30 | 2 (20%) | -114 | +11 |
+| adv15_gt0.2 Sell | 23 | -178 | -2371 | 0.82 | 43% | 13 / -78 | 6 | 4 | 9.2 | 77 | [-831, +527] | 0.67 | 8 (62%) | -612 | +216 |
+| adv15_lt-0.3 Buy | 14 | +621 | -641 | 2.77 | 64% | 5 / -70 | 8 | 1 | 6.7 | 74 | [-31, +1298] | 0.06 | 1 (20%) | -57 | +147 |
+| adv15_lt-0.3 Sell | 18 | +554 | -1083 | 2.24 | 67% | 5 / -87 | 10 | 3 | 7.4 | 83 | [-69, +1193] | 0.07 | 2 (40%) | -197 | +171 |
+| adv15_gt0.3 Buy | 23 | +412 | -1696 | 1.53 | 52% | 11 / -70 | 9 | 3 | 6.5 | 73 | [-353, +1214] | 0.21 | 2 (18%) | -114 | +11 |
+| adv15_gt0.3 Sell | 24 | -234 | -2530 | 0.78 | 42% | 14 / -76 | 6 | 4 | 9.2 | 76 | [-897, +451] | 0.72 | 8 (57%) | -613 | +216 |
+| adv15_lt-0.5 Buy | 19 | +620 | -1147 | 2.12 | 58% | 8 / -69 | 9 | 2 | 7.8 | 73 | [-153, +1381] | 0.10 | 2 (25%) | -118 | +245 |
+| adv15_lt-0.5 Sell | 20 | +616 | -1224 | 2.20 | 65% | 6 / -83 | 10 | 4 | 7.6 | 82 | [-53, +1275] | 0.06 | 2 (33%) | -197 | +171 |
+| adv15_gt0.5 Buy | 24 | +355 | -1855 | 1.43 | 50% | 12 / -69 | 8 | 4 | 6.4 | 73 | [-432, +1154] | 0.24 | 3 (25%) | -171 | +158 |
+| adv15_gt0.5 Sell | 28 | +70 | -2629 | 1.07 | 50% | 14 / -76 | 9 | 5 | 8.3 | 77 | [-671, +804] | 0.44 | 8 (57%) | -613 | +216 |
+| rv1_gt1.5 Buy | 17 | +1002 | -551 | 3.73 | 71% | 5 / -73 | 9 | 3 | 8.8 | 75 | [+295, +1716] | 0.01 | 1 (20%) | -61 | +98 |
+| rv1_gt1.5 Sell | 14 | +18 | -1360 | 1.04 | 57% | 6 / -76 | 7 | 1 | 8.0 | 80 | [-425, +465] | 0.47 | 2 (33%) | -153 | +86 |
+| rv1_gt2.0 Buy | 18 | +937 | -741 | 3.17 | 67% | 6 / -72 | 9 | 3 | 8.3 | 74 | [+191, +1676] | 0.02 | 1 (17%) | -61 | +98 |
+| rv1_gt2.0 Sell | 15 | +156 | -1322 | 1.34 | 60% | 6 / -76 | 8 | 1 | 8.2 | 77 | [-343, +645] | 0.30 | 3 (50%) | -247 | +224 |
+| rv1_gt3.0 Buy | 19 | +723 | -1042 | 2.47 | 63% | 7 / -70 | 10 | 2 | 6.9 | 73 | [+2, +1487] | 0.05 | 1 (14%) | -61 | +98 |
+| rv1_gt3.0 Sell | 18 | +82 | -1697 | 1.14 | 56% | 8 / -75 | 8 | 2 | 8.7 | 80 | [-442, +614] | 0.40 | 3 (38%) | -246 | +224 |
+| rv1_lt0.5 Buy | 20 | +85 | -1720 | 1.12 | 50% | 10 / -71 | 7 | 3 | 6.4 | 75 | [-540, +720] | 0.42 | 3 (30%) | -171 | +158 |
+| rv1_lt0.5 Sell | 25 | -73 | -2399 | 0.93 | 44% | 13 / -77 | 8 | 4 | 8.1 | 80 | [-763, +636] | 0.56 | 6 (46%) | -470 | +42 |
+| rv1_lt0.7 Buy | 19 | +145 | -1559 | 1.22 | 53% | 9 / -72 | 7 | 3 | 6.4 | 77 | [-462, +761] | 0.36 | 2 (22%) | -110 | +61 |
+| rv1_lt0.7 Sell | 24 | -105 | -2331 | 0.90 | 42% | 13 / -77 | 7 | 4 | 8.3 | 81 | [-782, +593] | 0.60 | 6 (46%) | -470 | +41 |
+| rv5_gt1.5 Buy | 15 | +499 | -906 | 2.09 | 53% | 7 / -65 | 6 | 2 | 7.8 | 60 | [-185, +1225] | 0.12 | 1 (14%) | -57 | +147 |
+| rv5_gt1.5 Sell | 17 | +311 | -1370 | 1.60 | 59% | 7 / -74 | 8 | 2 | 7.5 | 80 | [-277, +939] | 0.19 | 2 (29%) | -197 | +171 |
+| rv5_gt2.0 Buy | 18 | +454 | -1211 | 1.78 | 50% | 9 / -65 | 7 | 2 | 6.7 | 66 | [-286, +1233] | 0.17 | 1 (11%) | -57 | +147 |
+| rv5_gt2.0 Sell | 18 | +364 | -1417 | 1.71 | 61% | 7 / -74 | 7 | 4 | 7.6 | 77 | [-219, +959] | 0.15 | 3 (43%) | -247 | +298 |
+| rv5_gt3.0 Buy | 20 | +563 | -1302 | 1.97 | 55% | 9 / -65 | 8 | 3 | 6.7 | 66 | [-172, +1327] | 0.11 | 2 (22%) | -118 | +244 |
+| rv5_gt3.0 Sell | 23 | +259 | -1943 | 1.33 | 52% | 10 / -76 | 8 | 5 | 7.5 | 80 | [-409, +938] | 0.27 | 5 (50%) | -368 | +277 |
+| rv5_lt0.5 Buy | 23 | +412 | -1698 | 1.53 | 52% | 11 / -70 | 10 | 2 | 6.5 | 73 | [-393, +1212] | 0.20 | 3 (27%) | -171 | +158 |
+| rv5_lt0.5 Sell | 26 | -57 | -2488 | 0.94 | 46% | 13 / -76 | 9 | 4 | 7.9 | 77 | [-744, +672] | 0.56 | 7 (54%) | -520 | -117 |
+| rv5_lt0.7 Buy | 23 | +412 | -1698 | 1.53 | 52% | 11 / -70 | 10 | 2 | 6.5 | 73 | [-393, +1212] | 0.20 | 3 (27%) | -171 | +158 |
+| rv5_lt0.7 Sell | 26 | -57 | -2488 | 0.94 | 46% | 13 / -76 | 9 | 4 | 7.9 | 77 | [-744, +672] | 0.56 | 7 (54%) | -520 | -117 |
+| rv15_gt1.5 Buy | 18 | +514 | -1150 | 1.96 | 56% | 8 / -67 | 8 | 2 | 7.4 | 67 | [-192, +1261] | 0.12 | 2 (25%) | -110 | +61 |
+| rv15_gt1.5 Sell | 19 | +124 | -1755 | 1.18 | 53% | 9 / -76 | 6 | 4 | 7.7 | 76 | [-460, +749] | 0.37 | 5 (56%) | -384 | +73 |
+| rv15_gt2.0 Buy | 21 | +591 | -1374 | 1.99 | 57% | 9 / -66 | 10 | 2 | 6.9 | 73 | [-176, +1361] | 0.10 | 3 (33%) | -171 | +158 |
+| rv15_gt2.0 Sell | 23 | -80 | -2299 | 0.91 | 48% | 12 / -76 | 7 | 4 | 7.7 | 76 | [-719, +575] | 0.58 | 7 (58%) | -510 | +98 |
+| rv15_gt3.0 Buy | 21 | +591 | -1375 | 1.99 | 57% | 9 / -66 | 9 | 3 | 6.9 | 73 | [-176, +1361] | 0.10 | 3 (33%) | -171 | +158 |
+| rv15_gt3.0 Sell | 26 | +21 | -2499 | 1.02 | 50% | 13 / -74 | 9 | 4 | 7.9 | 75 | [-656, +719] | 0.47 | 7 (54%) | -510 | +98 |
+| rv15_lt0.5 Buy | 22 | +407 | -1657 | 1.53 | 50% | 11 / -70 | 8 | 3 | 6.7 | 73 | [-373, +1212] | 0.21 | 3 (27%) | -171 | +158 |
+| rv15_lt0.5 Sell | 25 | -147 | -2476 | 0.85 | 44% | 13 / -76 | 9 | 3 | 8.1 | 80 | [-800, +534] | 0.64 | 7 (54%) | -519 | -117 |
+| rv15_lt0.7 Buy | 17 | +280 | -1257 | 1.48 | 53% | 8 / -73 | 8 | 1 | 6.5 | 75 | [-384, +995] | 0.26 | 1 (12%) | -61 | +97 |
+| rv15_lt0.7 Sell | 23 | +63 | -2063 | 1.07 | 43% | 12 / -74 | 10 | 1 | 8.1 | 81 | [-685, +888] | 0.46 | 6 (50%) | -470 | -47 |
+| dep15_on Buy | 22 | +376 | -1635 | 1.49 | 50% | 11 / -70 | 8 | 3 | 6.7 | 73 | [-399, +1186] | 0.23 | 3 (27%) | -171 | +158 |
+| dep15_on Sell | 23 | +295 | -1910 | 1.39 | 57% | 10 / -76 | 8 | 5 | 7.5 | 80 | [-393, +991] | 0.25 | 4 (40%) | -311 | +220 |
+| dep15_agree Buy | 24 | +355 | -1855 | 1.43 | 50% | 12 / -69 | 8 | 4 | 6.4 | 73 | [-432, +1154] | 0.24 | 3 (25%) | -171 | +158 |
+| dep15_agree Sell | 28 | +70 | -2629 | 1.07 | 50% | 14 / -76 | 9 | 5 | 8.3 | 77 | [-671, +804] | 0.44 | 8 (57%) | -613 | +216 |
+| dep15_oppose Buy | 22 | +376 | -1635 | 1.49 | 50% | 11 / -70 | 8 | 3 | 6.7 | 73 | [-399, +1186] | 0.23 | 3 (27%) | -171 | +158 |
+| dep15_oppose Sell | 24 | +281 | -1957 | 1.36 | 54% | 10 / -76 | 9 | 5 | 7.4 | 81 | [-395, +951] | 0.25 | 4 (40%) | -311 | +220 |
+| dep60_on Buy | 16 | +539 | -968 | 2.18 | 56% | 7 / -65 | 7 | 2 | 7.4 | 60 | [-153, +1265] | 0.11 | 1 (14%) | -57 | +147 |
+| dep60_on Sell | 17 | +381 | -1326 | 1.71 | 59% | 7 / -77 | 7 | 3 | 8.5 | 73 | [-236, +1013] | 0.16 | 2 (29%) | -143 | +265 |
+| dep60_agree Buy | 23 | +428 | -1683 | 1.57 | 52% | 11 / -69 | 8 | 4 | 6.5 | 73 | [-361, +1229] | 0.20 | 3 (27%) | -171 | +158 |
+| dep60_agree Sell | 28 | +70 | -2630 | 1.07 | 50% | 14 / -76 | 9 | 5 | 8.3 | 77 | [-671, +804] | 0.44 | 8 (57%) | -613 | +216 |
+| dep60_oppose Buy | 17 | +466 | -1141 | 1.88 | 53% | 8 / -66 | 7 | 2 | 6.9 | 60 | [-248, +1215] | 0.15 | 1 (12%) | -57 | +147 |
+| dep60_oppose Sell | 18 | +367 | -1372 | 1.66 | 56% | 7 / -77 | 8 | 3 | 8.1 | 77 | [-274, +1012] | 0.18 | 2 (29%) | -143 | +265 |
+| dep240_on Buy | 8 | +338 | -350 | 3.12 | 75% | 2 / -80 | 3 | 3 | 7.4 | 69 | [-71, +738] | 0.09 | 0 (0%) | +0 | +0 |
+| dep240_on Sell | 12 | +181 | -1010 | 1.50 | 58% | 5 / -73 | 7 | 0 | 7.9 | 71 | [-317, +696] | 0.28 | 1 (20%) | -49 | +53 |
+| dep240_agree Buy | 21 | +374 | -1537 | 1.53 | 52% | 10 / -70 | 7 | 4 | 6.9 | 73 | [-386, +1163] | 0.22 | 2 (20%) | -114 | +11 |
+| dep240_agree Sell | 27 | -82 | -2696 | 0.92 | 48% | 14 / -76 | 9 | 4 | 8.1 | 76 | [-773, +658] | 0.58 | 8 (57%) | -613 | +216 |
+| dep240_oppose Buy | 11 | +319 | -669 | 2.10 | 64% | 4 / -72 | 4 | 3 | 5.7 | 72 | [-163, +802] | 0.14 | 1 (25%) | -57 | +146 |
+| dep240_oppose Sell | 14 | +320 | -992 | 1.84 | 57% | 5 / -73 | 9 | 0 | 7.9 | 77 | [-214, +863] | 0.17 | 1 (20%) | -49 | +53 |
+| depany_on Buy | 7 | +297 | -291 | 2.86 | 71% | 2 / -80 | 3 | 2 | 9.1 | 60 | [-118, +706] | 0.12 | 0 (0%) | +0 | +0 |
+| depany_on Sell | 9 | +253 | -645 | 2.20 | 67% | 3 / -70 | 6 | 0 | 7.5 | 72 | [-159, +697] | 0.17 | 1 (33%) | -49 | +53 |
+| depany_agree Buy | 21 | +374 | -1537 | 1.53 | 52% | 10 / -70 | 7 | 4 | 6.9 | 73 | [-386, +1163] | 0.22 | 2 (20%) | -114 | +11 |
+| depany_agree Sell | 28 | +70 | -2631 | 1.07 | 50% | 14 / -76 | 9 | 5 | 8.3 | 77 | [-671, +804] | 0.44 | 8 (57%) | -613 | +216 |
+| depany_oppose Buy | 10 | +278 | -610 | 1.96 | 60% | 4 / -72 | 4 | 2 | 6.0 | 66 | [-208, +765] | 0.17 | 1 (25%) | -57 | +146 |
+| depany_oppose Sell | 10 | +239 | -691 | 2.07 | 60% | 3 / -70 | 7 | 0 | 7.4 | 77 | [-180, +687] | 0.18 | 1 (33%) | -49 | +53 |
+| adv5_lt-0.2&rv5_gt1.5 Buy | 18 | +364 | -1289 | 1.58 | 50% | 9 / -70 | 7 | 2 | 6.7 | 67 | [-387, +1159] | 0.23 | 1 (11%) | -57 | +147 |
+| adv5_lt-0.2&rv5_gt1.5 Sell | 21 | +599 | -1341 | 2.13 | 62% | 7 / -74 | 10 | 4 | 7.5 | 82 | [-47, +1253] | 0.07 | 3 (43%) | -247 | +298 |
+| adv5_lt-0.2|dep15_on Buy | 11 | +81 | -866 | 1.22 | 55% | 5 / -73 | 4 | 2 | 6.4 | 82 | [-390, +580] | 0.40 | 0 (0%) | +0 | +0 |
+| adv5_lt-0.2|dep15_on Sell | 13 | +857 | -367 | 4.86 | 77% | 3 / -74 | 8 | 2 | 7.5 | 73 | [+258, +1518] | 0.01 | 1 (33%) | -49 | -69 |
+| adv5_abs_gt0.3 Buy | 12 | +296 | -710 | 2.01 | 67% | 4 / -73 | 7 | 1 | 6.1 | 88 | [-163, +750] | 0.14 | 0 (0%) | +0 | +0 |
+| adv5_abs_gt0.3 Sell | 15 | +553 | -872 | 2.14 | 60% | 6 / -81 | 6 | 3 | 8.5 | 80 | [-196, +1334] | 0.12 | 2 (33%) | -142 | +263 |
+| depany_move_gt3.0 Buy | 10 | +250 | -650 | 2.01 | 60% | 4 / -62 | 5 | 1 | 6.7 | 58 | [-226, +735] | 0.21 | 1 (25%) | -57 | +146 |
+| depany_move_gt3.0 Sell | 15 | +562 | -864 | 2.63 | 67% | 5 / -69 | 8 | 2 | 7.7 | 72 | [-25, +1140] | 0.06 | 1 (20%) | -49 | +126 |
+| depany_move_gt5.0 Buy | 13 | +197 | -1004 | 1.50 | 54% | 6 / -66 | 5 | 2 | 7.8 | 60 | [-324, +747] | 0.29 | 1 (17%) | -57 | +146 |
+| depany_move_gt5.0 Sell | 17 | +367 | -1259 | 1.68 | 59% | 7 / -77 | 8 | 2 | 7.7 | 73 | [-278, +1021] | 0.19 | 2 (29%) | -142 | +264 |
+| depany_move_gt10.0 Buy | 19 | +278 | -1476 | 1.39 | 47% | 10 / -72 | 7 | 2 | 6.9 | 73 | [-509, +1086] | 0.30 | 1 (10%) | -57 | +147 |
+| depany_move_gt10.0 Sell | 20 | +542 | -1322 | 1.98 | 60% | 7 / -77 | 9 | 4 | 8.1 | 81 | [-138, +1223] | 0.10 | 2 (29%) | -143 | +265 |
+| rv5_gt1.5|depany_on Buy | 6 | +257 | -231 | 2.61 | 67% | 2 / -80 | 2 | 2 | 9.2 | 77 | [-158, +656] | 0.16 | 0 (0%) | +0 | +0 |
+| rv5_gt1.5|depany_on Sell | 8 | +200 | -597 | 1.95 | 62% | 3 / -70 | 5 | 0 | 7.4 | 71 | [-202, +649] | 0.23 | 0 (0%) | +0 | +0 |
+| sh24_adv5_lt-0.2 Buy | 15 | +416 | -945 | 1.87 | 53% | 7 / -68 | 5 | 3 | 6.5 | 72 | [-251, +1137] | 0.17 | 0 (0%) | +0 | +0 |
+| sh24_adv5_lt-0.2 Sell | 15 | -173 | -1530 | 0.75 | 33% | 9 / -76 | 5 | 1 | 8.1 | 77 | [-734, +452] | 0.70 | 2 (22%) | -114 | -146 |
+| sh24_adv5_gt0.2 Buy | 18 | +510 | -1154 | 1.97 | 56% | 8 / -66 | 8 | 2 | 6.4 | 74 | [-186, +1240] | 0.12 | 1 (12%) | -53 | -86 |
+| sh24_adv5_gt0.2 Sell | 24 | +497 | -1866 | 1.59 | 54% | 11 / -77 | 8 | 5 | 7.9 | 75 | [-322, +1334] | 0.16 | 4 (36%) | -349 | -27 |
+| sh24_rv5_gt1.5 Buy | 17 | +192 | -1362 | 1.32 | 53% | 8 / -75 | 6 | 3 | 3.7 | 77 | [-424, +803] | 0.31 | 1 (12%) | -57 | +146 |
+| sh24_rv5_gt1.5 Sell | 19 | +412 | -1347 | 1.67 | 58% | 7 / -85 | 9 | 3 | 8.5 | 80 | [-257, +1089] | 0.16 | 4 (57%) | -339 | +77 |
+| sh24_dep15_on Buy | 23 | +412 | -1699 | 1.53 | 52% | 11 / -70 | 8 | 4 | 6.5 | 73 | [-354, +1215] | 0.21 | 2 (18%) | -114 | +11 |
+| sh24_dep15_on Sell | 28 | +23 | -2635 | 1.02 | 46% | 14 / -76 | 9 | 5 | 8.3 | 77 | [-708, +765] | 0.49 | 7 (50%) | -509 | +183 |
+| sh24_dep60_on Buy | 21 | +405 | -1607 | 1.52 | 48% | 11 / -70 | 7 | 3 | 6.5 | 72 | [-371, +1238] | 0.21 | 2 (18%) | -114 | +11 |
+| sh24_dep60_on Sell | 24 | -31 | -2290 | 0.97 | 46% | 12 / -76 | 8 | 4 | 8.3 | 77 | [-674, +670] | 0.53 | 5 (42%) | -367 | -81 |
+| sh24_dep240_oppose Buy | 18 | +138 | -1567 | 1.19 | 44% | 10 / -72 | 6 | 2 | 6.7 | 73 | [-574, +886] | 0.40 | 0 (0%) | +0 | +0 |
+| sh24_dep240_oppose Sell | 15 | +10 | -1365 | 1.02 | 40% | 8 / -72 | 5 | 2 | 9.2 | 73 | [-538, +598] | 0.50 | 2 (25%) | -114 | +49 |
+| rand10_s0 Buy | 21 | +555 | -1411 | 1.88 | 57% | 9 / -70 | 8 | 4 | 6.9 | 73 | [-197, +1327] | 0.12 | 2 (22%) | -114 | +11 |
+| rand10_s0 Sell | 26 | +76 | -2383 | 1.08 | 46% | 13 / -76 | 8 | 5 | 8.9 | 77 | [-659, +812] | 0.44 | 7 (54%) | -510 | +183 |
+| rand10_s1 Buy | 23 | +235 | -1851 | 1.28 | 48% | 12 / -70 | 7 | 4 | 6.5 | 72 | [-552, +1050] | 0.33 | 3 (25%) | -171 | +158 |
+| rand10_s1 Sell | 27 | +178 | -2354 | 1.19 | 52% | 12 / -79 | 10 | 5 | 8.1 | 80 | [-551, +897] | 0.35 | 6 (50%) | -504 | +370 |
+| rand10_s2 Buy | 22 | +245 | -1762 | 1.32 | 50% | 11 / -70 | 8 | 3 | 6.4 | 74 | [-468, +1025] | 0.32 | 2 (18%) | -114 | +11 |
+| rand10_s2 Sell | 28 | -96 | -2737 | 0.91 | 46% | 14 / -76 | 11 | 3 | 7.9 | 76 | [-787, +623] | 0.59 | 8 (57%) | -613 | +216 |
+| rand10_s3 Buy | 20 | +47 | -1754 | 1.07 | 50% | 10 / -71 | 7 | 3 | 5.1 | 75 | [-553, +645] | 0.46 | 1 (10%) | -53 | -86 |
+| rand10_s3 Sell | 27 | -114 | -2635 | 0.90 | 44% | 14 / -77 | 9 | 4 | 8.1 | 79 | [-837, +610] | 0.60 | 8 (57%) | -611 | +21 |
+| rand10_s4 Buy | 23 | +412 | -1699 | 1.53 | 52% | 11 / -70 | 8 | 4 | 6.5 | 73 | [-354, +1215] | 0.21 | 2 (18%) | -114 | +11 |
+| rand10_s4 Sell | 29 | +56 | -2677 | 1.05 | 48% | 14 / -76 | 10 | 5 | 8.1 | 77 | [-670, +834] | 0.46 | 8 (57%) | -613 | +216 |
+| rand10_s5 Buy | 19 | +411 | -1362 | 1.67 | 53% | 9 / -68 | 7 | 3 | 6.4 | 75 | [-297, +1172] | 0.18 | 0 (0%) | +0 | +0 |
+| rand10_s5 Sell | 26 | +238 | -2189 | 1.25 | 50% | 12 / -79 | 12 | 2 | 8.3 | 78 | [-511, +1033] | 0.30 | 7 (58%) | -548 | +292 |
+| rand10_s6 Buy | 21 | +521 | -1402 | 1.75 | 52% | 10 / -70 | 7 | 4 | 6.5 | 77 | [-275, +1328] | 0.15 | 3 (30%) | -171 | +158 |
+| rand10_s6 Sell | 28 | +157 | -2476 | 1.16 | 50% | 13 / -74 | 11 | 4 | 8.3 | 77 | [-558, +883] | 0.36 | 7 (54%) | -536 | +317 |
+| rand10_s7 Buy | 21 | +397 | -1512 | 1.57 | 52% | 10 / -69 | 7 | 4 | 6.4 | 72 | [-362, +1177] | 0.20 | 1 (10%) | -57 | +147 |
+| rand10_s7 Sell | 26 | +216 | -2219 | 1.25 | 50% | 12 / -72 | 11 | 3 | 8.3 | 75 | [-484, +980] | 0.32 | 5 (42%) | -329 | +166 |
+| rand20_s0 Buy | 18 | +306 | -1355 | 1.49 | 50% | 9 / -70 | 5 | 4 | 7.4 | 67 | [-425, +1067] | 0.26 | 1 (11%) | -53 | -86 |
+| rand20_s0 Sell | 25 | -62 | -2417 | 0.94 | 44% | 13 / -76 | 7 | 5 | 8.5 | 77 | [-732, +645] | 0.57 | 6 (46%) | -416 | +45 |
+| rand20_s1 Buy | 17 | +476 | -1105 | 1.92 | 59% | 7 / -74 | 6 | 4 | 7.8 | 73 | [-222, +1218] | 0.14 | 2 (29%) | -110 | +61 |
+| rand20_s1 Sell | 25 | +144 | -2194 | 1.17 | 52% | 11 / -78 | 10 | 4 | 8.1 | 80 | [-534, +834] | 0.37 | 5 (45%) | -400 | +142 |
+| rand20_s2 Buy | 20 | +404 | -1455 | 1.66 | 55% | 9 / -68 | 8 | 3 | 6.7 | 74 | [-289, +1141] | 0.19 | 2 (22%) | -114 | +11 |
+| rand20_s2 Sell | 24 | -278 | -2518 | 0.72 | 42% | 13 / -76 | 9 | 2 | 7.9 | 75 | [-892, +360] | 0.78 | 7 (54%) | -509 | -97 |
+| rand20_s3 Buy | 19 | -119 | -1819 | 0.83 | 47% | 10 / -71 | 7 | 2 | 3.7 | 77 | [-651, +432] | 0.65 | 1 (10%) | -53 | -85 |
+| rand20_s3 Sell | 25 | -24 | -2410 | 0.98 | 48% | 13 / -77 | 9 | 3 | 8.1 | 79 | [-718, +687] | 0.53 | 7 (54%) | -546 | +98 |
+| rand20_s4 Buy | 20 | +189 | -1618 | 1.26 | 50% | 10 / -72 | 8 | 2 | 6.4 | 76 | [-498, +954] | 0.36 | 1 (10%) | -61 | +97 |
+| rand20_s4 Sell | 27 | +121 | -2408 | 1.12 | 48% | 13 / -76 | 11 | 3 | 7.7 | 80 | [-624, +893] | 0.40 | 7 (54%) | -536 | +317 |
+| rand20_s5 Buy | 19 | +411 | -1362 | 1.67 | 53% | 9 / -68 | 7 | 3 | 6.4 | 75 | [-297, +1172] | 0.18 | 0 (0%) | +0 | +0 |
+| rand20_s5 Sell | 25 | +320 | -2008 | 1.36 | 52% | 11 / -79 | 12 | 2 | 8.1 | 77 | [-418, +1086] | 0.25 | 7 (64%) | -548 | +292 |
+| rand20_s6 Buy | 18 | +456 | -1206 | 1.71 | 50% | 9 / -71 | 5 | 4 | 8.3 | 76 | [-312, +1244] | 0.17 | 3 (33%) | -171 | +158 |
+| rand20_s6 Sell | 26 | +35 | -2396 | 1.04 | 50% | 12 / -74 | 12 | 2 | 8.2 | 81 | [-613, +708] | 0.47 | 6 (50%) | -471 | +321 |
+| rand20_s7 Buy | 19 | +245 | -1462 | 1.35 | 47% | 10 / -69 | 5 | 4 | 6.5 | 60 | [-506, +1027] | 0.31 | 1 (10%) | -57 | +147 |
+| rand20_s7 Sell | 24 | +238 | -2058 | 1.29 | 50% | 11 / -74 | 10 | 3 | 8.9 | 75 | [-469, +964] | 0.30 | 4 (36%) | -284 | +243 |
+| rand30_s0 Buy | 18 | +306 | -1355 | 1.49 | 50% | 9 / -70 | 5 | 4 | 7.4 | 67 | [-425, +1068] | 0.26 | 1 (11%) | -53 | -86 |
+| rand30_s0 Sell | 22 | +7 | -2048 | 1.01 | 45% | 11 / -75 | 6 | 5 | 8.9 | 78 | [-635, +664] | 0.49 | 5 (45%) | -339 | +146 |
+| rand30_s1 Buy | 16 | +435 | -1044 | 1.84 | 56% | 7 / -74 | 6 | 3 | 8.3 | 73 | [-269, +1178] | 0.16 | 2 (29%) | -110 | +61 |
+| rand30_s1 Sell | 22 | -22 | -2057 | 0.97 | 45% | 11 / -78 | 7 | 4 | 8.9 | 78 | [-678, +655] | 0.53 | 5 (45%) | -400 | +142 |
+| rand30_s2 Buy | 18 | +186 | -1471 | 1.34 | 56% | 8 / -69 | 7 | 3 | 6.7 | 75 | [-371, +742] | 0.30 | 2 (25%) | -114 | +11 |
+| rand30_s2 Sell | 21 | -147 | -2151 | 0.83 | 48% | 11 / -79 | 8 | 2 | 8.1 | 76 | [-752, +465] | 0.67 | 6 (55%) | -443 | -20 |
+| rand30_s3 Buy | 17 | -178 | -1655 | 0.73 | 47% | 9 / -73 | 6 | 2 | 6.4 | 77 | [-681, +308] | 0.72 | 1 (11%) | -53 | -85 |
+| rand30_s3 Sell | 19 | -165 | -1978 | 0.82 | 42% | 11 / -82 | 7 | 1 | 8.5 | 79 | [-811, +503] | 0.67 | 5 (45%) | -398 | +141 |
+| rand30_s4 Buy | 19 | +78 | -1629 | 1.11 | 47% | 10 / -72 | 7 | 2 | 6.5 | 75 | [-617, +841] | 0.44 | 1 (10%) | -61 | +97 |
+| rand30_s4 Sell | 23 | +254 | -1873 | 1.32 | 52% | 10 / -79 | 11 | 2 | 7.7 | 80 | [-442, +999] | 0.28 | 6 (60%) | -491 | +394 |
+| rand30_s5 Buy | 16 | +318 | -1155 | 1.57 | 50% | 8 / -70 | 6 | 2 | 6.4 | 76 | [-356, +1054] | 0.24 | 0 (0%) | +0 | +0 |
+| rand30_s5 Sell | 22 | +277 | -1818 | 1.36 | 55% | 10 / -78 | 12 | 0 | 8.2 | 76 | [-412, +991] | 0.27 | 7 (70%) | -548 | +220 |
+| rand30_s6 Buy | 17 | +345 | -1216 | 1.54 | 47% | 9 / -71 | 4 | 4 | 8.8 | 75 | [-406, +1112] | 0.23 | 3 (33%) | -171 | +158 |
+| rand30_s6 Sell | 24 | -49 | -2346 | 0.94 | 50% | 12 / -74 | 10 | 2 | 8.4 | 81 | [-675, +583] | 0.55 | 6 (50%) | -471 | +321 |
+| rand30_s7 Buy | 16 | +436 | -972 | 1.89 | 56% | 7 / -70 | 5 | 4 | 6.4 | 73 | [-245, +1167] | 0.15 | 0 (0%) | +0 | +0 |
+| rand30_s7 Sell | 21 | +599 | -1400 | 1.89 | 52% | 9 / -73 | 9 | 3 | 9.2 | 74 | [-204, +1434] | 0.11 | 3 (33%) | -207 | +187 |
+| rand50_s0 Buy | 13 | +317 | -918 | 1.64 | 46% | 7 / -70 | 3 | 3 | 9.3 | 61 | [-343, +1060] | 0.23 | 1 (14%) | -53 | -86 |
+| rand50_s0 Sell | 17 | +177 | -1378 | 1.24 | 41% | 9 / -82 | 4 | 4 | 9.3 | 80 | [-568, +965] | 0.36 | 2 (22%) | -169 | +41 |
+| rand50_s1 Buy | 14 | +113 | -1161 | 1.22 | 50% | 7 / -74 | 6 | 1 | 7.4 | 76 | [-495, +800] | 0.41 | 1 (14%) | -53 | -86 |
+| rand50_s1 Sell | 16 | -104 | -1539 | 0.82 | 44% | 8 / -72 | 6 | 2 | 8.3 | 78 | [-578, +383] | 0.65 | 3 (38%) | -202 | -113 |
+| rand50_s2 Buy | 15 | +349 | -1052 | 1.91 | 60% | 6 / -64 | 7 | 2 | 6.5 | 72 | [-206, +902] | 0.15 | 1 (17%) | -61 | +97 |
+| rand50_s2 Sell | 15 | +233 | -1173 | 1.39 | 53% | 7 / -85 | 6 | 2 | 8.2 | 80 | [-446, +974] | 0.31 | 3 (43%) | -230 | +143 |
+| rand50_s3 Buy | 12 | -46 | -1072 | 0.90 | 50% | 6 / -79 | 4 | 2 | 7.2 | 82 | [-509, +418] | 0.57 | 0 (0%) | +0 | +0 |
+| rand50_s3 Sell | 17 | -267 | -1899 | 0.66 | 41% | 10 / -79 | 7 | 0 | 8.1 | 76 | [-788, +282] | 0.80 | 4 (40%) | -295 | +146 |
+| rand50_s4 Buy | 15 | +155 | -1184 | 1.26 | 47% | 8 / -73 | 6 | 1 | 6.9 | 77 | [-493, +895] | 0.37 | 1 (12%) | -61 | +97 |
+| rand50_s4 Sell | 16 | +20 | -1426 | 1.04 | 50% | 7 / -77 | 9 | 0 | 7.4 | 77 | [-496, +578] | 0.48 | 3 (43%) | -246 | +12 |
+| rand50_s5 Buy | 13 | +333 | -880 | 1.81 | 54% | 6 / -68 | 6 | 1 | 6.5 | 78 | [-272, +985] | 0.20 | 0 (0%) | +0 | +0 |
+| rand50_s5 Sell | 15 | +254 | -1211 | 1.51 | 53% | 7 / -71 | 8 | 0 | 8.2 | 73 | [-348, +850] | 0.25 | 3 (43%) | -219 | +89 |
+| rand50_s6 Buy | 11 | +293 | -667 | 1.69 | 55% | 5 / -85 | 3 | 3 | 9.1 | 83 | [-351, +970] | 0.24 | 0 (0%) | +0 | +0 |
+| rand50_s6 Sell | 17 | -50 | -1658 | 0.92 | 53% | 8 / -82 | 9 | 0 | 8.1 | 82 | [-578, +512] | 0.57 | 4 (50%) | -350 | +342 |
+| rand50_s7 Buy | 10 | +458 | -402 | 2.76 | 60% | 4 / -65 | 4 | 2 | 6.1 | 67 | [-112, +1078] | 0.10 | 0 (0%) | +0 | +0 |
+| rand50_s7 Sell | 19 | +553 | -1269 | 1.93 | 53% | 8 / -72 | 11 | 0 | 8.5 | 74 | [-177, +1354] | 0.11 | 2 (25%) | -142 | +190 |
+
+PER-SIDE x TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live Buy tf15 | 19 | +518 | -1244 | 1.99 | 58% | 8 / -65 | 8 | 3 | 6.4 | 73 | [-182, +1229] | 0.11 |
+| live Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| live Buy tf240 | 0 |
+| live Sell tf15 | 23 | +105 | -2091 | 1.13 | 52% | 11 / -76 | 9 | 3 | 7.7 | 77 | [-567, +771] | 0.40 |
+| live Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| live Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| adv1_lt-0.1 Buy tf15 | 15 | +326 | -1136 | 1.71 | 53% | 7 / -66 | 7 | 1 | 6.5 | 72 | [-281, +1027] | 0.20 |
+| adv1_lt-0.1 Buy tf60 | 1 | -94 | -195 | 0.00 | 0% | 1 / -94 | 0 | 0 | 10.3 | 94 | [-94, -94] | 1.00 |
+| adv1_lt-0.1 Buy tf240 | 0 |
+| adv1_lt-0.1 Sell tf15 | 12 | +669 | -474 | 5.12 | 83% | 2 / -81 | 10 | 0 | 7.3 | 74 | [+220, +1112] | 0.01 |
+| adv1_lt-0.1 Sell tf60 | 2 | +113 | -21 | 9.47 | 50% | 0 / +0 | 1 | 1 | 9.9 | 84 | [-27, +253] | 0.25 |
+| adv1_lt-0.1 Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| adv1_gt0.1 Buy tf15 | 6 | +474 | +17 | 8.83 | 83% | 1 / -61 | 4 | 1 | 5.2 | 87 | [+38, +944] | 0.04 |
+| adv1_gt0.1 Buy tf60 | 5 | +25 | -423 | 1.12 | 40% | 3 / -72 | 0 | 2 | 11.6 | 60 | [-329, +420] | 0.44 |
+| adv1_gt0.1 Buy tf240 | 0 |
+| adv1_gt0.1 Sell tf15 | 14 | -437 | -1792 | 0.43 | 29% | 10 / -76 | 2 | 2 | 8.1 | 81 | [-903, +75] | 0.92 |
+| adv1_gt0.1 Sell tf60 | 2 | +205 | +5 | 3.67 | 50% | 1 / -77 | 1 | 0 | 31.8 | 79 | [-154, +565] | 0.25 |
+| adv1_gt0.1 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| adv1_lt-0.2 Buy tf15 | 16 | +331 | -1172 | 1.72 | 56% | 7 / -66 | 8 | 1 | 6.4 | 74 | [-280, +1008] | 0.20 |
+| adv1_lt-0.2 Buy tf60 | 2 | -196 | -343 | 0.00 | 0% | 2 / -98 | 0 | 0 | 6.7 | 97 | [-204, -188] | 1.00 |
+| adv1_lt-0.2 Buy tf240 | 0 |
+| adv1_lt-0.2 Sell tf15 | 16 | +437 | -1070 | 2.02 | 69% | 5 / -85 | 11 | 0 | 7.4 | 78 | [-145, +1006] | 0.12 |
+| adv1_lt-0.2 Sell tf60 | 2 | +113 | -21 | 9.45 | 50% | 0 / +0 | 1 | 1 | 9.9 | 83 | [-27, +252] | 0.25 |
+| adv1_lt-0.2 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| adv1_gt0.2 Buy tf15 | 8 | +457 | -200 | 4.89 | 75% | 2 / -59 | 5 | 1 | 4.5 | 74 | [-16, +985] | 0.06 |
+| adv1_gt0.2 Buy tf60 | 5 | +25 | -423 | 1.11 | 40% | 3 / -72 | 0 | 2 | 11.6 | 60 | [-329, +420] | 0.44 |
+| adv1_gt0.2 Buy tf240 | 0 |
+| adv1_gt0.2 Sell tf15 | 15 | -351 | -1808 | 0.54 | 33% | 10 / -76 | 3 | 2 | 8.1 | 80 | [-851, +206] | 0.86 |
+| adv1_gt0.2 Sell tf60 | 2 | +205 | +5 | 3.67 | 50% | 1 / -77 | 1 | 0 | 31.8 | 79 | [-154, +565] | 0.25 |
+| adv1_gt0.2 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| adv1_lt-0.3 Buy tf15 | 16 | +331 | -1174 | 1.72 | 56% | 7 / -66 | 8 | 1 | 6.4 | 74 | [-280, +1009] | 0.20 |
+| adv1_lt-0.3 Buy tf60 | 3 | -49 | -297 | 0.75 | 33% | 2 / -98 | 0 | 1 | 10.3 | 94 | [-298, +199] | 0.74 |
+| adv1_lt-0.3 Buy tf240 | 0 |
+| adv1_lt-0.3 Sell tf15 | 16 | +438 | -1071 | 2.03 | 69% | 5 / -85 | 11 | 0 | 7.4 | 78 | [-145, +1008] | 0.12 |
+| adv1_lt-0.3 Sell tf60 | 3 | +182 | -52 | 14.64 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+42, +322] | 0.03 |
+| adv1_lt-0.3 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| adv1_gt0.3 Buy tf15 | 10 | +608 | -250 | 6.17 | 80% | 2 / -59 | 7 | 1 | 3.4 | 76 | [+123, +1156] | 0.01 |
+| adv1_gt0.3 Buy tf60 | 5 | +25 | -423 | 1.11 | 40% | 3 / -72 | 0 | 2 | 11.6 | 60 | [-329, +420] | 0.44 |
+| adv1_gt0.3 Buy tf240 | 0 |
+| adv1_gt0.3 Sell tf15 | 15 | -351 | -1808 | 0.54 | 33% | 10 / -76 | 3 | 2 | 8.1 | 80 | [-851, +207] | 0.86 |
+| adv1_gt0.3 Sell tf60 | 2 | +205 | +5 | 3.67 | 50% | 1 / -77 | 1 | 0 | 31.8 | 79 | [-154, +565] | 0.25 |
+| adv1_gt0.3 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| adv1_lt-0.5 Buy tf15 | 17 | +412 | -1151 | 1.89 | 59% | 7 / -66 | 9 | 1 | 6.4 | 75 | [-200, +1082] | 0.14 |
+| adv1_lt-0.5 Buy tf60 | 4 | -110 | -458 | 0.57 | 25% | 3 / -86 | 0 | 1 | 12.6 | 77 | [-384, +171] | 0.74 |
+| adv1_lt-0.5 Buy tf240 | 0 |
+| adv1_lt-0.5 Sell tf15 | 19 | +459 | -1338 | 1.82 | 63% | 7 / -80 | 11 | 1 | 7.7 | 80 | [-200, +1140] | 0.13 |
+| adv1_lt-0.5 Sell tf60 | 3 | +182 | -52 | 14.63 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+42, +322] | 0.03 |
+| adv1_lt-0.5 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| adv1_gt0.5 Buy tf15 | 14 | +502 | -757 | 2.53 | 64% | 5 / -66 | 7 | 2 | 6.1 | 76 | [-101, +1146] | 0.09 |
+| adv1_gt0.5 Buy tf60 | 4 | -69 | -417 | 0.68 | 25% | 3 / -72 | 0 | 1 | 9.0 | 56 | [-325, +187] | 0.74 |
+| adv1_gt0.5 Buy tf240 | 0 |
+| adv1_gt0.5 Sell tf15 | 18 | -277 | -2035 | 0.67 | 39% | 11 / -76 | 4 | 3 | 8.3 | 78 | [-833, +313] | 0.78 |
+| adv1_gt0.5 Sell tf60 | 2 | -8 | -208 | 0.89 | 50% | 1 / -77 | 0 | 1 | 20.0 | 79 | [-154, +137] | 0.76 |
+| adv1_gt0.5 Sell tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| adv5_lt-0.1 Buy tf15 | 5 | +27 | -418 | 1.21 | 60% | 2 / -65 | 3 | 0 | 3.4 | 72 | [-219, +282] | 0.43 |
+| adv5_lt-0.1 Buy tf60 | 4 | +138 | -175 | 1.71 | 50% | 2 / -98 | 0 | 2 | 9.7 | 97 | [-383, +644] | 0.31 |
+| adv5_lt-0.1 Buy tf240 | 0 |
+| adv5_lt-0.1 Sell tf15 | 10 | +569 | -353 | 4.73 | 80% | 2 / -76 | 8 | 0 | 7.4 | 77 | [+108, +1037] | 0.02 |
+| adv5_lt-0.1 Sell tf60 | 2 | -83 | -216 | 0.00 | 0% | 1 / -69 | 1 | 0 | 25.5 | 83 | [-138, -27] | 1.00 |
+| adv5_lt-0.1 Sell tf240 | 0 |
+| adv5_gt0.1 Buy tf15 | 16 | +537 | -924 | 2.38 | 62% | 6 / -65 | 8 | 2 | 6.7 | 74 | [-98, +1215] | 0.08 |
+| adv5_gt0.1 Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-443, +245] | 0.74 |
+| adv5_gt0.1 Buy tf240 | 0 |
+| adv5_gt0.1 Sell tf15 | 18 | -290 | -1998 | 0.63 | 44% | 10 / -79 | 7 | 1 | 7.9 | 78 | [-806, +271] | 0.80 |
+| adv5_gt0.1 Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +321] | 0.26 |
+| adv5_gt0.1 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| adv5_lt-0.2 Buy tf15 | 8 | +99 | -601 | 1.58 | 62% | 3 / -57 | 4 | 1 | 5.1 | 66 | [-197, +421] | 0.30 |
+| adv5_lt-0.2 Buy tf60 | 3 | -18 | -265 | 0.91 | 33% | 2 / -98 | 0 | 1 | 10.3 | 94 | [-297, +262] | 0.74 |
+| adv5_lt-0.2 Buy tf240 | 0 |
+| adv5_lt-0.2 Sell tf15 | 11 | +626 | -397 | 5.10 | 82% | 2 / -76 | 8 | 1 | 7.4 | 73 | [+168, +1086] | 0.01 |
+| adv5_lt-0.2 Sell tf60 | 3 | +217 | -17 | 3.63 | 33% | 1 / -69 | 1 | 1 | 46.7 | 82 | [-152, +585] | 0.30 |
+| adv5_lt-0.2 Sell tf240 | 0 |
+| adv5_gt0.2 Buy tf15 | 16 | +537 | -925 | 2.37 | 62% | 6 / -65 | 8 | 2 | 6.7 | 74 | [-98, +1215] | 0.08 |
+| adv5_gt0.2 Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| adv5_gt0.2 Buy tf240 | 0 |
+| adv5_gt0.2 Sell tf15 | 20 | -12 | -1908 | 0.99 | 50% | 10 / -79 | 7 | 3 | 7.9 | 78 | [-643, +643] | 0.52 |
+| adv5_gt0.2 Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +321] | 0.26 |
+| adv5_gt0.2 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| adv5_lt-0.3 Buy tf15 | 10 | +123 | -736 | 1.54 | 60% | 4 / -57 | 5 | 1 | 4.7 | 66 | [-215, +477] | 0.29 |
+| adv5_lt-0.3 Buy tf60 | 4 | +44 | -304 | 1.22 | 50% | 2 / -98 | 1 | 1 | 10.9 | 88 | [-384, +426] | 0.39 |
+| adv5_lt-0.3 Buy tf240 | 0 |
+| adv5_lt-0.3 Sell tf15 | 14 | +394 | -930 | 2.03 | 64% | 5 / -77 | 8 | 1 | 7.6 | 77 | [-184, +979] | 0.13 |
+| adv5_lt-0.3 Sell tf60 | 3 | +412 | +179 | 31.88 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+99, +725] | 0.03 |
+| adv5_lt-0.3 Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| adv5_gt0.3 Buy tf15 | 17 | +648 | -914 | 2.66 | 65% | 6 / -65 | 9 | 2 | 6.5 | 75 | [+8, +1337] | 0.05 |
+| adv5_gt0.3 Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| adv5_gt0.3 Buy tf240 | 0 |
+| adv5_gt0.3 Sell tf15 | 21 | -61 | -2058 | 0.93 | 48% | 11 / -76 | 7 | 3 | 8.1 | 77 | [-696, +596] | 0.56 |
+| adv5_gt0.3 Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +321] | 0.26 |
+| adv5_gt0.3 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| adv5_lt-0.5 Buy tf15 | 13 | +146 | -1014 | 1.37 | 54% | 6 / -67 | 6 | 1 | 6.4 | 73 | [-359, +693] | 0.34 |
+| adv5_lt-0.5 Buy tf60 | 5 | -17 | -465 | 0.93 | 40% | 3 / -86 | 1 | 1 | 11.6 | 83 | [-411, +386] | 0.56 |
+| adv5_lt-0.5 Buy tf240 | 0 |
+| adv5_lt-0.5 Sell tf15 | 16 | +546 | -955 | 2.42 | 69% | 5 / -77 | 9 | 2 | 7.6 | 81 | [-46, +1137] | 0.06 |
+| adv5_lt-0.5 Sell tf60 | 3 | +182 | -52 | 14.63 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+42, +322] | 0.03 |
+| adv5_lt-0.5 Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| adv5_gt0.5 Buy tf15 | 19 | +518 | -1244 | 1.99 | 58% | 8 / -65 | 9 | 2 | 6.4 | 73 | [-182, +1229] | 0.11 |
+| adv5_gt0.5 Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| adv5_gt0.5 Buy tf240 | 0 |
+| adv5_gt0.5 Sell tf15 | 22 | +37 | -2060 | 1.04 | 50% | 11 / -76 | 8 | 3 | 7.9 | 75 | [-598, +717] | 0.47 |
+| adv5_gt0.5 Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| adv5_gt0.5 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| adv15_lt-0.1 Buy tf15 | 9 | +294 | -507 | 2.72 | 67% | 3 / -57 | 5 | 1 | 6.4 | 72 | [-119, +726] | 0.12 |
+| adv15_lt-0.1 Buy tf60 | 2 | +52 | -148 | 1.56 | 50% | 1 / -94 | 1 | 0 | 12.6 | 72 | [-188, +293] | 0.25 |
+| adv15_lt-0.1 Buy tf240 | 0 |
+| adv15_lt-0.1 Sell tf15 | 12 | +497 | -626 | 2.76 | 75% | 3 / -94 | 8 | 1 | 7.3 | 82 | [-61, +1045] | 0.07 |
+| adv15_lt-0.1 Sell tf60 | 3 | +217 | -17 | 3.63 | 33% | 1 / -69 | 1 | 1 | 46.7 | 82 | [-152, +586] | 0.30 |
+| adv15_lt-0.1 Sell tf240 | 0 |
+| adv15_gt0.1 Buy tf15 | 15 | +532 | -882 | 2.37 | 60% | 6 / -65 | 7 | 2 | 6.9 | 73 | [-106, +1218] | 0.09 |
+| adv15_gt0.1 Buy tf60 | 3 | -215 | -462 | 0.00 | 0% | 3 / -72 | 0 | 0 | 3.1 | 60 | [-264, -167] | 1.00 |
+| adv15_gt0.1 Buy tf240 | 0 |
+| adv15_gt0.1 Sell tf15 | 14 | -283 | -1575 | 0.59 | 36% | 9 / -77 | 3 | 2 | 8.9 | 84 | [-777, +251] | 0.82 |
+| adv15_gt0.1 Sell tf60 | 2 | -8 | -208 | 0.89 | 50% | 1 / -77 | 0 | 1 | 20.0 | 78 | [-153, +137] | 0.76 |
+| adv15_gt0.1 Sell tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| adv15_lt-0.2 Buy tf15 | 12 | +568 | -493 | 3.22 | 67% | 4 / -64 | 7 | 1 | 6.4 | 74 | [-10, +1208] | 0.05 |
+| adv15_lt-0.2 Buy tf60 | 2 | +53 | -148 | 1.56 | 50% | 1 / -94 | 1 | 0 | 12.6 | 72 | [-188, +294] | 0.25 |
+| adv15_lt-0.2 Buy tf240 | 0 |
+| adv15_lt-0.2 Sell tf15 | 14 | +449 | -851 | 2.23 | 71% | 4 / -91 | 9 | 1 | 7.3 | 83 | [-135, +1012] | 0.10 |
+| adv15_lt-0.2 Sell tf60 | 3 | -14 | -248 | 0.83 | 33% | 1 / -69 | 1 | 1 | 23.1 | 82 | [-152, +125] | 0.63 |
+| adv15_lt-0.2 Sell tf240 | 0 |
+| adv15_gt0.2 Buy tf15 | 17 | +464 | -1095 | 2.00 | 59% | 7 / -66 | 8 | 2 | 6.5 | 73 | [-176, +1160] | 0.13 |
+| adv15_gt0.2 Buy tf60 | 3 | -215 | -462 | 0.00 | 0% | 3 / -72 | 0 | 0 | 3.1 | 60 | [-264, -167] | 1.00 |
+| adv15_gt0.2 Buy tf240 | 0 |
+| adv15_gt0.2 Sell tf15 | 18 | -142 | -1835 | 0.82 | 44% | 10 / -78 | 6 | 2 | 8.3 | 78 | [-726, +470] | 0.64 |
+| adv15_gt0.2 Sell tf60 | 3 | +117 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +320] | 0.26 |
+| adv15_gt0.2 Sell tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| adv15_lt-0.3 Buy tf15 | 12 | +568 | -493 | 3.21 | 67% | 4 / -64 | 7 | 1 | 6.4 | 74 | [-10, +1209] | 0.05 |
+| adv15_lt-0.3 Buy tf60 | 2 | +53 | -148 | 1.56 | 50% | 1 / -94 | 1 | 0 | 12.6 | 72 | [-188, +294] | 0.25 |
+| adv15_lt-0.3 Buy tf240 | 0 |
+| adv15_lt-0.3 Sell tf15 | 15 | +568 | -834 | 2.56 | 73% | 4 / -91 | 9 | 2 | 7.4 | 83 | [-11, +1145] | 0.05 |
+| adv15_lt-0.3 Sell tf60 | 3 | -14 | -249 | 0.83 | 33% | 1 / -69 | 1 | 1 | 23.1 | 82 | [-152, +125] | 0.63 |
+| adv15_lt-0.3 Sell tf240 | 0 |
+| adv15_gt0.3 Buy tf15 | 18 | +575 | -1086 | 2.24 | 61% | 7 / -66 | 9 | 2 | 6.4 | 74 | [-98, +1291] | 0.08 |
+| adv15_gt0.3 Buy tf60 | 5 | -162 | -610 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-443, +245] | 0.74 |
+| adv15_gt0.3 Buy tf240 | 0 |
+| adv15_gt0.3 Sell tf15 | 19 | -199 | -1993 | 0.76 | 42% | 11 / -76 | 6 | 2 | 8.5 | 77 | [-777, +424] | 0.71 |
+| adv15_gt0.3 Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +320] | 0.26 |
+| adv15_gt0.3 Sell tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| adv15_lt-0.5 Buy tf15 | 16 | +628 | -837 | 2.57 | 62% | 6 / -67 | 8 | 2 | 6.7 | 74 | [-40, +1342] | 0.06 |
+| adv15_lt-0.5 Buy tf60 | 3 | -8 | -311 | 0.95 | 33% | 2 / -78 | 1 | 0 | 14.9 | 60 | [-249, +232] | 0.64 |
+| adv15_lt-0.5 Buy tf240 | 0 |
+| adv15_lt-0.5 Sell tf15 | 17 | +433 | -1172 | 1.87 | 65% | 6 / -83 | 9 | 2 | 7.5 | 83 | [-182, +1081] | 0.12 |
+| adv15_lt-0.5 Sell tf60 | 3 | +182 | -52 | 14.67 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+42, +322] | 0.03 |
+| adv15_lt-0.5 Sell tf240 | 0 |
+| adv15_gt0.5 Buy tf15 | 19 | +518 | -1244 | 1.99 | 58% | 8 / -65 | 8 | 3 | 6.4 | 73 | [-182, +1229] | 0.11 |
+| adv15_gt0.5 Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| adv15_gt0.5 Buy tf240 | 0 |
+| adv15_gt0.5 Sell tf15 | 23 | +105 | -2091 | 1.13 | 52% | 11 / -76 | 9 | 3 | 7.7 | 77 | [-567, +771] | 0.40 |
+| adv15_gt0.5 Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +321] | 0.26 |
+| adv15_gt0.5 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rv1_gt1.5 Buy tf15 | 13 | +863 | -346 | 5.24 | 77% | 3 / -68 | 8 | 2 | 5.7 | 75 | [+280, +1473] | 0.00 |
+| rv1_gt1.5 Buy tf60 | 3 | +241 | -26 | 4.95 | 67% | 1 / -61 | 1 | 1 | 14.9 | 60 | [+25, +458] | 0.04 |
+| rv1_gt1.5 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rv1_gt1.5 Sell tf15 | 13 | +71 | -1206 | 1.18 | 62% | 5 / -80 | 7 | 1 | 7.7 | 83 | [-361, +497] | 0.39 |
+| rv1_gt1.5 Sell tf60 | 0 |
+| rv1_gt1.5 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rv1_gt2.0 Buy tf15 | 14 | +790 | -521 | 3.85 | 71% | 4 / -69 | 8 | 2 | 6.0 | 74 | [+173, +1452] | 0.02 |
+| rv1_gt2.0 Buy tf60 | 4 | +147 | -221 | 1.95 | 50% | 2 / -77 | 1 | 1 | 12.6 | 77 | [-277, +596] | 0.31 |
+| rv1_gt2.0 Buy tf240 | 0 |
+| rv1_gt2.0 Sell tf15 | 14 | +209 | -1169 | 1.52 | 64% | 5 / -80 | 8 | 1 | 8.0 | 80 | [-265, +697] | 0.24 |
+| rv1_gt2.0 Sell tf60 | 0 |
+| rv1_gt2.0 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rv1_gt3.0 Buy tf15 | 16 | +731 | -733 | 3.16 | 69% | 5 / -68 | 9 | 2 | 6.0 | 74 | [+88, +1418] | 0.03 |
+| rv1_gt3.0 Buy tf60 | 3 | -8 | -309 | 0.95 | 33% | 2 / -77 | 1 | 0 | 14.9 | 60 | [-248, +233] | 0.64 |
+| rv1_gt3.0 Buy tf240 | 0 |
+| rv1_gt3.0 Sell tf15 | 16 | +66 | -1512 | 1.12 | 56% | 7 / -78 | 8 | 1 | 8.0 | 80 | [-439, +578] | 0.41 |
+| rv1_gt3.0 Sell tf60 | 1 | +69 | -32 | inf | 100% | 0 / +0 | 0 | 1 | 23.1 | 82 | [+69, +69] | 0.00 |
+| rv1_gt3.0 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rv1_lt0.5 Buy tf15 | 15 | +247 | -1110 | 1.62 | 60% | 6 / -67 | 7 | 2 | 6.4 | 77 | [-252, +768] | 0.22 |
+| rv1_lt0.5 Buy tf60 | 5 | -163 | -610 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-443, +244] | 0.74 |
+| rv1_lt0.5 Buy tf240 | 0 |
+| rv1_lt0.5 Sell tf15 | 19 | +171 | -1621 | 1.24 | 53% | 9 / -78 | 7 | 3 | 7.7 | 80 | [-473, +822] | 0.34 |
+| rv1_lt0.5 Sell tf60 | 4 | -91 | -424 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 79 | [-284, +111] | 0.82 |
+| rv1_lt0.5 Sell tf240 | 2 | -153 | -353 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rv1_lt0.7 Buy tf15 | 15 | +247 | -1110 | 1.62 | 60% | 6 / -67 | 7 | 2 | 6.4 | 77 | [-252, +768] | 0.22 |
+| rv1_lt0.7 Buy tf60 | 4 | -102 | -449 | 0.59 | 25% | 3 / -83 | 0 | 1 | 6.7 | 73 | [-382, +186] | 0.74 |
+| rv1_lt0.7 Buy tf240 | 0 |
+| rv1_lt0.7 Sell tf15 | 18 | +138 | -1553 | 1.20 | 50% | 9 / -78 | 6 | 3 | 7.9 | 81 | [-478, +784] | 0.35 |
+| rv1_lt0.7 Sell tf60 | 4 | -90 | -424 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 79 | [-284, +111] | 0.82 |
+| rv1_lt0.7 Sell tf240 | 2 | -153 | -353 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rv5_gt1.5 Buy tf15 | 12 | +507 | -596 | 2.68 | 58% | 5 / -60 | 5 | 2 | 6.7 | 66 | [-105, +1164] | 0.09 |
+| rv5_gt1.5 Buy tf60 | 3 | -8 | -310 | 0.95 | 33% | 2 / -78 | 1 | 0 | 14.9 | 60 | [-249, +232] | 0.64 |
+| rv5_gt1.5 Buy tf240 | 0 |
+| rv5_gt1.5 Sell tf15 | 16 | +242 | -1338 | 1.47 | 56% | 7 / -74 | 8 | 1 | 7.4 | 77 | [-338, +843] | 0.25 |
+| rv5_gt1.5 Sell tf60 | 1 | +69 | -32 | inf | 100% | 0 / +0 | 0 | 1 | 23.1 | 82 | [+69, +69] | 0.00 |
+| rv5_gt1.5 Sell tf240 | 0 |
+| rv5_gt2.0 Buy tf15 | 14 | +515 | -747 | 2.37 | 57% | 6 / -62 | 6 | 2 | 6.4 | 73 | [-120, +1211] | 0.10 |
+| rv5_gt2.0 Buy tf60 | 4 | -61 | -464 | 0.70 | 25% | 3 / -69 | 1 | 0 | 12.6 | 56 | [-310, +187] | 0.74 |
+| rv5_gt2.0 Buy tf240 | 0 |
+| rv5_gt2.0 Sell tf15 | 16 | +168 | -1411 | 1.33 | 56% | 7 / -74 | 7 | 2 | 7.4 | 77 | [-373, +706] | 0.30 |
+| rv5_gt2.0 Sell tf60 | 2 | +195 | -6 | inf | 100% | 0 / +0 | 0 | 2 | 21.0 | 74 | [+138, +253] | 0.00 |
+| rv5_gt2.0 Sell tf240 | 0 |
+| rv5_gt3.0 Buy tf15 | 16 | +625 | -838 | 2.67 | 62% | 6 / -62 | 7 | 3 | 6.4 | 73 | [-12, +1309] | 0.05 |
+| rv5_gt3.0 Buy tf60 | 4 | -61 | -464 | 0.71 | 25% | 3 / -69 | 1 | 0 | 12.6 | 56 | [-310, +187] | 0.74 |
+| rv5_gt3.0 Buy tf240 | 0 |
+| rv5_gt3.0 Sell tf15 | 18 | +255 | -1511 | 1.44 | 56% | 8 / -73 | 7 | 3 | 7.4 | 77 | [-334, +840] | 0.24 |
+| rv5_gt3.0 Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +366] | 0.24 |
+| rv5_gt3.0 Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| rv5_lt0.5 Buy tf15 | 18 | +575 | -1087 | 2.24 | 61% | 7 / -66 | 10 | 1 | 6.4 | 74 | [-92, +1279] | 0.08 |
+| rv5_lt0.5 Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| rv5_lt0.5 Buy tf240 | 0 |
+| rv5_lt0.5 Sell tf15 | 20 | +187 | -1709 | 1.27 | 55% | 9 / -76 | 8 | 3 | 7.6 | 75 | [-452, +835] | 0.33 |
+| rv5_lt0.5 Sell tf60 | 4 | -91 | -425 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 79 | [-285, +111] | 0.82 |
+| rv5_lt0.5 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rv5_lt0.7 Buy tf15 | 18 | +575 | -1087 | 2.24 | 61% | 7 / -66 | 10 | 1 | 6.4 | 74 | [-92, +1279] | 0.08 |
+| rv5_lt0.7 Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| rv5_lt0.7 Buy tf240 | 0 |
+| rv5_lt0.7 Sell tf15 | 20 | +187 | -1709 | 1.27 | 55% | 9 / -76 | 8 | 3 | 7.6 | 75 | [-452, +835] | 0.33 |
+| rv5_lt0.7 Sell tf60 | 4 | -91 | -425 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 79 | [-285, +111] | 0.82 |
+| rv5_lt0.7 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rv15_gt1.5 Buy tf15 | 14 | +575 | -686 | 2.76 | 64% | 5 / -65 | 7 | 2 | 6.7 | 74 | [-38, +1224] | 0.06 |
+| rv15_gt1.5 Buy tf60 | 4 | -61 | -463 | 0.71 | 25% | 3 / -69 | 1 | 0 | 12.6 | 56 | [-310, +187] | 0.74 |
+| rv15_gt1.5 Buy tf240 | 0 |
+| rv15_gt1.5 Sell tf15 | 16 | +6 | -1572 | 1.01 | 50% | 8 / -76 | 6 | 2 | 7.4 | 75 | [-521, +566] | 0.49 |
+| rv15_gt1.5 Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +322] | 0.26 |
+| rv15_gt1.5 Sell tf240 | 0 |
+| rv15_gt2.0 Buy tf15 | 17 | +652 | -911 | 2.68 | 65% | 6 / -65 | 9 | 2 | 6.5 | 75 | [+3, +1334] | 0.05 |
+| rv15_gt2.0 Buy tf60 | 4 | -61 | -463 | 0.71 | 25% | 3 / -69 | 1 | 0 | 12.6 | 56 | [-310, +187] | 0.74 |
+| rv15_gt2.0 Buy tf240 | 0 |
+| rv15_gt2.0 Sell tf15 | 19 | -97 | -1914 | 0.87 | 47% | 10 / -73 | 7 | 2 | 7.5 | 74 | [-658, +494] | 0.62 |
+| rv15_gt2.0 Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +321] | 0.26 |
+| rv15_gt2.0 Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| rv15_gt3.0 Buy tf15 | 17 | +652 | -911 | 2.68 | 65% | 6 / -65 | 8 | 3 | 6.5 | 75 | [+3, +1334] | 0.05 |
+| rv15_gt3.0 Buy tf60 | 4 | -61 | -464 | 0.70 | 25% | 3 / -69 | 1 | 0 | 12.6 | 56 | [-310, +187] | 0.74 |
+| rv15_gt3.0 Buy tf240 | 0 |
+| rv15_gt3.0 Sell tf15 | 21 | +57 | -1961 | 1.08 | 52% | 10 / -73 | 9 | 2 | 7.5 | 74 | [-535, +659] | 0.44 |
+| rv15_gt3.0 Sell tf60 | 3 | +118 | -184 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +322] | 0.26 |
+| rv15_gt3.0 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rv15_lt0.5 Buy tf15 | 17 | +569 | -1047 | 2.23 | 59% | 7 / -66 | 8 | 2 | 6.5 | 73 | [-91, +1273] | 0.08 |
+| rv15_lt0.5 Buy tf60 | 5 | -162 | -610 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-443, +245] | 0.74 |
+| rv15_lt0.5 Buy tf240 | 0 |
+| rv15_lt0.5 Sell tf15 | 19 | +97 | -1697 | 1.14 | 53% | 9 / -76 | 8 | 2 | 7.7 | 80 | [-504, +732] | 0.40 |
+| rv15_lt0.5 Sell tf60 | 4 | -91 | -425 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 79 | [-284, +111] | 0.82 |
+| rv15_lt0.5 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rv15_lt0.7 Buy tf15 | 14 | +545 | -769 | 2.70 | 64% | 5 / -64 | 8 | 1 | 6.4 | 74 | [-27, +1179] | 0.06 |
+| rv15_lt0.7 Buy tf60 | 2 | -162 | -309 | 0.00 | 0% | 2 / -81 | 0 | 0 | 9.5 | 80 | [-204, -121] | 1.00 |
+| rv15_lt0.7 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rv15_lt0.7 Sell tf15 | 18 | +24 | -1668 | 1.04 | 50% | 9 / -73 | 8 | 1 | 7.9 | 79 | [-541, +606] | 0.47 |
+| rv15_lt0.7 Sell tf60 | 3 | +192 | -41 | 3.13 | 33% | 1 / -77 | 2 | 0 | 16.9 | 81 | [-167, +551] | 0.29 |
+| rv15_lt0.7 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| dep15_on Buy tf15 | 17 | +539 | -1024 | 2.17 | 59% | 7 / -66 | 7 | 3 | 6.5 | 73 | [-129, +1251] | 0.10 |
+| dep15_on Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 1 | 0 | 10.3 | 60 | [-444, +245] | 0.74 |
+| dep15_on Buy tf240 | 0 |
+| dep15_on Sell tf15 | 20 | +201 | -1703 | 1.31 | 55% | 9 / -73 | 8 | 3 | 7.4 | 79 | [-408, +820] | 0.30 |
+| dep15_on Sell tf60 | 2 | +195 | -6 | inf | 100% | 0 / +0 | 0 | 2 | 21.0 | 74 | [+138, +252] | 0.00 |
+| dep15_on Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| dep15_agree Buy tf15 | 19 | +518 | -1244 | 1.99 | 58% | 8 / -65 | 8 | 3 | 6.4 | 73 | [-182, +1229] | 0.11 |
+| dep15_agree Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| dep15_agree Buy tf240 | 0 |
+| dep15_agree Sell tf15 | 23 | +105 | -2091 | 1.13 | 52% | 11 / -76 | 9 | 3 | 7.7 | 77 | [-567, +771] | 0.40 |
+| dep15_agree Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +321] | 0.26 |
+| dep15_agree Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| dep15_oppose Buy tf15 | 17 | +539 | -1024 | 2.17 | 59% | 7 / -66 | 7 | 3 | 6.5 | 73 | [-129, +1251] | 0.10 |
+| dep15_oppose Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 1 | 0 | 10.3 | 60 | [-444, +245] | 0.74 |
+| dep15_oppose Buy tf240 | 0 |
+| dep15_oppose Sell tf15 | 20 | +201 | -1703 | 1.31 | 55% | 9 / -73 | 8 | 3 | 7.4 | 79 | [-408, +820] | 0.30 |
+| dep15_oppose Sell tf60 | 3 | +182 | -52 | 14.61 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+42, +321] | 0.03 |
+| dep15_oppose Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| dep60_on Buy tf15 | 13 | +548 | -657 | 2.81 | 62% | 5 / -60 | 6 | 2 | 6.5 | 60 | [-57, +1196] | 0.07 |
+| dep60_on Buy tf60 | 3 | -9 | -311 | 0.94 | 33% | 2 / -78 | 1 | 0 | 14.9 | 60 | [-249, +232] | 0.64 |
+| dep60_on Buy tf240 | 0 |
+| dep60_on Sell tf15 | 13 | +339 | -966 | 1.88 | 62% | 5 / -77 | 7 | 1 | 7.7 | 73 | [-223, +899] | 0.16 |
+| dep60_on Sell tf60 | 2 | +196 | -6 | inf | 100% | 0 / +0 | 0 | 2 | 21.0 | 75 | [+138, +254] | 0.00 |
+| dep60_on Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| dep60_agree Buy tf15 | 18 | +591 | -1071 | 2.32 | 61% | 7 / -64 | 8 | 3 | 6.1 | 74 | [-91, +1306] | 0.07 |
+| dep60_agree Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| dep60_agree Buy tf240 | 0 |
+| dep60_agree Sell tf15 | 23 | +105 | -2092 | 1.13 | 52% | 11 / -76 | 9 | 3 | 7.7 | 77 | [-567, +771] | 0.40 |
+| dep60_agree Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +321] | 0.26 |
+| dep60_agree Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| dep60_oppose Buy tf15 | 14 | +474 | -831 | 2.27 | 57% | 6 / -62 | 6 | 2 | 6.4 | 67 | [-154, +1164] | 0.12 |
+| dep60_oppose Buy tf60 | 3 | -8 | -310 | 0.95 | 33% | 2 / -78 | 1 | 0 | 14.9 | 60 | [-249, +232] | 0.64 |
+| dep60_oppose Buy tf240 | 0 |
+| dep60_oppose Sell tf15 | 13 | +339 | -965 | 1.88 | 62% | 5 / -77 | 7 | 1 | 7.7 | 73 | [-223, +899] | 0.16 |
+| dep60_oppose Sell tf60 | 3 | +182 | -52 | 14.67 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+42, +323] | 0.03 |
+| dep60_oppose Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| dep240_on Buy tf15 | 5 | +139 | -307 | 3.43 | 80% | 1 / -57 | 3 | 1 | 3.4 | 60 | [-63, +340] | 0.13 |
+| dep240_on Buy tf60 | 2 | +302 | +135 | inf | 100% | 0 / +0 | 0 | 2 | 12.0 | 75 | [+293, +311] | 0.00 |
+| dep240_on Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| dep240_on Sell tf15 | 11 | +234 | -858 | 1.75 | 64% | 4 / -78 | 7 | 0 | 7.7 | 72 | [-255, +722] | 0.21 |
+| dep240_on Sell tf60 | 0 |
+| dep240_on Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| dep240_agree Buy tf15 | 16 | +537 | -925 | 2.37 | 62% | 6 / -65 | 7 | 3 | 6.7 | 74 | [-99, +1215] | 0.08 |
+| dep240_agree Buy tf60 | 5 | -163 | -612 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| dep240_agree Buy tf240 | 0 |
+| dep240_agree Sell tf15 | 22 | -47 | -2158 | 0.94 | 50% | 11 / -76 | 9 | 2 | 7.6 | 75 | [-670, +607] | 0.54 |
+| dep240_agree Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +321] | 0.26 |
+| dep240_agree Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| dep240_oppose Buy tf15 | 8 | +120 | -625 | 1.64 | 62% | 3 / -62 | 4 | 1 | 3.6 | 66 | [-187, +441] | 0.27 |
+| dep240_oppose Buy tf60 | 2 | +302 | +135 | inf | 100% | 0 / +0 | 0 | 2 | 12.0 | 75 | [+293, +311] | 0.00 |
+| dep240_oppose Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| dep240_oppose Sell tf15 | 12 | +386 | -793 | 2.23 | 67% | 4 / -78 | 8 | 0 | 7.9 | 77 | [-150, +934] | 0.12 |
+| dep240_oppose Sell tf60 | 1 | -13 | -46 | 0.00 | 0% | 0 / +0 | 1 | 0 | 0.9 | 100 | [-13, -13] | 1.00 |
+| dep240_oppose Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| depany_on Buy tf15 | 4 | +98 | -247 | 2.72 | 75% | 1 / -57 | 2 | 1 | 4.5 | 57 | [-104, +300] | 0.21 |
+| depany_on Buy tf60 | 2 | +302 | +135 | inf | 100% | 0 / +0 | 1 | 1 | 12.0 | 75 | [+293, +311] | 0.00 |
+| depany_on Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| depany_on Sell tf15 | 9 | +253 | -645 | 2.20 | 67% | 3 / -70 | 6 | 0 | 7.5 | 72 | [-159, +697] | 0.17 |
+| depany_on Sell tf60 | 0 |
+| depany_on Sell tf240 | 0 |
+| depany_agree Buy tf15 | 16 | +537 | -925 | 2.37 | 62% | 6 / -65 | 7 | 3 | 6.7 | 74 | [-99, +1215] | 0.08 |
+| depany_agree Buy tf60 | 5 | -163 | -612 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| depany_agree Buy tf240 | 0 |
+| depany_agree Sell tf15 | 23 | +106 | -2093 | 1.13 | 52% | 11 / -76 | 9 | 3 | 7.7 | 77 | [-567, +772] | 0.40 |
+| depany_agree Sell tf60 | 3 | +118 | -183 | 2.53 | 67% | 1 / -77 | 0 | 2 | 18.8 | 76 | [-85, +321] | 0.26 |
+| depany_agree Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| depany_oppose Buy tf15 | 7 | +79 | -566 | 1.42 | 57% | 3 / -62 | 3 | 1 | 3.7 | 60 | [-231, +411] | 0.35 |
+| depany_oppose Buy tf60 | 2 | +302 | +135 | inf | 100% | 0 / +0 | 1 | 1 | 12.0 | 75 | [+293, +311] | 0.00 |
+| depany_oppose Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| depany_oppose Sell tf15 | 9 | +252 | -644 | 2.20 | 67% | 3 / -70 | 6 | 0 | 7.5 | 72 | [-159, +696] | 0.17 |
+| depany_oppose Sell tf60 | 1 | -13 | -46 | 0.00 | 0% | 0 / +0 | 1 | 0 | 0.9 | 100 | [-13, -13] | 1.00 |
+| depany_oppose Sell tf240 | 0 |
+| adv5_lt-0.2&rv5_gt1.5 Buy tf15 | 14 | +474 | -831 | 2.27 | 57% | 6 / -62 | 6 | 2 | 6.4 | 67 | [-154, +1164] | 0.12 |
+| adv5_lt-0.2&rv5_gt1.5 Buy tf60 | 4 | -110 | -459 | 0.57 | 25% | 3 / -86 | 1 | 0 | 12.6 | 77 | [-384, +171] | 0.74 |
+| adv5_lt-0.2&rv5_gt1.5 Buy tf240 | 0 |
+| adv5_lt-0.2&rv5_gt1.5 Sell tf15 | 18 | +417 | -1289 | 1.81 | 61% | 7 / -74 | 9 | 2 | 7.4 | 81 | [-209, +1066] | 0.14 |
+| adv5_lt-0.2&rv5_gt1.5 Sell tf60 | 3 | +182 | -52 | 14.67 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+42, +322] | 0.03 |
+| adv5_lt-0.2&rv5_gt1.5 Sell tf240 | 0 |
+| adv5_lt-0.2|dep15_on Buy tf15 | 8 | +99 | -601 | 1.58 | 62% | 3 / -57 | 4 | 1 | 5.1 | 66 | [-197, +421] | 0.30 |
+| adv5_lt-0.2|dep15_on Buy tf60 | 3 | -18 | -265 | 0.91 | 33% | 2 / -98 | 0 | 1 | 10.3 | 94 | [-297, +262] | 0.74 |
+| adv5_lt-0.2|dep15_on Buy tf240 | 0 |
+| adv5_lt-0.2|dep15_on Sell tf15 | 11 | +626 | -397 | 5.10 | 82% | 2 / -76 | 8 | 1 | 7.4 | 73 | [+168, +1086] | 0.01 |
+| adv5_lt-0.2|dep15_on Sell tf60 | 2 | +230 | +30 | 4.33 | 50% | 1 / -69 | 0 | 1 | 48.3 | 74 | [-138, +599] | 0.24 |
+| adv5_lt-0.2|dep15_on Sell tf240 | 0 |
+| adv5_abs_gt0.3 Buy tf15 | 8 | +252 | -406 | 3.58 | 75% | 2 / -49 | 6 | 0 | 4.6 | 80 | [-28, +523] | 0.07 |
+| adv5_abs_gt0.3 Buy tf60 | 4 | +44 | -304 | 1.22 | 50% | 2 / -98 | 1 | 1 | 10.9 | 88 | [-384, +426] | 0.39 |
+| adv5_abs_gt0.3 Buy tf240 | 0 |
+| adv5_abs_gt0.3 Sell tf15 | 12 | +228 | -896 | 1.59 | 58% | 5 / -77 | 6 | 1 | 8.1 | 77 | [-329, +799] | 0.26 |
+| adv5_abs_gt0.3 Sell tf60 | 2 | +426 | +225 | inf | 100% | 0 / +0 | 0 | 2 | 32.7 | 74 | [+252, +599] | 0.00 |
+| adv5_abs_gt0.3 Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| depany_move_gt3.0 Buy tf15 | 8 | +198 | -502 | 2.28 | 62% | 3 / -52 | 4 | 1 | 6.1 | 58 | [-161, +598] | 0.21 |
+| depany_move_gt3.0 Buy tf60 | 2 | +52 | -148 | 1.56 | 50% | 1 / -94 | 1 | 0 | 12.6 | 72 | [-188, +293] | 0.25 |
+| depany_move_gt3.0 Buy tf240 | 0 |
+| depany_move_gt3.0 Sell tf15 | 13 | +488 | -737 | 2.67 | 69% | 4 / -73 | 8 | 1 | 7.5 | 73 | [-25, +1020] | 0.06 |
+| depany_move_gt3.0 Sell tf60 | 1 | +126 | +26 | inf | 100% | 0 / +0 | 0 | 1 | 18.8 | 67 | [+126, +126] | 0.00 |
+| depany_move_gt3.0 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| depany_move_gt5.0 Buy tf15 | 9 | +112 | -687 | 1.47 | 56% | 4 / -60 | 4 | 1 | 6.5 | 60 | [-290, +560] | 0.35 |
+| depany_move_gt5.0 Buy tf60 | 4 | +85 | -316 | 1.55 | 50% | 2 / -77 | 1 | 1 | 13.2 | 71 | [-277, +426] | 0.33 |
+| depany_move_gt5.0 Buy tf240 | 0 |
+| depany_move_gt5.0 Sell tf15 | 14 | +395 | -931 | 2.03 | 64% | 5 / -77 | 8 | 1 | 7.6 | 76 | [-184, +980] | 0.13 |
+| depany_move_gt5.0 Sell tf60 | 1 | +126 | +26 | inf | 100% | 0 / +0 | 0 | 1 | 18.8 | 67 | [+126, +126] | 0.00 |
+| depany_move_gt5.0 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| depany_move_gt10.0 Buy tf15 | 15 | +388 | -1017 | 1.84 | 53% | 7 / -66 | 6 | 2 | 6.5 | 73 | [-278, +1133] | 0.18 |
+| depany_move_gt10.0 Buy tf60 | 4 | -110 | -458 | 0.57 | 25% | 3 / -86 | 1 | 0 | 12.6 | 77 | [-384, +171] | 0.74 |
+| depany_move_gt10.0 Buy tf240 | 0 |
+| depany_move_gt10.0 Sell tf15 | 15 | +514 | -915 | 2.33 | 67% | 5 / -77 | 8 | 2 | 7.7 | 80 | [-65, +1086] | 0.07 |
+| depany_move_gt10.0 Sell tf60 | 3 | +182 | -52 | 14.66 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+42, +322] | 0.03 |
+| depany_move_gt10.0 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rv5_gt1.5|depany_on Buy tf15 | 3 | +57 | -187 | 2.00 | 67% | 1 / -57 | 1 | 1 | 5.7 | 53 | [-109, +224] | 0.37 |
+| rv5_gt1.5|depany_on Buy tf60 | 2 | +302 | +135 | inf | 100% | 0 / +0 | 1 | 1 | 12.0 | 75 | [+293, +311] | 0.00 |
+| rv5_gt1.5|depany_on Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rv5_gt1.5|depany_on Sell tf15 | 8 | +200 | -597 | 1.95 | 62% | 3 / -70 | 5 | 0 | 7.4 | 71 | [-202, +649] | 0.23 |
+| rv5_gt1.5|depany_on Sell tf60 | 0 |
+| rv5_gt1.5|depany_on Sell tf240 | 0 |
+| sh24_adv5_lt-0.2 Buy tf15 | 13 | +578 | -636 | 2.83 | 62% | 5 / -63 | 5 | 3 | 6.5 | 72 | [-31, +1213] | 0.06 |
+| sh24_adv5_lt-0.2 Buy tf60 | 2 | -163 | -309 | 0.00 | 0% | 2 / -81 | 0 | 0 | 9.5 | 80 | [-204, -121] | 1.00 |
+| sh24_adv5_lt-0.2 Buy tf240 | 0 |
+| sh24_adv5_lt-0.2 Sell tf15 | 10 | +140 | -783 | 1.36 | 50% | 5 / -78 | 4 | 1 | 7.9 | 80 | [-369, +685] | 0.34 |
+| sh24_adv5_lt-0.2 Sell tf60 | 3 | -159 | -393 | 0.00 | 0% | 2 / -73 | 1 | 0 | 16.9 | 76 | [-223, -96] | 1.00 |
+| sh24_adv5_lt-0.2 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| sh24_adv5_gt0.2 Buy tf15 | 15 | +511 | -851 | 2.35 | 60% | 6 / -63 | 8 | 1 | 6.4 | 75 | [-108, +1188] | 0.09 |
+| sh24_adv5_gt0.2 Buy tf60 | 3 | -1 | -303 | 1.00 | 33% | 2 / -74 | 0 | 1 | 10.3 | 52 | [-242, +240] | 0.64 |
+| sh24_adv5_gt0.2 Buy tf240 | 0 |
+| sh24_adv5_gt0.2 Sell tf15 | 20 | +225 | -1737 | 1.32 | 55% | 9 / -77 | 8 | 3 | 7.6 | 75 | [-441, +880] | 0.29 |
+| sh24_adv5_gt0.2 Sell tf60 | 2 | +427 | +226 | inf | 100% | 0 / +0 | 0 | 2 | 32.7 | 74 | [+253, +601] | 0.00 |
+| sh24_adv5_gt0.2 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| sh24_rv5_gt1.5 Buy tf15 | 14 | +241 | -1066 | 1.59 | 57% | 6 / -68 | 6 | 2 | 3.6 | 75 | [-257, +744] | 0.23 |
+| sh24_rv5_gt1.5 Buy tf60 | 3 | -49 | -296 | 0.75 | 33% | 2 / -98 | 0 | 1 | 10.3 | 94 | [-297, +199] | 0.74 |
+| sh24_rv5_gt1.5 Buy tf240 | 0 |
+| sh24_rv5_gt1.5 Sell tf15 | 15 | +331 | -1093 | 1.67 | 60% | 6 / -83 | 8 | 1 | 8.5 | 77 | [-280, +968] | 0.20 |
+| sh24_rv5_gt1.5 Sell tf60 | 3 | +182 | -52 | 14.62 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+42, +321] | 0.03 |
+| sh24_rv5_gt1.5 Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| sh24_dep15_on Buy tf15 | 18 | +575 | -1087 | 2.24 | 61% | 7 / -66 | 8 | 3 | 6.4 | 74 | [-98, +1291] | 0.08 |
+| sh24_dep15_on Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| sh24_dep15_on Buy tf240 | 0 |
+| sh24_dep15_on Sell tf15 | 22 | +72 | -2050 | 1.09 | 50% | 11 / -76 | 8 | 3 | 7.9 | 75 | [-574, +742] | 0.43 |
+| sh24_dep15_on Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| sh24_dep15_on Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| sh24_dep60_on Buy tf15 | 16 | +567 | -996 | 2.22 | 56% | 7 / -66 | 7 | 2 | 6.4 | 73 | [-106, +1278] | 0.08 |
+| sh24_dep60_on Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| sh24_dep60_on Buy tf240 | 0 |
+| sh24_dep60_on Sell tf15 | 18 | +19 | -1707 | 1.03 | 50% | 9 / -76 | 7 | 2 | 7.8 | 75 | [-557, +615] | 0.48 |
+| sh24_dep60_on Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| sh24_dep60_on Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| sh24_dep240_oppose Buy tf15 | 15 | +394 | -1063 | 1.86 | 53% | 7 / -66 | 6 | 2 | 6.5 | 72 | [-256, +1097] | 0.17 |
+| sh24_dep240_oppose Buy tf60 | 3 | -256 | -503 | 0.00 | 0% | 3 / -85 | 0 | 0 | 10.3 | 93 | [-297, -215] | 1.00 |
+| sh24_dep240_oppose Buy tf240 | 0 |
+| sh24_dep240_oppose Sell tf15 | 11 | +27 | -1014 | 1.06 | 45% | 6 / -74 | 4 | 1 | 8.5 | 73 | [-476, +569] | 0.48 |
+| sh24_dep240_oppose Sell tf60 | 3 | +36 | -198 | 1.40 | 33% | 1 / -77 | 1 | 1 | 16.9 | 76 | [-167, +239] | 0.40 |
+| sh24_dep240_oppose Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rand10_s0 Buy tf15 | 17 | +616 | -947 | 2.45 | 65% | 6 / -71 | 8 | 3 | 6.4 | 75 | [-46, +1311] | 0.06 |
+| rand10_s0 Buy tf60 | 4 | -61 | -463 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-309, +187] | 0.74 |
+| rand10_s0 Buy tf240 | 0 |
+| rand10_s0 Sell tf15 | 20 | +125 | -1798 | 1.17 | 50% | 10 / -75 | 7 | 3 | 8.3 | 75 | [-528, +784] | 0.39 |
+| rand10_s0 Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| rand10_s0 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rand10_s1 Buy tf15 | 18 | +407 | -1255 | 1.78 | 56% | 8 / -65 | 7 | 3 | 6.4 | 73 | [-247, +1124] | 0.17 |
+| rand10_s1 Buy tf60 | 4 | -69 | -417 | 0.68 | 25% | 3 / -72 | 0 | 1 | 9.0 | 56 | [-325, +187] | 0.74 |
+| rand10_s1 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rand10_s1 Sell tf15 | 21 | +227 | -1770 | 1.32 | 57% | 9 / -79 | 9 | 3 | 7.7 | 80 | [-435, +886] | 0.29 |
+| rand10_s1 Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| rand10_s1 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rand10_s2 Buy tf15 | 17 | +407 | -1152 | 1.88 | 59% | 7 / -66 | 8 | 2 | 6.4 | 75 | [-217, +1092] | 0.15 |
+| rand10_s2 Buy tf60 | 5 | -162 | -610 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-443, +245] | 0.74 |
+| rand10_s2 Buy tf240 | 0 |
+| rand10_s2 Sell tf15 | 22 | -47 | -2154 | 0.94 | 50% | 11 / -76 | 10 | 1 | 7.6 | 75 | [-669, +605] | 0.54 |
+| rand10_s2 Sell tf60 | 4 | +104 | -229 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +364] | 0.24 |
+| rand10_s2 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rand10_s3 Buy tf15 | 17 | +295 | -1260 | 1.64 | 59% | 7 / -66 | 7 | 3 | 6.4 | 73 | [-237, +830] | 0.18 |
+| rand10_s3 Buy tf60 | 3 | -248 | -495 | 0.00 | 0% | 3 / -83 | 0 | 0 | 3.1 | 93 | [-297, -199] | 1.00 |
+| rand10_s3 Buy tf240 | 0 |
+| rand10_s3 Sell tf15 | 21 | +129 | -1859 | 1.17 | 52% | 10 / -78 | 8 | 3 | 7.7 | 79 | [-523, +797] | 0.37 |
+| rand10_s3 Sell tf60 | 4 | -90 | -423 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 78 | [-283, +110] | 0.82 |
+| rand10_s3 Sell tf240 | 2 | -153 | -353 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rand10_s4 Buy tf15 | 18 | +575 | -1087 | 2.24 | 61% | 7 / -66 | 8 | 3 | 6.4 | 74 | [-98, +1291] | 0.08 |
+| rand10_s4 Buy tf60 | 5 | -163 | -611 | 0.47 | 20% | 4 / -77 | 0 | 1 | 10.3 | 60 | [-444, +245] | 0.74 |
+| rand10_s4 Buy tf240 | 0 |
+| rand10_s4 Sell tf15 | 23 | +105 | -2092 | 1.13 | 52% | 11 / -76 | 9 | 3 | 7.7 | 77 | [-567, +771] | 0.40 |
+| rand10_s4 Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| rand10_s4 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rand10_s5 Buy tf15 | 17 | +349 | -1257 | 1.67 | 53% | 8 / -65 | 7 | 2 | 5.7 | 72 | [-279, +1020] | 0.19 |
+| rand10_s5 Buy tf60 | 2 | +62 | -105 | 1.66 | 50% | 1 / -94 | 0 | 1 | 9.7 | 97 | [-187, +311] | 0.24 |
+| rand10_s5 Buy tf240 | 0 |
+| rand10_s5 Sell tf15 | 20 | +288 | -1605 | 1.40 | 55% | 9 / -79 | 11 | 0 | 7.9 | 78 | [-424, +972] | 0.25 |
+| rand10_s5 Sell tf60 | 4 | +104 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +364] | 0.24 |
+| rand10_s5 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rand10_s6 Buy tf15 | 14 | +435 | -873 | 2.12 | 57% | 6 / -65 | 7 | 1 | 4.7 | 76 | [-182, +1092] | 0.13 |
+| rand10_s6 Buy tf60 | 7 | +86 | -529 | 1.28 | 43% | 4 / -77 | 0 | 3 | 10.3 | 83 | [-363, +551] | 0.39 |
+| rand10_s6 Buy tf240 | 0 |
+| rand10_s6 Sell tf15 | 23 | +106 | -2093 | 1.13 | 52% | 11 / -76 | 10 | 2 | 7.7 | 77 | [-567, +771] | 0.40 |
+| rand10_s6 Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| rand10_s6 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rand10_s7 Buy tf15 | 17 | +506 | -1054 | 2.16 | 59% | 7 / -62 | 7 | 3 | 5.7 | 72 | [-135, +1194] | 0.10 |
+| rand10_s7 Buy tf60 | 4 | -110 | -457 | 0.57 | 25% | 3 / -85 | 0 | 1 | 12.6 | 77 | [-383, +172] | 0.74 |
+| rand10_s7 Buy tf240 | 0 |
+| rand10_s7 Sell tf15 | 21 | +164 | -1836 | 1.22 | 52% | 10 / -73 | 10 | 1 | 7.5 | 73 | [-487, +832] | 0.35 |
+| rand10_s7 Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| rand10_s7 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rand20_s0 Buy tf15 | 14 | +367 | -893 | 1.87 | 57% | 6 / -70 | 5 | 3 | 6.7 | 73 | [-264, +1064] | 0.18 |
+| rand20_s0 Buy tf60 | 4 | -61 | -462 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-309, +187] | 0.74 |
+| rand20_s0 Buy tf240 | 0 |
+| rand20_s0 Sell tf15 | 19 | -13 | -1833 | 0.98 | 47% | 10 / -75 | 6 | 3 | 8.1 | 77 | [-618, +615] | 0.51 |
+| rand20_s0 Sell tf60 | 4 | +105 | -229 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| rand20_s0 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rand20_s1 Buy tf15 | 14 | +485 | -819 | 2.34 | 64% | 5 / -72 | 6 | 3 | 7.4 | 74 | [-141, +1166] | 0.10 |
+| rand20_s1 Buy tf60 | 2 | +94 | -108 | 2.76 | 50% | 1 / -53 | 0 | 1 | 7.5 | 51 | [-106, +294] | 0.25 |
+| rand20_s1 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rand20_s1 Sell tf15 | 19 | +388 | -1414 | 1.70 | 63% | 7 / -79 | 9 | 3 | 7.5 | 80 | [-217, +986] | 0.15 |
+| rand20_s1 Sell tf60 | 4 | -91 | -426 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 79 | [-285, +111] | 0.82 |
+| rand20_s1 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rand20_s2 Buy tf15 | 16 | +464 | -994 | 2.14 | 62% | 6 / -68 | 8 | 2 | 6.4 | 76 | [-145, +1135] | 0.12 |
+| rand20_s2 Buy tf60 | 4 | -60 | -461 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-308, +187] | 0.74 |
+| rand20_s2 Buy tf240 | 0 |
+| rand20_s2 Sell tf15 | 18 | -34 | -1739 | 0.95 | 50% | 9 / -77 | 8 | 1 | 7.5 | 73 | [-596, +535] | 0.54 |
+| rand20_s2 Sell tf60 | 4 | -91 | -424 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 79 | [-284, +111] | 0.82 |
+| rand20_s2 Sell tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rand20_s3 Buy tf15 | 16 | +129 | -1325 | 1.28 | 56% | 7 / -66 | 7 | 2 | 5.1 | 74 | [-356, +610] | 0.34 |
+| rand20_s3 Buy tf60 | 3 | -248 | -494 | 0.00 | 0% | 3 / -83 | 0 | 0 | 3.1 | 93 | [-297, -199] | 1.00 |
+| rand20_s3 Buy tf240 | 0 |
+| rand20_s3 Sell tf15 | 20 | +206 | -1681 | 1.29 | 55% | 9 / -78 | 9 | 2 | 7.6 | 81 | [-461, +841] | 0.30 |
+| rand20_s3 Sell tf60 | 3 | -77 | -376 | 0.47 | 33% | 2 / -73 | 0 | 1 | 23.1 | 75 | [-222, +68] | 0.75 |
+| rand20_s3 Sell tf240 | 2 | -153 | -353 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-200, -106] | 1.00 |
+| rand20_s4 Buy tf15 | 16 | +298 | -1161 | 1.64 | 56% | 7 / -66 | 8 | 1 | 6.0 | 76 | [-309, +946] | 0.23 |
+| rand20_s4 Buy tf60 | 4 | -109 | -457 | 0.57 | 25% | 3 / -85 | 0 | 1 | 12.6 | 77 | [-383, +172] | 0.74 |
+| rand20_s4 Buy tf240 | 0 |
+| rand20_s4 Sell tf15 | 21 | +170 | -1824 | 1.22 | 52% | 10 / -76 | 10 | 1 | 7.5 | 80 | [-521, +878] | 0.35 |
+| rand20_s4 Sell tf60 | 4 | +104 | -229 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| rand20_s4 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rand20_s5 Buy tf15 | 17 | +349 | -1257 | 1.67 | 53% | 8 / -65 | 7 | 2 | 5.7 | 72 | [-279, +1020] | 0.19 |
+| rand20_s5 Buy tf60 | 2 | +62 | -105 | 1.66 | 50% | 1 / -94 | 0 | 1 | 9.7 | 97 | [-187, +311] | 0.24 |
+| rand20_s5 Buy tf240 | 0 |
+| rand20_s5 Sell tf15 | 19 | +369 | -1423 | 1.58 | 58% | 8 / -79 | 11 | 0 | 7.7 | 77 | [-307, +1058] | 0.19 |
+| rand20_s5 Sell tf60 | 4 | +104 | -230 | 2.15 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +364] | 0.24 |
+| rand20_s5 Sell tf240 | 2 | -154 | -355 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rand20_s6 Buy tf15 | 11 | +370 | -678 | 2.12 | 55% | 5 / -66 | 5 | 1 | 6.5 | 75 | [-211, +1009] | 0.16 |
+| rand20_s6 Buy tf60 | 7 | +86 | -529 | 1.28 | 43% | 4 / -77 | 0 | 3 | 10.3 | 83 | [-363, +551] | 0.39 |
+| rand20_s6 Buy tf240 | 0 |
+| rand20_s6 Sell tf15 | 22 | +110 | -1988 | 1.14 | 55% | 10 / -76 | 11 | 1 | 7.9 | 81 | [-493, +764] | 0.39 |
+| rand20_s6 Sell tf60 | 3 | -22 | -255 | 0.76 | 33% | 1 / -77 | 1 | 1 | 16.9 | 82 | [-167, +124] | 0.63 |
+| rand20_s6 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rand20_s7 Buy tf15 | 15 | +355 | -1005 | 1.82 | 53% | 7 / -62 | 5 | 3 | 6.4 | 60 | [-268, +1061] | 0.19 |
+| rand20_s7 Buy tf60 | 4 | -110 | -457 | 0.57 | 25% | 3 / -85 | 0 | 1 | 12.6 | 77 | [-383, +172] | 0.74 |
+| rand20_s7 Buy tf240 | 0 |
+| rand20_s7 Sell tf15 | 19 | +186 | -1676 | 1.27 | 53% | 9 / -76 | 9 | 1 | 8.1 | 73 | [-457, +841] | 0.33 |
+| rand20_s7 Sell tf60 | 4 | +105 | -230 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| rand20_s7 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rand30_s0 Buy tf15 | 14 | +367 | -893 | 1.87 | 57% | 6 / -70 | 5 | 3 | 6.7 | 73 | [-264, +1065] | 0.18 |
+| rand30_s0 Buy tf60 | 4 | -61 | -462 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-309, +188] | 0.74 |
+| rand30_s0 Buy tf240 | 0 |
+| rand30_s0 Sell tf15 | 18 | -98 | -1818 | 0.87 | 44% | 10 / -75 | 5 | 3 | 8.1 | 78 | [-689, +500] | 0.62 |
+| rand30_s0 Sell tf60 | 4 | +105 | -229 | 2.16 | 50% | 1 / -77 | 1 | 2 | 17.9 | 79 | [-162, +365] | 0.24 |
+| rand30_s0 Sell tf240 | 0 |
+| rand30_s1 Buy tf15 | 13 | +444 | -758 | 2.23 | 62% | 5 / -72 | 6 | 2 | 7.8 | 73 | [-179, +1133] | 0.13 |
+| rand30_s1 Buy tf60 | 2 | +94 | -107 | 2.76 | 50% | 1 / -53 | 0 | 1 | 7.5 | 51 | [-106, +294] | 0.25 |
+| rand30_s1 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rand30_s1 Sell tf15 | 16 | +222 | -1278 | 1.40 | 56% | 7 / -79 | 6 | 3 | 8.0 | 77 | [-352, +803] | 0.27 |
+| rand30_s1 Sell tf60 | 4 | -91 | -425 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 79 | [-285, +111] | 0.82 |
+| rand30_s1 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-202, -106] | 1.00 |
+| rand30_s2 Buy tf15 | 14 | +246 | -1010 | 1.71 | 64% | 5 / -69 | 7 | 2 | 6.4 | 77 | [-212, +696] | 0.19 |
+| rand30_s2 Buy tf60 | 4 | -61 | -461 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-308, +187] | 0.74 |
+| rand30_s2 Buy tf240 | 0 |
+| rand30_s2 Sell tf15 | 17 | +30 | -1573 | 1.05 | 53% | 8 / -79 | 8 | 1 | 7.7 | 73 | [-530, +576] | 0.47 |
+| rand30_s2 Sell tf60 | 3 | -77 | -377 | 0.47 | 33% | 2 / -73 | 0 | 1 | 23.1 | 76 | [-222, +68] | 0.75 |
+| rand30_s2 Sell tf240 | 1 | -100 | -201 | 0.00 | 0% | 1 / -100 | 0 | 0 | 2.2 | 99 | [-100, -100] | 1.00 |
+| rand30_s3 Buy tf15 | 14 | +79 | -1175 | 1.20 | 57% | 6 / -67 | 6 | 2 | 6.4 | 75 | [-351, +529] | 0.40 |
+| rand30_s3 Buy tf60 | 2 | -155 | -301 | 0.00 | 0% | 2 / -77 | 0 | 0 | 1.6 | 76 | [-204, -106] | 1.00 |
+| rand30_s3 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rand30_s3 Sell tf15 | 16 | +80 | -1433 | 1.12 | 50% | 8 / -82 | 7 | 1 | 8.3 | 81 | [-518, +674] | 0.42 |
+| rand30_s3 Sell tf60 | 2 | -145 | -345 | 0.00 | 0% | 2 / -73 | 0 | 0 | 33.4 | 71 | [-153, -137] | 1.00 |
+| rand30_s3 Sell tf240 | 1 | -100 | -200 | 0.00 | 0% | 1 / -100 | 0 | 0 | 2.2 | 99 | [-100, -100] | 1.00 |
+| rand30_s4 Buy tf15 | 15 | +188 | -1172 | 1.41 | 53% | 7 / -66 | 7 | 1 | 6.4 | 75 | [-393, +846] | 0.33 |
+| rand30_s4 Buy tf60 | 4 | -109 | -457 | 0.57 | 25% | 3 / -85 | 0 | 1 | 12.6 | 77 | [-383, +172] | 0.74 |
+| rand30_s4 Buy tf240 | 0 |
+| rand30_s4 Sell tf15 | 19 | +272 | -1522 | 1.41 | 58% | 8 / -82 | 10 | 1 | 7.5 | 82 | [-388, +961] | 0.24 |
+| rand30_s4 Sell tf60 | 3 | +36 | -198 | 1.40 | 33% | 1 / -77 | 1 | 1 | 16.9 | 76 | [-167, +239] | 0.40 |
+| rand30_s4 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rand30_s5 Buy tf15 | 14 | +256 | -1050 | 1.55 | 50% | 7 / -66 | 6 | 1 | 6.0 | 74 | [-337, +917] | 0.26 |
+| rand30_s5 Buy tf60 | 2 | +62 | -105 | 1.66 | 50% | 1 / -94 | 0 | 1 | 9.7 | 97 | [-187, +311] | 0.24 |
+| rand30_s5 Buy tf240 | 0 |
+| rand30_s5 Sell tf15 | 19 | +508 | -1286 | 1.93 | 63% | 7 / -78 | 12 | 0 | 8.1 | 77 | [-165, +1188] | 0.10 |
+| rand30_s5 Sell tf60 | 1 | -77 | -177 | 0.00 | 0% | 1 / -77 | 0 | 0 | 16.9 | 76 | [-77, -77] | 1.00 |
+| rand30_s5 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rand30_s6 Buy tf15 | 10 | +259 | -687 | 1.79 | 50% | 5 / -66 | 4 | 1 | 7.2 | 74 | [-284, +902] | 0.24 |
+| rand30_s6 Buy tf60 | 7 | +86 | -528 | 1.28 | 43% | 4 / -77 | 0 | 3 | 10.3 | 83 | [-362, +551] | 0.39 |
+| rand30_s6 Buy tf240 | 0 |
+| rand30_s6 Sell tf15 | 21 | +12 | -1984 | 1.02 | 52% | 10 / -76 | 10 | 1 | 8.1 | 82 | [-594, +635] | 0.49 |
+| rand30_s6 Sell tf60 | 2 | -8 | -209 | 0.89 | 50% | 1 / -77 | 0 | 1 | 20.0 | 79 | [-154, +138] | 0.76 |
+| rand30_s6 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rand30_s7 Buy tf15 | 12 | +392 | -668 | 2.34 | 58% | 5 / -59 | 5 | 2 | 6.0 | 66 | [-183, +1015] | 0.14 |
+| rand30_s7 Buy tf60 | 4 | +44 | -304 | 1.23 | 50% | 2 / -98 | 0 | 2 | 10.9 | 88 | [-384, +427] | 0.39 |
+| rand30_s7 Buy tf240 | 0 |
+| rand30_s7 Sell tf15 | 17 | +239 | -1425 | 1.40 | 53% | 8 / -76 | 8 | 1 | 8.5 | 74 | [-420, +874] | 0.28 |
+| rand30_s7 Sell tf60 | 3 | +413 | +179 | 31.93 | 67% | 0 / +0 | 1 | 2 | 18.8 | 82 | [+100, +726] | 0.03 |
+| rand30_s7 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rand50_s0 Buy tf15 | 10 | +325 | -632 | 1.96 | 50% | 5 / -68 | 3 | 2 | 9.5 | 67 | [-263, +986] | 0.19 |
+| rand50_s0 Buy tf60 | 2 | +94 | -107 | 2.77 | 50% | 1 / -53 | 0 | 1 | 7.5 | 51 | [-106, +294] | 0.25 |
+| rand50_s0 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rand50_s0 Sell tf15 | 13 | -142 | -1362 | 0.78 | 38% | 8 / -82 | 2 | 3 | 9.2 | 80 | [-694, +445] | 0.67 |
+| rand50_s0 Sell tf60 | 4 | +319 | -15 | 4.52 | 50% | 1 / -77 | 2 | 1 | 17.9 | 79 | [-117, +819] | 0.12 |
+| rand50_s0 Sell tf240 | 0 |
+| rand50_s1 Buy tf15 | 11 | +171 | -827 | 1.48 | 55% | 5 / -72 | 6 | 0 | 6.9 | 75 | [-366, +801] | 0.33 |
+| rand50_s1 Buy tf60 | 2 | +44 | -156 | 1.84 | 50% | 1 / -53 | 0 | 1 | 78.5 | 67 | [-106, +195] | 0.25 |
+| rand50_s1 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rand50_s1 Sell tf15 | 10 | +139 | -762 | 1.51 | 60% | 4 / -69 | 5 | 1 | 6.8 | 78 | [-247, +551] | 0.28 |
+| rand50_s1 Sell tf60 | 4 | -90 | -423 | 0.43 | 25% | 2 / -73 | 1 | 1 | 20.0 | 78 | [-283, +110] | 0.82 |
+| rand50_s1 Sell tf240 | 2 | -153 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rand50_s2 Buy tf15 | 10 | +232 | -668 | 2.33 | 70% | 3 / -58 | 7 | 0 | 4.9 | 75 | [-105, +571] | 0.13 |
+| rand50_s2 Buy tf60 | 5 | +117 | -384 | 1.56 | 40% | 3 / -69 | 0 | 2 | 14.9 | 60 | [-321, +587] | 0.33 |
+| rand50_s2 Buy tf240 | 0 |
+| rand50_s2 Sell tf15 | 12 | +112 | -993 | 1.27 | 58% | 5 / -83 | 6 | 1 | 8.0 | 78 | [-361, +609] | 0.36 |
+| rand50_s2 Sell tf60 | 2 | +222 | +22 | 3.88 | 50% | 1 / -77 | 0 | 1 | 31.8 | 79 | [-154, +599] | 0.25 |
+| rand50_s2 Sell tf240 | 1 | -101 | -202 | 0.00 | 0% | 1 / -101 | 0 | 0 | 2.2 | 100 | [-101, -101] | 1.00 |
+| rand50_s3 Buy tf15 | 9 | +65 | -737 | 1.24 | 56% | 4 / -67 | 4 | 1 | 6.5 | 77 | [-297, +442] | 0.39 |
+| rand50_s3 Buy tf60 | 2 | -9 | -155 | 0.91 | 50% | 1 / -102 | 0 | 1 | 7.3 | 91 | [-204, +186] | 0.76 |
+| rand50_s3 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rand50_s3 Sell tf15 | 15 | -90 | -1522 | 0.85 | 47% | 8 / -76 | 7 | 0 | 8.1 | 73 | [-590, +440] | 0.62 |
+| rand50_s3 Sell tf60 | 1 | -77 | -177 | 0.00 | 0% | 1 / -77 | 0 | 0 | 16.9 | 76 | [-77, -77] | 1.00 |
+| rand50_s3 Sell tf240 | 1 | -100 | -200 | 0.00 | 0% | 1 / -100 | 0 | 0 | 2.2 | 99 | [-100, -100] | 1.00 |
+| rand50_s4 Buy tf15 | 10 | +180 | -735 | 1.56 | 50% | 5 / -64 | 5 | 0 | 6.4 | 76 | [-320, +782] | 0.31 |
+| rand50_s4 Buy tf60 | 4 | +78 | -270 | 1.48 | 50% | 2 / -81 | 1 | 1 | 13.2 | 71 | [-284, +427] | 0.33 |
+| rand50_s4 Buy tf240 | 1 | -102 | -179 | 0.00 | 0% | 1 / -102 | 0 | 0 | 9.3 | 100 | [-102, -102] | 1.00 |
+| rand50_s4 Sell tf15 | 12 | +232 | -879 | 1.68 | 67% | 4 / -85 | 8 | 0 | 7.2 | 80 | [-271, +750] | 0.23 |
+| rand50_s4 Sell tf60 | 3 | -160 | -394 | 0.00 | 0% | 2 / -73 | 1 | 0 | 16.9 | 76 | [-223, -96] | 1.00 |
+| rand50_s4 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| rand50_s5 Buy tf15 | 10 | +215 | -731 | 1.68 | 50% | 5 / -63 | 5 | 0 | 6.0 | 74 | [-304, +824] | 0.28 |
+| rand50_s5 Buy tf60 | 3 | +118 | -149 | 2.26 | 67% | 1 / -94 | 1 | 1 | 10.3 | 93 | [-94, +329] | 0.25 |
+| rand50_s5 Buy tf240 | 0 |
+| rand50_s5 Sell tf15 | 13 | +408 | -857 | 2.20 | 62% | 5 / -68 | 8 | 0 | 8.2 | 73 | [-125, +959] | 0.11 |
+| rand50_s5 Sell tf60 | 0 |
+| rand50_s5 Sell tf240 | 2 | -154 | -354 | 0.00 | 0% | 2 / -77 | 0 | 0 | 8.5 | 75 | [-201, -106] | 1.00 |
+| rand50_s6 Buy tf15 | 6 | +93 | -453 | 1.40 | 50% | 3 / -77 | 3 | 0 | 5.6 | 79 | [-362, +629] | 0.40 |
+| rand50_s6 Buy tf60 | 5 | +200 | -214 | 2.03 | 60% | 2 / -98 | 0 | 3 | 10.3 | 93 | [-244, +645] | 0.23 |
+| rand50_s6 Buy tf240 | 0 |
+| rand50_s6 Sell tf15 | 17 | -50 | -1658 | 0.92 | 53% | 8 / -82 | 9 | 0 | 8.1 | 82 | [-578, +512] | 0.57 |
+| rand50_s6 Sell tf60 | 0 |
+| rand50_s6 Sell tf240 | 0 |
+| rand50_s7 Buy tf15 | 8 | +442 | -305 | 3.78 | 62% | 3 / -53 | 3 | 2 | 6.1 | 60 | [-62, +984] | 0.08 |
+| rand50_s7 Buy tf60 | 2 | +16 | -97 | 1.16 | 50% | 1 / -102 | 1 | 0 | 6.3 | 100 | [-204, +236] | 0.24 |
+| rand50_s7 Buy tf240 | 0 |
+| rand50_s7 Sell tf15 | 16 | +335 | -1253 | 1.64 | 56% | 7 / -75 | 9 | 0 | 8.4 | 74 | [-275, +946] | 0.19 |
+| rand50_s7 Sell tf60 | 2 | +270 | +137 | 21.23 | 50% | 0 / +0 | 2 | 0 | 23.9 | 91 | [-27, +567] | 0.25 |
+| rand50_s7 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+
+FEATURES AT THE FIRE vs OUTCOME — simulated live rule, 53 positions (stop-outs 49%, net +411)
+  vol1: n 53, Spearman(x, pnl) -0.199 (perm P 0.15), Spearman(x, R) -0.184 (P 0.20), AUC(x -> stop-out) 0.578
+                   bin |    n  stop     net   mean  meanR    PF
+          [+20.1,+303) |   11   36%    +371    +34  +0.54  2.45
+           [+303,+605) |   10   40%    +439    +44  +0.62  2.66
+      [+605,+1.37e+03) |   11   73%    -440    -40  -0.45  0.29
+    [+1.37e+03,+2.06e+03) |   10   20%    +507    +51  +0.60  5.00
+    [+2.06e+03,+9.02e+03) |   11   73%    -465    -42  -0.60  0.27
+  vol5: n 53, Spearman(x, pnl) -0.147 (perm P 0.28), Spearman(x, R) -0.081 (P 0.56), AUC(x -> stop-out) 0.503
+                   bin |    n  stop     net   mean  meanR    PF
+    [+1.11e+03,+2.55e+03) |   11   45%    +141    +13  +0.31  1.43
+    [+2.55e+03,+3.69e+03) |   10   50%    +429    +43  +0.47  2.35
+    [+3.69e+03,+6.44e+03) |   11   55%     +28     +3  +0.16  1.06
+    [+6.44e+03,+9.38e+03) |   10   50%    -284    -28  -0.36  0.33
+    [+9.38e+03,+3.35e+04) |   11   45%     +97     +9  +0.03  1.25
+  vol15: n 53, Spearman(x, pnl) -0.133 (perm P 0.34), Spearman(x, R) -0.148 (P 0.28), AUC(x -> stop-out) 0.491
+                   bin |    n  stop     net   mean  meanR    PF
+    [+2.78e+03,+6.88e+03) |   11   45%    +280    +25  +0.46  1.81
+    [+6.88e+03,+1.09e+04) |   10   40%    +517    +52  +0.84  2.77
+    [+1.09e+04,+1.58e+04) |   11   82%    -572    -52  -0.75  0.12
+    [+1.58e+04,+2.54e+04) |   10   30%    +205    +21  +0.23  1.94
+    [+2.54e+04,+7.29e+04) |   11   45%     -19     -2  -0.08  0.95
+  rv1: n 53, Spearman(x, pnl) -0.225 (perm P 0.10), Spearman(x, R) -0.240 (P 0.08), AUC(x -> stop-out) 0.638
+                   bin |    n  stop     net   mean  meanR    PF
+      [+0.0544,+0.732) |   11   45%    +245    +22  +0.32  1.72
+        [+0.732,+1.27) |   10   20%    +532    +53  +0.79  3.95
+         [+1.27,+2.05) |   11   55%     +17     +2  +0.10  1.04
+         [+2.05,+4.26) |   10   60%    -125    -12  -0.23  0.69
+         [+4.26,+22.9) |   11   64%    -258    -23  -0.33  0.54
+  rv5: n 53, Spearman(x, pnl) -0.149 (perm P 0.28), Spearman(x, R) -0.106 (P 0.43), AUC(x -> stop-out) 0.563
+                   bin |    n  stop     net   mean  meanR    PF
+       [+0.408,+0.889) |   11   36%    +114    +10  +0.30  1.36
+        [+0.889,+1.08) |   10   60%    +219    +22  +0.25  1.54
+          [+1.08,+1.5) |   11   36%    +374    +34  +0.45  2.49
+           [+1.5,+2.8) |   10   50%     +17     +2  -0.03  1.05
+          [+2.8,+13.9) |   11   64%    -313    -28  -0.36  0.44
+  rv15: n 53, Spearman(x, pnl) -0.137 (perm P 0.31), Spearman(x, R) -0.150 (P 0.27), AUC(x -> stop-out) 0.551
+                   bin |    n  stop     net   mean  meanR    PF
+       [+0.279,+0.649) |   11   45%    +184    +17  +0.29  1.50
+       [+0.649,+0.917) |   10   40%    +507    +51  +0.85  2.49
+        [+0.917,+1.21) |   11   45%     -18     -2  -0.07  0.94
+         [+1.21,+1.85) |   10   70%    -227    -23  -0.34  0.52
+         [+1.85,+6.01) |   11   45%     -35     -3  -0.08  0.91
+  imb1: n 53, Spearman(x, pnl) -0.333 (perm P 0.01), Spearman(x, R) -0.282 (P 0.05), AUC(x -> stop-out) 0.736
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.986,-0.428) |   11   18%    +582    +53  +0.81  5.57
+      [-0.428,+0.0276) |   10   40%    +374    +37  +0.60  2.10
+      [+0.0276,+0.189) |   11   55%    -245    -22  -0.31  0.47
+       [+0.189,+0.527) |   10   50%    +136    +14  +0.07  1.40
+       [+0.527,+0.978) |   11   82%    -435    -40  -0.51  0.32
+  imb5: n 53, Spearman(x, pnl) -0.291 (perm P 0.04), Spearman(x, R) -0.261 (P 0.06), AUC(x -> stop-out) 0.641
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.801,-0.415) |   11   36%    +439    +40  +0.53  2.76
+       [-0.415,-0.125) |   10   50%    +312    +31  +0.49  1.98
+      [-0.125,+0.0473) |   11   27%    +209    +19  +0.40  1.70
+       [+0.0473,+0.48) |   10   60%    -203    -20  -0.32  0.56
+        [+0.48,+0.897) |   11   73%    -346    -31  -0.49  0.41
+  imb15: n 53, Spearman(x, pnl) -0.150 (perm P 0.29), Spearman(x, R) -0.117 (P 0.41), AUC(x -> stop-out) 0.623
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.798,-0.359) |   11   55%    -131    -12  -0.24  0.68
+       [-0.359,-0.119) |   10   30%    +537    +54  +0.83  3.35
+      [-0.119,+0.0677) |   11   27%    +443    +40  +0.55  2.93
+      [+0.0677,+0.376) |   10   40%    +181    +18  +0.39  1.53
+       [+0.376,+0.716) |   11   91%    -619    -56  -0.82  0.12
+  adv1: n 53, Spearman(x, pnl) +0.233 (perm P 0.09), Spearman(x, R) +0.368 (P 0.01), AUC(x -> stop-out) 0.312
+                   bin |    n  stop     net   mean  meanR    PF
+        [-0.97,-0.365) |   11   82%    -353    -32  -0.56  0.41
+       [-0.365,-0.112) |   10   50%     -17     -2  +0.05  0.96
+       [-0.112,+0.218) |   11   36%    +286    +26  +0.36  1.95
+       [+0.218,+0.592) |   10   40%     +88     +9  +0.07  1.29
+       [+0.592,+0.986) |   11   36%    +408    +37  +0.69  2.43
+  adv5: n 53, Spearman(x, pnl) +0.172 (perm P 0.22), Spearman(x, R) +0.237 (P 0.09), AUC(x -> stop-out) 0.335
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.897,-0.624) |   11   73%     -87     -8  -0.25  0.82
+       [-0.624,-0.317) |   10   50%    +109    +11  +0.19  1.26
+       [-0.317,-0.124) |   11   55%      +3     +0  +0.13  1.01
+      [-0.124,+0.0611) |   10   40%    -115    -12  +0.00  0.68
+      [+0.0611,+0.519) |   11   27%    +501    +46  +0.54  3.60
+  adv15: n 53, Spearman(x, pnl) +0.321 (perm P 0.02), Spearman(x, R) +0.405 (P 0.00), AUC(x -> stop-out) 0.265
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.721,-0.529) |   11   82%    -494    -45  -0.68  0.20
+       [-0.529,-0.214) |   10   70%    -187    -19  -0.28  0.63
+      [-0.214,+0.0349) |   11   36%    +290    +26  +0.38  1.80
+      [+0.0349,+0.191) |   10   20%    +534    +53  +0.83  5.24
+       [+0.191,+0.798) |   11   36%    +268    +24  +0.40  1.91
+  dep15_on: n 53, Spearman(x, pnl) -0.165 (perm P 0.25), Spearman(x, R) -0.183 (P 0.20), AUC(x -> stop-out) 0.541
+                   bin |    n  stop     net   mean  meanR    PF
+                    =0 |   45   47%    +670    +15  +0.22  1.44
+                    =1 |    8   62%    -258    -32  -0.44  0.33
+  dep15_dir: n 53, Spearman(x, pnl) +0.162 (perm P 0.26), Spearman(x, R) +0.179 (P 0.22), AUC(x -> stop-out) 0.426
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |    7   71%    -245    -35  -0.48  0.34
+                    =0 |   45   47%    +670    +15  +0.22  1.44
+                    =1 |    1    0%     -13    -13  -0.13  0.00
+  dep15_move: n 53, Spearman(x, pnl) +0.157 (perm P 0.27), Spearman(x, R) +0.169 (P 0.24), AUC(x -> stop-out) 0.430
+                   bin |    n  stop     net   mean  meanR    PF
+            [-5.45,+0) |    7   71%    -245    -35  -0.48  0.34
+           [+0,+0.604) |   46   46%    +656    +14  +0.22  1.43
+  dep15_dens: n 53, Spearman(x, pnl) -0.176 (perm P 0.22), Spearman(x, R) -0.209 (P 0.13), AUC(x -> stop-out) 0.557
+                   bin |    n  stop     net   mean  meanR    PF
+             [+0,+5.4) |   42   45%    +680    +16  +0.25  1.50
+      [+5.4,+1.28e+03) |   11   64%    -269    -24  -0.37  0.51
+  dep60_on: n 53, Spearman(x, pnl) -0.237 (perm P 0.09), Spearman(x, R) -0.209 (P 0.12), AUC(x -> stop-out) 0.583
+                   bin |    n  stop     net   mean  meanR    PF
+                    =0 |   33   42%    +816    +25  +0.40  1.82
+                    =1 |   20   60%    -405    -20  -0.32  0.56
+  dep60_dir: n 53, Spearman(x, pnl) +0.172 (perm P 0.21), Spearman(x, R) +0.170 (P 0.21), AUC(x -> stop-out) 0.422
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   18   61%    -318    -18  -0.30  0.62
+                    =0 |   33   42%    +816    +25  +0.40  1.82
+                    =1 |    2   50%     -86    -43  -0.57  0.00
+  dep60_move: n 53, Spearman(x, pnl) +0.167 (perm P 0.23), Spearman(x, R) +0.146 (P 0.30), AUC(x -> stop-out) 0.423
+                   bin |    n  stop     net   mean  meanR    PF
+         [-62.3,-2.16) |   11   55%    -123    -11  -0.17  0.73
+            [-2.16,+0) |    7   71%    -196    -28  -0.49  0.47
+            [+0,+0.87) |   35   43%    +729    +21  +0.34  1.68
+  dep60_dens: n 53, Spearman(x, pnl) -0.140 (perm P 0.32), Spearman(x, R) -0.125 (P 0.36), AUC(x -> stop-out) 0.541
+                   bin |    n  stop     net   mean  meanR    PF
+            [+0,+79.6) |   32   47%    +530    +17  +0.28  1.50
+          [+79.6,+420) |   10   70%    -292    -29  -0.53  0.37
+       [+420,+1.6e+03) |   11   36%    +173    +16  +0.25  1.45
+  dep240_on: n 53, Spearman(x, pnl) -0.132 (perm P 0.36), Spearman(x, R) -0.024 (P 0.87), AUC(x -> stop-out) 0.588
+                   bin |    n  stop     net   mean  meanR    PF
+                    =0 |   17   35%    +341    +20  +0.38  1.81
+                    =1 |   36   56%     +70     +2  +0.00  1.05
+  dep240_dir: n 53, Spearman(x, pnl) +0.185 (perm P 0.18), Spearman(x, R) +0.081 (P 0.55), AUC(x -> stop-out) 0.397
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   31   58%     -50     -2  -0.01  0.96
+                    =0 |   17   35%    +341    +20  +0.38  1.81
+                    =1 |    5   40%    +119    +24  +0.10  1.83
+  dep240_move: n 53, Spearman(x, pnl) +0.246 (perm P 0.08), Spearman(x, R) +0.187 (P 0.18), AUC(x -> stop-out) 0.345
+                   bin |    n  stop     net   mean  meanR    PF
+         [-69.2,-10.6) |   11   73%    -328    -30  -0.53  0.39
+         [-10.6,-3.14) |   10   60%     +43     +4  +0.15  1.08
+            [-3.14,+0) |   10   40%    +236    +24  +0.39  1.85
+            [+0,+9.76) |   22   36%    +461    +21  +0.32  1.81
+  dep240_dens: n 53, Spearman(x, pnl) -0.171 (perm P 0.22), Spearman(x, R) -0.032 (P 0.82), AUC(x -> stop-out) 0.556
+                   bin |    n  stop     net   mean  meanR    PF
+            [+0,+36.4) |   11   45%    +152    +14  +0.20  1.43
+          [+36.4,+137) |   10   30%    +667    +67  +0.99  5.43
+           [+137,+352) |   11   55%    -201    -18  -0.11  0.62
+           [+352,+542) |   10   80%    -473    -47  -0.72  0.13
+      [+542,+2.49e+03) |   11   36%    +265    +24  +0.27  1.79
+  depany_on: n 53, Spearman(x, pnl) -0.166 (perm P 0.27), Spearman(x, R) -0.072 (P 0.62), AUC(x -> stop-out) 0.590
+                   bin |    n  stop     net   mean  meanR    PF
+                    =0 |   13   31%    +372    +29  +0.52  2.39
+                    =1 |   40   55%     +40     +1  -0.01  1.02
+  depany_dir: n 53, Spearman(x, pnl) +0.137 (perm P 0.34), Spearman(x, R) +0.067 (P 0.63), AUC(x -> stop-out) 0.419
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   36   56%     +72     +2  +0.02  1.05
+                    =0 |   13   31%    +372    +29  +0.52  2.39
+                    =1 |    4   50%     -33     -8  -0.26  0.77
+  depany_move: n 53, Spearman(x, pnl) -0.268 (perm P 0.05), Spearman(x, R) -0.197 (P 0.15), AUC(x -> stop-out) 0.642
+                   bin |    n  stop     net   mean  meanR    PF
+            [+0,+1.81) |   21   38%    +685    +33  +0.53  2.28
+          [+1.81,+7.2) |   11   45%    +150    +14  +0.17  1.38
+          [+7.2,+14.7) |   10   50%     -33     -3  -0.06  0.91
+         [+14.7,+69.2) |   11   73%    -391    -36  -0.53  0.34
+
+  per tf x side, adv5 / rv5 / depany_dir:
+  tf15 Buy adv5: n 19, Spearman(x, pnl) -0.089 (perm P 0.71), Spearman(x, R) -0.086 (P 0.72), AUC(x -> stop-out) 0.523
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.771,-0.397) |    6   33%    +401    +67  +0.88  4.29
+       [-0.397,-0.136) |    6   67%     -21     -3  -0.17  0.92
+       [-0.136,+0.471) |    7   29%    +138    +20  +0.30  2.06
+  tf15 Buy rv5: n 19, Spearman(x, pnl) -0.063 (perm P 0.80), Spearman(x, R) +0.049 (P 0.84), AUC(x -> stop-out) 0.420
+                   bin |    n  stop     net   mean  meanR    PF
+        [+0.495,+1.04) |    6   50%    +210    +35  +0.50  2.15
+          [+1.04,+1.6) |    6   33%    +268    +45  +0.53  3.28
+          [+1.6,+10.7) |    7   43%     +40     +6  +0.03  1.18
+  tf15 Buy depany_dir: n 19, Spearman(x, pnl) -0.021 (perm P 0.94), Spearman(x, R) -0.094 (P 0.68), AUC(x -> stop-out) 0.534
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   12   42%    +439    +37  +0.44  2.32
+                    =0 |    4   25%     +98    +24  +0.48  2.71
+                    =1 |    3   67%     -19     -6  -0.30  0.85
+  tf15 Buy dep240_dir: n 19, Spearman(x, pnl) +0.008 (perm P 0.99), Spearman(x, R) -0.079 (P 0.75), AUC(x -> stop-out) 0.500
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   11   45%    +398    +36  +0.44  2.19
+                    =0 |    5   20%    +139    +28  +0.49  3.42
+                    =1 |    3   67%     -19     -6  -0.30  0.85
+  tf15 Sell adv5: n 23, Spearman(x, pnl) +0.399 (perm P 0.05), Spearman(x, R) +0.371 (P 0.09), AUC(x -> stop-out) 0.250
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.814,-0.494) |    8   75%    -334    -42  -0.57  0.26
+      [-0.494,-0.0357) |    7   43%      -2     -0  -0.05  0.99
+      [-0.0357,+0.519) |    8   25%    +441    +55  +0.85  3.89
+  tf15 Sell rv5: n 23, Spearman(x, pnl) -0.037 (perm P 0.86), Spearman(x, R) -0.046 (P 0.83), AUC(x -> stop-out) 0.583
+                   bin |    n  stop     net   mean  meanR    PF
+       [+0.408,+0.964) |    8   50%    -111    -14  -0.24  0.61
+        [+0.964,+1.38) |    7   29%    +323    +46  +0.85  2.71
+         [+1.38,+13.9) |    8   62%    -107    -13  -0.27  0.71
+  tf15 Sell depany_dir: n 23, Spearman(x, pnl) +0.096 (perm P 0.67), Spearman(x, R) +0.014 (P 0.97), AUC(x -> stop-out) 0.428
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   15   53%     -22     -1  -0.01  0.97
+                    =0 |    8   38%    +127    +16  +0.24  1.61
+  tf15 Sell dep240_dir: n 23, Spearman(x, pnl) +0.240 (perm P 0.27), Spearman(x, R) +0.173 (P 0.44), AUC(x -> stop-out) 0.375
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   12   58%    -156    -13  -0.16  0.70
+                    =0 |   10   40%    +109    +11  +0.22  1.35
+                    =1 |    1    0%    +152   +152  +1.52   inf
+
+FEATURES AT THE RECORDED OPEN vs RECORDED PNL — 54 recorded positions (stop-outs 50%, net +438; close reasons {'main_close': 9, 'stop': 27, 'target': 18})
+  adv1: n 54, Spearman(x, pnl) +0.264 (perm P 0.06), Spearman(x, R) +0.277 (P 0.04), AUC(x -> stop-out) 0.310
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.969,-0.439) |   11   73%    -209    -19  -0.35  0.55
+       [-0.439,-0.161) |   11   55%    +113    +10  +0.03  1.33
+      [-0.161,+0.0768) |   10   50%    -127    -13  -0.09  0.69
+      [+0.0768,+0.474) |   11   45%    +166    +15  +0.36  1.47
+       [+0.474,+0.986) |   11   27%    +495    +45  +0.67  3.98
+  adv5: n 54, Spearman(x, pnl) +0.231 (perm P 0.11), Spearman(x, R) +0.156 (P 0.27), AUC(x -> stop-out) 0.373
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.897,-0.479) |   11   73%    -217    -20  -0.30  0.52
+      [-0.479,-0.0408) |   11   55%    -197    -18  -0.25  0.56
+      [-0.0408,+0.133) |   10   40%    +184    +18  +0.34  1.57
+       [+0.133,+0.413) |   11   45%    +367    +33  +0.51  2.27
+         [+0.413,+0.8) |   11   36%    +301    +27  +0.36  2.43
+  adv15: n 54, Spearman(x, pnl) +0.097 (perm P 0.49), Spearman(x, R) +0.051 (P 0.69), AUC(x -> stop-out) 0.401
+                   bin |    n  stop     net   mean  meanR    PF
+       [-0.717,-0.347) |   11   91%    -493    -45  -0.64  0.14
+       [-0.347,-0.061) |   11   36%    +312    +28  +0.50  2.07
+       [-0.061,+0.126) |   10   30%    +360    +36  +0.48  2.47
+       [+0.126,+0.382) |   11   36%    +329    +30  +0.49  2.28
+       [+0.382,+0.796) |   11   55%     -69     -6  -0.16  0.81
+  rv1: n 54, Spearman(x, pnl) -0.214 (perm P 0.12), Spearman(x, R) -0.256 (P 0.07), AUC(x -> stop-out) 0.636
+                   bin |    n  stop     net   mean  meanR    PF
+       [+0.146,+0.816) |   11   45%    +129    +12  +0.25  1.44
+        [+0.816,+1.22) |   11   27%    +486    +44  +0.58  3.29
+         [+1.22,+2.12) |   10   50%    +121    +12  +0.26  1.37
+         [+2.12,+4.73) |   11   55%     +72     +7  +0.04  1.21
+           [+4.73,+23) |   11   73%    -370    -34  -0.48  0.32
+  rv5: n 54, Spearman(x, pnl) -0.093 (perm P 0.51), Spearman(x, R) -0.012 (P 0.93), AUC(x -> stop-out) 0.554
+                   bin |    n  stop     net   mean  meanR    PF
+       [+0.426,+0.926) |   11   36%    +165    +15  +0.38  1.59
+         [+0.926,+1.1) |   11   55%    +164    +15  +0.15  1.43
+          [+1.1,+1.56) |   10   50%    +186    +19  +0.21  1.68
+         [+1.56,+2.71) |   11   45%    +159    +14  +0.14  1.50
+         [+2.71,+13.9) |   11   64%    -236    -21  -0.24  0.51
+  rv15: n 54, Spearman(x, pnl) -0.106 (perm P 0.44), Spearman(x, R) -0.101 (P 0.47), AUC(x -> stop-out) 0.549
+                   bin |    n  stop     net   mean  meanR    PF
+       [+0.279,+0.649) |   11   45%    +223    +20  +0.33  1.67
+       [+0.649,+0.892) |   11   45%    +271    +25  +0.45  1.71
+        [+0.892,+1.19) |   10   40%    +104    +10  +0.15  1.43
+         [+1.19,+1.85) |   11   73%    -174    -16  -0.26  0.57
+         [+1.85,+6.01) |   11   45%     +13     +1  -0.03  1.04
+  dep15_on: n 54, Spearman(x, pnl) -0.120 (perm P 0.40), Spearman(x, R) -0.064 (P 0.67), AUC(x -> stop-out) 0.537
+                   bin |    n  stop     net   mean  meanR    PF
+                    =0 |   46   48%    +621    +13  +0.20  1.44
+                    =1 |    8   62%    -183    -23  -0.29  0.42
+  dep15_dir: n 54, Spearman(x, pnl) +0.141 (perm P 0.32), Spearman(x, R) +0.100 (P 0.50), AUC(x -> stop-out) 0.431
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |    5   80%    -177    -35  -0.43  0.32
+                    =0 |   46   48%    +621    +13  +0.20  1.44
+                    =1 |    3   33%      -6     -2  -0.06  0.89
+  dep60_dir: n 54, Spearman(x, pnl) +0.061 (perm P 0.67), Spearman(x, R) +0.022 (P 0.88), AUC(x -> stop-out) 0.437
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   12   67%    -185    -15  -0.25  0.61
+                    =0 |   34   44%    +673    +20  +0.32  1.69
+                    =1 |    8   50%     -50     -6  -0.11  0.82
+  dep240_dir: n 54, Spearman(x, pnl) +0.035 (perm P 0.80), Spearman(x, R) -0.035 (P 0.80), AUC(x -> stop-out) 0.474
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   19   58%     -24     -1  -0.01  0.97
+                    =0 |   18   39%    +353    +20  +0.40  1.79
+                    =1 |   17   53%    +109     +6  +0.00  1.18
+  depany_dir: n 54, Spearman(x, pnl) -0.005 (perm P 0.97), Spearman(x, R) -0.065 (P 0.61), AUC(x -> stop-out) 0.473
+                   bin |    n  stop     net   mean  meanR    PF
+                   =-1 |   23   57%     +79     +3  +0.04  1.10
+                    =0 |   14   36%    +357    +26  +0.50  2.15
+                    =1 |   17   53%      +1     +0  -0.05  1.00
+  depany_move: n 54, Spearman(x, pnl) -0.195 (perm P 0.16), Spearman(x, R) -0.103 (P 0.48), AUC(x -> stop-out) 0.625
+                   bin |    n  stop     net   mean  meanR    PF
+            [+0,+1.47) |   22   41%    +570    +26  +0.40  2.04
+         [+1.47,+5.93) |   10   50%      -3     -0  +0.05  0.99
+         [+5.93,+14.2) |   11   55%     -31     -3  -0.06  0.93
+         [+14.2,+69.2) |   11   64%     -98     -9  -0.16  0.75
+
+  feature medians: at the live fires vs 400 random trade ticks (side assigned at random for adv):
+        vol5: fires median +4485.600 (q25 +2673.980, q75 +8455.960) | random +6361.780 (q25 +3325.582, q75 +11521.460)
+         rv5: fires median +1.203 (q25 +0.983, q75 +2.380) | random +1.200 (q25 +0.853, q75 +2.501)
+        imb5: fires median -0.031 (q25 -0.301, q75 +0.265) | random -0.075 (q25 -0.294, q75 +0.175)
+        adv5: fires median -0.232 (q25 -0.573, q75 +0.031) | random +0.011 (q25 -0.211, q75 +0.250)
+    dep15_on: fires median +0.000 (q25 +0.000, q75 +0.000) | random +0.000 (q25 +0.000, q75 +0.000)
+    dep60_on: fires median +0.000 (q25 +0.000, q75 +1.000) | random +0.000 (q25 +0.000, q75 +1.000)
+    dep240_on: fires median +1.000 (q25 +0.000, q75 +1.000) | random +1.000 (q25 +0.000, q75 +1.000)
+
+SPLIT-HALF (blocks 2 first / 3 second; Δ vs live per half; the variant with the best first-half Δ is the one 'chosen')
+                   variant |  Δ first Δ second | blocks changed first/second
+                  dep60_on |     +582      -73 | 2/2
+                 rv5_gt1.5 |     +549     -151 | 2/2
+              dep60_oppose |     +508      -87 | 2/2
+     adv5_lt-0.2&rv5_gt1.5 |     +476      +76 | 2/2
+        depany_move_gt10.0 |     +422      -13 | 2/2
+              adv15_lt-0.5 |     +390     +435 | 2/2
+              adv15_lt-0.3 |     +370     +394 | 2/2
+                 rv5_gt2.0 |     +349      +57 | 2/2
+                 rv1_gt2.0 |     +309     +374 | 2/2
+                 rv5_gt3.0 |     +255     +156 | 2/2
+              adv15_lt-0.2 |     +251     +394 | 2/2
+                 rv1_gt1.5 |     +244     +365 | 2/2
+                 rv1_gt3.0 |     +223     +171 | 2/2
+               adv1_lt-0.1 |     +205     +297 | 2/2
+               adv1_lt-0.3 |     +195     +142 | 1/2
+               adv1_lt-0.5 |     +195     +183 | 1/2
+               adv5_lt-0.5 |     +183     +162 | 2/2
+                rv15_gt3.0 |     +177      +24 | 2/2
+         depany_move_gt5.0 |     +171      -17 | 2/2
+         depany_move_gt3.0 |     +171     +230 | 2/2
+                rv15_gt1.5 |     +165      +61 | 2/2
+           sh24_adv5_gt0.2 |     +151     +445 | 2/2
+                rv15_gt2.0 |     +145      -45 | 2/2
+              dep240_agree |     +131     -250 | 2/2
+              depany_agree |     +131      -98 | 2/2
+  variants with Δ first > 0: 36, of which Δ second > 0: 23 (64%); chosen 'dep60_on' second-half Δ -73
+  reverse: Δ second > 0: 39, of which Δ first > 0: 23 (59%); chosen on the second 'adv15_lt-0.1' first-half Δ -29
+
+RANDOM-SKIP PLACEBO BAND (Δ vs live over 8 seeds): rand10: mean +31, min -478, max +267; rand20: mean -54, min -554, max +319; rand30: mean -76, min -754, max +624; rand50: mean -63, min -725, max +600
+
+SKIPS PER VARIANT (fires skipped by the volume gate / positions / Δ net vs live)
+               adv1_lt-0.1: skipped  23, positions  31 (live 53), Δ    +502
+                adv1_gt0.1: skipped  29, positions  28 (live 53), Δ    -197
+               adv1_lt-0.2: skipped  16, positions  38 (live 53), Δ    +120
+                adv1_gt0.2: skipped  25, positions  32 (live 53), Δ    -229
+               adv1_lt-0.3: skipped  14, positions  40 (live 53), Δ    +337
+                adv1_gt0.3: skipped  22, positions  34 (live 53), Δ     -78
+               adv1_lt-0.5: skipped   9, positions  45 (live 53), Δ    +378
+                adv1_gt0.5: skipped  15, positions  40 (live 53), Δ    -417
+               adv5_lt-0.1: skipped  34, positions  21 (live 53), Δ    +241
+                adv5_gt0.1: skipped  11, positions  44 (live 53), Δ    -362
+               adv5_lt-0.2: skipped  28, positions  25 (live 53), Δ    +513
+                adv5_gt0.2: skipped   8, positions  46 (live 53), Δ     -84
+               adv5_lt-0.3: skipped  22, positions  32 (live 53), Δ    +461
+                adv5_gt0.3: skipped   5, positions  48 (live 53), Δ     -22
+               adv5_lt-0.5: skipped  16, positions  38 (live 53), Δ    +345
+                adv5_gt0.5: skipped   1, positions  52 (live 53), Δ     -69
+              adv15_lt-0.1: skipped  27, positions  26 (live 53), Δ    +649
+               adv15_gt0.1: skipped  19, positions  36 (live 53), Δ    -539
+              adv15_lt-0.2: skipped  22, positions  31 (live 53), Δ    +645
+               adv15_gt0.2: skipped  12, positions  43 (live 53), Δ    -340
+              adv15_lt-0.3: skipped  21, positions  32 (live 53), Δ    +764
+               adv15_gt0.3: skipped   6, positions  47 (live 53), Δ    -233
+              adv15_lt-0.5: skipped  15, positions  39 (live 53), Δ    +825
+               adv15_gt0.5: skipped   1, positions  52 (live 53), Δ     +13
+                 rv1_gt1.5: skipped  25, positions  31 (live 53), Δ    +609
+                 rv1_gt2.0: skipped  22, positions  33 (live 53), Δ    +682
+                 rv1_gt3.0: skipped  17, positions  37 (live 53), Δ    +394
+                 rv1_lt0.5: skipped   7, positions  45 (live 53), Δ    -400
+                 rv1_lt0.7: skipped  11, positions  43 (live 53), Δ    -371
+                 rv5_gt1.5: skipped  22, positions  32 (live 53), Δ    +398
+                 rv5_gt2.0: skipped  17, positions  36 (live 53), Δ    +406
+                 rv5_gt3.0: skipped  10, positions  43 (live 53), Δ    +411
+                 rv5_lt0.5: skipped   3, positions  49 (live 53), Δ     -56
+                 rv5_lt0.7: skipped   3, positions  49 (live 53), Δ     -56
+                rv15_gt1.5: skipped  16, positions  37 (live 53), Δ    +226
+                rv15_gt2.0: skipped   9, positions  44 (live 53), Δ     +99
+                rv15_gt3.0: skipped   6, positions  47 (live 53), Δ    +201
+                rv15_lt0.5: skipped   5, positions  47 (live 53), Δ    -151
+                rv15_lt0.7: skipped  15, positions  40 (live 53), Δ     -69
+                  dep15_on: skipped   8, positions  45 (live 53), Δ    +259
+               dep15_agree: skipped   1, positions  52 (live 53), Δ     +13
+              dep15_oppose: skipped   7, positions  46 (live 53), Δ    +246
+                  dep60_on: skipped  20, positions  33 (live 53), Δ    +509
+               dep60_agree: skipped   2, positions  51 (live 53), Δ     +86
+              dep60_oppose: skipped  18, positions  35 (live 53), Δ    +422
+                 dep240_on: skipped  37, positions  20 (live 53), Δ    +108
+              dep240_agree: skipped   5, positions  48 (live 53), Δ    -119
+             dep240_oppose: skipped  32, positions  25 (live 53), Δ    +227
+                 depany_on: skipped  41, positions  16 (live 53), Δ    +139
+              depany_agree: skipped   4, positions  49 (live 53), Δ     +33
+             depany_oppose: skipped  37, positions  20 (live 53), Δ    +106
+     adv5_lt-0.2&rv5_gt1.5: skipped  14, positions  39 (live 53), Δ    +552
+      adv5_lt-0.2|dep15_on: skipped  29, positions  24 (live 53), Δ    +527
+            adv5_abs_gt0.3: skipped  27, positions  27 (live 53), Δ    +438
+         depany_move_gt3.0: skipped  29, positions  25 (live 53), Δ    +401
+         depany_move_gt5.0: skipped  24, positions  30 (live 53), Δ    +154
+        depany_move_gt10.0: skipped  14, positions  39 (live 53), Δ    +409
+       rv5_gt1.5|depany_on: skipped  43, positions  14 (live 53), Δ     +45
+          sh24_adv5_lt-0.2: skipped  24, positions  30 (live 53), Δ    -169
+           sh24_adv5_gt0.2: skipped  12, positions  42 (live 53), Δ    +596
+            sh24_rv5_gt1.5: skipped  18, positions  36 (live 53), Δ    +193
+             sh24_dep15_on: skipped   3, positions  51 (live 53), Δ     +24
+             sh24_dep60_on: skipped   9, positions  45 (live 53), Δ     -37
+        sh24_dep240_oppose: skipped  20, positions  33 (live 53), Δ    -263
+                 rand10_s0: skipped   7, positions  47 (live 53), Δ    +220
+                 rand10_s1: skipped   4, positions  50 (live 53), Δ      +2
+                 rand10_s2: skipped   3, positions  50 (live 53), Δ    -262
+                 rand10_s3: skipped   5, positions  47 (live 53), Δ    -478
+                 rand10_s4: skipped   2, positions  52 (live 53), Δ     +57
+                 rand10_s5: skipped   9, positions  45 (live 53), Δ    +238
+                 rand10_s6: skipped   6, positions  49 (live 53), Δ    +267
+                 rand10_s7: skipped   7, positions  47 (live 53), Δ    +201
+                 rand20_s0: skipped  11, positions  43 (live 53), Δ    -167
+                 rand20_s1: skipped  11, positions  42 (live 53), Δ    +208
+                 rand20_s2: skipped   9, positions  44 (live 53), Δ    -285
+                 rand20_s3: skipped   9, positions  44 (live 53), Δ    -554
+                 rand20_s4: skipped   7, positions  47 (live 53), Δ    -101
+                 rand20_s5: skipped  10, positions  44 (live 53), Δ    +319
+                 rand20_s6: skipped  12, positions  44 (live 53), Δ     +80
+                 rand20_s7: skipped  11, positions  43 (live 53), Δ     +71
+                 rand30_s0: skipped  15, positions  40 (live 53), Δ     -98
+                 rand30_s1: skipped  16, positions  38 (live 53), Δ      +2
+                 rand30_s2: skipped  14, positions  39 (live 53), Δ    -373
+                 rand30_s3: skipped  18, positions  36 (live 53), Δ    -754
+                 rand30_s4: skipped  12, positions  42 (live 53), Δ     -79
+                 rand30_s5: skipped  17, positions  38 (live 53), Δ    +183
+                 rand30_s6: skipped  16, positions  41 (live 53), Δ    -115
+                 rand30_s7: skipped  18, positions  37 (live 53), Δ    +624
+                 rand50_s0: skipped  26, positions  30 (live 53), Δ     +82
+                 rand50_s1: skipped  25, positions  30 (live 53), Δ    -402
+                 rand50_s2: skipped  26, positions  30 (live 53), Δ    +170
+                 rand50_s3: skipped  28, positions  29 (live 53), Δ    -725
+                 rand50_s4: skipped  25, positions  31 (live 53), Δ    -237
+                 rand50_s5: skipped  29, positions  28 (live 53), Δ    +176
+                 rand50_s6: skipped  29, positions  28 (live 53), Δ    -168
+                 rand50_s7: skipped  28, positions  29 (live 53), Δ    +600

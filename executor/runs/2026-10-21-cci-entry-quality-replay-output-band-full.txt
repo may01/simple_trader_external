@@ -1,0 +1,124 @@
+trades 753117 (10-16 22:29:05 -> 10-21 11:16:04); replay 10-18 11:41:10 -> 10-21 11:16:04: 532852 trades; indicator names 42, rows 470989, expiry non-monotone steps 0
+trade feed gaps > 60 s in the replay window: 4 [('10-19 13:01:46', 5564), ('10-19 20:01:34', 9432), ('10-20 16:13:10', 305), ('10-21 02:55:41', 66)]
+pre-candidate trades (filters pass, zone+target present, inzone or rejection): {'15_long': 38319, '15_short': 44058, '60_long': 37240, '60_short': 19175, '240_long': 24248, '240_short': 27028} any: 160614
+simulated live: 186 fires, 171 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/0/0/0, trend cache 179902
+simulated cci5_band140: 186 fires, 135 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 42/0/0/0, trend cache 180409
+simulated cci15_band140: 186 fires, 147 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 24/0/0/0, trend cache 180409
+simulated cci5+15_band140: 186 fires, 125 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 52/0/0/0, trend cache 180409
+simulated cci5_band100: 186 fires, 94 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 87/0/0/0, trend cache 180409
+simulated cci15_band100: 186 fires, 114 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 59/0/0/0, trend cache 180409
+
+REPRODUCTION (live variant vs recorded fires, same side+tf within 60 s): recorded 191, simulated 186, matched 184, missed 7, extra 2
+  candle-stop port: 39/40 recorded stops reproduced within half a tick
+  candle-stop era: recorded positions 38 net +169, pairs W15 4 (P1 -273, P2 +312); sim-live positions 37 net -40, pairs W15 8 (P1 -536, P2 +485)
+
+SUMMARY (same simulator, same window for every variant; pairs = stop -> same side better re-entry within 15 min)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 171 | +2503 | -13522 | 1.38 | 51% | 82 / -80 | 61 | 27 | 7.5 | 84 | [+236, +4841] | 0.03 | 35 (43%) | -2795 | +226 |
+| cci5_band140 | 135 | +2869 | -9739 | 1.59 | 53% | 62 / -78 | 56 | 17 | 7.3 | 83 | [+870, +5022] | 0.01 | 17 (27%) | -1368 | +68 |
+| cci15_band140 | 147 | +2682 | -11139 | 1.50 | 54% | 67 / -79 | 59 | 20 | 8.0 | 83 | [+639, +4667] | 0.02 | 27 (40%) | -2138 | +601 |
+| cci5+15_band140 | 125 | +2450 | -9231 | 1.55 | 54% | 57 / -78 | 53 | 15 | 7.5 | 83 | [+573, +4406] | 0.02 | 17 (30%) | -1366 | +66 |
+| cci5_band100 | 94 | +2631 | -6050 | 1.84 | 56% | 40 / -78 | 45 | 9 | 7.8 | 84 | [+942, +4490] | 0.00 | 6 (15%) | -546 | +175 |
+| cci15_band100 | 114 | +2788 | -7979 | 1.73 | 56% | 49 / -78 | 50 | 14 | 7.9 | 81 | [+945, +4694] | 0.01 | 18 (37%) | -1328 | +460 |
+
+PAIR STATS ON LIVE SIM BY WINDOW
+  W<= 5: pairs 28 of 82 stop-outs (34%); P1 -2293 (mean -82), P2 +311 (mean +11), P2 outcomes {'stop': 13, 'reversal': 7, 'target': 7, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.06, P2 beyond P1 stop 17/28; gap median 1.6 min; P2 rule {'zone_rejection': 10, 'in_zone': 18}, P2 tf {15: 14, 60: 12, 240: 2}
+  W<=15: pairs 35 of 82 stop-outs (43%); P1 -2795 (mean -80), P2 +226 (mean +6), P2 outcomes {'stop': 17, 'reversal': 9, 'target': 8, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.19, P2 beyond P1 stop 23/35; gap median 1.9 min; P2 rule {'zone_rejection': 13, 'in_zone': 22}, P2 tf {15: 17, 60: 16, 240: 2}
+  W<=30: pairs 45 of 82 stop-outs (55%); P1 -3572 (mean -79), P2 +544 (mean +12), P2 outcomes {'stop': 22, 'reversal': 12, 'target': 10, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.35, P2 beyond P1 stop 31/45; gap median 2.4 min; P2 rule {'zone_rejection': 18, 'in_zone': 27}, P2 tf {15: 23, 60: 19, 240: 3}
+  W<=60: pairs 49 of 82 stop-outs (60%); P1 -3966 (mean -81), P2 +606 (mean +12), P2 outcomes {'stop': 24, 'reversal': 12, 'target': 12, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.35, P2 beyond P1 stop 33/49; gap median 3.0 min; P2 rule {'zone_rejection': 19, 'in_zone': 30}, P2 tf {15: 27, 60: 19, 240: 3}
+  live sim: re-entry-flagged positions 67, pnl +644; others 104, pnl +1859
+
+PAIRED 6-H BLOCK BOOTSTRAP vs live (13 blocks, 5000 resamples)
+  cci5_band140 - live: delta   +367, 90 % CI [  -858,  +1670], P(delta<0) 0.32; blocks > 6, < 6, = 1
+  cci15_band140 - live: delta   +179, 90 % CI [  -942,  +1293], P(delta<0) 0.40; blocks > 7, < 5, = 1
+  cci5+15_band140 - live: delta    -53, 90 % CI [ -1652,  +1489], P(delta<0) 0.52; blocks > 5, < 7, = 1
+  cci5_band100 - live: delta   +128, 90 % CI [ -1762,  +2052], P(delta<0) 0.47; blocks > 6, < 6, = 1
+  cci15_band100 - live: delta   +285, 90 % CI [ -1422,  +1915], P(delta<0) 0.39; blocks > 6, < 6, = 1
+
+PER-DAY NET (UTC day of the opening fire)
+| day | live | cci5_band140 | cci15_band140 | cci5+15_band140 | cci5_band100 | cci15_band100 |
+|---|---|---|---|---|---|---|
+| 10-18 | 26 / +542 | 22 / +517 | 24 / +432 | 21 / +305 | 15 / +774 | 19 / +225 |
+| 10-19 | 40 / +330 | 30 / +564 | 32 / +124 | 27 / +492 | 20 / +607 | 24 / +220 |
+| 10-20 | 74 / +1684 | 59 / +1631 | 64 / +1788 | 53 / +1497 | 40 / +1311 | 49 / +1757 |
+| 10-21 | 31 / -53 | 24 / +157 | 27 / +337 | 24 / +156 | 19 / -60 | 22 / +587 |
+
+PER-TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf15 | 129 | +1581 | -10476 | 1.33 | 51% | 61 / -79 | 57 | 11 | 6.7 | 82 | [-281, +3523] | 0.09 | 14 (23%) | -1085 | +173 |
+| live tf60 | 33 | +255 | -2849 | 1.18 | 48% | 17 / -85 | 3 | 12 | 10.1 | 86 | [-667, +1180] | 0.33 | 0 (0%) | +0 | +0 |
+| live tf240 | 9 | +667 | -197 | 2.98 | 56% | 4 / -84 | 1 | 4 | 11.4 | 88 | [-150, +1493] | 0.09 | 0 (0%) | +0 | +0 |
+| cci5_band140 tf15 | 115 | +1874 | -8864 | 1.45 | 52% | 53 / -78 | 53 | 9 | 6.9 | 83 | [+40, +3738] | 0.05 | 10 (19%) | -788 | +61 |
+| cci5_band140 tf60 | 15 | +326 | -1085 | 1.61 | 53% | 7 / -76 | 2 | 6 | 11.1 | 84 | [-272, +927] | 0.18 | 0 (0%) | +0 | +0 |
+| cci5_band140 tf240 | 5 | +669 | +210 | 5.27 | 60% | 2 / -78 | 1 | 2 | 14.7 | 85 | [-18, +1357] | 0.06 | 0 (0%) | +0 | +0 |
+| cci15_band140 tf15 | 116 | +2083 | -8825 | 1.51 | 54% | 52 / -78 | 55 | 9 | 7.1 | 80 | [+277, +3954] | 0.03 | 13 (25%) | -1017 | +251 |
+| cci15_band140 tf60 | 28 | +482 | -2151 | 1.45 | 54% | 13 / -83 | 3 | 11 | 10.7 | 85 | [-368, +1325] | 0.17 | 0 (0%) | +0 | +0 |
+| cci15_band140 tf240 | 3 | +117 | -163 | 1.65 | 33% | 2 / -89 | 1 | 0 | 18.8 | 88 | [-269, +503] | 0.29 | 0 (0%) | +0 | +0 |
+| cci5+15_band140 tf15 | 108 | +1932 | -8188 | 1.50 | 54% | 49 / -78 | 50 | 9 | 7.1 | 82 | [+157, +3729] | 0.03 | 10 (20%) | -787 | +60 |
+| cci5+15_band140 tf60 | 15 | +325 | -1081 | 1.61 | 53% | 7 / -76 | 2 | 6 | 11.1 | 83 | [-270, +924] | 0.18 | 0 (0%) | +0 | +0 |
+| cci5+15_band140 tf240 | 2 | +193 | +38 | 2.89 | 50% | 1 / -102 | 1 | 0 | 14.0 | 100 | [-205, +591] | 0.25 | 0 (0%) | +0 | +0 |
+| cci5_band100 tf15 | 86 | +1913 | -6091 | 1.65 | 55% | 38 / -77 | 43 | 5 | 7.2 | 84 | [+323, +3521] | 0.02 | 4 (11%) | -345 | +202 |
+| cci5_band100 tf60 | 6 | +235 | -264 | 2.43 | 67% | 2 / -82 | 1 | 3 | 16.2 | 100 | [-136, +587] | 0.13 | 0 (0%) | +0 | +0 |
+| cci5_band100 tf240 | 2 | +484 | +305 | inf | 100% | 0 / +0 | 1 | 1 | 15.1 | 92 | [+377, +591] | 0.00 | 0 (0%) | +0 | +0 |
+| cci15_band100 tf15 | 92 | +2225 | -6518 | 1.73 | 57% | 39 / -77 | 47 | 6 | 7.1 | 77 | [+575, +3929] | 0.01 | 10 (26%) | -710 | +111 |
+| cci15_band100 tf60 | 19 | +446 | -1299 | 1.71 | 58% | 8 / -78 | 2 | 8 | 14.9 | 84 | [-221, +1108] | 0.14 | 0 (0%) | +0 | +0 |
+| cci15_band100 tf240 | 3 | +117 | -162 | 1.66 | 33% | 2 / -89 | 1 | 0 | 18.8 | 88 | [-269, +503] | 0.29 | 0 (0%) | +0 | +0 |
+
+PER-SIDE (positions by side)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live Buy | 80 | +467 | -7188 | 1.14 | 44% | 44 / -78 | 26 | 10 | 5.9 | 79 | [-1120, +2128] | 0.33 | 16 (36%) | -1205 | -52 |
+| live Sell | 91 | +2036 | -6334 | 1.64 | 57% | 38 / -83 | 35 | 17 | 8.5 | 86 | [+487, +3652] | 0.01 | 19 (50%) | -1590 | +278 |
+| cci5_band140 Buy | 60 | +897 | -4773 | 1.38 | 47% | 31 / -75 | 24 | 5 | 5.7 | 79 | [-529, +2396] | 0.16 | 6 (19%) | -438 | -57 |
+| cci5_band140 Sell | 75 | +1972 | -4966 | 1.79 | 57% | 31 / -81 | 32 | 12 | 8.5 | 85 | [+481, +3417] | 0.01 | 11 (35%) | -930 | +125 |
+| cci15_band140 Buy | 72 | +516 | -6334 | 1.18 | 46% | 38 / -77 | 27 | 7 | 6.4 | 76 | [-916, +1997] | 0.28 | 13 (34%) | -988 | +8 |
+| cci15_band140 Sell | 75 | +2165 | -4804 | 1.91 | 61% | 29 / -82 | 32 | 13 | 8.7 | 84 | [+715, +3625] | 0.01 | 14 (48%) | -1151 | +593 |
+| cci5+15_band140 Buy | 57 | +702 | -4667 | 1.32 | 47% | 29 / -75 | 24 | 4 | 5.7 | 78 | [-628, +2089] | 0.19 | 6 (21%) | -437 | -58 |
+| cci5+15_band140 Sell | 68 | +1748 | -4564 | 1.77 | 59% | 28 / -81 | 29 | 11 | 8.6 | 84 | [+391, +3137] | 0.02 | 11 (39%) | -928 | +124 |
+| cci5_band100 Buy | 40 | +387 | -3362 | 1.24 | 48% | 21 / -77 | 17 | 2 | 6.0 | 81 | [-737, +1556] | 0.30 | 2 (10%) | -201 | -27 |
+| cci5_band100 Sell | 54 | +2244 | -2687 | 2.50 | 63% | 19 / -78 | 28 | 7 | 8.7 | 86 | [+988, +3535] | 0.00 | 4 (21%) | -345 | +202 |
+| cci15_band100 Buy | 52 | +1163 | -3783 | 1.65 | 52% | 24 / -74 | 22 | 6 | 6.2 | 74 | [-110, +2511] | 0.07 | 8 (33%) | -511 | +123 |
+| cci15_band100 Sell | 62 | +1625 | -4196 | 1.79 | 60% | 25 / -82 | 28 | 8 | 8.7 | 84 | [+348, +2943] | 0.02 | 10 (40%) | -817 | +337 |
+
+PER-SIDE x TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live Buy tf15 | 58 | +324 | -5252 | 1.14 | 47% | 30 / -75 | 24 | 4 | 5.7 | 74 | [-855, +1620] | 0.32 |
+| live Buy tf60 | 18 | -301 | -2000 | 0.69 | 33% | 12 / -82 | 1 | 5 | 9.4 | 80 | [-944, +397] | 0.78 |
+| live Buy tf240 | 4 | +444 | +64 | 3.31 | 50% | 2 / -96 | 1 | 1 | 10.0 | 94 | [-370, +1228] | 0.11 |
+| live Sell tf15 | 71 | +1257 | -5225 | 1.49 | 55% | 31 / -83 | 33 | 7 | 8.1 | 85 | [-149, +2696] | 0.07 |
+| live Sell tf60 | 15 | +556 | -849 | 2.21 | 67% | 5 / -92 | 2 | 7 | 10.1 | 87 | [-69, +1150] | 0.07 |
+| live Sell tf240 | 5 | +223 | -260 | 2.54 | 60% | 2 / -72 | 0 | 3 | 11.4 | 87 | [-178, +619] | 0.18 |
+| cci5_band140 Buy tf15 | 50 | +543 | -4231 | 1.29 | 48% | 25 / -73 | 22 | 3 | 5.6 | 77 | [-619, +1736] | 0.24 |
+| cci5_band140 Buy tf60 | 7 | -182 | -821 | 0.55 | 29% | 5 / -81 | 1 | 1 | 6.6 | 73 | [-567, +232] | 0.78 |
+| cci5_band140 Buy tf240 | 3 | +536 | +279 | 6.23 | 67% | 1 / -102 | 1 | 1 | 18.8 | 100 | [+91, +981] | 0.03 |
+| cci5_band140 Sell tf15 | 65 | +1331 | -4632 | 1.57 | 55% | 28 / -83 | 31 | 6 | 8.1 | 85 | [-43, +2730] | 0.06 |
+| cci5_band140 Sell tf60 | 8 | +508 | -264 | 4.97 | 75% | 2 / -64 | 1 | 5 | 13.5 | 84 | [+140, +854] | 0.01 |
+| cci5_band140 Sell tf240 | 2 | +134 | -70 | 3.46 | 50% | 1 / -54 | 0 | 1 | 13.1 | 68 | [-108, +376] | 0.25 |
+| cci15_band140 Buy tf15 | 54 | +687 | -4491 | 1.36 | 50% | 26 / -73 | 25 | 3 | 5.7 | 74 | [-499, +1931] | 0.18 |
+| cci15_band140 Buy tf60 | 16 | -378 | -1872 | 0.59 | 31% | 11 / -84 | 1 | 4 | 10.2 | 91 | [-953, +256] | 0.84 |
+| cci15_band140 Buy tf240 | 2 | +207 | +29 | 3.35 | 50% | 1 / -88 | 1 | 0 | 9.9 | 94 | [-176, +591] | 0.24 |
+| cci15_band140 Sell tf15 | 62 | +1396 | -4334 | 1.66 | 58% | 26 / -82 | 30 | 6 | 8.4 | 85 | [+52, +2726] | 0.04 |
+| cci15_band140 Sell tf60 | 12 | +860 | -279 | 6.62 | 83% | 2 / -76 | 2 | 7 | 13.5 | 84 | [+408, +1255] | 0.00 |
+| cci15_band140 Sell tf240 | 1 | -90 | -191 | 0.00 | 0% | 1 / -90 | 0 | 0 | 22.9 | 88 | [-90, -90] | 1.00 |
+| cci5+15_band140 Buy tf15 | 48 | +690 | -3887 | 1.41 | 50% | 23 / -73 | 22 | 3 | 5.7 | 76 | [-425, +1885] | 0.16 |
+| cci5+15_band140 Buy tf60 | 7 | -181 | -818 | 0.55 | 29% | 5 / -80 | 1 | 1 | 6.6 | 72 | [-565, +232] | 0.78 |
+| cci5+15_band140 Buy tf240 | 2 | +193 | +38 | 2.89 | 50% | 1 / -102 | 1 | 0 | 14.0 | 100 | [-205, +591] | 0.25 |
+| cci5+15_band140 Sell tf15 | 60 | +1242 | -4301 | 1.58 | 57% | 26 / -82 | 28 | 6 | 8.4 | 85 | [-95, +2581] | 0.06 |
+| cci5+15_band140 Sell tf60 | 8 | +506 | -263 | 4.97 | 75% | 2 / -64 | 1 | 5 | 13.5 | 84 | [+139, +853] | 0.01 |
+| cci5+15_band140 Sell tf240 | 0 |
+| cci5_band100 Buy tf15 | 36 | +181 | -3255 | 1.12 | 47% | 19 / -77 | 16 | 1 | 5.4 | 77 | [-788, +1213] | 0.39 |
+| cci5_band100 Buy tf60 | 3 | -89 | -324 | 0.46 | 33% | 2 / -82 | 0 | 1 | 15.9 | 100 | [-266, +87] | 0.74 |
+| cci5_band100 Buy tf240 | 1 | +296 | +217 | inf | 100% | 0 / +0 | 1 | 0 | 18.8 | 100 | [+296, +296] | 0.00 |
+| cci5_band100 Sell tf15 | 50 | +1732 | -2836 | 2.15 | 60% | 19 / -78 | 27 | 4 | 8.6 | 86 | [+495, +3007] | 0.01 |
+| cci5_band100 Sell tf60 | 3 | +324 | +61 | inf | 100% | 0 / +0 | 1 | 2 | 16.5 | 100 | [+273, +375] | 0.00 |
+| cci5_band100 Sell tf240 | 1 | +188 | +88 | inf | 100% | 0 / +0 | 0 | 1 | 11.4 | 84 | [+188, +188] | 0.00 |
+| cci15_band100 Buy tf15 | 42 | +1028 | -3021 | 1.77 | 55% | 18 / -73 | 21 | 3 | 5.9 | 74 | [-53, +2222] | 0.06 |
+| cci15_band100 Buy tf60 | 8 | -73 | -791 | 0.80 | 38% | 5 / -74 | 0 | 3 | 10.7 | 67 | [-462, +353] | 0.62 |
+| cci15_band100 Buy tf240 | 2 | +208 | +29 | 3.35 | 50% | 1 / -88 | 1 | 0 | 9.9 | 94 | [-176, +591] | 0.24 |
+| cci15_band100 Sell tf15 | 50 | +1197 | -3497 | 1.70 | 58% | 21 / -81 | 26 | 3 | 8.0 | 84 | [-21, +2425] | 0.06 |
+| cci15_band100 Sell tf60 | 11 | +519 | -508 | 3.03 | 73% | 3 / -85 | 2 | 5 | 16.5 | 87 | [+19, +990] | 0.04 |
+| cci15_band100 Sell tf240 | 1 | -90 | -191 | 0.00 | 0% | 1 / -90 | 0 | 0 | 22.9 | 88 | [-90, -90] | 1.00 |
+dumped /tmp/claude-1000/-home-om-projects-simple-trader/8ea6a761-c563-4295-ae10-53fb9ead2d9a/scratchpad/band_full.json

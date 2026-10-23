@@ -1,0 +1,119 @@
+trades 753117 (10-16 22:29:05 -> 10-21 11:16:04); replay 10-20 20:25:00 -> 10-21 11:16:04: 87416 trades; indicator names 42, rows 470989, expiry non-monotone steps 0
+trade feed gaps > 60 s in the replay window: 1 [('10-21 02:55:41', 66)]
+pre-candidate trades (filters pass, zone+target present, inzone or rejection): {'15_long': 8295, '15_short': 7243, '60_long': 8164, '60_short': 1820, '240_long': 2553, '240_short': 11964} any: 34460
+simulated live: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/0/0/0, trend cache 37338
+simulated cci5_skip100: 41 fires, 22 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 19/0/0/0, trend cache 37845
+simulated cci5_wait100_d1.0: 54 fires, 35 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/19/13/2, trend cache 37845
+simulated cci5_skip140: 41 fires, 29 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 11/0/0/0, trend cache 37845
+simulated cci5_wait140_d0.5: 48 fires, 36 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/11/7/1, trend cache 37845
+simulated cci5_wait140_d1.0: 48 fires, 36 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/11/7/1, trend cache 37845
+simulated cci5_wait140_d2.0: 45 fires, 32 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/11/4/2, trend cache 37845
+simulated cci15_skip100: 41 fires, 30 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 9/0/0/0, trend cache 37845
+simulated cci15_wait100_d1.0: 49 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/9/8/0, trend cache 37845
+simulated cci15_skip140: 41 fires, 33 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 5/0/0/0, trend cache 37845
+simulated cci15_wait140_d0.5: 46 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/5/5/0, trend cache 37845
+simulated cci15_wait140_d1.0: 46 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/5/5/0, trend cache 37845
+simulated cci15_wait140_d2.0: 44 fires, 35 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/5/3/2, trend cache 37845
+simulated cci5_band: 41 fires, 12 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 29/0/0/0, trend cache 37845
+simulated wait_all_d1.0: 67 fires, 26 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/41/26/9, trend cache 37894
+
+REPRODUCTION (live variant vs recorded fires, same side+tf within 60 s): recorded 42, simulated 41, matched 40, missed 2, extra 1
+  candle-stop port: 39/40 recorded stops reproduced within half a tick
+  candle-stop era: recorded positions 38 net +169, pairs W15 4 (P1 -273, P2 +312); sim-live positions 38 net +237, pairs W15 8 (P1 -526, P2 +474)
+
+SUMMARY (same simulator, same window for every variant; pairs = stop -> same side better re-entry within 15 min)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 38 | +237 | -3508 | 1.17 | 45% | 21 / -68 | 9 | 7 | 8.6 | 71 | [-709, +1219] | 0.35 | 8 (38%) | -526 | +474 |
+| cci5_skip100 | 22 | +76 | -2062 | 1.08 | 36% | 14 / -68 | 8 | 0 | 7.7 | 69 | [-741, +974] | 0.46 | 1 (7%) | -93 | +137 |
+| cci5_wait100_d1.0 | 35 | +359 | -3090 | 1.28 | 40% | 21 / -61 | 7 | 6 | 7.5 | 54 | [-599, +1347] | 0.27 | 5 (24%) | -307 | +255 |
+| cci5_skip140 | 29 | +351 | -2469 | 1.32 | 45% | 16 / -69 | 10 | 3 | 8.5 | 72 | [-548, +1290] | 0.27 | 3 (19%) | -258 | +353 |
+| cci5_wait140_d0.5 | 36 | +110 | -3408 | 1.08 | 42% | 21 / -65 | 9 | 5 | 8.3 | 61 | [-793, +1045] | 0.43 | 6 (29%) | -387 | +254 |
+| cci5_wait140_d1.0 | 36 | +249 | -3272 | 1.19 | 42% | 21 / -61 | 9 | 5 | 7.9 | 60 | [-651, +1186] | 0.33 | 6 (29%) | -367 | +315 |
+| cci5_wait140_d2.0 | 32 | +281 | -2839 | 1.23 | 41% | 19 / -63 | 8 | 5 | 8.3 | 70 | [-664, +1263] | 0.32 | 3 (16%) | -258 | +353 |
+| cci15_skip100 | 30 | +608 | -2339 | 1.60 | 50% | 15 / -67 | 10 | 4 | 8.3 | 68 | [-268, +1558] | 0.13 | 5 (33%) | -305 | +521 |
+| cci15_wait100_d1.0 | 38 | +555 | -3200 | 1.43 | 45% | 21 / -62 | 8 | 8 | 8.3 | 60 | [-426, +1562] | 0.18 | 8 (38%) | -474 | +594 |
+| cci15_skip140 | 33 | +673 | -2578 | 1.61 | 52% | 16 / -69 | 11 | 5 | 8.5 | 72 | [-265, +1659] | 0.12 | 6 (38%) | -409 | +639 |
+| cci15_wait140_d0.5 | 38 | +351 | -3396 | 1.26 | 45% | 21 / -65 | 9 | 7 | 8.6 | 67 | [-591, +1325] | 0.28 | 8 (38%) | -494 | +511 |
+| cci15_wait140_d1.0 | 38 | +608 | -3147 | 1.49 | 47% | 20 / -63 | 9 | 8 | 8.3 | 67 | [-354, +1588] | 0.15 | 8 (40%) | -474 | +557 |
+| cci15_wait140_d2.0 | 35 | +637 | -2816 | 1.54 | 49% | 18 / -65 | 9 | 7 | 8.5 | 69 | [-318, +1648] | 0.14 | 6 (33%) | -409 | +639 |
+| cci5_band | 12 | +441 | -701 | 2.43 | 58% | 5 / -62 | 7 | 0 | 7.7 | 64 | [-99, +1018] | 0.09 | 0 (0%) | +0 | +0 |
+| wait_all_d1.0 | 26 | +71 | -2532 | 1.09 | 27% | 19 / -43 | 3 | 3 | 2.8 | 37 | [-568, +752] | 0.43 | 4 (21%) | -170 | +117 |
+
+PAIR STATS ON LIVE SIM BY WINDOW
+  W<= 5: pairs 7 of 21 stop-outs (33%); P1 -477 (mean -68), P2 +348 (mean +50), P2 outcomes {'reversal': 2, 'stop': 2, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 0.94, P2 beyond P1 stop 3/7; gap median 1.5 min; P2 rule {'zone_rejection': 4, 'in_zone': 3}, P2 tf {60: 2, 15: 5}
+  W<=15: pairs 8 of 21 stop-outs (38%); P1 -526 (mean -66), P2 +474 (mean +59), P2 outcomes {'reversal': 3, 'stop': 2, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.06, P2 beyond P1 stop 4/8; gap median 1.5 min; P2 rule {'zone_rejection': 4, 'in_zone': 4}, P2 tf {60: 3, 15: 5}
+  W<=30: pairs 11 of 21 stop-outs (52%); P1 -754 (mean -69), P2 +275 (mean +25), P2 outcomes {'reversal': 3, 'stop': 5, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.38, P2 beyond P1 stop 7/11; gap median 1.8 min; P2 rule {'zone_rejection': 7, 'in_zone': 4}, P2 tf {60: 5, 15: 6}
+  W<=60: pairs 11 of 21 stop-outs (52%); P1 -754 (mean -69), P2 +275 (mean +25), P2 outcomes {'reversal': 3, 'stop': 5, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.38, P2 beyond P1 stop 7/11; gap median 1.8 min; P2 rule {'zone_rejection': 7, 'in_zone': 4}, P2 tf {60: 5, 15: 6}
+  live sim: re-entry-flagged positions 14, pnl +250; others 24, pnl -13
+
+PAIRED 6-H BLOCK BOOTSTRAP vs live (3 blocks, 5000 resamples)
+  cci5_skip100 - live: delta   -161, 90 % CI [  -575,   +253], P(delta<0) 0.73; blocks > 1, < 2, = 0
+  cci5_wait100_d1.0 - live: delta   +122, 90 % CI [  -218,   +461], P(delta<0) 0.26; blocks > 2, < 1, = 0
+  cci5_skip140 - live: delta   +113, 90 % CI [  -385,   +612], P(delta<0) 0.30; blocks > 1, < 2, = 0
+  cci5_wait140_d0.5 - live: delta   -127, 90 % CI [  -379,   +125], P(delta<0) 0.74; blocks > 1, < 2, = 0
+  cci5_wait140_d1.0 - live: delta    +11, 90 % CI [  -347,   +370], P(delta<0) 0.40; blocks > 1, < 2, = 0
+  cci5_wait140_d2.0 - live: delta    +44, 90 % CI [  -417,   +505], P(delta<0) 0.31; blocks > 1, < 2, = 0
+  cci15_skip100 - live: delta   +371, 90 % CI [   -37,   +778], P(delta<0) 0.14; blocks > 2, < 1, = 0
+  cci15_wait100_d1.0 - live: delta   +318, 90 % CI [  +105,   +530], P(delta<0) 0.04; blocks > 2, < 1, = 0
+  cci15_skip140 - live: delta   +436, 90 % CI [   +51,   +821], P(delta<0) 0.04; blocks > 2, < 1, = 0
+  cci15_wait140_d0.5 - live: delta   +114, 90 % CI [   +12,   +216], P(delta<0) 0.04; blocks > 2, < 1, = 0
+  cci15_wait140_d1.0 - live: delta   +371, 90 % CI [  +169,   +572], P(delta<0) 0.04; blocks > 2, < 1, = 0
+  cci15_wait140_d2.0 - live: delta   +399, 90 % CI [   +51,   +748], P(delta<0) 0.04; blocks > 2, < 1, = 0
+  cci5_band - live: delta   +203, 90 % CI [  -541,   +948], P(delta<0) 0.37; blocks > 2, < 1, = 0
+  wait_all_d1.0 - live: delta   -166, 90 % CI [  -423,    +90], P(delta<0) 0.74; blocks > 1, < 2, = 0
+
+PER-DAY NET (UTC day of the opening fire)
+| day | live | cci5_skip100 | cci5_wait100_d1.0 | cci5_skip140 | cci5_wait140_d0.5 | cci5_wait140_d1.0 | cci5_wait140_d2.0 | cci15_skip100 | cci15_wait100_d1.0 | cci15_skip140 | cci15_wait140_d0.5 | cci15_wait140_d1.0 | cci15_wait140_d2.0 | cci5_band | wait_all_d1.0 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 10-20 | 7 / +289 | 3 / +134 | 6 / +374 | 5 / +199 | 6 / +158 | 6 / +167 | 6 / +167 | 5 / +224 | 7 / +497 | 6 / +342 | 7 / +301 | 7 / +460 | 6 / +342 | 0 / +0 | 5 / +166 |
+| 10-21 | 31 / -52 | 19 / -58 | 29 / -15 | 24 / +152 | 30 / -48 | 30 / +82 | 26 / +115 | 25 / +384 | 31 / +58 | 27 / +331 | 31 / +50 | 31 / +148 | 29 / +295 | 12 / +441 | 21 / -95 |
+
+PER-TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf15 | 30 | +144 | -2798 | 1.12 | 43% | 17 / -69 | 9 | 4 | 7.7 | 72 | [-695, +1073] | 0.40 | 3 (18%) | -262 | +178 |
+| live tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| live tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| cci5_skip100 tf15 | 21 | +137 | -1901 | 1.15 | 38% | 13 / -69 | 8 | 0 | 7.5 | 72 | [-683, +1029] | 0.41 | 1 (8%) | -93 | +137 |
+| cci5_skip100 tf60 | 1 | -61 | -161 | 0.00 | 0% | 1 / -61 | 0 | 0 | 15.9 | 60 | [-61, -61] | 1.00 | 0 (0%) | +0 | +0 |
+| cci5_skip100 tf240 | 0 |
+| cci5_wait100_d1.0 tf15 | 28 | +132 | -2614 | 1.12 | 36% | 18 / -60 | 7 | 3 | 7.1 | 56 | [-715, +1044] | 0.43 | 3 (17%) | -229 | +247 |
+| cci5_wait100_d1.0 tf60 | 5 | +207 | -296 | 3.21 | 60% | 2 / -47 | 0 | 2 | 6.0 | 42 | [-74, +487] | 0.12 | 0 (0%) | +0 | +0 |
+| cci5_wait100_d1.0 tf240 | 2 | +20 | -180 | 1.21 | 50% | 1 / -98 | 0 | 1 | 9.9 | 64 | [-196, +236] | 0.25 | 0 (0%) | +0 | +0 |
+| cci5_skip140 tf15 | 25 | +498 | -1944 | 1.56 | 48% | 13 / -69 | 10 | 2 | 7.8 | 72 | [-353, +1431] | 0.17 | 2 (15%) | -197 | +255 |
+| cci5_skip140 tf60 | 2 | +8 | -193 | 1.13 | 50% | 1 / -61 | 0 | 1 | 19.5 | 71 | [-122, +138] | 0.24 | 0 (0%) | +0 | +0 |
+| cci5_skip140 tf240 | 2 | -155 | -332 | 0.00 | 0% | 2 / -78 | 0 | 0 | 12.0 | 75 | [-205, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| cci5_wait140_d0.5 tf15 | 30 | +266 | -2674 | 1.24 | 43% | 17 / -65 | 9 | 4 | 7.7 | 65 | [-571, +1193] | 0.31 | 3 (18%) | -245 | +194 |
+| cci5_wait140_d0.5 tf60 | 4 | -0 | -402 | 1.00 | 50% | 2 / -49 | 0 | 1 | 13.0 | 60 | [-171, +169] | 0.55 | 0 (0%) | +0 | +0 |
+| cci5_wait140_d0.5 tf240 | 2 | -155 | -332 | 0.00 | 0% | 2 / -78 | 0 | 0 | 12.0 | 75 | [-205, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| cci5_wait140_d1.0 tf15 | 30 | +384 | -2558 | 1.37 | 43% | 17 / -61 | 9 | 4 | 7.7 | 64 | [-463, +1319] | 0.23 | 3 (18%) | -229 | +210 |
+| cci5_wait140_d1.0 tf60 | 4 | +20 | -382 | 1.21 | 50% | 2 / -47 | 0 | 1 | 8.4 | 46 | [-159, +202] | 0.42 | 0 (0%) | +0 | +0 |
+| cci5_wait140_d1.0 tf240 | 2 | -155 | -332 | 0.00 | 0% | 2 / -78 | 0 | 0 | 12.0 | 75 | [-205, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| cci5_wait140_d2.0 tf15 | 27 | +462 | -2180 | 1.48 | 44% | 15 / -64 | 8 | 4 | 7.8 | 72 | [-407, +1394] | 0.21 | 2 (13%) | -197 | +255 |
+| cci5_wait140_d2.0 tf60 | 3 | -25 | -326 | 0.74 | 33% | 2 / -47 | 0 | 1 | 15.9 | 60 | [-155, +105] | 0.63 | 0 (0%) | +0 | +0 |
+| cci5_wait140_d2.0 tf240 | 2 | -155 | -332 | 0.00 | 0% | 2 / -78 | 0 | 0 | 12.0 | 75 | [-205, -106] | 1.00 | 0 (0%) | +0 | +0 |
+| cci15_skip100 tf15 | 25 | +315 | -2129 | 1.33 | 44% | 14 / -68 | 10 | 1 | 7.5 | 69 | [-529, +1232] | 0.28 | 1 (7%) | -93 | +138 |
+| cci15_skip100 tf60 | 5 | +293 | -209 | 5.81 | 80% | 1 / -61 | 0 | 3 | 15.9 | 67 | [+12, +559] | 0.05 | 0 (0%) | +0 | +0 |
+| cci15_skip100 tf240 | 0 |
+| cci15_wait100_d1.0 tf15 | 30 | +274 | -2676 | 1.25 | 40% | 18 / -62 | 8 | 4 | 7.7 | 60 | [-581, +1225] | 0.31 | 3 (17%) | -230 | +248 |
+| cci15_wait100_d1.0 tf60 | 6 | +261 | -343 | 3.78 | 67% | 2 / -47 | 0 | 3 | 15.4 | 64 | [-50, +571] | 0.09 | 0 (0%) | +0 | +0 |
+| cci15_wait100_d1.0 tf240 | 2 | +20 | -181 | 1.20 | 50% | 1 / -98 | 0 | 1 | 9.9 | 65 | [-196, +236] | 0.25 | 0 (0%) | +0 | +0 |
+| cci15_skip140 tf15 | 27 | +474 | -2174 | 1.50 | 48% | 14 / -68 | 11 | 2 | 7.5 | 72 | [-404, +1385] | 0.19 | 2 (14%) | -197 | +256 |
+| cci15_skip140 tf60 | 6 | +200 | -405 | 2.29 | 67% | 2 / -78 | 0 | 3 | 15.4 | 72 | [-163, +555] | 0.19 | 0 (0%) | +0 | +0 |
+| cci15_skip140 tf240 | 0 |
+| cci15_wait140_d0.5 tf15 | 30 | +230 | -2715 | 1.20 | 43% | 17 / -66 | 9 | 4 | 7.7 | 68 | [-604, +1158] | 0.33 | 3 (18%) | -246 | +194 |
+| cci15_wait140_d0.5 tf60 | 7 | +162 | -541 | 1.85 | 57% | 3 / -64 | 0 | 3 | 14.9 | 67 | [-208, +546] | 0.25 | 0 (0%) | +0 | +0 |
+| cci15_wait140_d0.5 tf240 | 1 | -41 | -141 | 0.00 | 0% | 1 / -41 | 0 | 0 | 14.5 | 38 | [-41, -41] | 1.00 | 0 (0%) | +0 | +0 |
+| cci15_wait140_d1.0 tf15 | 30 | +323 | -2627 | 1.30 | 43% | 17 / -63 | 9 | 4 | 7.7 | 68 | [-517, +1263] | 0.27 | 3 (18%) | -229 | +211 |
+| cci15_wait140_d1.0 tf60 | 7 | +167 | -538 | 1.89 | 57% | 3 / -63 | 0 | 3 | 14.9 | 67 | [-200, +547] | 0.24 | 0 (0%) | +0 | +0 |
+| cci15_wait140_d1.0 tf240 | 1 | +118 | +18 | inf | 100% | 0 / +0 | 0 | 1 | 11.0 | 34 | [+118, +118] | 0.00 | 0 (0%) | +0 | +0 |
+| cci15_wait140_d2.0 tf15 | 28 | +470 | -2278 | 1.48 | 46% | 15 / -66 | 9 | 4 | 7.7 | 71 | [-413, +1413] | 0.21 | 2 (13%) | -197 | +256 |
+| cci15_wait140_d2.0 tf60 | 7 | +167 | -538 | 1.89 | 57% | 3 / -63 | 0 | 3 | 14.9 | 67 | [-201, +547] | 0.24 | 0 (0%) | +0 | +0 |
+| cci15_wait140_d2.0 tf240 | 0 |
+| cci5_band tf15 | 11 | +502 | -540 | 3.02 | 64% | 4 / -62 | 7 | 0 | 7.5 | 67 | [-47, +1055] | 0.07 | 0 (0%) | +0 | +0 |
+| cci5_band tf60 | 1 | -61 | -162 | 0.00 | 0% | 1 / -61 | 0 | 0 | 15.9 | 60 | [-61, -61] | 1.00 | 0 (0%) | +0 | +0 |
+| cci5_band tf240 | 0 |
+| wait_all_d1.0 tf15 | 20 | -337 | -2340 | 0.51 | 15% | 17 / -41 | 3 | 0 | 2.5 | 37 | [-742, +126] | 0.89 | 2 (12%) | -105 | +109 |
+| wait_all_d1.0 tf60 | 4 | +356 | -45 | 11.91 | 75% | 1 / -33 | 0 | 2 | 8.3 | 37 | [+59, +658] | 0.02 | 0 (0%) | +0 | +0 |
+| wait_all_d1.0 tf240 | 2 | +53 | -147 | 1.54 | 50% | 1 / -98 | 0 | 1 | 13.0 | 64 | [-195, +300] | 0.25 | 0 (0%) | +0 | +0 |

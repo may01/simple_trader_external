@@ -22,7 +22,9 @@ Both repos have a `release_001` branch = the running paper system: trade_executo
 
 ---
 
-## CB zone stop from the order book (spec [2026-10-19](specs/2026-10-19-cb-book-stop-design.md), plan [2026-10-19](plans/2026-10-19-cb-book-stop-plan.md))
+## CB zone stop from the order book — ARCHIVED 2026-10-21 (spec [2026-10-19](specs/2026-10-19-cb-book-stop-design.md), plan [2026-10-19](plans/2026-10-19-cb-book-stop-plan.md))
+
+**Superseded by the candle stop (user decision 2026-10-21: the forming 15-min extreme ± trailing mean 1-min range is the better option; no further work on the volume/book stop). The book stop is already on `layer-implementation` (`88f92c4` + `90461f7`, pushed to origin) and stays in the code behind `CB_STOP_MODE=book` (cb-candle-stop compose default `candle`); the `cb-book-stop` branch was folded in and deleted. Archived: no merge of any further book-stop change, no follow-ups (the `streak ≥ E` collapse, deferred minors). main/'s phase 20 measurement stays on `cb-zone-run-stats` @ `8c5f422`, unmerged, for the record.**
 
 Implemented 2026-10-19 on branch `cb-book-stop` (off `close-marker-pnl` @ `4f5ede3`), committed `88f92c4` (2026-10-20); not merged into `layer-implementation`, pushed 2026-10-20. A CB zone open's stop is the order-book level reached by `|buy − sell|` flow per minute × (frozen expected in-zone minutes − in-zone streak + 1 buffer), walked on the adverse side at fire time (`signals::cb_stop`, `CbZoneEntryCheck::with_stop`); the event carries `stop`/`inzone_streak`/`stop_minutes`/`stop_vol_rate`, the decision carries `stop`, the builder uses it only when strictly adverse to `open_price` (else the 1 % placeholder, logged). Sizing is notional-capped (`sizing::cap_to_account_limits`): a tight stop trades smaller, never `NotPlaced`. Env `CB_STOP_EXPECTED_POINTS` (compose default = main/'s frozen `15:2.0/2.0;60:3.0/3.0;240:4.0/4.0`, phase 20), `CB_STOP_VOL_WINDOW_SECS=300`, `CB_STOP_BUFFER_MINUTES=1`. Host loop green: signals 111, local_analysis 40, execution 136, orchestrator 108, state_store 22+96, visualizer_server 17+58.
 

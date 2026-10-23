@@ -1,0 +1,420 @@
+trades 753117 (10-16 22:29:05 -> 10-21 11:16:04); replay 10-18 11:41:10 -> 10-21 11:16:04: 532852 trades; indicator names 42, rows 470989, expiry non-monotone steps 0
+trade feed gaps > 60 s in the replay window: 4 [('10-19 13:01:46', 5564), ('10-19 20:01:34', 9432), ('10-20 16:13:10', 305), ('10-21 02:55:41', 66)]
+pre-candidate trades (filters pass, zone+target present, inzone or rejection): {'15_long': 38319, '15_short': 44058, '60_long': 37240, '60_short': 19175, '240_long': 24248, '240_short': 27028} any: 160614
+simulated live: 186 fires, 171 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 179902
+simulated cd5: 186 fires, 147 positions, cooled 24, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 179902
+simulated cd15: 186 fires, 139 positions, cooled 34, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 179902
+simulated cd30: 186 fires, 127 positions, cooled 50, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 180422
+simulated sm15: 186 fires, 166 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 181826
+simulated sm20: 186 fires, 160 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 182868
+simulated anc2: 186 fires, 167 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 182868
+simulated roll15: 186 fires, 169 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 182868
+simulated dp05: 81 fires, 71 positions, cooled 0, depth-blocked ticks 28872, skip-blocked ticks 0, trend cache 183917
+simulated dp10: 46 fires, 41 positions, cooled 0, depth-blocked ticks 40357, skip-blocked ticks 0, trend cache 184436
+simulated skip3: 178 fires, 164 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 3769, trend cache 184813
+simulated skip5: 166 fires, 152 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 11388, trend cache 186648
+simulated half: 186 fires, 171 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 186648
+
+REPRODUCTION (live variant vs recorded fires, same side+tf within 60 s): recorded 191, simulated 186, matched 184, missed 7, extra 2
+  candle-stop port: 39/40 recorded stops reproduced within half a tick
+  candle-stop era: recorded positions 38 net +169, pairs W15 4 (P1 -273, P2 +312); sim-live positions 37 net -40, pairs W15 8 (P1 -536, P2 +485)
+
+SUMMARY (same simulator, same window for every variant; pairs = stop -> same side better re-entry within 15 min)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 171 | +2503 | -13522 | 1.38 | 51% | 82 / -80 | 61 | 27 | 7.5 | 84 | [+236, +4841] | 0.03 | 35 (43%) | -2795 | +226 |
+| cd5 | 147 | +2581 | -11208 | 1.47 | 52% | 69 / -79 | 55 | 23 | 7.0 | 84 | [+427, +4789] | 0.02 | 9 (13%) | -697 | +285 |
+| cd15 | 139 | +2426 | -10688 | 1.46 | 52% | 66 / -79 | 54 | 19 | 7.0 | 83 | [+402, +4493] | 0.02 | 0 (0%) | +0 | +0 |
+| cd30 | 127 | +1766 | -10138 | 1.37 | 52% | 60 / -79 | 52 | 15 | 6.6 | 83 | [-37, +3624] | 0.05 | 0 (0%) | +0 | +0 |
+| sm15 | 166 | +3051 | -11443 | 1.51 | 59% | 66 / -91 | 64 | 35 | 9.1 | 100 | [+879, +5267] | 0.01 | 33 (50%) | -3022 | +591 |
+| sm20 | 160 | +3108 | -9488 | 1.58 | 64% | 54 / -98 | 66 | 39 | 10.0 | 100 | [+1074, +5223] | 0.01 | 30 (56%) | -2961 | +307 |
+| anc2 | 167 | +2326 | -12565 | 1.37 | 53% | 75 / -82 | 63 | 28 | 8.0 | 91 | [+182, +4541] | 0.04 | 31 (41%) | -2448 | +372 |
+| roll15 | 169 | +2918 | -12752 | 1.47 | 53% | 77 / -81 | 64 | 27 | 8.0 | 85 | [+692, +5215] | 0.01 | 33 (43%) | -2601 | +617 |
+| dp05 | 71 | +2169 | -4467 | 1.92 | 54% | 31 / -73 | 29 | 11 | 7.0 | 85 | [+674, +3740] | 0.01 | 8 (26%) | -607 | -167 |
+| dp10 | 41 | +684 | -3058 | 1.39 | 49% | 21 / -83 | 19 | 1 | 7.1 | 87 | [-525, +1927] | 0.18 | 4 (19%) | -326 | -184 |
+| skip3 | 164 | +1889 | -13235 | 1.30 | 51% | 76 / -83 | 65 | 22 | 7.9 | 85 | [-305, +4037] | 0.08 | 34 (45%) | -2778 | +231 |
+| skip5 | 152 | +2486 | -11348 | 1.45 | 55% | 65 / -84 | 67 | 19 | 7.8 | 91 | [+460, +4563] | 0.02 | 30 (46%) | -2514 | +70 |
+| half | 171 | +1567 | -9529 | 1.33 | 51% | 82 / -57 | 61 | 27 | 7.5 | 50 | [-59, +3276] | 0.06 | 35 (43%) | -1963 | +222 |
+
+PAIR STATS ON LIVE SIM BY WINDOW
+  W<= 5: pairs 28 of 82 stop-outs (34%); P1 -2293 (mean -82), P2 +311 (mean +11), P2 outcomes {'stop': 13, 'reversal': 7, 'target': 7, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.06, P2 beyond P1 stop 17/28; gap median 1.6 min; P2 rule {'zone_rejection': 10, 'in_zone': 18}, P2 tf {15: 14, 60: 12, 240: 2}
+  W<=15: pairs 35 of 82 stop-outs (43%); P1 -2795 (mean -80), P2 +226 (mean +6), P2 outcomes {'stop': 17, 'reversal': 9, 'target': 8, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.19, P2 beyond P1 stop 23/35; gap median 1.9 min; P2 rule {'zone_rejection': 13, 'in_zone': 22}, P2 tf {15: 17, 60: 16, 240: 2}
+  W<=30: pairs 45 of 82 stop-outs (55%); P1 -3572 (mean -79), P2 +544 (mean +12), P2 outcomes {'stop': 22, 'reversal': 12, 'target': 10, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.35, P2 beyond P1 stop 31/45; gap median 2.4 min; P2 rule {'zone_rejection': 18, 'in_zone': 27}, P2 tf {15: 23, 60: 19, 240: 3}
+  W<=60: pairs 49 of 82 stop-outs (60%); P1 -3966 (mean -81), P2 +606 (mean +12), P2 outcomes {'stop': 24, 'reversal': 12, 'target': 12, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.35, P2 beyond P1 stop 33/49; gap median 3.0 min; P2 rule {'zone_rejection': 19, 'in_zone': 30}, P2 tf {15: 27, 60: 19, 240: 3}
+  live sim: re-entry-flagged positions 67, pnl +644; others 104, pnl +1859
+  cd5: fires rejected by cooldown 24
+  cd15: fires rejected by cooldown 34
+  cd30: fires rejected by cooldown 50
+
+PAIRED 6-H BLOCK BOOTSTRAP vs live (13 blocks, 5000 resamples)
+  cd5     - live: delta    +78, 90 % CI [  -645,   +812], P(delta<0) 0.43; blocks > 8, < 4, = 1
+  cd15    - live: delta    -77, 90 % CI [ -1117,   +924], P(delta<0) 0.56; blocks > 7, < 5, = 1
+  cd30    - live: delta   -737, 90 % CI [ -2189,   +571], P(delta<0) 0.81; blocks > 7, < 5, = 1
+  sm15    - live: delta   +548, 90 % CI [  -660,  +1911], P(delta<0) 0.26; blocks > 3, < 10, = 0
+  sm20    - live: delta   +605, 90 % CI [  -548,  +1851], P(delta<0) 0.21; blocks > 7, < 6, = 0
+  anc2    - live: delta   -177, 90 % CI [  -702,   +396], P(delta<0) 0.72; blocks > 6, < 7, = 0
+  roll15  - live: delta   +415, 90 % CI [   -41,   +945], P(delta<0) 0.07; blocks > 6, < 6, = 1
+  dp05    - live: delta   -334, 90 % CI [ -2376,  +1680], P(delta<0) 0.59; blocks > 8, < 5, = 0
+  dp10    - live: delta  -1819, 90 % CI [ -4142,   +447], P(delta<0) 0.90; blocks > 5, < 8, = 0
+  skip3   - live: delta   -614, 90 % CI [ -1650,   +285], P(delta<0) 0.85; blocks > 5, < 7, = 1
+  skip5   - live: delta    -17, 90 % CI [ -1535,  +1288], P(delta<0) 0.47; blocks > 7, < 5, = 1
+  half    - live: delta   -936, 90 % CI [ -1623,   -244], P(delta<0) 0.99; blocks > 4, < 9, = 0
+
+PER-DAY NET (UTC day of the opening fire)
+| day | live | cd5 | cd15 | cd30 | sm15 | sm20 | anc2 | roll15 | dp05 | dp10 | skip3 | skip5 | half |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 10-18 | 26 / +542 | 22 / +691 | 21 / +584 | 18 / +197 | 25 / +987 | 24 / +773 | 25 / +559 | 25 / +800 | 11 / +693 | 5 / +178 | 26 / +647 | 24 / +761 | 26 / +203 |
+| 10-19 | 40 / +330 | 36 / +522 | 35 / +388 | 32 / +334 | 38 / +671 | 37 / +864 | 40 / +201 | 40 / +274 | 14 / +478 | 7 / -281 | 39 / +116 | 36 / +658 | 40 / +124 |
+| 10-20 | 74 / +1684 | 63 / +1507 | 58 / +1722 | 54 / +1184 | 74 / +1253 | 71 / +1209 | 72 / +1610 | 73 / +1897 | 36 / +628 | 20 / +432 | 70 / +1176 | 64 / +1121 | 74 / +1274 |
+| 10-21 | 31 / -53 | 26 / -139 | 25 / -268 | 23 / +51 | 29 / +140 | 28 / +262 | 30 / -45 | 31 / -54 | 10 / +369 | 9 / +354 | 29 / -50 | 28 / -54 | 31 / -33 |
+
+PER-TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf15 | 129 | +1581 | -10476 | 1.33 | 51% | 61 / -79 | 57 | 11 | 6.7 | 82 | [-281, +3523] | 0.09 | 14 (23%) | -1085 | +173 |
+| live tf60 | 33 | +255 | -2849 | 1.18 | 48% | 17 / -85 | 3 | 12 | 10.1 | 86 | [-667, +1180] | 0.33 | 0 (0%) | +0 | +0 |
+| live tf240 | 9 | +667 | -197 | 2.98 | 56% | 4 / -84 | 1 | 4 | 11.4 | 88 | [-150, +1493] | 0.09 | 0 (0%) | +0 | +0 |
+| cd5 tf15 | 116 | +1379 | -9463 | 1.32 | 51% | 55 / -78 | 51 | 10 | 6.5 | 82 | [-403, +3214] | 0.11 | 1 (2%) | -71 | -59 |
+| cd5 tf60 | 23 | +429 | -1752 | 1.46 | 52% | 11 / -84 | 3 | 9 | 10.3 | 84 | [-364, +1239] | 0.18 | 0 (0%) | +0 | +0 |
+| cd5 tf240 | 8 | +773 | +8 | 4.30 | 62% | 3 / -78 | 1 | 4 | 13.1 | 88 | [+59, +1548] | 0.04 | 0 (0%) | +0 | +0 |
+| cd15 tf15 | 115 | +1591 | -9195 | 1.37 | 52% | 54 / -79 | 51 | 10 | 6.5 | 82 | [-229, +3446] | 0.08 | 0 (0%) | +0 | +0 |
+| cd15 tf60 | 17 | +131 | -1510 | 1.18 | 47% | 9 / -80 | 2 | 6 | 11.1 | 84 | [-509, +783] | 0.37 | 0 (0%) | +0 | +0 |
+| cd15 tf240 | 7 | +703 | +18 | 4.01 | 57% | 3 / -78 | 1 | 3 | 14.7 | 87 | [-6, +1454] | 0.06 | 0 (0%) | +0 | +0 |
+| cd30 tf15 | 107 | +1213 | -8782 | 1.31 | 52% | 50 / -79 | 49 | 8 | 6.5 | 83 | [-409, +2880] | 0.11 | 0 (0%) | +0 | +0 |
+| cd30 tf60 | 15 | +102 | -1327 | 1.16 | 47% | 8 / -80 | 2 | 5 | 7.3 | 76 | [-511, +731] | 0.40 | 0 (0%) | +0 | +0 |
+| cd30 tf240 | 5 | +451 | -30 | 4.18 | 60% | 2 / -71 | 1 | 2 | 11.4 | 87 | [-97, +968] | 0.08 | 0 (0%) | +0 | +0 |
+| sm15 tf15 | 124 | +2223 | -8632 | 1.52 | 60% | 47 / -90 | 60 | 17 | 8.6 | 100 | [+424, +4032] | 0.02 | 10 (21%) | -889 | +151 |
+| sm15 tf60 | 33 | +318 | -2549 | 1.23 | 55% | 15 / -93 | 3 | 14 | 10.7 | 100 | [-604, +1226] | 0.29 | 0 (0%) | +0 | +0 |
+| sm15 tf240 | 9 | +511 | -262 | 2.35 | 56% | 4 / -94 | 1 | 4 | 11.4 | 100 | [-252, +1294] | 0.14 | 0 (0%) | +0 | +0 |
+| sm20 tf15 | 120 | +2261 | -7261 | 1.60 | 66% | 38 / -97 | 61 | 21 | 8.9 | 100 | [+630, +3947] | 0.01 | 8 (21%) | -803 | -24 |
+| sm20 tf60 | 31 | +331 | -2081 | 1.25 | 58% | 13 / -100 | 4 | 13 | 13.3 | 100 | [-571, +1284] | 0.27 | 1 (8%) | -97 | +101 |
+| sm20 tf240 | 9 | +516 | -146 | 2.70 | 67% | 3 / -101 | 1 | 5 | 11.4 | 100 | [-155, +1161] | 0.10 | 0 (0%) | +0 | +0 |
+| anc2 tf15 | 125 | +1455 | -9471 | 1.33 | 54% | 54 / -80 | 59 | 12 | 7.2 | 91 | [-231, +3253] | 0.08 | 10 (19%) | -718 | +134 |
+| anc2 tf60 | 33 | +204 | -2897 | 1.14 | 48% | 17 / -87 | 3 | 12 | 10.2 | 87 | [-720, +1141] | 0.37 | 1 (6%) | -100 | +133 |
+| anc2 tf240 | 9 | +666 | -197 | 2.98 | 56% | 4 / -84 | 1 | 4 | 11.4 | 88 | [-150, +1492] | 0.09 | 0 (0%) | +0 | +0 |
+| roll15 tf15 | 127 | +2044 | -9650 | 1.46 | 54% | 56 / -78 | 60 | 11 | 7.3 | 82 | [+211, +3904] | 0.03 | 12 (21%) | -887 | +377 |
+| roll15 tf60 | 33 | +206 | -2905 | 1.14 | 48% | 17 / -88 | 3 | 12 | 10.2 | 87 | [-722, +1145] | 0.36 | 1 (6%) | -101 | +134 |
+| roll15 tf240 | 9 | +668 | -197 | 2.98 | 56% | 4 / -84 | 1 | 4 | 11.4 | 89 | [-149, +1495] | 0.09 | 0 (0%) | +0 | +0 |
+| dp05 tf15 | 47 | +1694 | -2803 | 2.32 | 60% | 17 / -71 | 26 | 4 | 6.0 | 78 | [+582, +2839] | 0.01 | 1 (6%) | -68 | +76 |
+| dp05 tf60 | 16 | -258 | -1703 | 0.69 | 31% | 11 / -76 | 3 | 2 | 8.7 | 93 | [-857, +421] | 0.77 | 0 (0%) | +0 | +0 |
+| dp05 tf240 | 8 | +732 | +39 | 4.16 | 62% | 3 / -77 | 0 | 5 | 25.7 | 93 | [+45, +1404] | 0.04 | 0 (0%) | +0 | +0 |
+| dp10 tf15 | 23 | +38 | -2088 | 1.04 | 52% | 11 / -83 | 12 | 0 | 6.0 | 85 | [-642, +739] | 0.46 | 0 (0%) | +0 | +0 |
+| dp10 tf60 | 12 | +761 | -282 | 2.91 | 58% | 5 / -80 | 7 | 0 | 12.6 | 100 | [-33, +1532] | 0.06 | 0 (0%) | +0 | +0 |
+| dp10 tf240 | 6 | -115 | -688 | 0.73 | 17% | 5 / -86 | 0 | 1 | 18.9 | 78 | [-558, +657] | 0.74 | 0 (0%) | +0 | +0 |
+| skip3 tf15 | 124 | +1617 | -9788 | 1.35 | 52% | 55 / -82 | 61 | 8 | 6.9 | 84 | [-240, +3585] | 0.08 | 13 (24%) | -1018 | +311 |
+| skip3 tf60 | 31 | +0 | -2857 | 1.00 | 48% | 16 / -86 | 3 | 11 | 10.2 | 95 | [-861, +899] | 0.49 | 1 (6%) | -62 | +133 |
+| skip3 tf240 | 9 | +273 | -590 | 1.65 | 44% | 5 / -84 | 1 | 3 | 10.2 | 87 | [-377, +993] | 0.27 | 0 (0%) | +0 | +0 |
+| skip5 tf15 | 115 | +1555 | -8731 | 1.38 | 55% | 48 / -83 | 62 | 5 | 6.5 | 90 | [-152, +3351] | 0.07 | 15 (31%) | -1181 | -176 |
+| skip5 tf60 | 29 | +1008 | -1773 | 1.97 | 59% | 12 / -87 | 5 | 11 | 10.1 | 97 | [+61, +1966] | 0.04 | 1 (8%) | -101 | +134 |
+| skip5 tf240 | 8 | -77 | -844 | 0.83 | 38% | 5 / -89 | 0 | 3 | 9.0 | 88 | [-530, +401] | 0.62 | 0 (0%) | +0 | +0 |
+| half tf15 | 129 | +984 | -6817 | 1.31 | 51% | 61 / -51 | 57 | 11 | 6.7 | 48 | [-254, +2283] | 0.10 | 14 (23%) | -705 | +170 |
+| half tf60 | 33 | +187 | -2438 | 1.15 | 48% | 17 / -73 | 3 | 12 | 10.1 | 66 | [-624, +1013] | 0.36 | 0 (0%) | +0 | +0 |
+| half tf240 | 9 | +396 | -275 | 2.28 | 56% | 4 / -77 | 1 | 4 | 11.4 | 84 | [-256, +1100] | 0.17 | 0 (0%) | +0 | +0 |
+
+PAIRS live (W15)
+  10-18 11:54:43 Sell tf15  e 12.0050 s 12.0216    -71 | + 2.4m tf15  zone_rejection e 12.0380 s 12.0561 stop        -79
+  10-18 12:02:21 Sell tf15  e 12.0380 s 12.0561    -79 | + 1.4m tf60  in_zone        e 12.0530 s 12.0734 reversal   +108
+  10-18 13:06:41 Buy  tf15  e 12.0090 s 11.9886    -87 | + 1.3m tf60  in_zone        e 11.9880 s 11.9672 stop        -87
+  10-18 16:39:03 Sell tf15  e 11.7470 s 11.7690    -98 | + 1.1m tf15  in_zone        e 11.7560 s 11.7843 stop       -102
+  10-18 16:57:27 Sell tf15  e 11.7560 s 11.7843   -102 | + 2.0m tf60  in_zone        e 11.7950 s 11.8229 target     +107
+  10-18 20:50:32 Sell tf15  e 11.6210 s 11.6485   -102 | + 2.3m tf15  zone_rejection e 11.6690 s 11.6965 target     +120
+  10-19 03:04:07 Buy  tf15  e 12.1890 s 12.1756    -58 | + 0.5m tf15  zone_rejection e 12.1770 s 12.1666 stop        -45
+  10-19 03:56:00 Buy  tf15  e 12.1770 s 12.1666    -45 | +12.7m tf15  zone_rejection e 12.1550 s 12.1410 stop        -62
+  10-19 04:13:23 Buy  tf15  e 12.1550 s 12.1410    -62 | + 5.5m tf60  in_zone        e 12.1110 s 12.1022 reversal   +133
+  10-19 09:19:03 Sell tf15  e 12.1800 s 12.1917    -50 | + 1.0m tf15  in_zone        e 12.1820 s 12.2028 target      +62
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0960   -100 | + 2.3m tf240 in_zone        e 12.0670 s 12.0430 stop       -104
+  10-19 17:21:57 Buy  tf15  e 11.9630 s 11.9386   -103 | + 2.6m tf60  in_zone        e 11.9300 s 11.8990 stop       -103
+  10-20 00:14:00 Buy  tf60  e 12.0100 s 11.9937    -71 | + 9.2m tf15  in_zone        e 11.9960 s 11.9446 target      -23
+  10-20 01:06:50 Buy  tf240 e 11.9460 s 11.9250    -89 | + 1.1m tf60  zone_rejection e 11.9200 s 11.9046 stop        -68
+  10-20 01:20:11 Sell tf15  e 11.8940 s 11.9380   -102 | + 3.0m tf15  in_zone        e 11.9410 s 11.9865 stop       -101
+  10-20 01:35:30 Sell tf15  e 11.9410 s 11.9865   -101 | + 1.6m tf15  zone_rejection e 11.9870 s 12.0196 reversal   +101
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0758    -92 | + 5.0m tf60  in_zone        e 12.0910 s 12.1163 stop       -103
+  10-20 04:54:21 Buy  tf15  e 12.0570 s 12.0408    -71 | +12.8m tf15  zone_rejection e 12.0340 s 12.0203 stop        -58
+  10-20 05:22:02 Buy  tf15  e 12.0340 s 12.0203    -58 | + 1.8m tf15  in_zone        e 12.0020 s 11.9851 target     +130
+  10-20 08:48:12 Buy  tf15  e 11.9280 s 11.9087    -85 | + 1.4m tf60  in_zone        e 11.9110 s 11.8856 reversal   +102
+  10-20 10:59:02 Sell tf15  e 11.9250 s 11.9397    -64 | + 1.4m tf15  in_zone        e 11.9380 s 11.9598 target      +26
+  10-20 12:19:01 Sell tf15  e 11.9830 s 12.0002    -76 | + 1.1m tf60  in_zone        e 11.9890 s 12.0224 stop       -102
+  10-20 12:21:10 Sell tf60  e 11.9890 s 12.0224   -102 | + 2.2m tf240 in_zone        e 12.0240 s 12.0544 reversal    +69
+  10-20 12:51:40 Buy  tf15  e 11.9960 s 11.9642   -101 | + 1.9m tf60  in_zone        e 11.9540 s 11.9246 reversal    +75
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0420   -102 | + 5.1m tf60  zone_rejection e 12.0510 s 12.0758 stop       -101
+  10-20 14:48:13 Buy  tf15  e 12.4270 s 12.3634   -101 | +14.7m tf60  in_zone        e 12.3280 s 12.2798 stop       -102
+  10-20 19:35:48 Sell tf15  e 12.1710 s 12.1917    -88 | + 4.1m tf60  zone_rejection e 12.2040 s 12.2151 stop        -50
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -58 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +150
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481   -103 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3611 reversal   +120
+  10-21 00:15:10 Sell tf15  e 12.3510 s 12.3669    -67 | + 3.2m tf15  zone_rejection e 12.3560 s 12.3750 stop        -79
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -95 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +141
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -54 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -88
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -50 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +129
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -62 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target     +100
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3662    -46 | + 1.5m tf60  in_zone        e 12.3680 s 12.3867 open_at_end    +12
+
+PAIRS cd5 (W15)
+  10-18 16:39:03 Sell tf15  e 11.7470 s 11.7690    -98 | + 6.3m tf60  in_zone        e 11.7950 s 11.8229 target     +107
+  10-19 04:13:23 Buy  tf15  e 12.1550 s 12.1410    -62 | + 5.5m tf60  in_zone        e 12.1110 s 12.1022 reversal   +133
+  10-20 00:14:00 Buy  tf60  e 12.0100 s 11.9937    -72 | + 9.2m tf15  in_zone        e 11.9960 s 11.9446 target      -23
+  10-20 04:54:21 Buy  tf15  e 12.0570 s 12.0408    -71 | +12.8m tf15  zone_rejection e 12.0340 s 12.0203 stop        -59
+  10-20 10:59:02 Sell tf15  e 11.9250 s 11.9397    -64 | +10.7m tf60  zone_rejection e 11.9600 s 11.9740 reversal   +132
+  10-20 12:19:01 Sell tf15  e 11.9830 s 12.0002    -77 | + 5.9m tf240 in_zone        e 12.0240 s 12.0544 reversal    +69
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0420   -102 | + 5.1m tf60  zone_rejection e 12.0510 s 12.0758 stop       -101
+  10-20 14:48:13 Buy  tf15  e 12.4270 s 12.3634   -101 | +14.7m tf60  in_zone        e 12.3280 s 12.2798 stop       -102
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -50 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +129
+
+PAIRS cd15 (W15)
+
+PAIRS cd30 (W15)
+
+PAIRS sm15 (W15)
+  10-18 11:54:43 Sell tf15  e 12.0050 s 12.0259    -87 | + 2.4m tf15  zone_rejection e 12.0380 s 12.0606 stop        -95
+  10-18 12:02:21 Sell tf15  e 12.0380 s 12.0606    -95 | + 1.2m tf60  in_zone        e 12.0530 s 12.0776 reversal   +106
+  10-18 13:06:41 Buy  tf15  e 12.0090 s 11.9840   -104 | + 1.1m tf60  in_zone        e 11.9880 s 11.9624 stop       -101
+  10-18 16:39:03 Sell tf15  e 11.7470 s 11.7756   -102 | + 2.4m tf60  in_zone        e 11.7950 s 11.8294 target      +87
+  10-18 20:50:32 Sell tf15  e 11.6210 s 11.6572   -102 | + 2.1m tf15  zone_rejection e 11.6690 s 11.7037 target      +95
+  10-18 21:16:22 Sell tf240 e 11.6850 s 11.7122   -103 | +11.0m tf15  in_zone        e 11.7320 s 11.7705 stop       -101
+  10-19 03:04:07 Buy  tf15  e 12.1890 s 12.1699    -83 | +13.1m tf15  zone_rejection e 12.1550 s 12.1369 stop        -79
+  10-19 04:13:23 Buy  tf15  e 12.1550 s 12.1369    -79 | + 5.5m tf60  in_zone        e 12.1110 s 12.0983 reversal   +133
+  10-19 09:19:03 Sell tf15  e 12.1800 s 12.1951    -67 | + 0.8m tf15  in_zone        e 12.1820 s 12.2061 target      +62
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0920   -104 | + 2.1m tf240 in_zone        e 12.0670 s 12.0384 stop       -102
+  10-19 17:21:57 Buy  tf15  e 11.9630 s 11.9325   -101 | + 2.5m tf60  in_zone        e 11.9300 s 11.8935 stop       -101
+  10-20 00:14:00 Buy  tf60  e 12.0100 s 11.9901    -85 | + 9.1m tf15  in_zone        e 11.9960 s 11.9404 target      -22
+  10-20 01:06:50 Buy  tf240 e 11.9460 s 11.9185   -102 | + 0.3m tf60  zone_rejection e 11.9200 s 11.8979 stop        -98
+  10-20 01:20:11 Sell tf15  e 11.8940 s 11.9465   -101 | + 2.0m tf15  in_zone        e 11.9410 s 11.9953 stop       -101
+  10-20 01:35:30 Sell tf15  e 11.9410 s 11.9953   -101 | + 1.4m tf15  zone_rejection e 11.9870 s 12.0285 reversal    +80
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0812   -103 | + 4.9m tf60  in_zone        e 12.0910 s 12.1214 reversal    +49
+  10-20 04:54:21 Buy  tf15  e 12.0570 s 12.0368    -88 | + 5.3m tf15  zone_rejection e 12.0340 s 12.0165 stop        -76
+  10-20 05:22:02 Buy  tf15  e 12.0340 s 12.0165    -76 | + 1.7m tf15  in_zone        e 12.0020 s 11.9811 target     +131
+  10-20 05:59:02 Buy  tf60  e 11.9910 s 11.9708    -89 | +14.6m tf240 in_zone        e 11.9580 s 11.9332 reversal   +327
+  10-20 08:48:12 Buy  tf15  e 11.9280 s 11.9031   -101 | + 1.4m tf60  in_zone        e 11.9110 s 11.8799 reversal    +84
+  10-20 10:59:02 Sell tf15  e 11.9250 s 11.9435    -81 | + 1.3m tf15  in_zone        e 11.9380 s 11.9637 target      +23
+  10-20 12:19:01 Sell tf15  e 11.9830 s 12.0053    -98 | + 0.8m tf60  in_zone        e 11.9890 s 12.0277 stop       -101
+  10-20 12:21:10 Sell tf60  e 11.9890 s 12.0277   -101 | + 2.1m tf240 in_zone        e 12.0240 s 12.0601 reversal    +58
+  10-20 12:51:40 Buy  tf15  e 11.9960 s 11.9573   -101 | + 1.5m tf60  in_zone        e 11.9540 s 11.9174 reversal    +60
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0495   -101 | + 1.3m tf60  zone_rejection e 12.0510 s 12.0836 stop       -101
+  10-20 19:35:48 Sell tf15  e 12.1710 s 12.1976   -102 | + 3.7m tf60  zone_rejection e 12.2040 s 12.2207 stop        -72
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2891    -75 | + 1.3m tf60  zone_rejection e 12.2860 s 12.2699 reversal   +151
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3522   -103 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3651 reversal   +111
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2934    -71 | + 1.4m tf15  in_zone        e 12.2910 s 12.2666 reversal    +41
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3165    -67 | + 5.3m tf60  in_zone        e 12.3500 s 12.3707 reversal   +130
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3583    -83 | + 1.6m tf15  in_zone        e 12.3670 s 12.3433 target     +100
+  10-21 09:40:40 Buy  tf15  e 12.3890 s 12.3628   -103 | + 7.4m tf60  zone_rejection e 12.3320 s 12.3050 stop       -100
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3702    -63 | + 1.1m tf60  in_zone        e 12.3680 s 12.3906 open_at_end    +12
+
+PAIRS sm20 (W15)
+  10-18 11:54:43 Sell tf15  e 12.0050 s 12.0302   -103 | + 1.2m tf15  zone_rejection e 12.0380 s 12.0652 reversal    +40
+  10-18 13:06:41 Buy  tf15  e 12.0090 s 11.9793   -101 | + 0.8m tf60  in_zone        e 11.9880 s 11.9575 stop       -102
+  10-18 16:39:03 Sell tf15  e 11.7470 s 11.7821   -103 | + 2.0m tf60  in_zone        e 11.7950 s 11.8359 target      +73
+  10-18 20:50:32 Sell tf15  e 11.6210 s 11.6660   -100 | + 0.9m tf15  zone_rejection e 11.6690 s 11.7109 target      +79
+  10-18 21:16:22 Sell tf240 e 11.6850 s 11.7189   -100 | + 8.0m tf15  in_zone        e 11.7320 s 11.7750 stop       -100
+  10-19 03:04:07 Buy  tf15  e 12.1890 s 12.1642   -101 | +12.2m tf15  zone_rejection e 12.1550 s 12.1329 stop        -95
+  10-19 04:13:23 Buy  tf15  e 12.1550 s 12.1329    -95 | + 5.5m tf60  in_zone        e 12.1110 s 12.0944 reversal   +133
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0880   -103 | + 2.1m tf240 in_zone        e 12.0670 s 12.0339 stop       -103
+  10-19 12:11:05 Sell tf60  e 12.0820 s 12.1223   -102 | + 1.6m tf15  zone_rejection e 12.1270 s 12.1560 target      +38
+  10-19 17:21:57 Buy  tf15  e 11.9630 s 11.9263   -101 | + 2.5m tf60  in_zone        e 11.9300 s 11.8880 stop       -102
+  10-20 00:14:00 Buy  tf60  e 12.0100 s 11.9864   -102 | + 8.7m tf15  in_zone        e 11.9960 s 11.9362 target      -20
+  10-20 01:20:11 Sell tf15  e 11.8940 s 11.9551   -102 | + 0.9m tf15  in_zone        e 11.9410 s 12.0041 reversal    -21
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0866   -101 | + 3.5m tf60  in_zone        e 12.0910 s 12.1265 reversal    +42
+  10-20 04:54:21 Buy  tf15  e 12.0570 s 12.0327   -103 | + 1.8m tf15  zone_rejection e 12.0340 s 12.0126 stop        -93
+  10-20 05:22:02 Buy  tf15  e 12.0340 s 12.0126    -93 | + 1.6m tf15  in_zone        e 12.0020 s 11.9772 target     +125
+  10-20 05:59:02 Buy  tf60  e 11.9910 s 11.9663   -101 | +13.7m tf240 in_zone        e 11.9580 s 11.9287 reversal   +276
+  10-20 08:48:12 Buy  tf15  e 11.9280 s 11.8975   -102 | + 0.9m tf60  in_zone        e 11.9110 s 11.8742 reversal    +71
+  10-20 10:59:02 Sell tf15  e 11.9250 s 11.9473    -99 | + 1.2m tf15  in_zone        e 11.9380 s 11.9677 target      +20
+  10-20 12:19:01 Sell tf15  e 11.9830 s 12.0104   -102 | + 0.7m tf60  in_zone        e 11.9890 s 12.0329 stop       -100
+  10-20 12:21:10 Sell tf60  e 11.9890 s 12.0329   -100 | + 1.0m tf240 in_zone        e 12.0240 s 12.0659 reversal    +50
+  10-20 12:51:40 Buy  tf15  e 11.9960 s 11.9504   -101 | + 1.2m tf60  in_zone        e 11.9540 s 11.9102 reversal    +50
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0570   -102 | + 0.8m tf60  zone_rejection e 12.0510 s 12.0915 stop       -101
+  10-20 19:35:48 Sell tf15  e 12.1710 s 12.2034   -102 | + 3.5m tf60  zone_rejection e 12.2040 s 12.2262 stop        -97
+  10-20 19:45:00 Sell tf60  e 12.2040 s 12.2262    -97 | + 4.2m tf60  in_zone        e 12.2390 s 12.2706 reversal   +101
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2851    -92 | + 0.9m tf60  zone_rejection e 12.2860 s 12.2662 reversal   +150
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2896    -88 | + 1.4m tf15  in_zone        e 12.2910 s 12.2625 reversal    +35
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3207    -84 | + 5.1m tf60  in_zone        e 12.3500 s 12.3749 reversal   +124
+  10-21 09:40:40 Buy  tf15  e 12.3890 s 12.3575   -101 | + 6.1m tf60  zone_rejection e 12.3320 s 12.3011 stop       -100
+  10-21 10:36:11 Sell tf15  e 12.3290 s 12.3562   -103 | +12.2m tf15  zone_rejection e 12.3560 s 12.3743 stop        -79
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3743    -79 | + 0.9m tf60  in_zone        e 12.3680 s 12.3945 open_at_end    +11
+
+PAIRS anc2 (W15)
+  10-18 11:54:43 Sell tf15  e 12.0050 s 12.0466   -101 | + 0.5m tf15  zone_rejection e 12.0380 s 12.0561 stop        -79
+  10-18 12:02:21 Sell tf15  e 12.0380 s 12.0561    -79 | + 1.4m tf60  in_zone        e 12.0530 s 12.0734 reversal   +108
+  10-18 13:06:41 Buy  tf15  e 12.0090 s 11.9886    -87 | + 1.3m tf60  in_zone        e 11.9880 s 11.9672 stop        -87
+  10-18 16:39:03 Sell tf15  e 11.7470 s 11.7790   -103 | + 2.3m tf60  in_zone        e 11.7950 s 11.8229 target     +107
+  10-18 20:50:32 Sell tf15  e 11.6210 s 11.6565   -101 | + 2.1m tf15  zone_rejection e 11.6690 s 11.6965 target     +120
+  10-19 03:04:07 Buy  tf15  e 12.1890 s 12.1756    -58 | + 0.5m tf15  zone_rejection e 12.1770 s 12.1666 stop        -45
+  10-19 03:56:00 Buy  tf15  e 12.1770 s 12.1666    -45 | +12.7m tf15  zone_rejection e 12.1550 s 12.1410 stop        -62
+  10-19 04:13:23 Buy  tf15  e 12.1550 s 12.1410    -62 | + 5.5m tf60  in_zone        e 12.1110 s 12.0992 reversal   +133
+  10-19 09:19:03 Sell tf15  e 12.1800 s 12.1917    -50 | + 1.0m tf15  in_zone        e 12.1820 s 12.2028 target      +62
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0960   -100 | + 2.3m tf240 in_zone        e 12.0670 s 12.0430 stop       -104
+  10-19 17:21:57 Buy  tf15  e 11.9630 s 11.9386   -103 | + 2.6m tf60  in_zone        e 11.9300 s 11.8990 stop       -103
+  10-20 00:14:00 Buy  tf60  e 12.0100 s 11.9937    -71 | + 9.2m tf15  in_zone        e 11.9960 s 11.9446 target      -23
+  10-20 01:06:50 Buy  tf240 e 11.9460 s 11.9250    -88 | + 1.1m tf60  zone_rejection e 11.9200 s 11.9046 stop        -67
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0758    -92 | + 5.0m tf60  in_zone        e 12.0910 s 12.1163 stop       -103
+  10-20 04:54:21 Buy  tf15  e 12.0570 s 12.0408    -71 | +12.8m tf15  zone_rejection e 12.0340 s 12.0203 stop        -58
+  10-20 05:22:02 Buy  tf15  e 12.0340 s 12.0203    -58 | + 1.8m tf15  in_zone        e 12.0020 s 11.9851 target     +130
+  10-20 08:48:12 Buy  tf15  e 11.9280 s 11.9047   -102 | + 1.4m tf60  in_zone        e 11.9110 s 11.8856 reversal   +102
+  10-20 10:59:02 Sell tf15  e 11.9250 s 11.9397    -64 | + 1.4m tf15  in_zone        e 11.9380 s 11.9598 target      +25
+  10-20 12:19:01 Sell tf15  e 11.9830 s 12.0002    -76 | + 1.1m tf60  in_zone        e 11.9890 s 12.0224 stop       -102
+  10-20 12:21:10 Sell tf60  e 11.9890 s 12.0224   -102 | + 2.2m tf240 in_zone        e 12.0240 s 12.0544 reversal    +69
+  10-20 12:51:40 Buy  tf15  e 11.9960 s 11.9522   -100 | + 1.2m tf60  in_zone        e 11.9540 s 11.9246 reversal    +75
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0420   -102 | + 5.1m tf60  zone_rejection e 12.0510 s 12.0758 stop       -101
+  10-20 19:35:48 Sell tf15  e 12.1710 s 12.1927    -92 | + 4.0m tf60  zone_rejection e 12.2040 s 12.2271 stop       -100
+  10-20 19:45:00 Sell tf60  e 12.2040 s 12.2271   -100 | + 4.2m tf60  in_zone        e 12.2390 s 12.2598 reversal   +133
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -58 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +150
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481   -103 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3611 reversal   +120
+  10-21 00:15:10 Sell tf15  e 12.3510 s 12.3669    -66 | + 3.2m tf15  zone_rejection e 12.3560 s 12.3750 stop        -79
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -54 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -88
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -50 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +129
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -62 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +99
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3662    -46 | + 1.5m tf60  in_zone        e 12.3680 s 12.3867 open_at_end    +12
+
+PAIRS roll15 (W15)
+  10-18 11:54:43 Sell tf15  e 12.0050 s 12.0216    -71 | + 2.4m tf15  zone_rejection e 12.0380 s 12.0561 stop        -79
+  10-18 12:02:21 Sell tf15  e 12.0380 s 12.0561    -79 | + 1.4m tf60  in_zone        e 12.0530 s 12.0734 reversal   +108
+  10-18 13:06:41 Buy  tf15  e 12.0090 s 11.9886    -87 | + 1.3m tf60  in_zone        e 11.9880 s 11.9672 stop        -87
+  10-18 16:39:03 Sell tf15  e 11.7470 s 11.7770   -103 | + 2.4m tf60  in_zone        e 11.7950 s 11.8229 target     +107
+  10-18 20:50:32 Sell tf15  e 11.6210 s 11.6485   -102 | + 2.3m tf15  zone_rejection e 11.6690 s 11.6965 target     +120
+  10-19 03:04:07 Buy  tf15  e 12.1890 s 12.1756    -58 | + 0.5m tf15  zone_rejection e 12.1770 s 12.1666 stop        -45
+  10-19 03:56:00 Buy  tf15  e 12.1770 s 12.1666    -45 | +12.7m tf15  zone_rejection e 12.1550 s 12.1410 stop        -62
+  10-19 04:13:23 Buy  tf15  e 12.1550 s 12.1410    -62 | + 5.5m tf60  in_zone        e 12.1110 s 12.0992 reversal   +133
+  10-19 09:19:03 Sell tf15  e 12.1800 s 12.1917    -50 | + 1.0m tf15  in_zone        e 12.1820 s 12.2028 target      +62
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0960   -100 | + 2.3m tf240 in_zone        e 12.0670 s 12.0430 stop       -104
+  10-19 17:21:57 Buy  tf15  e 11.9630 s 11.9386   -103 | + 2.6m tf60  in_zone        e 11.9300 s 11.8990 stop       -103
+  10-20 00:14:00 Buy  tf60  e 12.0100 s 11.9937    -72 | + 9.2m tf15  in_zone        e 11.9960 s 11.9446 target      -23
+  10-20 01:06:50 Buy  tf240 e 11.9460 s 11.9250    -89 | + 1.1m tf60  zone_rejection e 11.9200 s 11.9046 stop        -68
+  10-20 01:20:11 Sell tf15  e 11.8940 s 11.9730   -101 | + 8.1m tf15  zone_rejection e 11.9870 s 12.0196 reversal   +101
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0758    -92 | + 5.0m tf60  in_zone        e 12.0910 s 12.1163 stop       -103
+  10-20 04:54:21 Buy  tf15  e 12.0570 s 12.0408    -71 | +12.8m tf15  zone_rejection e 12.0340 s 12.0203 stop        -59
+  10-20 05:22:02 Buy  tf15  e 12.0340 s 12.0203    -59 | + 1.8m tf15  in_zone        e 12.0020 s 11.9851 target     +130
+  10-20 08:48:12 Buy  tf15  e 11.9280 s 11.9087    -85 | + 1.4m tf60  in_zone        e 11.9110 s 11.8856 reversal   +102
+  10-20 10:59:02 Sell tf15  e 11.9250 s 11.9397    -64 | + 1.4m tf15  in_zone        e 11.9380 s 11.9598 target      +26
+  10-20 12:19:01 Sell tf15  e 11.9830 s 12.0002    -77 | + 1.1m tf60  in_zone        e 11.9890 s 12.0224 stop       -102
+  10-20 12:21:10 Sell tf60  e 11.9890 s 12.0224   -102 | + 2.2m tf240 in_zone        e 12.0240 s 12.0544 reversal    +69
+  10-20 12:51:40 Buy  tf15  e 11.9960 s 11.9642   -101 | + 1.9m tf60  in_zone        e 11.9540 s 11.9246 reversal    +75
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0420   -102 | + 5.1m tf60  zone_rejection e 12.0510 s 12.0758 stop       -101
+  10-20 19:35:48 Sell tf15  e 12.1710 s 12.1917    -89 | + 4.1m tf60  zone_rejection e 12.2040 s 12.2271 stop       -101
+  10-20 19:45:00 Sell tf60  e 12.2040 s 12.2271   -101 | + 4.2m tf60  in_zone        e 12.2390 s 12.2598 reversal   +134
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -59 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +151
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481   -103 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3611 reversal   +121
+  10-21 00:15:10 Sell tf15  e 12.3510 s 12.3669    -67 | + 3.2m tf15  zone_rejection e 12.3560 s 12.3750 stop        -79
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -96 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +141
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -55 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -88
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -50 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +129
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -62 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target     +100
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3662    -46 | + 1.5m tf60  in_zone        e 12.3680 s 12.3867 open_at_end    +12
+
+PAIRS dp05 (W15)
+  10-18 21:23:57 Sell tf240 e 11.6930 s 11.7128    -86 | + 5.4m tf60  in_zone        e 11.7180 s 11.7349 stop        -73
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0960   -100 | + 2.3m tf240 in_zone        e 12.0670 s 12.0430 stop       -104
+  10-20 00:15:18 Buy  tf60  e 12.0010 s 11.9936    -34 | +13.2m tf15  in_zone        e 11.9730 s 11.9435 reversal    +64
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0758    -93 | + 5.0m tf60  in_zone        e 12.0910 s 12.1163 stop       -103
+  10-20 07:26:54 Buy  tf15  e 11.9800 s 11.9647    -68 | + 2.3m tf15  zone_rejection e 11.9590 s 11.9498 target      +76
+  10-20 12:57:57 Buy  tf15  e 11.9850 s 11.9639    -94 | + 2.1m tf60  in_zone        e 11.9500 s 11.9246 stop       -102
+  10-20 19:35:48 Sell tf15  e 12.1710 s 12.1917    -88 | + 8.9m tf60  zone_rejection e 12.2200 s 12.2308 stop        -46
+  10-20 19:49:49 Sell tf60  e 12.2200 s 12.2308    -46 | + 5.0m tf15  in_zone        e 12.2360 s 12.2599 target     +120
+
+PAIRS dp10 (W15)
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0960    -99 | + 2.3m tf240 in_zone        e 12.0670 s 12.0430 stop       -104
+  10-20 00:15:37 Buy  tf60  e 11.9980 s 11.9906    -33 | +13.1m tf15  in_zone        e 11.9710 s 11.9435 target     +124
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0758    -91 | + 5.0m tf60  in_zone        e 12.0910 s 12.1163 stop       -103
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0420   -102 | + 5.3m tf240 in_zone        e 12.0420 s 12.0758 stop       -101
+
+PAIRS skip3 (W15)
+  10-18 11:54:43 Sell tf15  e 12.0050 s 12.0216    -71 | + 3.9m tf15  in_zone        e 12.0380 s 12.0611 stop       -100
+  10-18 13:06:41 Buy  tf15  e 12.0090 s 11.9886    -87 | + 1.3m tf60  in_zone        e 11.9880 s 11.9672 stop        -87
+  10-18 16:39:03 Sell tf15  e 11.7470 s 11.7690    -98 | + 1.1m tf15  in_zone        e 11.7560 s 11.7843 stop       -102
+  10-18 16:57:27 Sell tf15  e 11.7560 s 11.7843   -102 | + 2.3m tf60  in_zone        e 11.7930 s 11.8230 target      +93
+  10-18 20:50:32 Sell tf15  e 11.6210 s 11.6485   -102 | + 3.0m tf15  zone_rejection e 11.6790 s 11.6973 target     +185
+  10-19 03:04:07 Buy  tf15  e 12.1890 s 12.1756    -58 | + 0.5m tf15  zone_rejection e 12.1770 s 12.1666 stop        -45
+  10-19 03:56:00 Buy  tf15  e 12.1770 s 12.1666    -45 | +12.7m tf15  zone_rejection e 12.1550 s 12.1410 stop        -62
+  10-19 04:13:23 Buy  tf15  e 12.1550 s 12.1410    -62 | + 8.2m tf60  zone_rejection e 12.1330 s 12.1021 reversal    +32
+  10-19 09:19:03 Sell tf15  e 12.1800 s 12.1917    -50 | + 6.1m tf15  in_zone        e 12.1810 s 12.2027 target      +58
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0960   -100 | + 2.3m tf240 in_zone        e 12.0670 s 12.0430 stop       -104
+  10-19 17:21:57 Buy  tf15  e 11.9630 s 11.9386   -103 | + 2.9m tf60  in_zone        e 11.9330 s 11.8988 stop       -102
+  10-20 00:14:00 Buy  tf60  e 12.0100 s 11.9937    -71 | + 9.2m tf15  in_zone        e 11.9960 s 11.9446 target      -23
+  10-20 01:06:50 Buy  tf240 e 11.9460 s 11.9250    -88 | + 1.1m tf60  zone_rejection e 11.9200 s 11.9046 stop        -67
+  10-20 01:20:11 Sell tf15  e 11.8940 s 11.9380   -102 | + 3.0m tf15  in_zone        e 11.9410 s 11.9865 stop       -101
+  10-20 01:35:30 Sell tf15  e 11.9410 s 11.9865   -101 | + 1.6m tf15  zone_rejection e 11.9870 s 12.0196 reversal   +101
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0758    -92 | + 5.0m tf60  in_zone        e 12.0910 s 12.1163 stop       -103
+  10-20 04:54:21 Buy  tf15  e 12.0570 s 12.0408    -71 | +12.8m tf15  zone_rejection e 12.0340 s 12.0203 stop        -58
+  10-20 05:22:02 Buy  tf15  e 12.0340 s 12.0203    -58 | + 1.8m tf15  in_zone        e 12.0020 s 11.9851 target     +130
+  10-20 08:48:12 Buy  tf15  e 11.9280 s 11.9087    -84 | + 1.4m tf60  in_zone        e 11.9110 s 11.8856 target     +102
+  10-20 10:59:02 Sell tf15  e 11.9250 s 11.9397    -63 | + 2.2m tf15  in_zone        e 11.9390 s 11.9599 target      +30
+  10-20 12:19:01 Sell tf15  e 11.9830 s 12.0002    -76 | + 1.1m tf60  in_zone        e 11.9890 s 12.0224 stop       -102
+  10-20 12:21:10 Sell tf60  e 11.9890 s 12.0224   -102 | + 2.2m tf240 in_zone        e 12.0240 s 12.0544 reversal   +112
+  10-20 12:51:40 Buy  tf15  e 11.9960 s 11.9642   -101 | + 1.9m tf60  in_zone        e 11.9540 s 11.9246 reversal    +75
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0420   -102 | + 5.1m tf60  zone_rejection e 12.0510 s 12.0758 stop       -101
+  10-20 14:48:13 Buy  tf15  e 12.4270 s 12.3634   -101 | +14.7m tf60  in_zone        e 12.3280 s 12.2798 stop       -102
+  10-20 19:35:48 Sell tf15  e 12.1710 s 12.1917    -88 | + 8.1m tf60  zone_rejection e 12.2130 s 12.2278 stop        -62
+  10-20 19:49:03 Sell tf60  e 12.2130 s 12.2278    -62 | + 4.2m tf60  in_zone        e 12.2390 s 12.2598 reversal   +133
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -58 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +149
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481   -103 | + 3.3m tf15  zone_rejection e 12.3430 s 12.3612 target     +136
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -95 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +140
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -54 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -87
+  10-21 06:20:11 Sell tf15  e 12.2940 s 12.3123    -79 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +128
+  10-21 08:04:27 Buy  tf15  e 12.3950 s 12.3743    -86 | + 1.6m tf60  zone_rejection e 12.3780 s 12.3632 stop        -62
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -62 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +99
+
+PAIRS skip5 (W15)
+  10-18 11:54:43 Sell tf15  e 12.0050 s 12.0216    -71 | +10.6m tf15  in_zone        e 12.0450 s 12.0635 stop        -79
+  10-18 12:10:31 Sell tf15  e 12.0450 s 12.0635    -79 | +12.5m tf60  zone_rejection e 12.0560 s 12.0741 reversal   +153
+  10-18 13:06:41 Buy  tf15  e 12.0090 s 11.9886    -87 | + 1.3m tf60  in_zone        e 11.9880 s 11.9672 stop        -88
+  10-18 16:39:03 Sell tf15  e 11.7470 s 11.7690    -98 | + 1.1m tf15  in_zone        e 11.7560 s 11.7843 stop       -102
+  10-18 16:57:27 Sell tf15  e 11.7560 s 11.7843   -102 | + 5.5m tf60  in_zone        e 11.8070 s 11.8288 target     +178
+  10-18 21:21:00 Sell tf15  e 11.6980 s 11.7135    -69 | +11.0m tf15  in_zone        e 11.7320 s 11.7660 stop       -100
+  10-19 03:56:00 Buy  tf15  e 12.1770 s 12.1666    -46 | +12.7m tf15  zone_rejection e 12.1550 s 12.1410 stop        -62
+  10-19 09:20:00 Sell tf15  e 12.1740 s 12.1918    -75 | + 6.1m tf15  in_zone        e 12.1810 s 12.2027 target      +58
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0960   -100 | + 2.3m tf240 in_zone        e 12.0670 s 12.0430 stop       -104
+  10-20 00:14:00 Buy  tf60  e 12.0100 s 11.9937    -72 | + 9.2m tf15  in_zone        e 11.9960 s 11.9446 target      -23
+  10-20 01:06:50 Buy  tf240 e 11.9460 s 11.9250    -89 | + 1.1m tf60  zone_rejection e 11.9200 s 11.9046 stop        -68
+  10-20 01:20:11 Sell tf15  e 11.8940 s 11.9380   -102 | + 3.0m tf15  in_zone        e 11.9410 s 11.9865 stop       -101
+  10-20 01:35:30 Sell tf15  e 11.9410 s 11.9865   -101 | + 8.4m tf15  zone_rejection e 11.9900 s 12.0191 target      +89
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0758    -93 | + 5.0m tf60  in_zone        e 12.0910 s 12.1163 stop       -103
+  10-20 04:54:21 Buy  tf15  e 12.0570 s 12.0408    -71 | +12.8m tf15  zone_rejection e 12.0340 s 12.0203 stop        -59
+  10-20 05:22:02 Buy  tf15  e 12.0340 s 12.0203    -59 | + 1.8m tf15  in_zone        e 12.0020 s 11.9851 target     +131
+  10-20 06:52:00 Buy  tf15  e 12.0070 s 11.9930    -59 | +10.8m tf15  in_zone        e 11.9800 s 11.9647 stop        -68
+  10-20 07:26:54 Buy  tf15  e 11.9800 s 11.9647    -68 | + 4.0m tf15  in_zone        e 11.9740 s 11.9459 target      +11
+  10-20 10:59:02 Sell tf15  e 11.9250 s 11.9397    -64 | + 4.3m tf15  zone_rejection e 11.9420 s 11.9597 target      +42
+  10-20 12:21:10 Sell tf60  e 11.9890 s 12.0224   -102 | + 2.2m tf240 in_zone        e 12.0240 s 12.0544 reversal   +112
+  10-20 12:51:40 Buy  tf15  e 11.9960 s 11.9642   -101 | + 4.5m tf15  zone_rejection e 11.9580 s 11.9245 target      +24
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0420   -102 | + 2.1m tf15  zone_rejection e 12.0340 s 12.0638 stop       -101
+  10-20 19:35:48 Sell tf15  e 12.1710 s 12.1917    -88 | + 9.4m tf60  in_zone        e 12.2100 s 12.2338 stop       -101
+  10-20 19:50:19 Sell tf60  e 12.2100 s 12.2338   -101 | + 4.2m tf60  in_zone        e 12.2390 s 12.2598 reversal   +134
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -95 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +141
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -54 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -88
+  10-21 06:20:11 Sell tf15  e 12.2940 s 12.3123    -79 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +129
+  10-21 08:08:11 Buy  tf15  e 12.4000 s 12.3742   -101 | + 3.5m tf60  in_zone        e 12.3820 s 12.3621 stop        -83
+  10-21 08:20:01 Buy  tf60  e 12.3820 s 12.3621    -83 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +99
+  10-21 10:05:03 Buy  tf240 e 12.3390 s 12.3088   -103 | + 8.8m tf60  in_zone        e 12.3030 s 12.2764 reversal    +98
+
+PAIRS half (W15)
+  10-18 11:54:43 Sell tf15  e 12.0050 s 12.0216    -35 | + 2.4m tf15  zone_rejection e 12.0380 s 12.0561 stop        -79
+  10-18 12:02:21 Sell tf15  e 12.0380 s 12.0561    -79 | + 1.4m tf60  in_zone        e 12.0530 s 12.0734 reversal   +108
+  10-18 13:06:41 Buy  tf15  e 12.0090 s 11.9886    -87 | + 1.3m tf60  in_zone        e 11.9880 s 11.9672 stop        -87
+  10-18 16:39:03 Sell tf15  e 11.7470 s 11.7690    -49 | + 1.1m tf15  in_zone        e 11.7560 s 11.7843 stop       -102
+  10-18 16:57:27 Sell tf15  e 11.7560 s 11.7843   -102 | + 2.0m tf60  in_zone        e 11.7950 s 11.8229 target     +107
+  10-18 20:50:32 Sell tf15  e 11.6210 s 11.6485    -51 | + 2.3m tf15  zone_rejection e 11.6690 s 11.6965 target     +120
+  10-19 03:04:07 Buy  tf15  e 12.1890 s 12.1756    -58 | + 0.5m tf15  zone_rejection e 12.1770 s 12.1666 stop        -45
+  10-19 03:56:00 Buy  tf15  e 12.1770 s 12.1666    -45 | +12.7m tf15  zone_rejection e 12.1550 s 12.1410 stop        -62
+  10-19 04:13:23 Buy  tf15  e 12.1550 s 12.1410    -62 | + 5.5m tf60  in_zone        e 12.1110 s 12.1022 reversal   +132
+  10-19 09:19:03 Sell tf15  e 12.1800 s 12.1917    -25 | + 1.0m tf15  in_zone        e 12.1820 s 12.2028 target      +62
+  10-19 10:24:10 Buy  tf15  e 12.1190 s 12.0960    -50 | + 2.3m tf240 in_zone        e 12.0670 s 12.0430 stop       -104
+  10-19 17:21:57 Buy  tf15  e 11.9630 s 11.9386    -51 | + 2.6m tf60  in_zone        e 11.9300 s 11.8990 stop       -103
+  10-20 00:14:00 Buy  tf60  e 12.0100 s 11.9937    -36 | + 9.2m tf15  in_zone        e 11.9960 s 11.9446 target      -23
+  10-20 01:06:50 Buy  tf240 e 11.9460 s 11.9250    -88 | + 1.1m tf60  zone_rejection e 11.9200 s 11.9046 stop        -67
+  10-20 01:20:11 Sell tf15  e 11.8940 s 11.9380    -51 | + 3.0m tf15  in_zone        e 11.9410 s 11.9865 stop       -101
+  10-20 01:35:30 Sell tf15  e 11.9410 s 11.9865   -101 | + 1.6m tf15  zone_rejection e 11.9870 s 12.0196 reversal   +101
+  10-20 03:42:07 Sell tf15  e 12.0540 s 12.0758    -46 | + 5.0m tf60  in_zone        e 12.0910 s 12.1163 stop       -103
+  10-20 04:54:21 Buy  tf15  e 12.0570 s 12.0408    -35 | +12.8m tf15  zone_rejection e 12.0340 s 12.0203 stop        -58
+  10-20 05:22:02 Buy  tf15  e 12.0340 s 12.0203    -58 | + 1.8m tf15  in_zone        e 12.0020 s 11.9851 target     +129
+  10-20 08:48:12 Buy  tf15  e 11.9280 s 11.9087    -84 | + 1.4m tf60  in_zone        e 11.9110 s 11.8856 reversal   +102
+  10-20 10:59:02 Sell tf15  e 11.9250 s 11.9397    -32 | + 1.4m tf15  in_zone        e 11.9380 s 11.9598 target      +25
+  10-20 12:19:01 Sell tf15  e 11.9830 s 12.0002    -38 | + 1.1m tf60  in_zone        e 11.9890 s 12.0224 stop       -102
+  10-20 12:21:10 Sell tf60  e 11.9890 s 12.0224   -102 | + 2.2m tf240 in_zone        e 12.0240 s 12.0544 reversal    +69
+  10-20 12:51:40 Buy  tf15  e 11.9960 s 11.9642   -101 | + 1.9m tf60  in_zone        e 11.9540 s 11.9246 reversal    +75
+  10-20 13:43:09 Sell tf15  e 11.9950 s 12.0420    -51 | + 5.1m tf60  zone_rejection e 12.0510 s 12.0758 stop       -101
+  10-20 14:48:13 Buy  tf15  e 12.4270 s 12.3634    -50 | +14.7m tf60  in_zone        e 12.3280 s 12.2798 stop       -102
+  10-20 19:35:48 Sell tf15  e 12.1710 s 12.1917    -44 | + 4.1m tf60  zone_rejection e 12.2040 s 12.2151 stop        -50
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -29 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +149
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481    -52 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3611 reversal   +119
+  10-21 00:15:10 Sell tf15  e 12.3510 s 12.3669    -66 | + 3.2m tf15  zone_rejection e 12.3560 s 12.3750 stop        -78
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -47 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +139
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -27 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -87
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -25 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +128
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -62 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +99
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3662    -45 | + 1.5m tf60  in_zone        e 12.3680 s 12.3867 open_at_end    +12

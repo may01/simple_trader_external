@@ -1,0 +1,194 @@
+trades 753117 (10-16 22:29:05 -> 10-21 11:16:04); replay 10-20 20:25:00 -> 10-21 11:16:04: 87416 trades; indicator names 42, rows 470989, expiry non-monotone steps 0
+trade feed gaps > 60 s in the replay window: 1 [('10-21 02:55:41', 66)]
+pre-candidate trades (filters pass, zone+target present, inzone or rejection): {'15_long': 8295, '15_short': 7243, '60_long': 8164, '60_short': 1820, '240_long': 2553, '240_short': 11964} any: 34460
+simulated live: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37338
+simulated cd5: 41 fires, 31 positions, cooled 7, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37338
+simulated cd15: 41 fires, 30 positions, cooled 9, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37338
+simulated cd30: 41 fires, 28 positions, cooled 12, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37845
+simulated sm15: 41 fires, 36 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 37894
+simulated sm20: 41 fires, 34 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 38344
+simulated anc2: 41 fires, 37 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 38344
+simulated roll15: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 38344
+simulated dp05: 15 fires, 12 positions, cooled 0, depth-blocked ticks 5172, skip-blocked ticks 0, trend cache 38407
+simulated dp10: 12 fires, 11 positions, cooled 0, depth-blocked ticks 6090, skip-blocked ticks 0, trend cache 38486
+simulated skip3: 40 fires, 36 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 897, trend cache 38487
+simulated skip5: 37 fires, 33 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 1949, trend cache 38595
+simulated half: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 38595
+
+REPRODUCTION (live variant vs recorded fires, same side+tf within 60 s): recorded 42, simulated 41, matched 40, missed 2, extra 1
+  candle-stop port: 39/40 recorded stops reproduced within half a tick
+  candle-stop era: recorded positions 38 net +169, pairs W15 4 (P1 -273, P2 +312); sim-live positions 38 net +237, pairs W15 8 (P1 -526, P2 +474)
+
+SUMMARY (same simulator, same window for every variant; pairs = stop -> same side better re-entry within 15 min)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 38 | +237 | -3508 | 1.17 | 45% | 21 / -68 | 9 | 7 | 8.6 | 71 | [-709, +1219] | 0.35 | 8 (38%) | -526 | +474 |
+| cd5 | 31 | -111 | -3147 | 0.91 | 39% | 19 / -67 | 7 | 5 | 7.5 | 67 | [-928, +782] | 0.59 | 1 (5%) | -49 | +126 |
+| cd15 | 30 | -236 | -3171 | 0.81 | 37% | 19 / -67 | 7 | 4 | 7.1 | 68 | [-1024, +630] | 0.68 | 0 (0%) | +0 | +0 |
+| cd30 | 28 | +76 | -2661 | 1.07 | 43% | 16 / -68 | 9 | 3 | 7.7 | 72 | [-718, +962] | 0.46 | 0 (0%) | +0 | +0 |
+| sm15 | 36 | +364 | -3134 | 1.26 | 53% | 17 / -81 | 8 | 10 | 10.4 | 87 | [-587, +1322] | 0.26 | 7 (41%) | -557 | +435 |
+| sm20 | 34 | +600 | -2528 | 1.50 | 62% | 13 / -92 | 8 | 12 | 12.3 | 100 | [-305, +1567] | 0.14 | 6 (46%) | -539 | +140 |
+| anc2 | 37 | +245 | -3356 | 1.18 | 46% | 20 / -68 | 8 | 8 | 8.5 | 73 | [-653, +1203] | 0.34 | 7 (35%) | -433 | +337 |
+| roll15 | 38 | +237 | -3508 | 1.17 | 45% | 21 / -68 | 9 | 7 | 8.6 | 71 | [-709, +1219] | 0.35 | 8 (38%) | -526 | +474 |
+| dp05 | 12 | +395 | -807 | 2.19 | 50% | 6 / -55 | 5 | 1 | 11.5 | 68 | [-226, +1106] | 0.16 | 0 (0%) | +0 | +0 |
+| dp10 | 11 | +365 | -735 | 1.95 | 55% | 5 / -77 | 5 | 1 | 12.1 | 72 | [-289, +1104] | 0.20 | 0 (0%) | +0 | +0 |
+| skip3 | 36 | +235 | -3290 | 1.16 | 44% | 19 / -75 | 11 | 5 | 9.1 | 74 | [-727, +1222] | 0.36 | 7 (37%) | -530 | +495 |
+| skip5 | 33 | +151 | -3039 | 1.11 | 48% | 17 / -80 | 9 | 6 | 9.3 | 77 | [-762, +1088] | 0.40 | 6 (35%) | -508 | +291 |
+| half | 38 | +244 | -2329 | 1.25 | 45% | 21 / -46 | 9 | 7 | 8.6 | 41 | [-453, +943] | 0.28 | 8 (38%) | -348 | +474 |
+
+PAIR STATS ON LIVE SIM BY WINDOW
+  W<= 5: pairs 7 of 21 stop-outs (33%); P1 -477 (mean -68), P2 +348 (mean +50), P2 outcomes {'reversal': 2, 'stop': 2, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 0.94, P2 beyond P1 stop 3/7; gap median 1.5 min; P2 rule {'zone_rejection': 4, 'in_zone': 3}, P2 tf {60: 2, 15: 5}
+  W<=15: pairs 8 of 21 stop-outs (38%); P1 -526 (mean -66), P2 +474 (mean +59), P2 outcomes {'reversal': 3, 'stop': 2, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.06, P2 beyond P1 stop 4/8; gap median 1.5 min; P2 rule {'zone_rejection': 4, 'in_zone': 4}, P2 tf {60: 3, 15: 5}
+  W<=30: pairs 11 of 21 stop-outs (52%); P1 -754 (mean -69), P2 +275 (mean +25), P2 outcomes {'reversal': 3, 'stop': 5, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.38, P2 beyond P1 stop 7/11; gap median 1.8 min; P2 rule {'zone_rejection': 7, 'in_zone': 4}, P2 tf {60: 5, 15: 6}
+  W<=60: pairs 11 of 21 stop-outs (52%); P1 -754 (mean -69), P2 +275 (mean +25), P2 outcomes {'reversal': 3, 'stop': 5, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.38, P2 beyond P1 stop 7/11; gap median 1.8 min; P2 rule {'zone_rejection': 7, 'in_zone': 4}, P2 tf {60: 5, 15: 6}
+  live sim: re-entry-flagged positions 14, pnl +250; others 24, pnl -13
+  cd5: fires rejected by cooldown 7
+  cd15: fires rejected by cooldown 9
+  cd30: fires rejected by cooldown 12
+
+PAIRED 6-H BLOCK BOOTSTRAP vs live (3 blocks, 5000 resamples)
+  cd5     - live: delta   -348, 90 % CI [  -637,    -59], P(delta<0) 0.97; blocks > 1, < 2, = 0
+  cd15    - live: delta   -473, 90 % CI [  -762,   -184], P(delta<0) 0.96; blocks > 1, < 2, = 0
+  cd30    - live: delta   -162, 90 % CI [  -488,   +164], P(delta<0) 0.71; blocks > 2, < 1, = 0
+  sm15    - live: delta   +127, 90 % CI [  -343,   +597], P(delta<0) 0.29; blocks > 1, < 2, = 0
+  sm20    - live: delta   +363, 90 % CI [  +166,   +559], P(delta<0) 0.00; blocks > 3, < 0, = 0
+  anc2    - live: delta     +7, 90 % CI [    -0,    +15], P(delta<0) 0.27; blocks > 1, < 1, = 1
+  roll15  - live: delta     +0, 90 % CI [    +0,     +0], P(delta<0) 0.00; blocks > 0, < 0, = 3
+  dp05    - live: delta   +158, 90 % CI [  -565,   +880], P(delta<0) 0.40; blocks > 1, < 2, = 0
+  dp10    - live: delta   +128, 90 % CI [  -829,  +1085], P(delta<0) 0.29; blocks > 1, < 2, = 0
+  skip3   - live: delta     -3, 90 % CI [    -9,     +3], P(delta<0) 0.74; blocks > 1, < 2, = 0
+  skip5   - live: delta    -86, 90 % CI [  -208,    +35], P(delta<0) 0.85; blocks > 1, < 2, = 0
+  half    - live: delta     +7, 90 % CI [  -216,   +229], P(delta<0) 0.40; blocks > 1, < 2, = 0
+
+PER-DAY NET (UTC day of the opening fire)
+| day | live | cd5 | cd15 | cd30 | sm15 | sm20 | anc2 | roll15 | dp05 | dp10 | skip3 | skip5 | half |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 10-20 | 7 / +289 | 5 / +25 | 5 / +25 | 5 / +25 | 7 / +230 | 6 / +334 | 7 / +289 | 7 / +289 | 2 / +33 | 2 / +12 | 7 / +285 | 5 / +204 | 7 / +277 |
+| 10-21 | 31 / -52 | 26 / -135 | 25 / -260 | 23 / +51 | 29 / +134 | 28 / +266 | 30 / -44 | 31 / -52 | 10 / +362 | 9 / +353 | 29 / -50 | 28 / -53 | 31 / -32 |
+
+PER-TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf15 | 30 | +144 | -2798 | 1.12 | 43% | 17 / -69 | 9 | 4 | 7.7 | 72 | [-695, +1073] | 0.40 | 3 (18%) | -262 | +178 |
+| live tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| live tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| cd5 tf15 | 25 | -45 | -2481 | 0.96 | 40% | 15 / -67 | 7 | 3 | 6.5 | 69 | [-780, +771] | 0.55 | 0 (0%) | +0 | +0 |
+| cd5 tf60 | 5 | -13 | -513 | 0.94 | 40% | 3 / -69 | 0 | 2 | 15.9 | 67 | [-328, +295] | 0.56 | 0 (0%) | +0 | +0 |
+| cd5 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| cd15 tf15 | 25 | -45 | -2479 | 0.96 | 40% | 15 / -67 | 7 | 3 | 6.5 | 69 | [-779, +771] | 0.55 | 0 (0%) | +0 | +0 |
+| cd15 tf60 | 4 | -138 | -538 | 0.33 | 25% | 3 / -69 | 0 | 1 | 13.1 | 70 | [-308, +31] | 0.85 | 0 (0%) | +0 | +0 |
+| cd15 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| cd30 tf15 | 25 | +113 | -2323 | 1.12 | 44% | 14 / -70 | 9 | 2 | 7.5 | 72 | [-673, +967] | 0.42 | 0 (0%) | +0 | +0 |
+| cd30 tf60 | 2 | +16 | -185 | 1.30 | 50% | 1 / -53 | 0 | 1 | 11.7 | 67 | [-106, +137] | 0.24 | 0 (0%) | +0 | +0 |
+| cd30 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| sm15 tf15 | 28 | +332 | -2374 | 1.31 | 54% | 13 / -81 | 8 | 7 | 9.0 | 88 | [-516, +1213] | 0.27 | 1 (8%) | -103 | +111 |
+| sm15 tf60 | 7 | +102 | -591 | 1.40 | 57% | 3 / -84 | 0 | 3 | 14.9 | 84 | [-298, +521] | 0.35 | 0 (0%) | +0 | +0 |
+| sm15 tf240 | 1 | -69 | -170 | 0.00 | 0% | 1 / -69 | 0 | 0 | 14.7 | 69 | [-69, -69] | 1.00 | 0 (0%) | +0 | +0 |
+| sm20 tf15 | 26 | +195 | -2177 | 1.19 | 58% | 11 / -92 | 7 | 8 | 11.0 | 100 | [-590, +1016] | 0.34 | 1 (9%) | -103 | -77 |
+| sm20 tf60 | 7 | +327 | -329 | 2.76 | 71% | 2 / -93 | 1 | 3 | 14.9 | 100 | [-114, +770] | 0.12 | 0 (0%) | +0 | +0 |
+| sm20 tf240 | 1 | +77 | -23 | inf | 100% | 0 / +0 | 0 | 1 | 25.1 | 88 | [+77, +77] | 0.00 | 0 (0%) | +0 | +0 |
+| anc2 tf15 | 29 | +152 | -2646 | 1.14 | 45% | 16 / -69 | 8 | 5 | 7.5 | 77 | [-645, +1032] | 0.39 | 2 (12%) | -168 | +41 |
+| anc2 tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| anc2 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| roll15 tf15 | 30 | +144 | -2798 | 1.12 | 43% | 17 / -69 | 9 | 4 | 7.7 | 72 | [-695, +1073] | 0.40 | 3 (18%) | -262 | +178 |
+| roll15 tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| roll15 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| dp05 tf15 | 7 | +321 | -380 | 4.45 | 71% | 2 / -47 | 5 | 0 | 6.3 | 69 | [+9, +651] | 0.04 | 0 (0%) | +0 | +0 |
+| dp05 tf60 | 3 | -199 | -500 | 0.00 | 0% | 3 / -66 | 0 | 0 | 18.7 | 67 | [-248, -150] | 1.00 | 0 (0%) | +0 | +0 |
+| dp05 tf240 | 2 | +273 | +72 | 7.72 | 50% | 1 / -41 | 0 | 1 | 31.5 | 52 | [-81, +627] | 0.24 | 0 (0%) | +0 | +0 |
+| dp10 tf15 | 6 | +54 | -546 | 1.32 | 67% | 2 / -83 | 4 | 0 | 6.9 | 73 | [-226, +324] | 0.33 | 0 (0%) | +0 | +0 |
+| dp10 tf60 | 3 | +60 | -240 | 1.38 | 33% | 2 / -79 | 1 | 0 | 18.7 | 77 | [-248, +367] | 0.29 | 0 (0%) | +0 | +0 |
+| dp10 tf240 | 2 | +252 | +52 | 5.15 | 50% | 1 / -61 | 0 | 1 | 50.8 | 62 | [-122, +626] | 0.24 | 0 (0%) | +0 | +0 |
+| skip3 tf15 | 28 | +154 | -2569 | 1.13 | 43% | 15 / -77 | 11 | 2 | 8.3 | 76 | [-714, +1056] | 0.40 | 2 (13%) | -197 | +272 |
+| skip3 tf60 | 7 | +154 | -548 | 1.74 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-224, +548] | 0.26 | 0 (0%) | +0 | +0 |
+| skip3 tf240 | 1 | -73 | -174 | 0.00 | 0% | 1 / -73 | 0 | 0 | 12.7 | 70 | [-73, -73] | 1.00 | 0 (0%) | +0 | +0 |
+| skip5 tf15 | 24 | +22 | -2292 | 1.02 | 46% | 13 / -80 | 9 | 2 | 8.4 | 79 | [-772, +880] | 0.50 | 1 (8%) | -93 | +138 |
+| skip5 tf60 | 7 | +309 | -385 | 3.31 | 71% | 2 / -67 | 0 | 4 | 14.0 | 76 | [-49, +658] | 0.08 | 0 (0%) | +0 | +0 |
+| skip5 tf240 | 2 | -180 | -362 | 0.00 | 0% | 2 / -90 | 0 | 0 | 10.1 | 88 | [-205, -155] | 1.00 | 0 (0%) | +0 | +0 |
+| half tf15 | 30 | +133 | -1789 | 1.18 | 43% | 17 / -44 | 9 | 4 | 7.7 | 40 | [-431, +746] | 0.34 | 3 (18%) | -163 | +178 |
+| half tf60 | 7 | +138 | -464 | 1.76 | 57% | 3 / -60 | 0 | 3 | 14.9 | 60 | [-217, +512] | 0.28 | 0 (0%) | +0 | +0 |
+| half tf240 | 1 | -26 | -77 | 0.00 | 0% | 1 / -26 | 0 | 0 | 14.7 | 25 | [-26, -26] | 1.00 | 0 (0%) | +0 | +0 |
+
+PAIRS live (W15)
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -57 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +147
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481   -103 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3611 reversal   +118
+  10-21 00:15:10 Sell tf15  e 12.3510 s 12.3669    -65 | + 3.2m tf15  zone_rejection e 12.3560 s 12.3750 stop        -77
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -93 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +138
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -53 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -86
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -49 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +126
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -61 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +97
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3662    -45 | + 1.5m tf60  in_zone        e 12.3680 s 12.3867 open_at_end    +12
+
+PAIRS cd5 (W15)
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -49 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +126
+
+PAIRS cd15 (W15)
+
+PAIRS cd30 (W15)
+
+PAIRS sm15 (W15)
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2891    -73 | + 1.3m tf60  zone_rejection e 12.2860 s 12.2699 reversal   +147
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3522   -103 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3651 reversal   +111
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2934    -70 | + 1.4m tf15  in_zone        e 12.2910 s 12.2666 reversal    +41
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3165    -66 | + 5.3m tf60  in_zone        e 12.3500 s 12.3707 reversal   +126
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3583    -81 | + 1.6m tf15  in_zone        e 12.3670 s 12.3433 target      +98
+  10-21 09:40:40 Buy  tf15  e 12.3890 s 12.3628   -103 | + 7.4m tf60  zone_rejection e 12.3320 s 12.3050 stop       -100
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3702    -61 | + 1.1m tf60  in_zone        e 12.3680 s 12.3906 open_at_end    +12
+
+PAIRS sm20 (W15)
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2851    -90 | + 0.9m tf60  zone_rejection e 12.2860 s 12.2662 reversal   +147
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2896    -86 | + 1.4m tf15  in_zone        e 12.2910 s 12.2625 reversal    +35
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3207    -82 | + 5.1m tf60  in_zone        e 12.3500 s 12.3749 reversal   +124
+  10-21 09:40:40 Buy  tf15  e 12.3890 s 12.3575   -101 | + 6.1m tf60  zone_rejection e 12.3320 s 12.3011 stop       -100
+  10-21 10:36:11 Sell tf15  e 12.3290 s 12.3562   -103 | +12.2m tf15  zone_rejection e 12.3560 s 12.3743 stop        -77
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3743    -77 | + 0.9m tf60  in_zone        e 12.3680 s 12.3945 open_at_end    +11
+
+PAIRS anc2 (W15)
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -57 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +147
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481   -103 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3611 reversal   +118
+  10-21 00:15:10 Sell tf15  e 12.3510 s 12.3669    -65 | + 3.2m tf15  zone_rejection e 12.3560 s 12.3750 stop        -77
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -53 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -86
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -49 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +126
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -61 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +97
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3662    -45 | + 1.5m tf60  in_zone        e 12.3680 s 12.3867 open_at_end    +12
+
+PAIRS roll15 (W15)
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -57 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +147
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481   -103 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3611 reversal   +118
+  10-21 00:15:10 Sell tf15  e 12.3510 s 12.3669    -65 | + 3.2m tf15  zone_rejection e 12.3560 s 12.3750 stop        -77
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -93 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +138
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -53 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -86
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -49 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +126
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -61 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +97
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3662    -45 | + 1.5m tf60  in_zone        e 12.3680 s 12.3867 open_at_end    +12
+
+PAIRS dp05 (W15)
+
+PAIRS dp10 (W15)
+
+PAIRS skip3 (W15)
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -57 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +147
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481   -103 | + 3.3m tf15  zone_rejection e 12.3430 s 12.3612 target     +134
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -93 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +138
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -53 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -86
+  10-21 06:20:11 Sell tf15  e 12.2940 s 12.3123    -78 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +126
+  10-21 08:04:27 Buy  tf15  e 12.3950 s 12.3743    -85 | + 1.6m tf60  zone_rejection e 12.3780 s 12.3632 stop        -61
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -61 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +97
+
+PAIRS skip5 (W15)
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -93 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +138
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -53 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -86
+  10-21 06:20:11 Sell tf15  e 12.2940 s 12.3123    -78 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +126
+  10-21 08:08:11 Buy  tf15  e 12.4000 s 12.3742   -101 | + 3.5m tf60  in_zone        e 12.3820 s 12.3621 stop        -81
+  10-21 08:20:01 Buy  tf60  e 12.3820 s 12.3621    -81 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +97
+  10-21 10:05:03 Buy  tf240 e 12.3390 s 12.3088   -103 | + 8.8m tf60  in_zone        e 12.3030 s 12.2764 reversal    +98
+
+PAIRS half (W15)
+  10-20 23:03:55 Buy  tf15  e 12.3070 s 12.2931    -28 | + 1.4m tf60  zone_rejection e 12.2860 s 12.2736 reversal   +147
+  10-20 23:23:51 Sell tf15  e 12.3220 s 12.3481    -52 | + 1.2m tf15  zone_rejection e 12.3390 s 12.3611 reversal   +118
+  10-21 00:15:10 Sell tf15  e 12.3510 s 12.3669    -65 | + 3.2m tf15  zone_rejection e 12.3560 s 12.3750 stop        -77
+  10-21 02:38:06 Sell tf15  e 12.3610 s 12.3834    -47 | + 1.1m tf15  zone_rejection e 12.3820 s 12.3946 target     +137
+  10-21 05:41:20 Buy  tf60  e 12.3100 s 12.2973    -27 | + 1.6m tf15  in_zone        e 12.2910 s 12.2707 stop        -86
+  10-21 06:17:02 Sell tf15  e 12.3010 s 12.3124    -24 | + 6.5m tf60  in_zone        e 12.3500 s 12.3665 reversal   +126
+  10-21 08:18:07 Buy  tf60  e 12.3780 s 12.3632    -61 | + 1.8m tf15  in_zone        e 12.3670 s 12.3479 target      +97
+  10-21 11:02:00 Sell tf15  e 12.3560 s 12.3662    -45 | + 1.5m tf60  in_zone        e 12.3680 s 12.3867 open_at_end    +12

@@ -1,0 +1,117 @@
+recorded cb positions 144, closed 114, 10-18 23:10:03 -> 10-21 11:06:02, net +650
+close reasons {'main_close': 18, 'target': 25, 'stop': 71} stop pnl -1721
+
+== all W<=5 min: positions 114, stop-outs 71, stop→same-side better re-entry pairs 6 (8% of stop-outs)
+   P1 loss sum -274 (mean -46); P2 pnl sum +153 (mean +26); pair net -120; P2 outcomes {'stop': 3, 'main_close': 1, 'target': 2}
+   cf 'P1 held to P2 exit' (P1 size): -280 vs actual P1 -274; cf 'skip P1, keep P2': +153 -> Δ vs actual pair +274
+   P2 entry improvement / P1 stop-dist: median 1.18, P2 entry beyond P1 stop: 3/6; gap min median 2.2
+   same tf 5/6, same zone value 0/6; P2 tf {15: 5, 60: 1}, P2 rule {'in_zone': 2, 'zone_rejection': 4}; P1 tf {15: 6}
+   chains (P2 itself is a P1 of another pair): 0
+   P1 open         side  tf    entry     stop     exit     pnl |   gap P2 tf rule            entry     stop reason       exit     pnl Δe/sd
+   10-20 10:59:02  sell  15  11.9245  11.9260  11.9255      -4 |   2.6    15 in_zone       11.9385  11.9400 stop      11.9375      +4  9.33
+   10-20 12:19:01  sell  15  11.9845  11.9880  11.9875     -13 |   1.8    60 in_zone       11.9895  12.1094 main_close  12.0035     -12  1.43
+   10-20 13:43:09  sell  15  11.9945  12.0020  12.0015     -29 |   3.6    15 zone_rejection  12.0235  12.0290 stop      12.0285     -21  3.87
+   10-20 23:23:52  sell  15  12.3215  12.3481  12.3465     -94 |   1.2    15 zone_rejection  12.3395  12.3611 target    12.3100    +119  0.68
+   10-21 00:15:12  sell  15  12.3505  12.3669  12.3595     -37 |   3.2    15 zone_rejection  12.3555  12.3750 stop      12.3725     -69  0.30
+   10-21 02:38:08  sell  15  12.3595  12.3834  12.3835     -97 |   1.1    15 zone_rejection  12.3815  12.3946 target    12.3490    +131  0.92
+
+== all W<=15 min: positions 114, stop-outs 71, stop→same-side better re-entry pairs 13 (18% of stop-outs)
+   P1 loss sum -352 (mean -27); P2 pnl sum +487 (mean +37); pair net +135; P2 outcomes {'stop': 7, 'main_close': 4, 'target': 2}
+   cf 'P1 held to P2 exit' (P1 size): -1067 vs actual P1 -352; cf 'skip P1, keep P2': +487 -> Δ vs actual pair +352
+   P2 entry improvement / P1 stop-dist: median 5.09, P2 entry beyond P1 stop: 10/13; gap min median 5.3
+   same tf 7/13, same zone value 0/13; P2 tf {15: 7, 60: 6}, P2 rule {'zone_rejection': 9, 'in_zone': 4}; P1 tf {15: 13}
+   chains (P2 itself is a P1 of another pair): 2
+   P1 open         side  tf    entry     stop     exit     pnl |   gap P2 tf rule            entry     stop reason       exit     pnl Δe/sd
+   10-20 01:35:30  sell  15  11.9415  11.9440  11.9435      -8 |  10.4    15 zone_rejection  11.9875  11.9910 stop      11.9895      -8 18.40
+   10-20 03:42:07  sell  15  12.0535  12.0550  12.0545      -4 |   8.3    60 in_zone       12.0925  12.0950 stop      12.0925      +0 26.00
+   10-20 10:59:02  sell  15  11.9245  11.9260  11.9255      -4 |   2.6    15 in_zone       11.9385  11.9400 stop      11.9375      +4  9.33
+   10-20 11:02:12  sell  15  11.9385  11.9400  11.9375      +4 |   9.1    60 zone_rejection  11.9595  11.9630 main_close  11.9285    +130 14.00
+   10-20 12:19:01  sell  15  11.9845  11.9880  11.9875     -13 |   1.8    60 in_zone       11.9895  12.1094 main_close  12.0035     -12  1.43
+   10-20 13:43:09  sell  15  11.9945  12.0020  12.0015     -29 |   3.6    15 zone_rejection  12.0235  12.0290 stop      12.0285     -21  3.87
+   10-20 13:47:00  sell  15  12.0235  12.0290  12.0285     -21 |   5.5    60 zone_rejection  12.0515  12.0540 stop      12.0535      -8  5.09
+   10-20 19:35:48  sell  15  12.1715  12.1730  12.1725      -4 |   9.1    60 zone_rejection  12.2035  12.2090 stop      12.2045      -4 21.33
+   10-20 20:20:40  buy   15  12.2075  12.2060  12.2075      +0 |   5.3    15 zone_rejection  12.2165  12.1940 main_close  12.2395     +94  6.00
+   10-20 23:23:52  sell  15  12.3215  12.3481  12.3465     -94 |   1.2    15 zone_rejection  12.3395  12.3611 target    12.3100    +119  0.68
+   10-21 00:15:12  sell  15  12.3505  12.3669  12.3595     -37 |   3.2    15 zone_rejection  12.3555  12.3750 stop      12.3725     -69  0.30
+   10-21 02:38:08  sell  15  12.3595  12.3834  12.3835     -97 |   1.1    15 zone_rejection  12.3815  12.3946 target    12.3490    +131  0.92
+   10-21 06:17:03  sell  15  12.3005  12.3124  12.3115     -45 |   6.5    60 in_zone       12.3505  12.3665 main_close  12.3185    +130  4.22
+
+== all W<=30 min: positions 114, stop-outs 71, stop→same-side better re-entry pairs 17 (24% of stop-outs)
+   P1 loss sum -508 (mean -30); P2 pnl sum +537 (mean +32); pair net +29; P2 outcomes {'stop': 10, 'main_close': 5, 'target': 2}
+   cf 'P1 held to P2 exit' (P1 size): -1788 vs actual P1 -508; cf 'skip P1, keep P2': +537 -> Δ vs actual pair +508
+   P2 entry improvement / P1 stop-dist: median 5.09, P2 entry beyond P1 stop: 14/17; gap min median 6.5
+   same tf 10/17, same zone value 0/17; P2 tf {15: 9, 60: 7, 240: 1}, P2 rule {'in_zone': 6, 'zone_rejection': 11}; P1 tf {15: 15, 60: 2}
+   chains (P2 itself is a P1 of another pair): 4
+   P1 open         side  tf    entry     stop     exit     pnl |   gap P2 tf rule            entry     stop reason       exit     pnl Δe/sd
+   10-20 01:20:11  sell  15  11.8935  11.9000  11.8985     -21 |  15.0    15 in_zone       11.9415  11.9440 stop      11.9435      -8  7.38
+   10-20 01:35:30  sell  15  11.9415  11.9440  11.9435      -8 |  10.4    15 zone_rejection  11.9875  11.9910 stop      11.9895      -8 18.40
+   10-20 03:42:07  sell  15  12.0535  12.0550  12.0545      -4 |   8.3    60 in_zone       12.0925  12.0950 stop      12.0925      +0 26.00
+   10-20 10:59:02  sell  15  11.9245  11.9260  11.9255      -4 |   2.6    15 in_zone       11.9385  11.9400 stop      11.9375      +4  9.33
+   10-20 11:02:12  sell  15  11.9385  11.9400  11.9375      +4 |   9.1    60 zone_rejection  11.9595  11.9630 main_close  11.9285    +130 14.00
+   10-20 12:19:01  sell  15  11.9845  11.9880  11.9875     -13 |   1.8    60 in_zone       11.9895  12.1094 main_close  12.0035     -12  1.43
+   10-20 13:43:09  sell  15  11.9945  12.0020  12.0015     -29 |   3.6    15 zone_rejection  12.0235  12.0290 stop      12.0285     -21  3.87
+   10-20 13:47:00  sell  15  12.0235  12.0290  12.0285     -21 |   5.5    60 zone_rejection  12.0515  12.0540 stop      12.0535      -8  5.09
+   10-20 19:35:48  sell  15  12.1715  12.1730  12.1725      -4 |   9.1    60 zone_rejection  12.2035  12.2090 stop      12.2045      -4 21.33
+   10-20 19:45:00  sell  60  12.2035  12.2090  12.2045      -4 |  24.2    60 in_zone       12.2385  12.2410 main_close  12.2075    +127  6.36
+   10-20 20:20:40  buy   15  12.2075  12.2060  12.2075      +0 |   5.3    15 zone_rejection  12.2165  12.1940 main_close  12.2395     +94  6.00
+   10-20 20:31:50  sell  60  12.2375  12.2532  12.2525     -61 |  27.6   240 zone_rejection  12.3165  12.3286 stop      12.3265     -41  5.03
+   10-20 23:23:52  sell  15  12.3215  12.3481  12.3465     -94 |   1.2    15 zone_rejection  12.3395  12.3611 target    12.3100    +119  0.68
+   10-21 00:15:12  sell  15  12.3505  12.3669  12.3595     -37 |   3.2    15 zone_rejection  12.3555  12.3750 stop      12.3725     -69  0.30
+   10-21 02:38:08  sell  15  12.3595  12.3834  12.3835     -97 |   1.1    15 zone_rejection  12.3815  12.3946 target    12.3490    +131  0.92
+   10-21 06:17:03  sell  15  12.3005  12.3124  12.3115     -45 |   6.5    60 in_zone       12.3505  12.3665 main_close  12.3185    +130  4.22
+   10-21 10:36:12  sell  15  12.3315  12.3486  12.3485     -69 |  17.3    15 zone_rejection  12.3565  12.3661 stop      12.3635     -28  1.46
+
+== all W<=60 min: positions 114, stop-outs 71, stop→same-side better re-entry pairs 19 (27% of stop-outs)
+   P1 loss sum -549 (mean -29); P2 pnl sum +504 (mean +27); pair net -45; P2 outcomes {'stop': 12, 'main_close': 5, 'target': 2}
+   cf 'P1 held to P2 exit' (P1 size): -2375 vs actual P1 -549; cf 'skip P1, keep P2': +504 -> Δ vs actual pair +549
+   P2 entry improvement / P1 stop-dist: median 6.00, P2 entry beyond P1 stop: 16/19; gap min median 8.3
+   same tf 10/19, same zone value 0/19; P2 tf {15: 10, 60: 7, 240: 2}, P2 rule {'in_zone': 7, 'zone_rejection': 12}; P1 tf {15: 16, 240: 1, 60: 2}
+   chains (P2 itself is a P1 of another pair): 5
+   P1 open         side  tf    entry     stop     exit     pnl |   gap P2 tf rule            entry     stop reason       exit     pnl Δe/sd
+   10-20 01:20:11  sell  15  11.8935  11.9000  11.8985     -21 |  15.0    15 in_zone       11.9415  11.9440 stop      11.9435      -8  7.38
+   10-20 01:35:30  sell  15  11.9415  11.9440  11.9435      -8 |  10.4    15 zone_rejection  11.9875  11.9910 stop      11.9895      -8 18.40
+   10-20 03:42:07  sell  15  12.0535  12.0550  12.0545      -4 |   8.3    60 in_zone       12.0925  12.0950 stop      12.0925      +0 26.00
+   10-20 10:59:02  sell  15  11.9245  11.9260  11.9255      -4 |   2.6    15 in_zone       11.9385  11.9400 stop      11.9375      +4  9.33
+   10-20 11:02:12  sell  15  11.9385  11.9400  11.9375      +4 |   9.1    60 zone_rejection  11.9595  11.9630 main_close  11.9285    +130 14.00
+   10-20 12:19:01  sell  15  11.9845  11.9880  11.9875     -13 |   1.8    60 in_zone       11.9895  12.1094 main_close  12.0035     -12  1.43
+   10-20 13:43:09  sell  15  11.9945  12.0020  12.0015     -29 |   3.6    15 zone_rejection  12.0235  12.0290 stop      12.0285     -21  3.87
+   10-20 13:47:00  sell  15  12.0235  12.0290  12.0285     -21 |   5.5    60 zone_rejection  12.0515  12.0540 stop      12.0535      -8  5.09
+   10-20 15:46:32  buy   15  12.1085  12.1050  12.1055     -12 |  32.3   240 zone_rejection  12.1665  12.1600 stop      12.1595     -29 16.57
+   10-20 16:19:02  buy  240  12.1665  12.1600  12.1595     -29 |  36.8    15 in_zone       12.2585  12.2550 stop      12.2575      -4 14.15
+   10-20 19:35:48  sell  15  12.1715  12.1730  12.1725      -4 |   9.1    60 zone_rejection  12.2035  12.2090 stop      12.2045      -4 21.33
+   10-20 19:45:00  sell  60  12.2035  12.2090  12.2045      -4 |  24.2    60 in_zone       12.2385  12.2410 main_close  12.2075    +127  6.36
+   10-20 20:20:40  buy   15  12.2075  12.2060  12.2075      +0 |   5.3    15 zone_rejection  12.2165  12.1940 main_close  12.2395     +94  6.00
+   10-20 20:31:50  sell  60  12.2375  12.2532  12.2525     -61 |  27.6   240 zone_rejection  12.3165  12.3286 stop      12.3265     -41  5.03
+   10-20 23:23:52  sell  15  12.3215  12.3481  12.3465     -94 |   1.2    15 zone_rejection  12.3395  12.3611 target    12.3100    +119  0.68
+   10-21 00:15:12  sell  15  12.3505  12.3669  12.3595     -37 |   3.2    15 zone_rejection  12.3555  12.3750 stop      12.3725     -69  0.30
+   10-21 02:38:08  sell  15  12.3595  12.3834  12.3835     -97 |   1.1    15 zone_rejection  12.3815  12.3946 target    12.3490    +131  0.92
+   10-21 06:17:03  sell  15  12.3005  12.3124  12.3115     -45 |   6.5    60 in_zone       12.3505  12.3665 main_close  12.3185    +130  4.22
+   10-21 10:36:12  sell  15  12.3315  12.3486  12.3485     -69 |  17.3    15 zone_rejection  12.3565  12.3661 stop      12.3635     -28  1.46
+
+== candle-stop era W<=15 min: positions 38, stop-outs 22, stop→same-side better re-entry pairs 4 (18% of stop-outs)
+   P1 loss sum -273 (mean -68); P2 pnl sum +312 (mean +78); pair net +39; P2 outcomes {'target': 2, 'stop': 1, 'main_close': 1}
+   cf 'P1 held to P2 exit' (P1 size): -77 vs actual P1 -273; cf 'skip P1, keep P2': +312 -> Δ vs actual pair +273
+   P2 entry improvement / P1 stop-dist: median 0.80, P2 entry beyond P1 stop: 1/4; gap min median 2.2
+   same tf 3/4, same zone value 0/4; P2 tf {15: 3, 60: 1}, P2 rule {'zone_rejection': 3, 'in_zone': 1}; P1 tf {15: 4}
+   chains (P2 itself is a P1 of another pair): 0
+   P1 open         side  tf    entry     stop     exit     pnl |   gap P2 tf rule            entry     stop reason       exit     pnl Δe/sd
+   10-20 23:23:52  sell  15  12.3215  12.3481  12.3465     -94 |   1.2    15 zone_rejection  12.3395  12.3611 target    12.3100    +119  0.68
+   10-21 00:15:12  sell  15  12.3505  12.3669  12.3595     -37 |   3.2    15 zone_rejection  12.3555  12.3750 stop      12.3725     -69  0.30
+   10-21 02:38:08  sell  15  12.3595  12.3834  12.3835     -97 |   1.1    15 zone_rejection  12.3815  12.3946 target    12.3490    +131  0.92
+   10-21 06:17:03  sell  15  12.3005  12.3124  12.3115     -45 |   6.5    60 in_zone       12.3505  12.3665 main_close  12.3185    +130  4.22
+
+== candle-stop era W<=60 min: positions 38, stop-outs 22, stop→same-side better re-entry pairs 6 (27% of stop-outs)
+   P1 loss sum -403 (mean -67); P2 pnl sum +243 (mean +40); pair net -160; P2 outcomes {'stop': 3, 'target': 2, 'main_close': 1}
+   cf 'P1 held to P2 exit' (P1 size): -571 vs actual P1 -403; cf 'skip P1, keep P2': +243 -> Δ vs actual pair +403
+   P2 entry improvement / P1 stop-dist: median 1.19, P2 entry beyond P1 stop: 3/6; gap min median 4.9
+   same tf 4/6, same zone value 0/6; P2 tf {240: 1, 15: 4, 60: 1}, P2 rule {'zone_rejection': 5, 'in_zone': 1}; P1 tf {60: 1, 15: 5}
+   chains (P2 itself is a P1 of another pair): 0
+   P1 open         side  tf    entry     stop     exit     pnl |   gap P2 tf rule            entry     stop reason       exit     pnl Δe/sd
+   10-20 20:31:50  sell  60  12.2375  12.2532  12.2525     -61 |  27.6   240 zone_rejection  12.3165  12.3286 stop      12.3265     -41  5.03
+   10-20 23:23:52  sell  15  12.3215  12.3481  12.3465     -94 |   1.2    15 zone_rejection  12.3395  12.3611 target    12.3100    +119  0.68
+   10-21 00:15:12  sell  15  12.3505  12.3669  12.3595     -37 |   3.2    15 zone_rejection  12.3555  12.3750 stop      12.3725     -69  0.30
+   10-21 02:38:08  sell  15  12.3595  12.3834  12.3835     -97 |   1.1    15 zone_rejection  12.3815  12.3946 target    12.3490    +131  0.92
+   10-21 06:17:03  sell  15  12.3005  12.3124  12.3115     -45 |   6.5    60 in_zone       12.3505  12.3665 main_close  12.3185    +130  4.22
+   10-21 10:36:12  sell  15  12.3315  12.3486  12.3485     -69 |  17.3    15 zone_rejection  12.3565  12.3661 stop      12.3635     -28  1.46
+
+stop-out follow-up categories: {'same side <=60 worse': 19, 'next opposite side (gap <=60)': 31, 'same side <=60 better': 19, 'same side gap >60': 1, 'last': 1}

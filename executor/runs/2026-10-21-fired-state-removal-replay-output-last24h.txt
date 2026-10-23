@@ -1,0 +1,576 @@
+trades 833128 (10-16 22:29:05 -> 10-21 18:11:27); replay 10-20 18:11:27 -> 10-21 18:11:27: 181461 trades; indicator names 42, rows 503202, expiry non-monotone steps 0
+trade feed gaps > 60 s in the replay window: 2 [('10-21 02:55:41', 66), ('10-21 16:27:12', 303)]
+pre-candidate trades (filters pass, zone+target present, inzone or rejection): {'15_long': 16085, '15_short': 12009, '60_long': 15582, '60_short': 5860, '240_long': 6902, '240_short': 25253} any: 68657
+simulated live: 65 fires, 59 positions, trend evaluations cached 74078
+simulated nofired: 264 fires, 82 positions, trend evaluations cached 75875
+simulated clear_exit: 112 fires, 82 positions, trend evaluations cached 75875
+simulated clear_stop: 85 fires, 71 positions, trend evaluations cached 75875
+
+REPRODUCTION (live variant vs recorded fires, same side+tf within 60 s): recorded 66, simulated 65, matched 63, missed 3, extra 2
+  |dt| median 0.0 s, max 0.5 s; same rule 63/63, same class 63/63, same zone value 63/63; exact-ts matches 62, slope rel diff median 7.53e-08, max 6.01e-07, > 1 % in 0
+  candle-stop port: 54/55 recorded stops reproduced within half a tick; samples: rec 12.3286/12.3200/0.0086 sim 12.3293/12.32/0.0093; rec 12.2880/12.2960/0.0080 sim 12.288/12.296/0.008; rec 12.2931/12.3010/0.0079 sim 12.2931/12.301/0.0079; rec 12.2736/12.2810/0.0074 sim 12.2736/12.281/0.0074
+  missed 10-20 18:26:24 Buy tf60 in_zone cls up zone 12.1640 | sim pre {'15_long': False, '15_short': False, '60_long': True, '60_short': False, '240_long': True, '240_short': False} sim class1m neutral
+  missed 10-20 20:26:46 Buy tf15 zone_rejection cls up zone 12.2026 | sim pre {'15_long': True, '15_short': False, '60_long': False, '60_short': False, '240_long': False, '240_short': False} sim class1m up
+  missed 10-20 20:31:49 Sell tf60 in_zone cls down zone 12.2386 | sim pre {'15_long': False, '15_short': True, '60_long': False, '60_short': True, '240_long': False, '240_short': False} sim class1m neutral
+  extra  10-20 18:11:32 Buy tf15 zone_rejection cls neutral zone 12.2193 outcome open
+  extra  10-20 18:26:24 Buy tf240 in_zone cls up zone 12.1624 outcome open
+  candle-stop era (>= 10-20 20:25:00): recorded positions 54 net +437.99; sim-live positions 52 net +132.65
+    rec 10-20 20:26:46 buy  cb_zone_15  entry 12.2165 stop 12.1940 size 4093 main_close pnl +94.13
+    rec 10-20 20:31:50 sell cb_zone_60  entry 12.2375 stop 12.2532 size 4090 stop      pnl -61.34
+    rec 10-20 21:01:01 sell cb_zone_240 entry 12.3165 stop 12.3286 size 4061 stop      pnl -40.61
+    rec 10-20 21:26:04 buy  cb_zone_15  entry 12.2985 stop 12.2880 size 4065 stop      pnl -40.65
+    rec 10-20 23:03:55 buy  cb_zone_15  entry 12.3065 stop 12.2931 size 4061 stop      pnl -48.73
+    rec 10-20 23:09:00 buy  cb_zone_60  entry 12.2855 stop 12.2736 size 4066 main_close pnl +146.37
+    rec 10-20 23:23:52 sell cb_zone_15  entry 12.3215 stop 12.3481 size 3757 stop      pnl -93.93
+    rec 10-20 23:47:07 sell cb_zone_15  entry 12.3395 stop 12.3611 size 4050 target    pnl +119.48
+    rec 10-21 00:02:38 buy  cb_zone_15  entry 12.3125 stop 12.2921 size 4064 main_close pnl +154.43
+    rec 10-21 00:15:12 sell cb_zone_15  entry 12.3505 stop 12.3669 size 4058 stop      pnl -36.52
+    rec 10-21 00:19:14 sell cb_zone_15  entry 12.3555 stop 12.3750 size 4055 stop      pnl -68.93
+    rec 10-21 01:02:05 buy  cb_zone_15  entry 12.3615 stop 12.3442 size 4050 stop      pnl -64.80
+    rec 10-21 01:24:15 sell cb_zone_15  entry 12.3555 stop 12.3753 size 4049 stop      pnl -60.74
+    rec 10-21 02:24:04 buy  cb_zone_15  entry 12.3355 stop 12.3206 size 4053 main_close pnl +105.38
+    rec 10-21 02:38:08 sell cb_zone_15  entry 12.3595 stop 12.3834 size 4050 stop      pnl -97.19
+    rec 10-21 02:51:05 sell cb_zone_15  entry 12.3815 stop 12.3946 size 4039 target    pnl +131.25
+    rec 10-21 03:18:01 buy  cb_zone_15  entry 12.3425 stop 12.3271 size 4057 stop      pnl -44.62
+    rec 10-21 03:34:02 sell cb_zone_15  entry 12.3675 stop 12.3795 size 4047 target    pnl +103.19
+    rec 10-21 03:52:07 sell cb_zone_15  entry 12.3575 stop 12.3735 size 4054 target    pnl +83.11
+    rec 10-21 04:10:40 sell cb_zone_15  entry 12.3505 stop 12.3683 size 4060 target    pnl +18.27
+    rec 10-21 05:03:21 sell cb_zone_15  entry 12.3625 stop 12.3790 size 4057 target    pnl +34.48
+    rec 10-21 05:16:51 buy  cb_zone_15  entry 12.3315 stop 12.3130 size 4068 target    pnl +46.78
+    rec 10-21 05:36:00 sell cb_zone_15  entry 12.3405 stop 12.3587 size 4067 main_close pnl +130.15
+    rec 10-21 05:41:22 buy  cb_zone_60  entry 12.3105 stop 12.2973 size 4082 stop      pnl -44.90
+    rec 10-21 05:43:07 buy  cb_zone_15  entry 12.2915 stop 12.2707 size 4087 stop      pnl -81.73
+    rec 10-21 06:17:03 sell cb_zone_15  entry 12.3005 stop 12.3124 size 4080 stop      pnl -44.88
+    rec 10-21 06:35:33 sell cb_zone_60  entry 12.3505 stop 12.3665 size 4062 main_close pnl +129.99
+    rec 10-21 06:54:22 buy  cb_zone_15  entry 12.3195 stop 12.3059 size 4078 stop      pnl -48.93
+    rec 10-21 07:12:35 sell cb_zone_15  entry 12.3375 stop 12.3502 size 4070 stop      pnl -52.91
+    rec 10-21 08:01:04 buy  cb_zone_15  entry 12.4145 stop 12.4006 size 4042 stop      pnl -56.59
+    rec 10-21 08:18:07 buy  cb_zone_60  entry 12.3785 stop 12.3632 size 4052 stop      pnl -56.72
+    rec 10-21 08:35:50 buy  cb_zone_15  entry 12.3665 stop 12.3479 size 4053 target    pnl +91.20
+    rec 10-21 08:52:08 sell cb_zone_15  entry 12.3865 stop 12.4519 size 1530 target    pnl +20.65
+    rec 10-21 09:17:34 sell cb_zone_60  entry 12.4055 stop 12.4261 size 4045 main_close pnl +64.72
+    rec 10-21 09:40:42 buy  cb_zone_15  entry 12.3865 stop 12.3682 size 4054 stop      pnl -72.97
+    rec 10-21 10:04:13 buy  cb_zone_60  entry 12.3315 stop 12.3090 size 4069 stop      pnl -89.52
+    rec 10-21 10:36:12 sell cb_zone_15  entry 12.3315 stop 12.3486 size 4065 stop      pnl -69.11
+    rec 10-21 11:02:00 sell cb_zone_15  entry 12.3565 stop 12.3661 size 4054 stop      pnl -28.38
+    rec 10-21 11:06:01 sell cb_zone_60  entry 12.3675 stop 12.3867 size 4050 stop      pnl -76.94
+    rec 10-21 11:29:05 sell cb_zone_15  entry 12.4085 stop 12.4261 size 4033 target    pnl +50.42
+    rec 10-21 11:39:07 buy  cb_zone_15  entry 12.3845 stop 12.3732 size 4043 main_close pnl +121.29
+    rec 10-21 11:54:06 sell cb_zone_15  entry 12.4115 stop 12.4327 size 4039 target    pnl +70.68
+    rec 10-21 12:32:02 buy  cb_zone_15  entry 12.3855 stop 12.3702 size 4050 target    pnl +38.48
+    rec 10-21 12:51:33 sell cb_zone_15  entry 12.4155 stop 12.4332 size 4042 stop      pnl -48.51
+    rec 10-21 13:02:12 sell cb_zone_240 entry 12.4435 stop 12.4678 size 4031 stop      pnl -88.69
+    rec 10-21 13:30:12 sell cb_zone_60  entry 12.4135 stop 12.4839 size 1420 target    pnl -7.81
+    rec 10-21 13:33:49 buy  cb_zone_60  entry 12.3935 stop 12.3409 size 1903 stop      pnl -98.95
+    rec 10-21 13:53:02 sell cb_zone_15  entry 12.4085 stop 12.4363 size 3599 main_close pnl +154.77
+    rec 10-21 14:02:52 buy  cb_zone_15  entry 12.3595 stop 12.3189 size 2461 target    pnl +13.54
+    rec 10-21 14:16:01 sell cb_zone_15  entry 12.3985 stop 12.4240 size 3919 stop      pnl -101.89
+    rec 10-21 14:38:10 sell cb_zone_15  entry 12.4505 stop 12.4832 size 3057 target    pnl +35.15
+    rec 10-21 15:21:46 buy  cb_zone_15  entry 12.5695 stop 12.5269 size 2348 target    pnl +90.41
+    rec 10-21 16:07:05 buy  cb_zone_15  entry 12.6705 stop 12.6458 size 3959 target    pnl +112.83
+    rec 10-21 16:37:08 buy  cb_zone_15  entry 12.6995 stop 12.6420 size 1741 target    pnl +4.35
+    sim 10-20 21:01:00 Sell tf240      entry 12.3170 stop 12.3293 size 4072 stop      pnl -52.93
+    sim 10-20 21:26:04 Buy  tf15       entry 12.2980 stop 12.2880 size 4076 stop      pnl -40.76
+    sim 10-20 23:03:55 Buy  tf15       entry 12.3070 stop 12.2931 size 4071 stop      pnl -57.00
+    sim 10-20 23:09:00 Buy  tf60       entry 12.2860 stop 12.2736 size 4076 reversal  pnl +146.74
+    sim 10-20 23:23:51 Sell tf15       entry 12.3220 stop 12.3481 size 3829 stop      pnl -103.38
+    sim 10-20 23:47:07 Sell tf15       entry 12.3390 stop 12.3611 size 4060 reversal  pnl +117.75
+    sim 10-21 00:02:36 Buy  tf15       entry 12.3100 stop 12.2921 size 4075 reversal  pnl +167.06
+    sim 10-21 00:15:10 Sell tf15       entry 12.3510 stop 12.3669 size 4068 stop      pnl -65.09
+    sim 10-21 00:19:14 Sell tf15       entry 12.3560 stop 12.3750 size 4064 stop      pnl -77.21
+    sim 10-21 01:02:05 Buy  tf15       entry 12.3620 stop 12.3442 size 4059 stop      pnl -73.05
+    sim 10-21 01:24:15 Sell tf15       entry 12.3550 stop 12.3753 size 4058 stop      pnl -85.21
+    sim 10-21 02:24:04 Buy  tf15       entry 12.3350 stop 12.3206 size 4061 reversal  pnl +105.59
+    sim 10-21 02:38:06 Sell tf15       entry 12.3610 stop 12.3834 size 4057 stop      pnl -93.30
+    sim 10-21 02:51:05 Sell tf15       entry 12.3820 stop 12.3946 size 4046 target    pnl +137.57
+    sim 10-21 03:18:01 Buy  tf15       entry 12.3420 stop 12.3271 size 4065 stop      pnl -60.97
+    sim 10-21 03:34:02 Sell tf15       entry 12.3670 stop 12.3795 size 4054 target    pnl +97.30
+    sim 10-21 03:52:06 Sell tf15       entry 12.3570 stop 12.3735 size 4061 target    pnl +85.29
+    sim 10-21 04:10:40 Sell tf15       entry 12.3480 stop 12.3683 size 4068 target    pnl +12.20
+    sim 10-21 05:03:21 Sell tf15       entry 12.3620 stop 12.3791 size 4064 target    pnl +32.51
+    sim 10-21 05:16:51 Buy  tf15       entry 12.3320 stop 12.3130 size 4075 target    pnl +40.75
+    sim 10-21 05:36:00 Sell tf15       entry 12.3410 stop 12.3587 size 4073 reversal  pnl +126.28
+    sim 10-21 05:41:20 Buy  tf60       entry 12.3100 stop 12.2973 size 4089 stop      pnl -53.16
+    sim 10-21 05:43:07 Buy  tf15       entry 12.2910 stop 12.2707 size 4093 stop      pnl -85.95
+    sim 10-21 06:17:02 Sell tf15       entry 12.3010 stop 12.3124 size 4086 stop      pnl -49.03
+    sim 10-21 06:35:32 Sell tf60       entry 12.3500 stop 12.3665 size 4068 reversal  pnl +126.11
+    sim 10-21 06:54:20 Buy  tf15       entry 12.3190 stop 12.3059 size 4083 stop      pnl -57.17
+    sim 10-21 07:12:34 Sell tf15       entry 12.3370 stop 12.3502 size 4075 stop      pnl -57.05
+    sim 10-21 08:01:04 Buy  tf15       entry 12.4150 stop 12.4006 size 4047 stop      pnl -60.71
+    sim 10-21 08:18:07 Buy  tf60       entry 12.3780 stop 12.3632 size 4057 stop      pnl -60.85
+    sim 10-21 08:35:50 Buy  tf15       entry 12.3670 stop 12.3479 size 4058 target    pnl +97.39
+    sim 10-21 08:52:08 Sell tf15       entry 12.3870 stop 12.4519 size 1542 target    pnl +23.12
+    sim 10-21 09:17:33 Sell tf60       entry 12.4060 stop 12.4261 size 4050 reversal  pnl +68.85
+    sim 10-21 09:40:40 Buy  tf15       entry 12.3890 stop 12.3682 size 4058 stop      pnl -85.23
+    sim 10-21 10:04:13 Buy  tf60       entry 12.3320 stop 12.3090 size 4074 stop      pnl -93.70
+    sim 10-21 10:36:11 Sell tf15       entry 12.3290 stop 12.3486 size 4071 stop      pnl -81.42
+    sim 10-21 11:02:00 Sell tf15       entry 12.3560 stop 12.3662 size 4059 stop      pnl -44.65
+    sim 10-21 11:06:01 Sell tf60       entry 12.3680 stop 12.3867 size 4053 stop      pnl -77.01
+    sim 10-21 11:29:05 Sell tf15       entry 12.4080 stop 12.4261 size 4037 target    pnl +56.52
+    sim 10-21 11:39:07 Buy  tf15       entry 12.3850 stop 12.3732 size 4047 reversal  pnl +109.26
+    sim 10-21 11:54:05 Sell tf15       entry 12.4120 stop 12.4327 size 4042 target    pnl +68.72
+    sim 10-21 12:32:02 Buy  tf15       entry 12.3850 stop 12.3702 size 4054 target    pnl +40.54
+    sim 10-21 12:51:33 Sell tf15       entry 12.4150 stop 12.4332 size 4046 stop      pnl -76.87
+    sim 10-21 13:02:11 Sell tf240      entry 12.4430 stop 12.4678 size 4033 stop      pnl -100.83
+    sim 10-21 13:30:13 Sell tf60       entry 12.4090 stop 12.4839 size 1335 target    pnl -13.35
+    sim 10-21 13:33:48 Buy  tf60       entry 12.3940 stop 12.3409 size 1885 stop      pnl -101.79
+    sim 10-21 13:53:02 Sell tf15       entry 12.4080 stop 12.4363 size 3536 reversal  pnl +152.03
+    sim 10-21 14:02:50 Buy  tf15       entry 12.3650 stop 12.3189 size 2168 target    pnl +2.17
+    sim 10-21 14:16:01 Sell tf15       entry 12.3980 stop 12.4240 size 3844 stop      pnl -103.78
+    sim 10-21 14:38:10 Sell tf15       entry 12.4500 stop 12.4832 size 3011 target    pnl +33.12
+    sim 10-21 15:21:46 Buy  tf15       entry 12.5700 stop 12.5269 size 2321 target    pnl +81.24
+    sim 10-21 16:07:05 Buy  tf15       entry 12.6710 stop 12.6458 size 3959 target    pnl +110.85
+    sim 10-21 16:37:08 Buy  tf15       entry 12.7000 stop 12.6420 size 1726 target    pnl +5.18
+
+SUMMARY (same simulator, same stop rule, same window for every variant)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | sum R | 90 % CI | P(net<0) | top-2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 59 | +440 | -5040 | 1.20 | 49% | 29 / -74 | 19 | 11 | 7.5 | 77 | +5.8 | [-713, +1593] | 0.27 | +433 |
+| nofired | 82 | +658 | -6717 | 1.21 | 51% | 40 / -77 | 19 | 23 | 7.7 | 80 | +8.5 | [-742, +2063] | 0.22 | +485 |
+| clear_exit | 82 | +658 | -6717 | 1.21 | 51% | 40 / -77 | 19 | 23 | 7.7 | 80 | +8.5 | [-742, +2063] | 0.22 | +485 |
+| clear_stop | 71 | +548 | -5988 | 1.20 | 48% | 37 / -75 | 19 | 15 | 8.5 | 77 | +7.6 | [-805, +1929] | 0.26 | +485 |
+
+PER-TF (positions by the tf of their opening fire)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | sum R | 90 % CI | P(net<0) | top-2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf15 (48 fires) | 45 | +498 | -3719 | 1.32 | 53% | 21 / -74 | 18 | 6 | 7.3 | 77 | +6.3 | [-469, +1551] | 0.21 | +433 |
+| live tf60 (13 fires) | 11 | +23 | -959 | 1.05 | 36% | 6 / -73 | 1 | 4 | 11.1 | 76 | +0.9 | [-472, +550] | 0.49 | +277 |
+| live tf240 (4 fires) | 3 | -82 | -362 | 0.47 | 33% | 2 / -77 | 0 | 1 | 14.7 | 100 | -1.3 | [-255, +91] | 0.74 | +19 |
+| nofired tf15 (94 fires) | 47 | +231 | -4128 | 1.14 | 53% | 22 / -75 | 16 | 9 | 6.5 | 77 | +2.9 | [-741, +1249] | 0.37 | +433 |
+| nofired tf60 (65 fires) | 19 | +309 | -1378 | 1.47 | 53% | 9 / -73 | 2 | 8 | 11.1 | 82 | +3.2 | [-360, +995] | 0.22 | +357 |
+| nofired tf240 (105 fires) | 16 | +118 | -1210 | 1.15 | 44% | 9 / -86 | 1 | 6 | 15.1 | 100 | +2.3 | [-595, +868] | 0.40 | +339 |
+| clear_exit tf15 (66 fires) | 47 | +231 | -4128 | 1.14 | 53% | 22 / -75 | 16 | 9 | 6.5 | 77 | +2.9 | [-741, +1249] | 0.37 | +433 |
+| clear_exit tf60 (26 fires) | 19 | +309 | -1378 | 1.47 | 53% | 9 / -73 | 2 | 8 | 11.1 | 82 | +3.2 | [-360, +995] | 0.22 | +357 |
+| clear_exit tf240 (20 fires) | 16 | +118 | -1210 | 1.15 | 44% | 9 / -86 | 1 | 6 | 15.1 | 100 | +2.3 | [-595, +868] | 0.40 | +339 |
+| clear_stop tf15 (52 fires) | 43 | +297 | -3752 | 1.20 | 51% | 21 / -72 | 17 | 5 | 6.9 | 76 | +3.7 | [-640, +1288] | 0.30 | +433 |
+| clear_stop tf60 (18 fires) | 14 | +130 | -1170 | 1.22 | 43% | 8 / -73 | 1 | 5 | 15.4 | 77 | +1.6 | [-488, +777] | 0.38 | +349 |
+| clear_stop tf240 (15 fires) | 14 | +120 | -1066 | 1.18 | 43% | 8 / -84 | 1 | 5 | 15.1 | 93 | +2.3 | [-544, +822] | 0.39 | +338 |
+
+HIGHER-TF SUBSET (tf 60 + 240 positions only)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | sum R | 90 % CI | P(net<0) | top-2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf60+240 | 14 | -58 | -1321 | 0.90 | 36% | 8 / -74 | 1 | 5 | 12.9 | 79 | -0.5 | [-594, +515] | 0.58 | +277 |
+| nofired tf60+240 | 35 | +427 | -2589 | 1.30 | 49% | 18 / -80 | 3 | 14 | 14.7 | 87 | +5.6 | [-570, +1419] | 0.25 | +406 |
+| clear_exit tf60+240 | 35 | +427 | -2589 | 1.30 | 49% | 18 / -80 | 3 | 14 | 14.7 | 87 | +5.6 | [-570, +1419] | 0.25 | +406 |
+| clear_stop tf60+240 | 28 | +250 | -2237 | 1.20 | 43% | 16 / -79 | 2 | 10 | 15.4 | 80 | +3.9 | [-666, +1211] | 0.34 | +406 |
+
+=== live ===
+fires 65 (15: 48, 60: 13, 240: 4); rule in_zone 36, rejection 29; outcomes open 48, skip_same 6, reversal 11; contradiction ticks 0, deferred ticks 180
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | sum R | 90 % CI | P(net<0) | top-2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 59 | +440 | -5040 | 1.20 | 49% | 29 / -74 | 19 | 11 | 7.5 | 77 | +5.8 | [-713, +1593] | 0.27 | +433 |
+|   tf 15 (48 fires) | 45 | +498 | -3719 | 1.32 | 53% | 21 / -74 | 18 | 6 | 7.3 | 77 | +6.3 | [-469, +1551] | 0.21 | +433 |
+|   tf 60 (13 fires) | 11 | +23 | -959 | 1.05 | 36% | 6 / -73 | 1 | 4 | 11.1 | 76 | +0.9 | [-472, +550] | 0.49 | +277 |
+|   tf 240 (4 fires) | 3 | -82 | -362 | 0.47 | 33% | 2 / -77 | 0 | 1 | 14.7 | 100 | -1.3 | [-255, +91] | 0.74 | +19 |
+  halves: first 30 trades net +528; second 29 trades net -88
+  stop source: {'candle': 59}; class at fire: {'up': 19, 'down': 22, 'neutral': 24}
+
+=== nofired ===
+fires 264 (15: 94, 60: 65, 240: 105); rule in_zone 161, rejection 103; outcomes open 59, skip_same 182, reversal 23; contradiction ticks 0, deferred ticks 22777
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | sum R | 90 % CI | P(net<0) | top-2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| nofired | 82 | +658 | -6717 | 1.21 | 51% | 40 / -77 | 19 | 23 | 7.7 | 80 | +8.5 | [-742, +2063] | 0.22 | +485 |
+|   tf 15 (94 fires) | 47 | +231 | -4128 | 1.14 | 53% | 22 / -75 | 16 | 9 | 6.5 | 77 | +2.9 | [-741, +1249] | 0.37 | +433 |
+|   tf 60 (65 fires) | 19 | +309 | -1378 | 1.47 | 53% | 9 / -73 | 2 | 8 | 11.1 | 82 | +3.2 | [-360, +995] | 0.22 | +357 |
+|   tf 240 (105 fires) | 16 | +118 | -1210 | 1.15 | 44% | 9 / -86 | 1 | 6 | 15.1 | 100 | +2.3 | [-595, +868] | 0.40 | +339 |
+  halves: first 42 trades net +530; second 40 trades net +128
+  stop source: {'candle': 82}; class at fire: {'up': 81, 'down': 107, 'neutral': 76}
+
+=== clear_exit ===
+fires 112 (15: 66, 60: 26, 240: 20); rule in_zone 67, rejection 45; outcomes open 59, skip_same 30, reversal 23; contradiction ticks 0, deferred ticks 2381
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | sum R | 90 % CI | P(net<0) | top-2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| clear_exit | 82 | +658 | -6717 | 1.21 | 51% | 40 / -77 | 19 | 23 | 7.7 | 80 | +8.5 | [-742, +2063] | 0.22 | +485 |
+|   tf 15 (66 fires) | 47 | +231 | -4128 | 1.14 | 53% | 22 / -75 | 16 | 9 | 6.5 | 77 | +2.9 | [-741, +1249] | 0.37 | +433 |
+|   tf 60 (26 fires) | 19 | +309 | -1378 | 1.47 | 53% | 9 / -73 | 2 | 8 | 11.1 | 82 | +3.2 | [-360, +995] | 0.22 | +357 |
+|   tf 240 (20 fires) | 16 | +118 | -1210 | 1.15 | 44% | 9 / -86 | 1 | 6 | 15.1 | 100 | +2.3 | [-595, +868] | 0.40 | +339 |
+  halves: first 42 trades net +530; second 40 trades net +128
+  stop source: {'candle': 82}; class at fire: {'up': 36, 'down': 41, 'neutral': 35}
+
+=== clear_stop ===
+fires 85 (15: 52, 60: 18, 240: 15); rule in_zone 54, rejection 31; outcomes open 56, skip_same 14, reversal 15; contradiction ticks 0, deferred ticks 375
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | sum R | 90 % CI | P(net<0) | top-2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| clear_stop | 71 | +548 | -5988 | 1.20 | 48% | 37 / -75 | 19 | 15 | 8.5 | 77 | +7.6 | [-805, +1929] | 0.26 | +485 |
+|   tf 15 (52 fires) | 43 | +297 | -3752 | 1.20 | 51% | 21 / -72 | 17 | 5 | 6.9 | 76 | +3.7 | [-640, +1288] | 0.30 | +433 |
+|   tf 60 (18 fires) | 14 | +130 | -1170 | 1.22 | 43% | 8 / -73 | 1 | 5 | 15.4 | 77 | +1.6 | [-488, +777] | 0.38 | +349 |
+|   tf 240 (15 fires) | 14 | +120 | -1066 | 1.18 | 43% | 8 / -84 | 1 | 5 | 15.1 | 93 | +2.3 | [-544, +822] | 0.39 | +338 |
+  halves: first 37 trades net +511; second 34 trades net +37
+  stop source: {'candle': 71}; class at fire: {'up': 26, 'down': 34, 'neutral': 25}
+
+PER-TRADE live
+open            side  tf rule           cls        entry     stop kind          target reason          exit      pnl    hold reentry_of   k    gap
+10-20 18:11:32  Buy   15 zone_rejection neutral  12.2210  12.1790 candle       12.2496 stop         12.1790  -100.04    13.3 -            0       
+10-20 18:26:24  Buy  240 in_zone        up       12.1650  12.1344 candle       12.2906 reversal     12.1870   +72.01    15.4 -            0       
+10-20 18:41:50  Sell  15 in_zone        down     12.1870  12.2078 candle       12.1614 target       12.1690   +73.83     2.3 -            0       
+10-20 19:35:48  Sell  15 in_zone        down     12.1710  12.1917 candle       12.1465 stop         12.1920   -86.31     5.1 -            0       
+10-20 19:45:00  Sell  60 zone_rejection down     12.2040  12.2151 candle       12.1133 stop         12.2160   -49.14     3.3 -            0       
+10-20 20:09:35  Sell  60 in_zone        down     12.2390  12.2598 candle       12.1834 reversal     12.2070  +130.61    11.1 -            0       
+10-20 20:20:39  Buy   15 in_zone        up       12.2070  12.1849 candle       12.2218 target       12.2720  +266.35    16.5 -            0       
+10-20 21:01:00  Sell 240 zone_rejection neutral  12.3170  12.3293 candle       12.2022 stop         12.3300   -52.93    14.7 -            0       
+10-20 21:26:04  Buy   15 zone_rejection neutral  12.2980  12.2880 candle       12.3277 stop         12.2880   -40.76     6.5 -            0       
+10-20 23:03:55  Buy   15 in_zone        up       12.3070  12.2931 candle       12.3161 stop         12.2930   -57.00     3.7 -            0       
+10-20 23:09:00  Buy   60 zone_rejection neutral  12.2860  12.2736 candle       12.3263 reversal     12.3220  +146.74    14.9 -            0       
+10-20 23:23:51  Sell  15 in_zone        down     12.3220  12.3481 candle       12.2951 stop         12.3490  -103.38    22.0 -            0       
+10-20 23:47:07  Sell  15 zone_rejection down     12.3390  12.3611 candle       12.3318 reversal     12.3100  +117.75    15.5 -            0       
+10-21 00:02:36  Buy   15 in_zone        up       12.3100  12.2921 candle       12.3193 reversal     12.3510  +167.06    12.6 -            0       
+10-21 00:15:10  Sell  15 zone_rejection neutral  12.3510  12.3669 candle       12.3112 stop         12.3670   -65.09     0.8 -            0       
+10-21 00:19:14  Sell  15 zone_rejection neutral  12.3560  12.3750 candle       12.3385 stop         12.3750   -77.21    11.8 -            0       
+10-21 01:02:05  Buy   15 in_zone        up       12.3620  12.3442 candle       12.3788 stop         12.3440   -73.05     6.4 -            0       
+10-21 01:24:15  Sell  15 zone_rejection neutral  12.3550  12.3753 candle       12.3228 stop         12.3760   -85.21     3.8 -            0       
+10-21 02:24:04  Buy   15 zone_rejection neutral  12.3350  12.3206 candle       12.3709 reversal     12.3610  +105.59    14.0 -            0       
+10-21 02:38:06  Sell  15 zone_rejection down     12.3610  12.3834 candle       12.3264 stop         12.3840   -93.30    11.9 -            0       
+10-21 02:51:05  Sell  15 zone_rejection neutral  12.3820  12.3946 candle       12.3479 target       12.3480  +137.57    12.0 -            0       
+10-21 03:18:01  Buy   15 in_zone        up       12.3420  12.3271 candle       12.3604 stop         12.3270   -60.97     1.9 -            0       
+10-21 03:34:02  Sell  15 zone_rejection neutral  12.3670  12.3795 candle       12.3424 target       12.3430   +97.30     6.6 -            0       
+10-21 03:52:06  Sell  15 zone_rejection neutral  12.3570  12.3735 candle       12.3341 target       12.3360   +85.29     8.1 -            0       
+10-21 04:10:40  Sell  15 in_zone        down     12.3480  12.3683 candle       12.3348 target       12.3450   +12.20     7.5 -            0       
+10-21 05:03:21  Sell  15 in_zone        down     12.3620  12.3791 candle       12.3484 target       12.3540   +32.51     6.3 -            0       
+10-21 05:16:51  Buy   15 in_zone        up       12.3320  12.3130 candle       12.3391 target       12.3420   +40.75     2.4 -            0       
+10-21 05:36:00  Sell  15 zone_rejection neutral  12.3410  12.3587 candle       12.3206 reversal     12.3100  +126.28     5.3 -            0       
+10-21 05:41:20  Buy   60 zone_rejection neutral  12.3100  12.2973 candle       12.3611 stop         12.2970   -53.16     0.2 -            0       
+10-21 05:43:07  Buy   15 in_zone        up       12.2910  12.2707 candle       12.3249 stop         12.2700   -85.95    18.5 -            0       
+10-21 06:17:02  Sell  15 zone_rejection neutral  12.3010  12.3124 candle       12.2792 stop         12.3130   -49.03    12.0 -            0       
+10-21 06:35:32  Sell  60 in_zone        down     12.3500  12.3665 candle       12.2991 reversal     12.3190  +126.11    18.8 -            0       
+10-21 06:54:20  Buy   15 in_zone        up       12.3190  12.3059 candle       12.3417 stop         12.3050   -57.17     5.7 -            0       
+10-21 07:12:34  Sell  15 in_zone        down     12.3370  12.3502 candle       12.3240 stop         12.3510   -57.05     9.3 -            0       
+10-21 08:01:04  Buy   15 zone_rejection neutral  12.4150  12.4006 candle       12.4583 stop         12.4000   -60.71     1.4 -            0       
+10-21 08:18:07  Buy   60 zone_rejection neutral  12.3780  12.3632 candle       12.4178 stop         12.3630   -60.85    15.9 -            0       
+10-21 08:35:50  Buy   15 in_zone        up       12.3670  12.3479 candle       12.3726 target       12.3910   +97.39     8.8 -            0       
+10-21 08:52:08  Sell  15 zone_rejection down     12.3870  12.4519 candle       12.3762 target       12.3720   +23.12     5.2 -            0       
+10-21 09:17:33  Sell  60 zone_rejection neutral  12.4060  12.4261 candle       12.3614 reversal     12.3890   +68.85    23.1 -            0       
+10-21 09:40:40  Buy   15 in_zone        up       12.3890  12.3682 candle       12.4071 stop         12.3680   -85.23     7.8 -            0       
+10-21 10:04:13  Buy   60 zone_rejection neutral  12.3320  12.3090 candle       12.3602 stop         12.3090   -93.70    10.3 -            0       
+10-21 10:36:11  Sell  15 in_zone        down     12.3290  12.3486 candle       12.3028 stop         12.3490   -81.42     8.5 -            0       
+10-21 11:02:00  Sell  15 zone_rejection neutral  12.3560  12.3662 candle       12.3312 stop         12.3670   -44.65     2.5 -            0       
+10-21 11:06:01  Sell  60 in_zone        down     12.3680  12.3867 candle       12.3219 stop         12.3870   -77.01    16.9 -            0       
+10-21 11:29:05  Sell  15 in_zone        down     12.4080  12.4261 candle       12.3901 target       12.3940   +56.52     7.4 -            0       
+10-21 11:39:07  Buy   15 zone_rejection neutral  12.3850  12.3732 candle       12.4163 reversal     12.4120  +109.26    15.0 -            0       
+10-21 11:54:05  Sell  15 in_zone        down     12.4120  12.4327 candle       12.3941 target       12.3950   +68.72     7.3 -            0       
+10-21 12:32:02  Buy   15 zone_rejection neutral  12.3850  12.3702 candle       12.3947 target       12.3950   +40.54     2.3 -            0       
+10-21 12:51:33  Sell  15 in_zone        down     12.4150  12.4332 candle       12.3978 stop         12.4340   -76.87     9.2 -            0       
+10-21 13:02:11  Sell 240 in_zone        down     12.4430  12.4678 candle       12.3161 stop         12.4680  -100.83     2.2 -            0       
+10-21 13:30:13  Sell  60 in_zone        down     12.4090  12.4839 candle       12.4439 target       12.4190   -13.35     0.9 -            0       
+10-21 13:33:48  Buy   60 in_zone        up       12.3940  12.3409 candle       12.5070 stop         12.3400  -101.79     3.1 -            0       
+10-21 13:53:02  Sell  15 zone_rejection neutral  12.4080  12.4363 candle       12.3582 reversal     12.3650  +152.03     9.8 -            0       
+10-21 14:02:50  Buy   15 in_zone        up       12.3650  12.3189 candle       12.3750 target       12.3660    +2.17     6.9 -            0       
+10-21 14:16:01  Sell  15 zone_rejection neutral  12.3980  12.4240 candle       12.3380 stop         12.4250  -103.78     7.7 -            0       
+10-21 14:38:10  Sell  15 in_zone        down     12.4500  12.4832 candle       12.4280 target       12.4390   +33.12     3.8 -            0       
+10-21 15:21:46  Buy   15 in_zone        up       12.5700  12.5269 candle       12.5957 target       12.6050   +81.24     3.4 -            0       
+10-21 16:07:05  Buy   15 zone_rejection neutral  12.6710  12.6458 candle       12.7124 target       12.6990  +110.85     3.4 -            0       
+10-21 16:37:08  Buy   15 in_zone        up       12.7000  12.6420 candle       12.7139 target       12.7030    +5.18     3.4 -            0       
+
+PER-TRADE nofired
+open            side  tf rule           cls        entry     stop kind          target reason          exit      pnl    hold reentry_of   k    gap
+10-20 18:11:32  Buy   15 zone_rejection neutral  12.2210  12.1790 candle       12.2496 stop         12.1790  -100.04    13.3 -            0       
+10-20 18:26:24  Buy  240 in_zone        up       12.1650  12.1344 candle       12.2906 reversal     12.1870   +72.01    15.4 -            0       
+10-20 18:41:50  Sell  15 in_zone        down     12.1870  12.2078 candle       12.1614 reversal     12.1670   +82.03     2.2 -            0       
+10-20 18:44:00  Buy  240 zone_rejection neutral  12.1670  12.1288 candle       12.3018 stop         12.1280  -102.18    37.8 reversal     1    2.2
+10-20 19:22:42  Buy  240 in_zone        up       12.1400  12.1089 candle       12.2711 reversal     12.1710   +99.79    13.1 stop         2    0.9
+10-20 19:35:48  Sell  15 in_zone        down     12.1710  12.1917 candle       12.1465 stop         12.1920   -86.32     5.1 -            0       
+10-20 19:45:00  Sell  60 zone_rejection down     12.2040  12.2151 candle       12.1133 stop         12.2160   -49.15     3.3 -            0       
+10-20 19:49:03  Sell  60 zone_rejection neutral  12.2130  12.2278 candle       12.1186 stop         12.2280   -61.36    16.3 stop         1    0.8
+10-20 20:09:35  Sell  60 in_zone        down     12.2390  12.2598 candle       12.1834 reversal     12.2070  +130.54    11.1 -            0       
+10-20 20:20:39  Buy   15 in_zone        up       12.2070  12.1849 candle       12.2218 target       12.2720  +266.20    16.5 -            0       
+10-20 21:01:00  Sell 240 zone_rejection neutral  12.3170  12.3293 candle       12.2022 stop         12.3300   -52.91    14.7 -            0       
+10-20 21:17:28  Sell 240 in_zone        down     12.3290  12.3434 candle       12.2163 reversal     12.2980  +125.97     8.6 stop         1    1.7
+10-20 21:26:04  Buy   15 zone_rejection neutral  12.2980  12.2880 candle       12.3277 stop         12.2880   -40.79     6.5 -            0       
+10-20 21:56:10  Sell 240 in_zone        down     12.3270  12.3389 candle       12.2097 stop         12.3390   -48.81    13.0 reversal     2   30.1
+10-20 22:11:24  Sell 240 in_zone        down     12.3350  12.3564 candle       12.2270 reversal     12.3070  +113.76    52.5 stop         3    2.2
+10-20 23:03:55  Buy   15 in_zone        up       12.3070  12.2931 candle       12.3161 stop         12.2930   -57.08     3.7 -            0       
+10-20 23:09:00  Buy   60 zone_rejection neutral  12.2860  12.2736 candle       12.3263 reversal     12.3100   +97.96    10.4 -            0       
+10-20 23:19:21  Sell 240 zone_rejection down     12.3100  12.3244 candle       12.2105 stop         12.3250   -61.16     3.3 reversal     4   15.4
+10-20 23:23:51  Sell 240 in_zone        down     12.3220  12.3481 candle       12.2178 stop         12.3490  -103.38    22.0 stop         5    1.2
+10-20 23:46:55  Sell 240 in_zone        down     12.3450  12.3611 candle       12.2354 reversal     12.3100  +142.08    15.7 stop         6    1.0
+10-21 00:02:36  Buy   15 in_zone        up       12.3100  12.2921 candle       12.3193 reversal     12.3510  +167.14    12.6 -            0       
+10-21 00:15:10  Sell  15 zone_rejection neutral  12.3510  12.3669 candle       12.3112 stop         12.3670   -65.12     0.8 -            0       
+10-21 00:19:14  Sell  15 zone_rejection neutral  12.3560  12.3750 candle       12.3385 stop         12.3750   -77.25    11.8 -            0       
+10-21 01:02:05  Buy   15 in_zone        up       12.3620  12.3442 candle       12.3788 stop         12.3440   -73.09     6.4 -            0       
+10-21 01:09:30  Buy   15 in_zone        up       12.3490  12.3293 candle       12.3640 stop         12.3290   -81.24     0.9 stop         1    1.0
+10-21 01:24:15  Sell  15 zone_rejection neutral  12.3550  12.3753 candle       12.3228 stop         12.3760   -85.19     3.8 -            0       
+10-21 02:24:04  Buy   15 zone_rejection neutral  12.3350  12.3206 candle       12.3709 reversal     12.3610  +105.55    14.0 -            0       
+10-21 02:38:06  Sell  15 zone_rejection down     12.3610  12.3834 candle       12.3264 stop         12.3840   -93.27    11.9 -            0       
+10-21 02:51:05  Sell  15 zone_rejection neutral  12.3820  12.3946 candle       12.3479 target       12.3480  +137.52    12.0 -            0       
+10-21 03:18:01  Buy   15 in_zone        up       12.3420  12.3271 candle       12.3604 stop         12.3270   -60.95     1.9 -            0       
+10-21 03:20:35  Buy   15 in_zone        up       12.3380  12.3193 candle       12.3540 target       12.3440   +24.37    10.6 stop         1    0.6
+10-21 03:34:02  Sell  15 zone_rejection neutral  12.3670  12.3795 candle       12.3424 target       12.3430   +97.29     6.6 -            0       
+10-21 03:52:06  Sell  15 zone_rejection neutral  12.3570  12.3735 candle       12.3341 target       12.3360   +85.28     8.1 -            0       
+10-21 04:10:40  Sell  15 in_zone        down     12.3480  12.3683 candle       12.3348 target       12.3450   +12.20     7.5 -            0       
+10-21 05:03:21  Sell  15 in_zone        down     12.3620  12.3791 candle       12.3484 target       12.3540   +32.51     6.3 -            0       
+10-21 05:10:40  Sell  15 in_zone        down     12.3490  12.3840 candle       12.3411 target       12.3420   +20.02     3.2 target       1    1.0
+10-21 05:16:51  Buy   15 in_zone        up       12.3320  12.3130 candle       12.3391 target       12.3420   +40.75     2.4 -            0       
+10-21 05:23:01  Buy   15 in_zone        up       12.3410  12.3132 candle       12.3573 stop         12.3130  -100.66     3.0 target       1    3.8
+10-21 05:27:34  Buy   15 in_zone        up       12.3180  12.3010 candle       12.3412 reversal     12.3410   +93.78     8.4 stop         2    1.6
+10-21 05:36:00  Sell  15 zone_rejection neutral  12.3410  12.3587 candle       12.3206 reversal     12.3100  +126.28     5.3 -            0       
+10-21 05:41:20  Buy   60 zone_rejection neutral  12.3100  12.2973 candle       12.3611 stop         12.2970   -53.16     0.2 -            0       
+10-21 05:43:00  Buy   60 in_zone        up       12.2920  12.2707 candle       12.3450 stop         12.2700   -90.04    18.7 stop         1    1.4
+10-21 06:17:02  Sell  15 zone_rejection neutral  12.3010  12.3124 candle       12.2792 stop         12.3130   -49.03    12.0 -            0       
+10-21 06:35:32  Sell  60 in_zone        down     12.3500  12.3665 candle       12.2991 reversal     12.3190  +126.11    18.8 -            0       
+10-21 06:54:20  Buy   15 in_zone        up       12.3190  12.3059 candle       12.3417 stop         12.3050   -57.17     5.7 -            0       
+10-21 07:12:34  Sell  15 in_zone        down     12.3370  12.3502 candle       12.3240 stop         12.3510   -57.05     9.3 -            0       
+10-21 08:01:04  Buy   15 zone_rejection neutral  12.4150  12.4006 candle       12.4583 stop         12.4000   -60.71     1.4 -            0       
+10-21 08:04:27  Buy   15 in_zone        up       12.3950  12.3743 candle       12.4233 stop         12.3740   -85.08    12.1 stop         1    2.0
+10-21 08:18:07  Buy   60 zone_rejection neutral  12.3780  12.3632 candle       12.4178 stop         12.3630   -60.80    15.9 -            0       
+10-21 08:35:50  Buy   60 in_zone        up       12.3670  12.3479 candle       12.4040 target       12.4210  +218.95    15.5 stop         1    1.8
+10-21 08:52:08  Sell  15 zone_rejection down     12.3870  12.4519 candle       12.3762 reversal     12.3720   +23.12     5.2 -            0       
+10-21 08:57:20  Buy   60 in_zone        up       12.3720  12.3502 candle       12.4212 reversal     12.4060  +138.13    20.2 target       2    6.0
+10-21 09:17:33  Sell  60 zone_rejection neutral  12.4060  12.4261 candle       12.3614 reversal     12.3890   +68.97    23.1 -            0       
+10-21 09:40:40  Buy   15 in_zone        up       12.3890  12.3682 candle       12.4071 stop         12.3680   -85.38     7.8 -            0       
+10-21 10:04:13  Buy   60 zone_rejection neutral  12.3320  12.3090 candle       12.3602 stop         12.3090   -93.86    10.3 -            0       
+10-21 10:17:40  Buy  240 in_zone        up       12.2920  12.2759 candle       12.3797 reversal     12.3290  +151.34    18.5 -            0       
+10-21 10:36:11  Sell  15 in_zone        down     12.3290  12.3486 candle       12.3028 reversal     12.3270    +8.17     2.2 -            0       
+10-21 10:38:22  Buy   60 zone_rejection neutral  12.3270  12.2973 candle       12.3550 target       12.3430   +53.90     7.5 stop         1   23.9
+10-21 11:02:00  Sell  15 zone_rejection neutral  12.3560  12.3662 candle       12.3312 stop         12.3670   -44.86     2.5 -            0       
+10-21 11:06:01  Sell  60 in_zone        down     12.3680  12.3867 candle       12.3219 stop         12.3870   -77.37    16.9 -            0       
+10-21 11:29:05  Sell  15 in_zone        down     12.4080  12.4261 candle       12.3901 target       12.3940   +56.78     7.4 -            0       
+10-21 11:37:38  Sell  60 in_zone        down     12.3900  12.4289 candle       12.3454 reversal     12.3850   +12.86     1.5 stop         1   14.7
+10-21 11:39:07  Buy   15 zone_rejection neutral  12.3850  12.3732 candle       12.4163 reversal     12.3930   +32.53     6.3 -            0       
+10-21 11:45:25  Sell  60 in_zone        down     12.3930  12.4106 candle       12.3549 stop         12.4110   -73.17     4.0 reversal     2    6.3
+10-21 11:54:05  Sell  15 in_zone        down     12.4120  12.4327 candle       12.3941 target       12.3950   +68.95     7.3 -            0       
+10-21 12:32:02  Buy   15 zone_rejection neutral  12.3850  12.3702 candle       12.3947 target       12.3950   +40.67     2.3 -            0       
+10-21 12:51:33  Sell  15 in_zone        down     12.4150  12.4332 candle       12.3978 stop         12.4340   -77.12     9.2 -            0       
+10-21 13:02:11  Sell 240 in_zone        down     12.4430  12.4678 candle       12.3161 stop         12.4680  -101.01     2.2 -            0       
+10-21 13:07:28  Sell 240 in_zone        down     12.4940  12.5463 candle       12.3767 target       12.3960  +187.26    26.2 stop         1    3.0
+10-21 13:33:48  Buy   60 in_zone        up       12.3940  12.3409 candle       12.5070 stop         12.3400  -101.79     3.1 -            0       
+10-21 13:37:39  Buy   60 in_zone        up       12.3710  12.3213 candle       12.4522 reversal     12.4080   +74.50    15.4 stop         1    0.8
+10-21 13:53:02  Sell  15 zone_rejection neutral  12.4080  12.4363 candle       12.3582 reversal     12.3650  +152.03     9.8 -            0       
+10-21 14:02:50  Buy   15 in_zone        up       12.3650  12.3189 candle       12.3750 target       12.3660    +2.17     6.9 -            0       
+10-21 14:11:20  Buy   60 zone_rejection neutral  12.3670  12.3024 candle       12.4106 reversal     12.3980   +47.98     4.7 -            0       
+10-21 14:16:01  Sell  15 zone_rejection neutral  12.3980  12.4240 candle       12.3380 stop         12.4250  -103.78     7.7 -            0       
+10-21 14:27:40  Sell 240 in_zone        down     12.4420  12.4906 candle       12.3354 stop         12.4910  -100.86    15.6 target       2   54.0
+10-21 14:44:21  Sell 240 in_zone        down     12.4760  12.5193 candle       12.3488 stop         12.5200  -101.69     4.1 stop         3    1.0
+10-21 14:49:24  Sell 240 in_zone        down     12.5010  12.5481 candle       12.3574 stop         12.5490  -101.98     2.5 stop         4    0.9
+10-21 15:21:46  Buy   15 in_zone        up       12.5700  12.5269 candle       12.5957 target       12.6050   +81.24     3.4 -            0       
+10-21 16:07:05  Buy   15 zone_rejection neutral  12.6710  12.6458 candle       12.7124 target       12.6990  +111.20     3.4 -            0       
+10-21 16:37:08  Buy   15 in_zone        up       12.7000  12.6420 candle       12.7139 target       12.7030    +5.18     3.4 -            0       
+10-21 16:42:00  Buy   15 zone_rejection neutral  12.6930  12.6405 candle       12.7486 stop         12.6400  -101.05    17.7 target       1    1.5
+
+PER-TRADE clear_exit
+open            side  tf rule           cls        entry     stop kind          target reason          exit      pnl    hold reentry_of   k    gap
+10-20 18:11:32  Buy   15 zone_rejection neutral  12.2210  12.1790 candle       12.2496 stop         12.1790  -100.04    13.3 -            0       
+10-20 18:26:24  Buy  240 in_zone        up       12.1650  12.1344 candle       12.2906 reversal     12.1870   +72.01    15.4 -            0       
+10-20 18:41:50  Sell  15 in_zone        down     12.1870  12.2078 candle       12.1614 reversal     12.1670   +82.03     2.2 -            0       
+10-20 18:44:00  Buy  240 zone_rejection neutral  12.1670  12.1288 candle       12.3018 stop         12.1280  -102.18    37.8 reversal     1    2.2
+10-20 19:22:42  Buy  240 in_zone        up       12.1400  12.1089 candle       12.2711 reversal     12.1710   +99.79    13.1 stop         2    0.9
+10-20 19:35:48  Sell  15 in_zone        down     12.1710  12.1917 candle       12.1465 stop         12.1920   -86.32     5.1 -            0       
+10-20 19:45:00  Sell  60 zone_rejection down     12.2040  12.2151 candle       12.1133 stop         12.2160   -49.15     3.3 -            0       
+10-20 19:49:03  Sell  60 zone_rejection neutral  12.2130  12.2278 candle       12.1186 stop         12.2280   -61.36    16.3 stop         1    0.8
+10-20 20:09:35  Sell  60 in_zone        down     12.2390  12.2598 candle       12.1834 reversal     12.2070  +130.54    11.1 -            0       
+10-20 20:20:39  Buy   15 in_zone        up       12.2070  12.1849 candle       12.2218 target       12.2720  +266.20    16.5 -            0       
+10-20 21:01:00  Sell 240 zone_rejection neutral  12.3170  12.3293 candle       12.2022 stop         12.3300   -52.91    14.7 -            0       
+10-20 21:17:28  Sell 240 in_zone        down     12.3290  12.3434 candle       12.2163 reversal     12.2980  +125.97     8.6 stop         1    1.7
+10-20 21:26:04  Buy   15 zone_rejection neutral  12.2980  12.2880 candle       12.3277 stop         12.2880   -40.79     6.5 -            0       
+10-20 21:56:10  Sell 240 in_zone        down     12.3270  12.3389 candle       12.2097 stop         12.3390   -48.81    13.0 reversal     2   30.1
+10-20 22:11:24  Sell 240 in_zone        down     12.3350  12.3564 candle       12.2270 reversal     12.3070  +113.76    52.5 stop         3    2.2
+10-20 23:03:55  Buy   15 in_zone        up       12.3070  12.2931 candle       12.3161 stop         12.2930   -57.08     3.7 -            0       
+10-20 23:09:00  Buy   60 zone_rejection neutral  12.2860  12.2736 candle       12.3263 reversal     12.3100   +97.96    10.4 -            0       
+10-20 23:19:21  Sell 240 zone_rejection down     12.3100  12.3244 candle       12.2105 stop         12.3250   -61.16     3.3 reversal     4   15.4
+10-20 23:23:51  Sell 240 in_zone        down     12.3220  12.3481 candle       12.2178 stop         12.3490  -103.38    22.0 stop         5    1.2
+10-20 23:46:55  Sell 240 in_zone        down     12.3450  12.3611 candle       12.2354 reversal     12.3100  +142.08    15.7 stop         6    1.0
+10-21 00:02:36  Buy   15 in_zone        up       12.3100  12.2921 candle       12.3193 reversal     12.3510  +167.14    12.6 -            0       
+10-21 00:15:10  Sell  15 zone_rejection neutral  12.3510  12.3669 candle       12.3112 stop         12.3670   -65.12     0.8 -            0       
+10-21 00:19:14  Sell  15 zone_rejection neutral  12.3560  12.3750 candle       12.3385 stop         12.3750   -77.25    11.8 -            0       
+10-21 01:02:05  Buy   15 in_zone        up       12.3620  12.3442 candle       12.3788 stop         12.3440   -73.09     6.4 -            0       
+10-21 01:09:30  Buy   15 in_zone        up       12.3490  12.3293 candle       12.3640 stop         12.3290   -81.24     0.9 stop         1    1.0
+10-21 01:24:15  Sell  15 zone_rejection neutral  12.3550  12.3753 candle       12.3228 stop         12.3760   -85.19     3.8 -            0       
+10-21 02:24:04  Buy   15 zone_rejection neutral  12.3350  12.3206 candle       12.3709 reversal     12.3610  +105.55    14.0 -            0       
+10-21 02:38:06  Sell  15 zone_rejection down     12.3610  12.3834 candle       12.3264 stop         12.3840   -93.27    11.9 -            0       
+10-21 02:51:05  Sell  15 zone_rejection neutral  12.3820  12.3946 candle       12.3479 target       12.3480  +137.52    12.0 -            0       
+10-21 03:18:01  Buy   15 in_zone        up       12.3420  12.3271 candle       12.3604 stop         12.3270   -60.95     1.9 -            0       
+10-21 03:20:35  Buy   15 in_zone        up       12.3380  12.3193 candle       12.3540 target       12.3440   +24.37    10.6 stop         1    0.6
+10-21 03:34:02  Sell  15 zone_rejection neutral  12.3670  12.3795 candle       12.3424 target       12.3430   +97.29     6.6 -            0       
+10-21 03:52:06  Sell  15 zone_rejection neutral  12.3570  12.3735 candle       12.3341 target       12.3360   +85.28     8.1 -            0       
+10-21 04:10:40  Sell  15 in_zone        down     12.3480  12.3683 candle       12.3348 target       12.3450   +12.20     7.5 -            0       
+10-21 05:03:21  Sell  15 in_zone        down     12.3620  12.3791 candle       12.3484 target       12.3540   +32.51     6.3 -            0       
+10-21 05:10:40  Sell  15 in_zone        down     12.3490  12.3840 candle       12.3411 target       12.3420   +20.02     3.2 target       1    1.0
+10-21 05:16:51  Buy   15 in_zone        up       12.3320  12.3130 candle       12.3391 target       12.3420   +40.75     2.4 -            0       
+10-21 05:23:01  Buy   15 in_zone        up       12.3410  12.3132 candle       12.3573 stop         12.3130  -100.66     3.0 target       1    3.8
+10-21 05:27:34  Buy   15 in_zone        up       12.3180  12.3010 candle       12.3412 reversal     12.3410   +93.78     8.4 stop         2    1.6
+10-21 05:36:00  Sell  15 zone_rejection neutral  12.3410  12.3587 candle       12.3206 reversal     12.3100  +126.28     5.3 -            0       
+10-21 05:41:20  Buy   60 zone_rejection neutral  12.3100  12.2973 candle       12.3611 stop         12.2970   -53.16     0.2 -            0       
+10-21 05:43:00  Buy   60 in_zone        up       12.2920  12.2707 candle       12.3450 stop         12.2700   -90.04    18.7 stop         1    1.4
+10-21 06:17:02  Sell  15 zone_rejection neutral  12.3010  12.3124 candle       12.2792 stop         12.3130   -49.03    12.0 -            0       
+10-21 06:35:32  Sell  60 in_zone        down     12.3500  12.3665 candle       12.2991 reversal     12.3190  +126.11    18.8 -            0       
+10-21 06:54:20  Buy   15 in_zone        up       12.3190  12.3059 candle       12.3417 stop         12.3050   -57.17     5.7 -            0       
+10-21 07:12:34  Sell  15 in_zone        down     12.3370  12.3502 candle       12.3240 stop         12.3510   -57.05     9.3 -            0       
+10-21 08:01:04  Buy   15 zone_rejection neutral  12.4150  12.4006 candle       12.4583 stop         12.4000   -60.71     1.4 -            0       
+10-21 08:04:27  Buy   15 in_zone        up       12.3950  12.3743 candle       12.4233 stop         12.3740   -85.08    12.1 stop         1    2.0
+10-21 08:18:07  Buy   60 zone_rejection neutral  12.3780  12.3632 candle       12.4178 stop         12.3630   -60.80    15.9 -            0       
+10-21 08:35:50  Buy   60 in_zone        up       12.3670  12.3479 candle       12.4040 target       12.4210  +218.95    15.5 stop         1    1.8
+10-21 08:52:08  Sell  15 zone_rejection down     12.3870  12.4519 candle       12.3762 reversal     12.3720   +23.12     5.2 -            0       
+10-21 08:57:20  Buy   60 in_zone        up       12.3720  12.3502 candle       12.4212 reversal     12.4060  +138.13    20.2 target       2    6.0
+10-21 09:17:33  Sell  60 zone_rejection neutral  12.4060  12.4261 candle       12.3614 reversal     12.3890   +68.97    23.1 -            0       
+10-21 09:40:40  Buy   15 in_zone        up       12.3890  12.3682 candle       12.4071 stop         12.3680   -85.38     7.8 -            0       
+10-21 10:04:13  Buy   60 zone_rejection neutral  12.3320  12.3090 candle       12.3602 stop         12.3090   -93.86    10.3 -            0       
+10-21 10:17:40  Buy  240 in_zone        up       12.2920  12.2759 candle       12.3797 reversal     12.3290  +151.34    18.5 -            0       
+10-21 10:36:11  Sell  15 in_zone        down     12.3290  12.3486 candle       12.3028 reversal     12.3270    +8.17     2.2 -            0       
+10-21 10:38:22  Buy   60 zone_rejection neutral  12.3270  12.2973 candle       12.3550 target       12.3430   +53.90     7.5 stop         1   23.9
+10-21 11:02:00  Sell  15 zone_rejection neutral  12.3560  12.3662 candle       12.3312 stop         12.3670   -44.86     2.5 -            0       
+10-21 11:06:01  Sell  60 in_zone        down     12.3680  12.3867 candle       12.3219 stop         12.3870   -77.37    16.9 -            0       
+10-21 11:29:05  Sell  15 in_zone        down     12.4080  12.4261 candle       12.3901 target       12.3940   +56.78     7.4 -            0       
+10-21 11:37:38  Sell  60 in_zone        down     12.3900  12.4289 candle       12.3454 reversal     12.3850   +12.86     1.5 stop         1   14.7
+10-21 11:39:07  Buy   15 zone_rejection neutral  12.3850  12.3732 candle       12.4163 reversal     12.3930   +32.53     6.3 -            0       
+10-21 11:45:25  Sell  60 in_zone        down     12.3930  12.4106 candle       12.3549 stop         12.4110   -73.17     4.0 reversal     2    6.3
+10-21 11:54:05  Sell  15 in_zone        down     12.4120  12.4327 candle       12.3941 target       12.3950   +68.95     7.3 -            0       
+10-21 12:32:02  Buy   15 zone_rejection neutral  12.3850  12.3702 candle       12.3947 target       12.3950   +40.67     2.3 -            0       
+10-21 12:51:33  Sell  15 in_zone        down     12.4150  12.4332 candle       12.3978 stop         12.4340   -77.12     9.2 -            0       
+10-21 13:02:11  Sell 240 in_zone        down     12.4430  12.4678 candle       12.3161 stop         12.4680  -101.01     2.2 -            0       
+10-21 13:07:28  Sell 240 in_zone        down     12.4940  12.5463 candle       12.3767 target       12.3960  +187.26    26.2 stop         1    3.0
+10-21 13:33:48  Buy   60 in_zone        up       12.3940  12.3409 candle       12.5070 stop         12.3400  -101.79     3.1 -            0       
+10-21 13:37:39  Buy   60 in_zone        up       12.3710  12.3213 candle       12.4522 reversal     12.4080   +74.50    15.4 stop         1    0.8
+10-21 13:53:02  Sell  15 zone_rejection neutral  12.4080  12.4363 candle       12.3582 reversal     12.3650  +152.03     9.8 -            0       
+10-21 14:02:50  Buy   15 in_zone        up       12.3650  12.3189 candle       12.3750 target       12.3660    +2.17     6.9 -            0       
+10-21 14:11:20  Buy   60 zone_rejection neutral  12.3670  12.3024 candle       12.4106 reversal     12.3980   +47.98     4.7 -            0       
+10-21 14:16:01  Sell  15 zone_rejection neutral  12.3980  12.4240 candle       12.3380 stop         12.4250  -103.78     7.7 -            0       
+10-21 14:27:40  Sell 240 in_zone        down     12.4420  12.4906 candle       12.3354 stop         12.4910  -100.86    15.6 target       2   54.0
+10-21 14:44:21  Sell 240 in_zone        down     12.4760  12.5193 candle       12.3488 stop         12.5200  -101.69     4.1 stop         3    1.0
+10-21 14:49:24  Sell 240 in_zone        down     12.5010  12.5481 candle       12.3574 stop         12.5490  -101.98     2.5 stop         4    0.9
+10-21 15:21:46  Buy   15 in_zone        up       12.5700  12.5269 candle       12.5957 target       12.6050   +81.24     3.4 -            0       
+10-21 16:07:05  Buy   15 zone_rejection neutral  12.6710  12.6458 candle       12.7124 target       12.6990  +111.20     3.4 -            0       
+10-21 16:37:08  Buy   15 in_zone        up       12.7000  12.6420 candle       12.7139 target       12.7030    +5.18     3.4 -            0       
+10-21 16:42:00  Buy   15 zone_rejection neutral  12.6930  12.6405 candle       12.7486 stop         12.6400  -101.05    17.7 target       1    1.5
+
+PER-TRADE clear_stop
+open            side  tf rule           cls        entry     stop kind          target reason          exit      pnl    hold reentry_of   k    gap
+10-20 18:11:32  Buy   15 zone_rejection neutral  12.2210  12.1790 candle       12.2496 stop         12.1790  -100.04    13.3 -            0       
+10-20 18:26:24  Buy  240 in_zone        up       12.1650  12.1344 candle       12.2906 reversal     12.1870   +72.01    15.4 -            0       
+10-20 18:41:50  Sell  15 in_zone        down     12.1870  12.2078 candle       12.1614 target       12.1690   +73.83     2.3 -            0       
+10-20 19:35:48  Sell  15 in_zone        down     12.1710  12.1917 candle       12.1465 stop         12.1920   -86.31     5.1 -            0       
+10-20 19:45:00  Sell  60 zone_rejection down     12.2040  12.2151 candle       12.1133 stop         12.2160   -49.14     3.3 -            0       
+10-20 19:49:03  Sell  60 zone_rejection neutral  12.2130  12.2278 candle       12.1186 stop         12.2280   -61.35    16.3 stop         1    0.8
+10-20 20:09:35  Sell  60 in_zone        down     12.2390  12.2598 candle       12.1834 reversal     12.2070  +130.53    11.1 -            0       
+10-20 20:20:39  Buy   15 in_zone        up       12.2070  12.1849 candle       12.2218 target       12.2720  +266.19    16.5 -            0       
+10-20 21:01:00  Sell 240 zone_rejection neutral  12.3170  12.3293 candle       12.2022 stop         12.3300   -52.90    14.7 -            0       
+10-20 21:17:28  Sell 240 in_zone        down     12.3290  12.3434 candle       12.2163 reversal     12.2980  +125.96     8.6 stop         1    1.7
+10-20 21:26:04  Buy   15 zone_rejection neutral  12.2980  12.2880 candle       12.3277 stop         12.2880   -40.79     6.5 -            0       
+10-20 21:56:10  Sell 240 in_zone        down     12.3270  12.3389 candle       12.2097 stop         12.3390   -48.81    13.0 reversal     2   30.1
+10-20 22:11:24  Sell 240 in_zone        down     12.3350  12.3564 candle       12.2270 reversal     12.3070  +113.76    52.5 stop         3    2.2
+10-20 23:03:55  Buy   15 in_zone        up       12.3070  12.2931 candle       12.3161 stop         12.2930   -57.07     3.7 -            0       
+10-20 23:09:00  Buy   60 zone_rejection neutral  12.2860  12.2736 candle       12.3263 reversal     12.3100   +97.95    10.4 -            0       
+10-20 23:19:21  Sell 240 zone_rejection down     12.3100  12.3244 candle       12.2105 stop         12.3250   -61.16     3.3 reversal     4   15.4
+10-20 23:23:51  Sell 240 in_zone        down     12.3220  12.3481 candle       12.2178 stop         12.3490  -103.38    22.0 stop         5    1.2
+10-20 23:46:55  Sell 240 in_zone        down     12.3450  12.3611 candle       12.2354 reversal     12.3100  +142.07    15.7 stop         6    1.0
+10-21 00:02:36  Buy   15 in_zone        up       12.3100  12.2921 candle       12.3193 reversal     12.3510  +167.13    12.6 -            0       
+10-21 00:15:10  Sell  15 zone_rejection neutral  12.3510  12.3669 candle       12.3112 stop         12.3670   -65.11     0.8 -            0       
+10-21 00:19:14  Sell  15 zone_rejection neutral  12.3560  12.3750 candle       12.3385 stop         12.3750   -77.24    11.8 -            0       
+10-21 01:02:05  Buy   15 in_zone        up       12.3620  12.3442 candle       12.3788 stop         12.3440   -73.08     6.4 -            0       
+10-21 01:09:30  Buy   15 in_zone        up       12.3490  12.3293 candle       12.3640 stop         12.3290   -81.23     0.9 stop         1    1.0
+10-21 01:24:15  Sell  15 zone_rejection neutral  12.3550  12.3753 candle       12.3228 stop         12.3760   -85.18     3.8 -            0       
+10-21 02:24:04  Buy   15 zone_rejection neutral  12.3350  12.3206 candle       12.3709 reversal     12.3610  +105.55    14.0 -            0       
+10-21 02:38:06  Sell  15 zone_rejection down     12.3610  12.3834 candle       12.3264 stop         12.3840   -93.27    11.9 -            0       
+10-21 02:51:05  Sell  15 zone_rejection neutral  12.3820  12.3946 candle       12.3479 target       12.3480  +137.51    12.0 -            0       
+10-21 03:18:01  Buy   15 in_zone        up       12.3420  12.3271 candle       12.3604 stop         12.3270   -60.95     1.9 -            0       
+10-21 03:20:35  Buy   15 in_zone        up       12.3380  12.3193 candle       12.3540 target       12.3440   +24.37    10.6 stop         1    0.6
+10-21 03:34:02  Sell  15 zone_rejection neutral  12.3670  12.3795 candle       12.3424 target       12.3430   +97.28     6.6 -            0       
+10-21 03:52:06  Sell  15 zone_rejection neutral  12.3570  12.3735 candle       12.3341 target       12.3360   +85.28     8.1 -            0       
+10-21 04:10:40  Sell  15 in_zone        down     12.3480  12.3683 candle       12.3348 target       12.3450   +12.20     7.5 -            0       
+10-21 05:03:21  Sell  15 in_zone        down     12.3620  12.3791 candle       12.3484 target       12.3540   +32.50     6.3 -            0       
+10-21 05:16:51  Buy   15 in_zone        up       12.3320  12.3130 candle       12.3391 target       12.3420   +40.74     2.4 -            0       
+10-21 05:36:00  Sell  15 zone_rejection neutral  12.3410  12.3587 candle       12.3206 reversal     12.3100  +126.26     5.3 -            0       
+10-21 05:41:20  Buy   60 zone_rejection neutral  12.3100  12.2973 candle       12.3611 stop         12.2970   -53.15     0.2 -            0       
+10-21 05:43:00  Buy   60 in_zone        up       12.2920  12.2707 candle       12.3450 stop         12.2700   -90.03    18.7 stop         1    1.4
+10-21 06:17:02  Sell  15 zone_rejection neutral  12.3010  12.3124 candle       12.2792 stop         12.3130   -49.03    12.0 -            0       
+10-21 06:35:32  Sell  60 in_zone        down     12.3500  12.3665 candle       12.2991 reversal     12.3190  +126.09    18.8 -            0       
+10-21 06:54:20  Buy   15 in_zone        up       12.3190  12.3059 candle       12.3417 stop         12.3050   -57.16     5.7 -            0       
+10-21 07:12:34  Sell  15 in_zone        down     12.3370  12.3502 candle       12.3240 stop         12.3510   -57.04     9.3 -            0       
+10-21 08:01:04  Buy   15 zone_rejection neutral  12.4150  12.4006 candle       12.4583 stop         12.4000   -60.70     1.4 -            0       
+10-21 08:04:27  Buy   15 in_zone        up       12.3950  12.3743 candle       12.4233 stop         12.3740   -85.06    12.1 stop         1    2.0
+10-21 08:18:07  Buy   60 zone_rejection neutral  12.3780  12.3632 candle       12.4178 stop         12.3630   -60.79    15.9 -            0       
+10-21 08:35:50  Buy   60 in_zone        up       12.3670  12.3479 candle       12.4040 target       12.4210  +218.91    15.5 stop         1    1.8
+10-21 08:52:08  Sell  15 zone_rejection down     12.3870  12.4519 candle       12.3762 target       12.3720   +23.12     5.2 -            0       
+10-21 09:17:33  Sell  60 zone_rejection neutral  12.4060  12.4261 candle       12.3614 reversal     12.3890   +68.86    23.1 -            0       
+10-21 09:40:40  Buy   15 in_zone        up       12.3890  12.3682 candle       12.4071 stop         12.3680   -85.24     7.8 -            0       
+10-21 10:04:13  Buy   60 zone_rejection neutral  12.3320  12.3090 candle       12.3602 stop         12.3090   -93.71    10.3 -            0       
+10-21 10:17:40  Buy  240 in_zone        up       12.2920  12.2759 candle       12.3797 reversal     12.3290  +151.11    18.5 -            0       
+10-21 10:36:11  Sell  15 in_zone        down     12.3290  12.3486 candle       12.3028 stop         12.3490   -81.56     8.5 -            0       
+10-21 11:02:00  Sell  15 zone_rejection neutral  12.3560  12.3662 candle       12.3312 stop         12.3670   -44.72     2.5 -            0       
+10-21 11:06:01  Sell  60 in_zone        down     12.3680  12.3867 candle       12.3219 stop         12.3870   -77.14    16.9 -            0       
+10-21 11:29:05  Sell  15 in_zone        down     12.4080  12.4261 candle       12.3901 target       12.3940   +56.61     7.4 -            0       
+10-21 11:39:07  Buy   15 zone_rejection neutral  12.3850  12.3732 candle       12.4163 reversal     12.4120  +109.44    15.0 -            0       
+10-21 11:54:05  Sell  15 in_zone        down     12.4120  12.4327 candle       12.3941 target       12.3950   +68.83     7.3 -            0       
+10-21 12:32:02  Buy   15 zone_rejection neutral  12.3850  12.3702 candle       12.3947 target       12.3950   +40.61     2.3 -            0       
+10-21 12:51:33  Sell  15 in_zone        down     12.4150  12.4332 candle       12.3978 stop         12.4340   -77.00     9.2 -            0       
+10-21 13:02:11  Sell 240 in_zone        down     12.4430  12.4678 candle       12.3161 stop         12.4680  -101.01     2.2 -            0       
+10-21 13:07:28  Sell 240 in_zone        down     12.4940  12.5463 candle       12.3767 target       12.3960  +187.26    26.2 stop         1    3.0
+10-21 13:33:48  Buy   60 in_zone        up       12.3940  12.3409 candle       12.5070 stop         12.3400  -101.79     3.1 -            0       
+10-21 13:37:39  Buy   60 in_zone        up       12.3710  12.3213 candle       12.4522 reversal     12.4080   +74.50    15.4 stop         1    0.8
+10-21 13:53:02  Sell  15 zone_rejection neutral  12.4080  12.4363 candle       12.3582 reversal     12.3650  +152.03     9.8 -            0       
+10-21 14:02:50  Buy   15 in_zone        up       12.3650  12.3189 candle       12.3750 target       12.3660    +2.17     6.9 -            0       
+10-21 14:16:01  Sell  15 zone_rejection neutral  12.3980  12.4240 candle       12.3380 stop         12.4250  -103.78     7.7 -            0       
+10-21 14:27:40  Sell 240 in_zone        down     12.4420  12.4906 candle       12.3354 stop         12.4910  -100.86    15.6 target       2   54.0
+10-21 14:44:21  Sell 240 in_zone        down     12.4760  12.5193 candle       12.3488 stop         12.5200  -101.69     4.1 stop         3    1.0
+10-21 14:49:24  Sell 240 in_zone        down     12.5010  12.5481 candle       12.3574 stop         12.5490  -101.98     2.5 stop         4    0.9
+10-21 15:21:46  Buy   15 in_zone        up       12.5700  12.5269 candle       12.5957 target       12.6050   +81.24     3.4 -            0       
+10-21 16:07:05  Buy   15 zone_rejection neutral  12.6710  12.6458 candle       12.7124 target       12.6990  +110.97     3.4 -            0       
+10-21 16:37:08  Buy   15 in_zone        up       12.7000  12.6420 candle       12.7139 target       12.7030    +5.18     3.4 -            0       
+
+RE-ENTRIES (positions whose (tf, side, zone) already produced an earlier position in the same variant), by the earlier position's close reason
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | sum R | 90 % CI | P(net<0) | top-2 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live first entries | 59 | +440 | -5040 | 1.20 | 49% | 29 / -74 | 19 | 11 | 7.5 | 77 | +5.8 | [-713, +1593] | 0.27 | +433 |
+| live re-entries (all) | 0 |
+|   live re-entry after stop | 0 |
+|   live re-entry after target | 0 |
+|   live re-entry after reversal | 0 |
+|   live re-entry k=1 | 0 |
+|   live re-entry k=2 | 0 |
+|   live re-entry k=3+ | 0 |
+|   live re-entry tf15 | 0 |
+|   live re-entry tf60 | 0 |
+|   live re-entry tf240 | 0 |
+| nofired first entries | 55 | +565 | -4554 | 1.30 | 53% | 26 / -72 | 14 | 15 | 6.9 | 74 | +6.6 | [-491, +1637] | 0.20 | +433 |
+| nofired re-entries (all) | 27 | +93 | -2163 | 1.08 | 48% | 14 / -87 | 5 | 8 | 13.0 | 89 | +1.9 | [-801, +962] | 0.43 | +406 |
+|   nofired re-entry after stop | 18 | +522 | -1008 | 1.84 | 61% | 7 / -89 | 4 | 7 | 12.6 | 87 | +7.3 | [-185, +1267] | 0.12 | +406 |
+|   nofired re-entry after target | 5 | -144 | -504 | 0.52 | 40% | 3 / -101 | 1 | 1 | 15.6 | 100 | -1.3 | [-504, +215] | 0.80 | +158 |
+|   nofired re-entry after reversal | 4 | -285 | -651 | 0.00 | 0% | 4 / -71 | 0 | 0 | 8.5 | 65 | -4.1 | [-351, -220] | 1.00 | -110 |
+|   nofired re-entry k=1 | 15 | +96 | -1121 | 1.15 | 53% | 7 / -89 | 5 | 3 | 12.1 | 100 | +1.7 | [-549, +776] | 0.41 | +406 |
+|   nofired re-entry k=2 | 6 | +109 | -423 | 1.49 | 50% | 3 / -74 | 0 | 3 | 13.1 | 80 | +0.9 | [-273, +491] | 0.32 | +238 |
+|   nofired re-entry k=3+ | 6 | -112 | -618 | 0.69 | 33% | 4 / -92 | 0 | 2 | 9.9 | 93 | -0.6 | [-533, +336] | 0.67 | +256 |
+|   nofired re-entry tf15 | 7 | -230 | -839 | 0.38 | 43% | 4 / -92 | 2 | 1 | 8.4 | 84 | -2.2 | [-530, +92] | 0.88 | +118 |
+|   nofired re-entry tf60 | 8 | +274 | -425 | 2.22 | 62% | 3 / -75 | 2 | 3 | 15.4 | 88 | +2.7 | [-189, +751] | 0.17 | +357 |
+|   nofired re-entry tf240 | 12 | +49 | -899 | 1.08 | 42% | 7 / -89 | 1 | 4 | 14.4 | 100 | +1.4 | [-586, +692] | 0.46 | +329 |
+  nofired: gap from the earlier close to the re-entry (min): median 1.7, q25 1.0, q75 4.9, max 54.0; re-entries within 2 min 16, within 5 min 20
+  nofired: stop -> re-entry pairs 18: stopped leg sum -1404, re-entry leg sum +522, re-entry stopped again 7, hit target 4, reversed 7; pair net > 0 in 5 of 18
+| clear_exit first entries | 55 | +565 | -4554 | 1.30 | 53% | 26 / -72 | 14 | 15 | 6.9 | 74 | +6.6 | [-491, +1637] | 0.20 | +433 |
+| clear_exit re-entries (all) | 27 | +93 | -2163 | 1.08 | 48% | 14 / -87 | 5 | 8 | 13.0 | 89 | +1.9 | [-801, +962] | 0.43 | +406 |
+|   clear_exit re-entry after stop | 18 | +522 | -1008 | 1.84 | 61% | 7 / -89 | 4 | 7 | 12.6 | 87 | +7.3 | [-185, +1267] | 0.12 | +406 |
+|   clear_exit re-entry after target | 5 | -144 | -504 | 0.52 | 40% | 3 / -101 | 1 | 1 | 15.6 | 100 | -1.3 | [-504, +215] | 0.80 | +158 |
+|   clear_exit re-entry after reversal | 4 | -285 | -651 | 0.00 | 0% | 4 / -71 | 0 | 0 | 8.5 | 65 | -4.1 | [-351, -220] | 1.00 | -110 |
+|   clear_exit re-entry k=1 | 15 | +96 | -1121 | 1.15 | 53% | 7 / -89 | 5 | 3 | 12.1 | 100 | +1.7 | [-549, +776] | 0.41 | +406 |
+|   clear_exit re-entry k=2 | 6 | +109 | -423 | 1.49 | 50% | 3 / -74 | 0 | 3 | 13.1 | 80 | +0.9 | [-273, +491] | 0.32 | +238 |
+|   clear_exit re-entry k=3+ | 6 | -112 | -618 | 0.69 | 33% | 4 / -92 | 0 | 2 | 9.9 | 93 | -0.6 | [-533, +336] | 0.67 | +256 |
+|   clear_exit re-entry tf15 | 7 | -230 | -839 | 0.38 | 43% | 4 / -92 | 2 | 1 | 8.4 | 84 | -2.2 | [-530, +92] | 0.88 | +118 |
+|   clear_exit re-entry tf60 | 8 | +274 | -425 | 2.22 | 62% | 3 / -75 | 2 | 3 | 15.4 | 88 | +2.7 | [-189, +751] | 0.17 | +357 |
+|   clear_exit re-entry tf240 | 12 | +49 | -899 | 1.08 | 42% | 7 / -89 | 1 | 4 | 14.4 | 100 | +1.4 | [-586, +692] | 0.46 | +329 |
+  clear_exit: gap from the earlier close to the re-entry (min): median 1.7, q25 1.0, q75 4.9, max 54.0; re-entries within 2 min 16, within 5 min 20
+  clear_exit: stop -> re-entry pairs 18: stopped leg sum -1404, re-entry leg sum +522, re-entry stopped again 7, hit target 4, reversed 7; pair net > 0 in 5 of 18
+| clear_stop first entries | 54 | +496 | -4582 | 1.26 | 50% | 27 / -72 | 16 | 11 | 7.4 | 73 | +6.5 | [-624, +1608] | 0.24 | +433 |
+| clear_stop re-entries (all) | 17 | +51 | -1406 | 1.06 | 41% | 10 / -84 | 3 | 4 | 15.4 | 84 | +1.2 | [-673, +832] | 0.47 | +406 |
+|   clear_stop re-entry after stop | 14 | +262 | -943 | 1.42 | 50% | 7 / -89 | 3 | 4 | 15.4 | 85 | +4.2 | [-443, +974] | 0.27 | +406 |
+|   clear_stop re-entry after target | 1 | -101 | -152 | 0.00 | 0% | 1 / -101 | 0 | 0 | 15.6 | 100 | -1.0 | [-101, -101] | 1.00 | -101 |
+|   clear_stop re-entry after reversal | 2 | -110 | -311 | 0.00 | 0% | 2 / -55 | 0 | 0 | 8.2 | 53 | -2.1 | [-122, -98] | 1.00 | -110 |
+|   clear_stop re-entry k=1 | 9 | +313 | -486 | 1.99 | 56% | 4 / -79 | 3 | 2 | 15.4 | 80 | +3.8 | [-245, +898] | 0.20 | +406 |
+|   clear_stop re-entry k=2 | 2 | -150 | -301 | 0.00 | 0% | 2 / -75 | 0 | 0 | 14.3 | 74 | -2.0 | [-202, -98] | 1.00 | -150 |
+|   clear_stop re-entry k=3+ | 6 | -112 | -618 | 0.69 | 33% | 4 / -92 | 0 | 2 | 9.9 | 93 | -0.6 | [-533, +336] | 0.67 | +256 |
+|   clear_stop re-entry tf15 | 3 | -142 | -443 | 0.15 | 33% | 2 / -83 | 1 | 0 | 10.6 | 80 | -1.7 | [-251, -32] | 0.96 | -57 |
+|   clear_stop re-entry tf60 | 4 | +142 | -209 | 1.94 | 50% | 2 / -76 | 1 | 1 | 15.9 | 82 | +1.5 | [-274, +587] | 0.31 | +293 |
+|   clear_stop re-entry tf240 | 10 | +51 | -754 | 1.10 | 40% | 6 / -86 | 1 | 3 | 14.3 | 93 | +1.4 | [-508, +678] | 0.45 | +329 |
+  clear_stop: gap from the earlier close to the re-entry (min): median 1.4, q25 1.0, q75 2.2, max 54.0; re-entries within 2 min 12, within 5 min 14
+  clear_stop: stop -> re-entry pairs 14: stopped leg sum -1029, re-entry leg sum +262, re-entry stopped again 7, hit target 3, reversed 4; pair net > 0 in 5 of 14
+
+FIRST-ENTRY KEYS live vs nofired: live 59 keys, nofired 55 first-entry keys, common 53 (same minute 53); net on common keys live +394 vs nofired first entries +366; only-live keys net +46 (6), only-nofired keys net +199 (2)
+
+FIRST-ENTRY KEYS live vs clear_exit: live 59 keys, clear_exit 55 first-entry keys, common 53 (same minute 53); net on common keys live +394 vs clear_exit first entries +366; only-live keys net +46 (6), only-clear_exit keys net +199 (2)
+
+FIRST-ENTRY KEYS live vs clear_stop: live 59 keys, clear_stop 54 first-entry keys, common 53 (same minute 53); net on common keys live +394 vs clear_stop first entries +345; only-live keys net +46 (6), only-clear_stop keys net +151 (1)
+
+PAIRED 6-H BLOCK BOOTSTRAP vs live (5 blocks, 5000 resamples)
+  nofired - live: delta +218, 90 % CI [-279, +833], P(delta<0) 0.28; blocks where nofired > live 2, < live 2, equal 1
+  clear_exit - live: delta +218, 90 % CI [-279, +833], P(delta<0) 0.27; blocks where clear_exit > live 2, < live 2, equal 1
+  clear_stop - live: delta +108, 90 % CI [-202, +463], P(delta<0) 0.29; blocks where clear_stop > live 2, < live 2, equal 1
+
+PER-DAY NET (UTC day of the opening fire)
+| day | live n / net | nofired n / net | clear_exit n / net | clear_stop n / net |
+|---|---|---|---|---|
+| 10-20 | 13 / +318 | 20 / +367 | 20 / +367 | 18 / +361 |
+| 10-21 | 46 / +122 | 62 / +291 | 62 / +291 | 53 / +186 |

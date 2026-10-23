@@ -1,0 +1,390 @@
+index gaps (step != 1 min): 1, largest 0 days 01:21:00 — rows are treated positionally, as the stored labels do
+[2y] (1052560, 24) 2023-01-01 00:00:00+00:00 -> 2024-12-31 23:59:00+00:00 loaded 36s RSS 445 MB
+labels done 98s RSS 858 MB
+
+######## [2y] tf 15 long: in-zone minutes 205986, zone blocks 41541, candles 70170
+  adv5 at zone ENTRY (first in-zone minute, n 41541): q10 -73 q25 -26 median +66 q75 +128 q90 +165; share >= 100: 38%, >= 140: 19%, < 0: 33%
+  adv5 at in-zone minutes, strict n1: label=1 n 25066 median +112 [q25 +23, q75 +163] | label=0 n 180920 median +95 [q25 +6, q75 +148]; base rate P(1) 0.122
+    P(strict n1=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 64 / 0.031 (entry 37 / 0.054) | -200..-140: 671 / 0.016 (entry 316 / 0.006) | -140..-100: 3050 / 0.059 (entry 1387 / 0.052) | -100..0: 43578 / 0.110 (entry 11848 / 0.111) | 0..100: 57645 / 0.110 (entry 12264 / 0.119) | 100..140: 39525 / 0.115 (entry 7700 / 0.143) | 140..200: 46284 / 0.135 (entry 6541 / 0.175) | >=200: 15169 / 0.193 (entry 1448 / 0.242)
+    first strict n1=1 minute per block: 10887 of 41541 blocks (26%); adv5 there median +116 [q25 +21, q75 +169]; minutes after zone entry median 0 (q75 3)
+  adv5 at in-zone minutes, strict n2: label=1 n 40082 median +106 [q25 +19, q75 +157] | label=0 n 165892 median +95 [q25 +6, q75 +148]; base rate P(1) 0.195
+    P(strict n2=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 64 / 0.031 (entry 37 / 0.054) | -200..-140: 671 / 0.019 (entry 316 / 0.006) | -140..-100: 3050 / 0.080 (entry 1387 / 0.071) | -100..0: 43574 / 0.182 (entry 11847 / 0.180) | 0..100: 57637 / 0.190 (entry 12264 / 0.202) | 100..140: 39525 / 0.189 (entry 7700 / 0.227) | 140..200: 46284 / 0.207 (entry 6541 / 0.252) | >=200: 15169 / 0.256 (entry 1448 / 0.319)
+    first strict n2=1 minute per block: 15162 of 41541 blocks (36%); adv5 there median +107 [q25 +13, q75 +162]; minutes after zone entry median 0 (q75 2)
+  adv15 at zone ENTRY (first in-zone minute, n 41541): q10 -113 q25 -65 median +21 q75 +102 q90 +155; share >= 100: 26%, >= 140: 14%, < 0: 44%
+  adv15 at in-zone minutes, strict n1: label=1 n 25066 median +68 [q25 -46, q75 +145] | label=0 n 180920 median +34 [q25 -54, q75 +113]; base rate P(1) 0.122
+    P(strict n1=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 581 / 0.129 (entry 194 / 0.093) | -200..-140: 6220 / 0.131 (entry 1733 / 0.121) | -140..-100: 15190 / 0.121 (entry 3635 / 0.117) | -100..0: 61360 / 0.101 (entry 12886 / 0.103) | 0..100: 60059 / 0.101 (entry 12398 / 0.111) | 100..140: 25295 / 0.135 (entry 5070 / 0.160) | 140..200: 25567 / 0.167 (entry 4398 / 0.213) | >=200: 11714 / 0.204 (entry 1227 / 0.281)
+    first strict n1=1 minute per block: 10887 of 41541 blocks (26%); adv15 there median +77 [q25 -39, q75 +153]; minutes after zone entry median 0 (q75 3)
+  adv15 at in-zone minutes, strict n2: label=1 n 40082 median +52 [q25 -49, q75 +129] | label=0 n 165892 median +34 [q25 -55, q75 +113]; base rate P(1) 0.195
+    P(strict n2=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 581 / 0.133 (entry 194 / 0.098) | -200..-140: 6220 / 0.173 (entry 1733 / 0.159) | -140..-100: 15190 / 0.188 (entry 3635 / 0.179) | -100..0: 61350 / 0.183 (entry 12885 / 0.183) | 0..100: 60057 / 0.182 (entry 12398 / 0.192) | 100..140: 25295 / 0.208 (entry 5070 / 0.240) | 140..200: 25567 / 0.227 (entry 4398 / 0.286) | >=200: 11714 / 0.244 (entry 1227 / 0.332)
+    first strict n2=1 minute per block: 15162 of 41541 blocks (36%); adv15 there median +62 [q25 -45, q75 +139]; minutes after zone entry median 0 (q75 2)
+  --- excursion beyond the current 1-min low in 1-min ATR, by adv5 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |  39774               0.72  1.83  3.34  4.58  42%  22% |          3.26  6.20 10.31 13.63  78%  65% |    187580  0.46  2.63
+           adv < 0 |  13512               0.69  1.69  2.94  3.93  40%  20% |          3.08  5.73  9.36 12.30  78%  64% |     44311  0.51  2.49
+            0..100 |  16367               0.66  1.70  3.11  4.27  40%  21% |          3.32  6.33 10.42 13.57  78%  65% |     52525  0.46  2.55
+        adv >= 100 |  19440               0.73  1.91  3.57  4.99  42%  24% |          3.34  6.53 10.86 14.59  78%  65% |     90744  0.44  2.78
+        adv >= 140 |  12265               0.77  2.00  3.71  5.34  44%  25% |          3.34  6.48 10.90 14.93  77%  65% |     55224  0.46  2.89
+        adv >= 200 |   3662               0.77  2.13  4.19  6.29  44%  27% |          3.25  6.50 11.65 16.06  76%  64% |     13716  0.50  3.43
+      adv >= p80=160 |   8707               0.78  2.02  3.83  5.50  44%  25% |          3.31  6.54 10.99 15.22  77%  65% |     37106  0.48  3.00
+      adv >= p90=188 |   4804               0.79  2.08  4.08  5.91  44%  26% |          3.27  6.57 11.53 16.07  76%  64% |     18601  0.49  3.28
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 100 (n 19440 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      57% |            55% |            31% |            18%
+         1.0      42% |            56% |            32% |            19%
+         1.5      32% |            56% |            33% |            20%
+         2.0      24% |            56% |            34% |            21%
+         3.0      13% |            60% |            37% |            24%
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 140 (n 12265 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      58% |            57% |            32% |            19%
+         1.0      44% |            57% |            33% |            20%
+         1.5      33% |            57% |            34% |            21%
+         2.0      25% |            58% |            35% |            23%
+         3.0      14% |            61% |            40% |            27%
+  --- excursion beyond the current 1-min low in 1-min ATR, by adv15 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |  39774               0.72  1.83  3.34  4.58  42%  22% |          3.26  6.20 10.31 13.63  78%  65% |    187580  0.46  2.63
+           adv < 0 |  17941               0.69  1.69  2.97  3.99  40%  20% |          3.13  5.84  9.45 12.20  78%  64% |     76342  0.47  2.40
+            0..100 |  13704               0.72  1.85  3.36  4.57  42%  23% |          3.47  6.57 10.89 14.49  79%  67% |     54703  0.48  2.67
+        adv >= 100 |  11982               0.74  2.00  3.89  5.51  43%  25% |          3.25  6.49 11.17 15.18  76%  63% |     56535  0.43  3.00
+        adv >= 140 |   6997               0.76  2.07  3.92  5.60  44%  26% |          3.13  6.29 10.86 14.95  76%  63% |     33522  0.42  2.99
+        adv >= 200 |   2119               0.72  2.04  4.12  6.10  43%  25% |          2.66  6.11 11.19 16.03  72%  58% |     10419  0.32  2.87
+      adv >= p80=133 |   7716               0.78  2.08  3.98  5.59  44%  26% |          3.17  6.37 11.00 14.97  76%  63% |     37079  0.43  3.00
+      adv >= p90=174 |   3848               0.70  2.00  3.97  5.70  42%  25% |          2.84  6.04 11.12 15.24  73%  60% |     18416  0.36  2.90
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 100 (n 11982 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      57% |            58% |            34% |            21%
+         1.0      43% |            58% |            35% |            22%
+         1.5      33% |            59% |            36% |            23%
+         2.0      25% |            60% |            39% |            25%
+         3.0      15% |            64% |            41% |            27%
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 140 (n 6997 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      57% |            59% |            35% |            21%
+         1.0      44% |            59% |            36% |            22%
+         1.5      34% |            60% |            37% |            23%
+         2.0      26% |            61% |            38% |            25%
+         3.0      16% |            62% |            41% |            28%
+
+######## [2y] tf 15 short: in-zone minutes 216767, zone blocks 42831, candles 70170
+  adv5 at zone ENTRY (first in-zone minute, n 42831): q10 -67 q25 -23 median +67 q75 +125 q90 +162; share >= 100: 37%, >= 140: 18%, < 0: 32%
+  adv5 at in-zone minutes, strict n1: label=1 n 26527 median +108 [q25 +15, q75 +158] | label=0 n 190230 median +99 [q25 +13, q75 +147]; base rate P(1) 0.122
+    P(strict n1=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 49 / 0.061 (entry 27 / 0.111) | -200..-140: 472 / 0.021 (entry 218 / 0.028) | -140..-100: 2372 / 0.065 (entry 1083 / 0.061) | -100..0: 44079 / 0.127 (entry 12315 / 0.123) | 0..100: 61633 / 0.107 (entry 13281 / 0.106) | 100..140: 44940 / 0.112 (entry 8232 / 0.121) | 140..200: 48675 / 0.135 (entry 6384 / 0.159) | >=200: 14537 / 0.178 (entry 1290 / 0.236)
+    first strict n1=1 minute per block: 10619 of 42831 blocks (25%); adv5 there median +107 [q25 +8, q75 +161]; minutes after zone entry median 0 (q75 3)
+  adv5 at in-zone minutes, strict n2: label=1 n 43754 median +104 [q25 +14, q75 +153] | label=0 n 173003 median +99 [q25 +13, q75 +147]; base rate P(1) 0.202
+    P(strict n2=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 49 / 0.061 (entry 27 / 0.111) | -200..-140: 472 / 0.021 (entry 218 / 0.028) | -140..-100: 2372 / 0.094 (entry 1083 / 0.091) | -100..0: 44079 / 0.208 (entry 12315 / 0.202) | 0..100: 61633 / 0.190 (entry 13281 / 0.195) | 100..140: 44940 / 0.195 (entry 8232 / 0.209) | 140..200: 48675 / 0.212 (entry 6384 / 0.246) | >=200: 14537 / 0.245 (entry 1290 / 0.312)
+    first strict n2=1 minute per block: 15350 of 42831 blocks (36%); adv5 there median +99 [q25 +3, q75 +154]; minutes after zone entry median 0 (q75 2)
+  adv15 at zone ENTRY (first in-zone minute, n 42831): q10 -110 q25 -62 median +26 q75 +103 q90 +152; share >= 100: 26%, >= 140: 13%, < 0: 43%
+  adv15 at in-zone minutes, strict n1: label=1 n 26527 median +62 [q25 -48, q75 +141] | label=0 n 190230 median +40 [q25 -51, q75 +115]; base rate P(1) 0.122
+    P(strict n1=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 555 / 0.114 (entry 163 / 0.086) | -200..-140: 5825 / 0.144 (entry 1612 / 0.125) | -140..-100: 15206 / 0.132 (entry 3589 / 0.123) | -100..0: 63605 / 0.105 (entry 13234 / 0.109) | 0..100: 63212 / 0.103 (entry 13036 / 0.104) | 100..140: 29608 / 0.123 (entry 5597 / 0.130) | 140..200: 27526 / 0.159 (entry 4400 / 0.184) | >=200: 11220 / 0.210 (entry 1199 / 0.279)
+    first strict n1=1 minute per block: 10619 of 42831 blocks (25%); adv15 there median +67 [q25 -47, q75 +144]; minutes after zone entry median 0 (q75 3)
+  adv15 at in-zone minutes, strict n2: label=1 n 43754 median +51 [q25 -49, q75 +128] | label=0 n 173003 median +41 [q25 -51, q75 +116]; base rate P(1) 0.202
+    P(strict n2=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 555 / 0.137 (entry 163 / 0.104) | -200..-140: 5825 / 0.199 (entry 1612 / 0.174) | -140..-100: 15206 / 0.207 (entry 3589 / 0.194) | -100..0: 63605 / 0.192 (entry 13234 / 0.197) | 0..100: 63212 / 0.188 (entry 13036 / 0.194) | 100..140: 29608 / 0.204 (entry 5597 / 0.217) | 140..200: 27526 / 0.229 (entry 4400 / 0.259) | >=200: 11220 / 0.258 (entry 1199 / 0.335)
+    first strict n2=1 minute per block: 15350 of 42831 blocks (36%); adv15 there median +54 [q25 -49, q75 +131]; minutes after zone entry median 0 (q75 2)
+  --- excursion beyond the current 1-min high in 1-min ATR, by adv5 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |  40989               0.73  1.78  3.22  4.42  42%  22% |          3.16  6.16 10.09 13.46  78%  64% |    197031  0.47  2.62
+           adv < 0 |  13628               0.66  1.62  2.89  3.94  39%  19% |          2.98  5.66  9.19 12.13  77%  62% |     43932  0.47  2.43
+            0..100 |  17560               0.66  1.65  3.04  4.17  39%  20% |          3.19  6.19  9.95 13.16  78%  64% |     56097  0.46  2.60
+        adv >= 100 |  20179               0.76  1.87  3.40  4.72  43%  23% |          3.28  6.47 10.81 14.58  78%  65% |     97002  0.48  2.72
+        adv >= 140 |  12265               0.80  1.95  3.56  4.92  44%  24% |          3.25  6.56 11.06 14.96  77%  64% |     56670  0.52  2.88
+        adv >= 200 |   3508               0.85  2.20  3.97  5.43  46%  27% |          3.36  6.76 11.39 16.11  78%  65% |     13065  0.60  3.25
+      adv >= p80=158 |   8834               0.81  1.99  3.66  5.13  44%  25% |          3.31  6.61 11.08 15.14  78%  65% |     38928  0.55  2.99
+      adv >= p90=186 |   4858               0.82  2.10  3.88  5.39  45%  26% |          3.32  6.62 11.34 15.57  77%  65% |     19486  0.58  3.16
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 100 (n 20179 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      59% |            54% |            29% |            16%
+         1.0      43% |            54% |            29% |            17%
+         1.5      32% |            53% |            30% |            17%
+         2.0      23% |            55% |            31% |            19%
+         3.0      13% |            56% |            35% |            21%
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 140 (n 12265 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      59% |            55% |            31% |            17%
+         1.0      44% |            55% |            31% |            18%
+         1.5      33% |            56% |            32% |            19%
+         2.0      24% |            56% |            32% |            20%
+         3.0      14% |            57% |            35% |            22%
+  --- excursion beyond the current 1-min high in 1-min ATR, by adv15 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |  40989               0.73  1.78  3.22  4.42  42%  22% |          3.16  6.16 10.09 13.46  78%  64% |    197031  0.47  2.62
+           adv < 0 |  18054               0.69  1.65  2.91  4.03  40%  19% |          3.05  5.76  9.23 12.26  78%  63% |     77896  0.46  2.38
+            0..100 |  14292               0.73  1.79  3.25  4.42  41%  22% |          3.33  6.49 10.65 14.39  78%  66% |     57504  0.49  2.72
+        adv >= 100 |  12631               0.76  1.93  3.57  5.02  43%  24% |          3.19  6.48 10.80 14.53  77%  63% |     61631  0.47  2.84
+        adv >= 140 |   7019               0.78  1.94  3.65  5.21  44%  24% |          3.13  6.57 10.98 14.73  76%  62% |     34812  0.47  2.88
+        adv >= 200 |   1973               0.72  2.03  3.77  5.44  43%  25% |          3.07  6.44 10.44 14.11  75%  62% |      9984  0.42  2.83
+      adv >= p80=133 |   7833               0.78  1.96  3.63  5.17  44%  24% |          3.15  6.58 11.08 14.74  76%  62% |     38985  0.47  2.88
+      adv >= p90=171 |   3854               0.76  1.91  3.72  5.29  44%  24% |          3.08  6.49 10.88 15.04  76%  62% |     19390  0.43  2.84
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 100 (n 12631 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      58% |            55% |            30% |            18%
+         1.0      43% |            55% |            31% |            18%
+         1.5      32% |            55% |            32% |            19%
+         2.0      24% |            57% |            33% |            21%
+         3.0      14% |            59% |            37% |            23%
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 140 (n 7019 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      59% |            55% |            31% |            18%
+         1.0      44% |            55% |            31% |            19%
+         1.5      32% |            56% |            33% |            21%
+         2.0      24% |            57% |            35% |            23%
+         3.0      14% |            62% |            40% |            24%
+[2y] tf 15 done 102s RSS 858 MB
+
+######## [2y] tf 60 long: in-zone minutes 155760, zone blocks 15671, candles 17542
+  adv5 at zone ENTRY (first in-zone minute, n 15671): q10 +29 q25 +76 median +120 q75 +161 q90 +201; share >= 100: 62%, >= 140: 37%, < 0: 5%
+  adv5 at in-zone minutes, strict n1: label=1 n 10332 median +139 [q25 +104, q75 +177] | label=0 n 145428 median +117 [q25 +82, q75 +154]; base rate P(1) 0.066
+    P(strict n1=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 0 / nan (entry 0 / nan) | -200..-140: 4 / 0.000 (entry 3 / 0.000) | -140..-100: 47 / 0.064 (entry 23 / 0.087) | -100..0: 2925 / 0.074 (entry 754 / 0.111) | 0..100: 53226 / 0.040 (entry 5107 / 0.068) | 100..140: 45816 / 0.063 (entry 4028 / 0.087) | 140..200: 40744 / 0.086 (entry 4141 / 0.105) | >=200: 12998 / 0.122 (entry 1615 / 0.142)
+    first strict n1=1 minute per block: 3219 of 15671 blocks (21%); adv5 there median +155 [q25 +111, q75 +197]; minutes after zone entry median 1 (q75 6)
+  adv5 at in-zone minutes, strict n2: label=1 n 16598 median +136 [q25 +103, q75 +173] | label=0 n 139129 median +117 [q25 +81, q75 +153]; base rate P(1) 0.107
+    P(strict n2=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 0 / nan (entry 0 / nan) | -200..-140: 4 / 0.000 (entry 3 / 0.000) | -140..-100: 47 / 0.064 (entry 23 / 0.087) | -100..0: 2925 / 0.097 (entry 754 / 0.154) | 0..100: 53207 / 0.067 (entry 5105 / 0.110) | 100..140: 45805 / 0.108 (entry 4028 / 0.140) | 140..200: 40741 / 0.135 (entry 4141 / 0.172) | >=200: 12998 / 0.175 (entry 1615 / 0.206)
+    first strict n2=1 minute per block: 4571 of 15671 blocks (29%); adv5 there median +151 [q25 +109, q75 +193]; minutes after zone entry median 1 (q75 5)
+  adv15 at zone ENTRY (first in-zone minute, n 15671): q10 -54 q25 -3 median +84 q75 +135 q90 +171; share >= 100: 43%, >= 140: 23%, < 0: 26%
+  adv15 at in-zone minutes, strict n1: label=1 n 10332 median +121 [q25 +31, q75 +171] | label=0 n 145428 median +119 [q25 +48, q75 +162]; base rate P(1) 0.066
+    P(strict n1=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 5 / 0.400 (entry 3 / 0.667) | -200..-140: 176 / 0.176 (entry 64 / 0.266) | -140..-100: 808 / 0.145 (entry 262 / 0.172) | -100..0: 22627 / 0.078 (entry 3730 / 0.094) | 0..100: 40444 / 0.059 (entry 4839 / 0.074) | 100..140: 32680 / 0.055 (entry 3236 / 0.087) | 140..200: 42776 / 0.064 (entry 2922 / 0.100) | >=200: 16244 / 0.091 (entry 615 / 0.163)
+    first strict n1=1 minute per block: 3219 of 15671 blocks (21%); adv15 there median +127 [q25 +36, q75 +184]; minutes after zone entry median 1 (q75 6)
+  adv15 at in-zone minutes, strict n2: label=1 n 16598 median +116 [q25 +31, q75 +167] | label=0 n 139129 median +119 [q25 +49, q75 +162]; base rate P(1) 0.107
+    P(strict n2=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 5 / 0.400 (entry 3 / 0.667) | -200..-140: 176 / 0.188 (entry 64 / 0.281) | -140..-100: 808 / 0.178 (entry 262 / 0.214) | -100..0: 22627 / 0.125 (entry 3730 / 0.146) | 0..100: 40435 / 0.105 (entry 4837 / 0.128) | 100..140: 32668 / 0.090 (entry 3236 / 0.139) | 140..200: 42764 / 0.104 (entry 2922 / 0.159) | >=200: 16244 / 0.120 (entry 615 / 0.208)
+    first strict n2=1 minute per block: 4571 of 15671 blocks (29%); adv15 there median +119 [q25 +26, q75 +174]; minutes after zone entry median 1 (q75 5)
+  --- excursion beyond the current 1-min low in 1-min ATR, by adv5 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |  15486               1.70  3.88  6.95  9.65  62%  45% |          3.20  6.28 10.57 13.94  77%  64% |    151854  1.20  5.64
+           adv < 0 |   1029               1.34  3.04  5.42  7.73  56%  41% |          2.62  5.01  8.48 11.58  73%  60% |      2880  1.45  5.20
+            0..100 |   8124               1.28  3.09  5.68  8.03  56%  38% |          3.00  5.92  9.80 12.98  76%  62% |     51525  0.95  4.64
+        adv >= 100 |  11558               1.77  4.09  7.24 10.11  63%  47% |          3.23  6.45 10.75 14.34  77%  64% |     97449  1.35  6.12
+        adv >= 140 |   8110               1.82  4.18  7.42 10.50  64%  47% |          3.23  6.48 10.90 14.67  77%  64% |     52729  1.45  6.50
+        adv >= 200 |   3020               1.81  4.23  8.00 11.77  63%  47% |          3.09  6.29 11.44 16.01  75%  62% |     12781  1.47  7.08
+      adv >= p80=166 |   5728               1.81  4.13  7.59 10.86  63%  47% |          3.20  6.48 10.96 15.00  76%  63% |     30584  1.50  6.79
+      adv >= p90=193 |   3483               1.85  4.22  7.95 11.54  63%  47% |          3.14  6.33 11.32 16.05  75%  63% |     15309  1.50  7.02
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 100 (n 11558 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      74% |            74% |            54% |            40%
+         1.0      63% |            74% |            55% |            41%
+         1.5      54% |            74% |            55% |            41%
+         2.0      47% |            74% |            55% |            41%
+         3.0      35% |            74% |            55% |            41%
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 140 (n 8110 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      74% |            74% |            55% |            41%
+         1.0      64% |            75% |            55% |            41%
+         1.5      55% |            74% |            55% |            41%
+         2.0      47% |            74% |            56% |            41%
+         3.0      35% |            75% |            56% |            42%
+  --- excursion beyond the current 1-min low in 1-min ATR, by adv15 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |  15486               1.70  3.88  6.95  9.65  62%  45% |          3.20  6.28 10.57 13.94  77%  64% |    151854  1.20  5.64
+           adv < 0 |   4163               1.66  3.57  6.26  8.69  63%  45% |          2.97  5.58  9.17 12.01  77%  63% |     23236  1.42  5.59
+            0..100 |   6224               1.63  3.76  6.94  9.52  61%  44% |          3.30  6.48 10.73 13.94  78%  65% |     39392  1.25  5.81
+        adv >= 100 |   8314               1.70  4.06  7.24 10.17  62%  45% |          3.26  6.52 11.15 15.28  76%  63% |     89226  1.12  5.59
+        adv >= 140 |   5294               1.86  4.16  7.48 10.37  63%  48% |          3.19  6.44 10.91 15.01  76%  63% |     57490  1.17  5.75
+        adv >= 200 |   1725               1.72  4.03  7.38 10.85  64%  46% |          2.75  6.10 11.16 16.46  74%  59% |     15823  1.14  5.87
+      adv >= p80=173 |   3038               1.80  4.17  7.30 10.63  62%  47% |          3.00  6.19 11.09 15.02  75%  62% |     30360  1.15  5.82
+      adv >= p90=201 |   1661               1.72  4.03  7.50 11.36  64%  46% |          2.78  6.11 11.25 16.92  74%  60% |     15168  1.12  5.90
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 100 (n 8314 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      72% |            74% |            54% |            41%
+         1.0      62% |            74% |            55% |            41%
+         1.5      53% |            73% |            55% |            41%
+         2.0      45% |            75% |            56% |            41%
+         3.0      34% |            75% |            55% |            41%
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 140 (n 5294 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      73% |            76% |            56% |            42%
+         1.0      63% |            76% |            56% |            41%
+         1.5      55% |            74% |            55% |            41%
+         2.0      48% |            74% |            55% |            41%
+         3.0      35% |            74% |            55% |            42%
+
+######## [2y] tf 60 short: in-zone minutes 169172, zone blocks 16300, candles 17542
+  adv5 at zone ENTRY (first in-zone minute, n 16300): q10 +34 q25 +77 median +117 q75 +156 q90 +193; share >= 100: 62%, >= 140: 35%, < 0: 4%
+  adv5 at in-zone minutes, strict n1: label=1 n 11953 median +136 [q25 +104, q75 +170] | label=0 n 157176 median +118 [q25 +85, q75 +154]; base rate P(1) 0.071
+    P(strict n1=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 1 / 0.000 (entry 1 / 0.000) | -200..-140: 20 / 0.100 (entry 8 / 0.250) | -140..-100: 37 / 0.027 (entry 14 / 0.071) | -100..0: 2704 / 0.077 (entry 657 / 0.102) | 0..100: 56325 / 0.043 (entry 5578 / 0.076) | 100..140: 51730 / 0.074 (entry 4376 / 0.091) | 140..200: 45122 / 0.090 (entry 4345 / 0.098) | >=200: 13190 / 0.110 (entry 1317 / 0.112)
+    first strict n1=1 minute per block: 3171 of 16300 blocks (19%); adv5 there median +143 [q25 +104, q75 +184]; minutes after zone entry median 1 (q75 6)
+  adv5 at in-zone minutes, strict n2: label=1 n 19137 median +134 [q25 +103, q75 +168] | label=0 n 149992 median +117 [q25 +84, q75 +153]; base rate P(1) 0.113
+    P(strict n2=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 1 / 0.000 (entry 1 / 0.000) | -200..-140: 20 / 0.100 (entry 8 / 0.250) | -140..-100: 37 / 0.027 (entry 14 / 0.071) | -100..0: 2704 / 0.089 (entry 657 / 0.120) | 0..100: 56325 / 0.073 (entry 5578 / 0.115) | 100..140: 51730 / 0.120 (entry 4376 / 0.143) | 140..200: 45122 / 0.143 (entry 4345 / 0.158) | >=200: 13190 / 0.163 (entry 1317 / 0.181)
+    first strict n2=1 minute per block: 4512 of 16300 blocks (28%); adv5 there median +142 [q25 +104, q75 +181]; minutes after zone entry median 0 (q75 5)
+  adv15 at zone ENTRY (first in-zone minute, n 16300): q10 -50 q25 -2 median +81 q75 +128 q90 +164; share >= 100: 41%, >= 140: 19%, < 0: 26%
+  adv15 at in-zone minutes, strict n1: label=1 n 11953 median +122 [q25 +35, q75 +169] | label=0 n 157176 median +116 [q25 +48, q75 +158]; base rate P(1) 0.071
+    P(strict n1=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 34 / 0.059 (entry 8 / 0.250) | -200..-140: 194 / 0.144 (entry 56 / 0.125) | -140..-100: 701 / 0.131 (entry 207 / 0.169) | -100..0: 22473 / 0.083 (entry 3912 / 0.097) | 0..100: 46743 / 0.064 (entry 5398 / 0.077) | 100..140: 38223 / 0.056 (entry 3623 / 0.075) | 140..200: 45517 / 0.072 (entry 2646 / 0.106) | >=200: 15244 / 0.102 (entry 446 / 0.168)
+    first strict n1=1 minute per block: 3171 of 16300 blocks (19%); adv15 there median +117 [q25 +26, q75 +171]; minutes after zone entry median 1 (q75 6)
+  adv15 at in-zone minutes, strict n2: label=1 n 19137 median +116 [q25 +37, q75 +165] | label=0 n 149992 median +117 [q25 +48, q75 +158]; base rate P(1) 0.113
+    P(strict n2=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 34 / 0.059 (entry 8 / 0.250) | -200..-140: 194 / 0.144 (entry 56 / 0.125) | -140..-100: 701 / 0.144 (entry 207 / 0.184) | -100..0: 22473 / 0.126 (entry 3912 / 0.149) | 0..100: 46743 / 0.110 (entry 5398 / 0.127) | 100..140: 38223 / 0.099 (entry 3623 / 0.123) | 140..200: 45517 / 0.113 (entry 2646 / 0.163) | >=200: 15244 / 0.137 (entry 446 / 0.195)
+    first strict n2=1 minute per block: 4512 of 16300 blocks (28%); adv15 there median +109 [q25 +23, q75 +163]; minutes after zone entry median 0 (q75 5)
+  --- excursion beyond the current 1-min high in 1-min ATR, by adv5 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |  16098               1.71  3.90  6.81  9.38  63%  45% |          3.11  6.10 10.23 13.59  77%  64% |    164989  1.26  5.59
+           adv < 0 |    958               1.18  2.94  5.08  6.99  54%  35% |          2.44  4.58  7.79 10.50  76%  57% |      2677  1.12  5.02
+            0..100 |   8709               1.29  3.07  5.63  7.47  56%  37% |          2.87  5.66  9.21 12.12  75%  61% |     54543  0.99  4.57
+        adv >= 100 |  12031               1.83  4.13  7.26 10.02  65%  48% |          3.22  6.33 10.75 14.18  78%  65% |    107769  1.43  6.08
+        adv >= 140 |   8254               1.93  4.28  7.66 10.34  65%  49% |          3.26  6.52 11.00 14.85  77%  65% |     57205  1.59  6.63
+        adv >= 200 |   2904               2.01  4.48  7.75 10.79  66%  50% |          3.40  6.80 11.21 15.49  78%  66% |     12974  1.74  7.13
+      adv >= p80=164 |   5740               1.98  4.38  7.71 10.68  65%  50% |          3.35  6.65 11.16 14.87  77%  65% |     33228  1.68  6.87
+      adv >= p90=191 |   3502               1.98  4.41  7.73 10.73  65%  50% |          3.38  6.74 11.06 15.21  77%  66% |     16648  1.74  7.12
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 100 (n 12031 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      76% |            73% |            53% |            40%
+         1.0      65% |            74% |            54% |            40%
+         1.5      55% |            73% |            54% |            41%
+         2.0      48% |            74% |            54% |            40%
+         3.0      35% |            74% |            55% |            40%
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 140 (n 8254 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      76% |            74% |            55% |            41%
+         1.0      65% |            76% |            56% |            42%
+         1.5      56% |            75% |            55% |            42%
+         2.0      49% |            74% |            55% |            41%
+         3.0      36% |            75% |            56% |            42%
+  --- excursion beyond the current 1-min high in 1-min ATR, by adv15 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |  16098               1.71  3.90  6.81  9.38  63%  45% |          3.11  6.10 10.23 13.59  77%  64% |    164989  1.26  5.59
+           adv < 0 |   4290               1.67  3.63  6.17  7.99  63%  44% |          2.83  5.46  8.72 11.73  76%  61% |     23073  1.45  5.56
+            0..100 |   6946               1.59  3.70  6.55  8.85  61%  43% |          3.15  6.13 10.14 13.45  78%  64% |     45617  1.22  5.57
+        adv >= 100 |   8428               1.80  4.07  7.17 10.11  64%  47% |          3.28  6.50 10.80 14.51  78%  65% |     96299  1.23  5.60
+        adv >= 140 |   5076               1.90  4.19  7.53 10.42  66%  49% |          3.19  6.52 11.02 14.91  77%  64% |     59158  1.28  5.72
+        adv >= 200 |   1526               1.85  4.50  7.87 10.85  65%  48% |          3.11  6.54 11.01 14.29  76%  63% |     14826  1.33  5.96
+      adv >= p80=169 |   3039               1.91  4.20  7.78 10.81  66%  49% |          3.12  6.48 11.01 14.97  77%  63% |     32940  1.30  5.92
+      adv >= p90=196 |   1656               1.98  4.50  7.89 10.84  65%  50% |          3.23  6.65 11.18 14.49  77%  64% |     16454  1.31  5.92
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 100 (n 8428 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      75% |            73% |            53% |            39%
+         1.0      64% |            73% |            53% |            40%
+         1.5      55% |            73% |            54% |            40%
+         2.0      47% |            73% |            54% |            40%
+         3.0      34% |            75% |            55% |            41%
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 140 (n 5076 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      76% |            74% |            54% |            40%
+         1.0      66% |            74% |            54% |            41%
+         1.5      56% |            73% |            54% |            40%
+         2.0      49% |            73% |            55% |            41%
+         3.0      35% |            75% |            56% |            42%
+[2y] tf 60 done 103s RSS 858 MB
+
+######## [2y] tf 240 long: in-zone minutes 126881, zone blocks 6519, candles 4386
+  adv5 at zone ENTRY (first in-zone minute, n 6519): q10 -28 q25 +55 median +110 q75 +159 q90 +207; share >= 100: 55%, >= 140: 34%, < 0: 13%
+  adv5 at in-zone minutes, strict n1: label=1 n 4980 median +113 [q25 +67, q75 +154] | label=0 n 121900 median +84 [q25 +23, q75 +129]; base rate P(1) 0.039
+    P(strict n1=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 252 / 0.000 (entry 7 / 0.000) | -200..-140: 1717 / 0.002 (entry 43 / 0.000) | -140..-100: 3510 / 0.006 (entry 114 / 0.000) | -100..0: 19072 / 0.024 (entry 712 / 0.048) | 0..100: 49850 / 0.032 (entry 2062 / 0.040) | 100..140: 26409 / 0.048 (entry 1393 / 0.056) | 140..200: 19782 / 0.059 (entry 1429 / 0.071) | >=200: 6288 / 0.076 (entry 758 / 0.108)
+    first strict n1=1 minute per block: 948 of 6519 blocks (15%); adv5 there median +156 [q25 +110, q75 +204]; minutes after zone entry median 2 (q75 12)
+  adv5 at in-zone minutes, strict n2: label=1 n 8041 median +109 [q25 +60, q75 +151] | label=0 n 118633 median +83 [q25 +22, q75 +129]; base rate P(1) 0.063
+    P(strict n2=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 252 / 0.000 (entry 7 / 0.000) | -200..-140: 1717 / 0.006 (entry 43 / 0.000) | -140..-100: 3510 / 0.023 (entry 114 / 0.009) | -100..0: 19053 / 0.046 (entry 711 / 0.082) | 0..100: 49752 / 0.052 (entry 2061 / 0.065) | 100..140: 26360 / 0.075 (entry 1391 / 0.090) | 140..200: 19753 / 0.090 (entry 1428 / 0.106) | >=200: 6277 / 0.113 (entry 758 / 0.145)
+    first strict n2=1 minute per block: 1336 of 6519 blocks (20%); adv5 there median +153 [q25 +108, q75 +202]; minutes after zone entry median 1 (q75 9)
+  adv15 at zone ENTRY (first in-zone minute, n 6519): q10 +31 q25 +75 median +121 q75 +165 q90 +206; share >= 100: 62%, >= 140: 39%, < 0: 4%
+  adv15 at in-zone minutes, strict n1: label=1 n 4980 median +124 [q25 +84, q75 +170] | label=0 n 121900 median +113 [q25 +76, q75 +155]; base rate P(1) 0.039
+    P(strict n1=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 9 / 0.000 (entry 2 / 0.000) | -200..-140: 45 / 0.000 (entry 1 / 0.000) | -140..-100: 176 / 0.091 (entry 7 / 0.000) | -100..0: 3342 / 0.039 (entry 283 / 0.032) | 0..100: 48234 / 0.033 (entry 2204 / 0.044) | 100..140: 32846 / 0.035 (entry 1509 / 0.056) | 140..200: 30706 / 0.045 (entry 1751 / 0.062) | >=200: 11522 / 0.060 (entry 761 / 0.102)
+    first strict n1=1 minute per block: 948 of 6519 blocks (15%); adv15 there median +160 [q25 +109, q75 +212]; minutes after zone entry median 2 (q75 12)
+  adv15 at in-zone minutes, strict n2: label=1 n 8041 median +122 [q25 +79, q75 +168] | label=0 n 118633 median +113 [q25 +76, q75 +154]; base rate P(1) 0.063
+    P(strict n2=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 9 / 0.000 (entry 2 / 0.000) | -200..-140: 45 / 0.000 (entry 1 / 0.000) | -140..-100: 176 / 0.136 (entry 7 / 0.000) | -100..0: 3342 / 0.063 (entry 283 / 0.049) | 0..100: 48131 / 0.058 (entry 2201 / 0.079) | 100..140: 32786 / 0.056 (entry 1507 / 0.078) | 140..200: 30693 / 0.071 (entry 1751 / 0.097) | >=200: 11492 / 0.090 (entry 761 / 0.139)
+    first strict n2=1 minute per block: 1336 of 6519 blocks (20%); adv15 there median +157 [q25 +107, q75 +206]; minutes after zone entry median 1 (q75 9)
+  --- excursion beyond the current 1-min low in 1-min ATR, by adv5 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |   6499               3.65  7.95 13.62 19.25  78%  66% |          3.02  6.12 10.53 14.19  76%  62% |    126031  2.63 11.24
+           adv < 0 |   1688               2.51  5.71 10.23 14.58  70%  56% |          2.68  5.52  9.22 12.70  74%  59% |     24306  2.23  9.12
+            0..100 |   3537               3.48  7.43 13.06 18.87  77%  64% |          2.93  5.86  9.89 13.64  75%  61% |     49526  2.55 11.15
+        adv >= 100 |   4499               3.74  8.26 14.13 19.66  77%  66% |          2.94  6.23 10.86 14.53  75%  62% |     52199  2.94 12.35
+        adv >= 140 |   3215               3.68  8.06 14.05 19.08  77%  65% |          2.87  6.12 10.86 14.73  74%  61% |     25950  2.96 12.50
+        adv >= 200 |   1387               3.36  7.42 14.51 20.79  73%  63% |          2.72  5.86 11.22 17.02  69%  58% |      6257  2.88 12.75
+      adv >= p80=141 |   3169               3.70  8.06 14.04 19.10  76%  65% |          2.87  6.11 10.86 14.80  74%  61% |     25259  2.95 12.49
+      adv >= p90=172 |   2185               3.60  7.69 14.22 19.19  76%  64% |          2.81  5.92 10.86 15.31  73%  59% |     12631  2.95 12.74
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 100 (n 4499 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      84% |            85% |            72% |            62%
+         1.0      77% |            86% |            73% |            63%
+         1.5      71% |            85% |            73% |            63%
+         2.0      66% |            85% |            73% |            63%
+         3.0      56% |            86% |            74% |            63%
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 140 (n 3215 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      83% |            86% |            73% |            62%
+         1.0      77% |            85% |            72% |            62%
+         1.5      71% |            85% |            73% |            62%
+         2.0      65% |            85% |            73% |            62%
+         3.0      55% |            86% |            73% |            62%
+  --- excursion beyond the current 1-min low in 1-min ATR, by adv15 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |   6499               3.65  7.95 13.62 19.25  78%  66% |          3.02  6.12 10.53 14.19  76%  62% |    126031  2.63 11.24
+           adv < 0 |    441               2.10  5.00  8.65 10.62  71%  52% |          3.15  5.80  9.01 11.75  81%  64% |      3494  1.36  6.50
+            0..100 |   3026               3.39  7.32 12.76 18.86  76%  64% |          2.87  5.81  9.73 13.79  76%  61% |     47860  2.54 10.50
+        adv >= 100 |   4588               3.75  8.19 14.22 19.56  77%  66% |          2.98  6.21 10.86 14.64  74%  62% |     74677  2.78 12.02
+        adv >= 140 |   3254               3.55  7.75 14.22 19.61  77%  65% |          2.93  5.99 10.63 14.34  75%  62% |     42015  2.70 12.35
+        adv >= 200 |   1327               2.96  6.63 14.47 20.35  74%  61% |          2.48  5.44 10.72 15.30  71%  56% |     11462  2.37 12.42
+      adv >= p80=166 |   2344               3.41  7.46 13.95 18.86  76%  64% |          2.75  5.74 10.21 13.93  74%  60% |     25245  2.66 12.29
+      adv >= p90=196 |   1415               3.01  6.64 14.40 20.19  74%  61% |          2.48  5.47 10.77 15.23  71%  56% |     12628  2.42 12.46
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 100 (n 4588 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      84% |            84% |            72% |            62%
+         1.0      77% |            85% |            73% |            62%
+         1.5      71% |            86% |            73% |            62%
+         2.0      66% |            85% |            73% |            61%
+         3.0      56% |            85% |            71% |            61%
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 140 (n 3254 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      84% |            85% |            72% |            60%
+         1.0      77% |            85% |            71% |            61%
+         1.5      71% |            85% |            72% |            61%
+         2.0      65% |            84% |            71% |            60%
+         3.0      55% |            85% |            71% |            59%
+
+######## [2y] tf 240 short: in-zone minutes 146703, zone blocks 6722, candles 4386
+  adv5 at zone ENTRY (first in-zone minute, n 6722): q10 -35 q25 +49 median +107 q75 +155 q90 +198; share >= 100: 54%, >= 140: 32%, < 0: 15%
+  adv5 at in-zone minutes, strict n1: label=1 n 6934 median +108 [q25 +65, q75 +146] | label=0 n 139769 median +86 [q25 +27, q75 +129]; base rate P(1) 0.047
+    P(strict n1=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 292 / 0.000 (entry 6 / 0.000) | -200..-140: 1999 / 0.008 (entry 60 / 0.033) | -140..-100: 4393 / 0.023 (entry 143 / 0.063) | -100..0: 20580 / 0.033 (entry 823 / 0.046) | 0..100: 57519 / 0.039 (entry 2076 / 0.051) | 100..140: 32486 / 0.060 (entry 1455 / 0.064) | 140..200: 23140 / 0.063 (entry 1520 / 0.066) | >=200: 6294 / 0.078 (entry 639 / 0.100)
+    first strict n1=1 minute per block: 989 of 6722 blocks (15%); adv5 there median +141 [q25 +95, q75 +186]; minutes after zone entry median 2 (q75 14)
+  adv5 at in-zone minutes, strict n2: label=1 n 10324 median +110 [q25 +69, q75 +147] | label=0 n 136379 median +85 [q25 +25, q75 +128]; base rate P(1) 0.070
+    P(strict n2=1 | adv5 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 292 / 0.003 (entry 6 / 0.000) | -200..-140: 1999 / 0.011 (entry 60 / 0.033) | -140..-100: 4393 / 0.029 (entry 143 / 0.084) | -100..0: 20580 / 0.043 (entry 823 / 0.055) | 0..100: 57519 / 0.059 (entry 2076 / 0.083) | 100..140: 32486 / 0.090 (entry 1455 / 0.107) | 140..200: 23140 / 0.097 (entry 1520 / 0.099) | >=200: 6294 / 0.116 (entry 639 / 0.150)
+    first strict n2=1 minute per block: 1376 of 6722 blocks (20%); adv5 there median +141 [q25 +99, q75 +186]; minutes after zone entry median 1 (q75 11)
+  adv15 at zone ENTRY (first in-zone minute, n 6722): q10 +31 q25 +73 median +117 q75 +159 q90 +197; share >= 100: 60%, >= 140: 35%, < 0: 5%
+  adv15 at in-zone minutes, strict n1: label=1 n 6934 median +124 [q25 +84, q75 +167] | label=0 n 139769 median +113 [q25 +78, q75 +153]; base rate P(1) 0.047
+    P(strict n1=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 14 / 0.071 (entry 3 / 0.333) | -200..-140: 38 / 0.105 (entry 3 / 0.000) | -140..-100: 171 / 0.029 (entry 15 / 0.067) | -100..0: 3834 / 0.054 (entry 290 / 0.072) | 0..100: 54370 / 0.039 (entry 2350 / 0.061) | 100..140: 40232 / 0.043 (entry 1701 / 0.057) | 140..200: 35841 / 0.055 (entry 1750 / 0.057) | >=200: 12203 / 0.073 (entry 610 / 0.080)
+    first strict n1=1 minute per block: 989 of 6722 blocks (15%); adv15 there median +142 [q25 +93, q75 +191]; minutes after zone entry median 2 (q75 14)
+  adv15 at in-zone minutes, strict n2: label=1 n 10324 median +125 [q25 +87, q75 +166] | label=0 n 136379 median +113 [q25 +77, q75 +152]; base rate P(1) 0.070
+    P(strict n2=1 | adv15 bin) in-zone minutes n / P (zone-entry minutes n / P): <-200: 14 / 0.071 (entry 3 / 0.333) | -200..-140: 38 / 0.105 (entry 3 / 0.000) | -140..-100: 171 / 0.029 (entry 15 / 0.067) | -100..0: 3834 / 0.071 (entry 290 / 0.107) | 0..100: 54370 / 0.056 (entry 2350 / 0.089) | 100..140: 40232 / 0.069 (entry 1701 / 0.081) | 140..200: 35841 / 0.083 (entry 1750 / 0.096) | >=200: 12203 / 0.103 (entry 610 / 0.143)
+    first strict n2=1 minute per block: 1376 of 6722 blocks (20%); adv15 there median +143 [q25 +97, q75 +189]; minutes after zone entry median 1 (q75 11)
+  --- excursion beyond the current 1-min high in 1-min ATR, by adv5 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |   6695               3.61  7.47 13.39 17.99  78%  67% |          3.12  6.13 10.20 13.98  77%  64% |    145736  2.81 10.74
+           adv < 0 |   1900               2.63  5.37  8.94 11.94  72%  59% |          2.92  5.27  8.38 11.34  76%  62% |     27011  2.47  8.71
+            0..100 |   3816               3.12  6.67 12.08 16.10  75%  62% |          2.81  5.61  9.28 12.42  74%  61% |     57135  2.73 10.28
+        adv >= 100 |   4528               3.85  8.16 14.33 19.77  80%  68% |          3.17  6.39 10.61 14.71  77%  64% |     61590  3.09 12.05
+        adv >= 140 |   3272               3.86  8.47 14.30 19.47  79%  68% |          3.22  6.61 10.92 14.95  76%  64% |     29277  3.23 12.62
+        adv >= 200 |   1312               3.83  7.91 13.79 19.17  80%  67% |          3.31  6.60 10.70 15.29  77%  64% |      6268  3.49 13.18
+      adv >= p80=140 |   3269               3.85  8.44 14.30 19.47  79%  68% |          3.22  6.62 10.91 14.95  76%  64% |     29185  3.23 12.62
+      adv >= p90=169 |   2201               3.84  7.96 14.22 19.83  78%  67% |          3.29  6.61 10.66 14.88  76%  64% |     14587  3.26 12.71
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 100 (n 4528 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      86% |            86% |            73% |            62%
+         1.0      80% |            85% |            73% |            61%
+         1.5      74% |            85% |            73% |            61%
+         2.0      68% |            85% |            72% |            61%
+         3.0      58% |            84% |            71% |            61%
+      delayed entry at current extreme + δ·ATR1 for adv5 >= 140 (n 3272 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      85% |            85% |            73% |            63%
+         1.0      79% |            86% |            74% |            62%
+         1.5      72% |            86% |            74% |            63%
+         2.0      68% |            86% |            72% |            62%
+         3.0      58% |            84% |            72% |            62%
+  --- excursion beyond the current 1-min high in 1-min ATR, by adv15 (one sample per block = first in-zone minute meeting the condition; 'all' = every in-zone minute)
+         condition | blocks to candle end: q50   q75   q90   q95  P>1  P>2 | next 60m: q50   q75   q90   q95  P>1  P>2 | all-min n   q50   q90
+       all in-zone |   6695               3.61  7.47 13.39 17.99  78%  67% |          3.12  6.13 10.20 13.98  77%  64% |    145736  2.81 10.74
+           adv < 0 |    498               2.32  4.94  7.61 10.07  68%  54% |          2.83  5.54  8.60 11.69  75%  60% |      3987  1.91  6.66
+            0..100 |   3237               3.12  6.25 11.35 15.58  75%  63% |          2.98  5.60  9.32 12.62  76%  63% |     53936  2.61  9.35
+        adv >= 100 |   4704               3.87  8.13 14.05 19.46  80%  68% |          3.13  6.38 10.60 14.48  78%  64% |     87813  3.02 11.67
+        adv >= 140 |   3211               3.87  8.21 14.44 19.83  79%  67% |          3.09  6.41 10.82 14.88  77%  63% |     47841  3.15 12.21
+        adv >= 200 |   1185               4.01  8.19 14.36 19.67  79%  68% |          3.17  6.68 10.55 14.36  77%  63% |     12156  3.27 11.56
+      adv >= p80=164 |   2302               3.91  8.18 14.35 19.46  78%  67% |          3.20  6.50 10.89 14.98  77%  63% |     29220  3.17 12.16
+      adv >= p90=193 |   1351               4.03  8.13 14.30 19.79  79%  68% |          3.19  6.66 10.69 14.42  77%  63% |     14615  3.29 11.66
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 100 (n 4704 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      86% |            86% |            73% |            62%
+         1.0      80% |            85% |            73% |            61%
+         1.5      74% |            85% |            72% |            60%
+         2.0      68% |            85% |            72% |            61%
+         3.0      58% |            85% |            72% |            62%
+      delayed entry at current extreme + δ·ATR1 for adv15 >= 140 (n 3211 blocks, horizon = candle end): P(filled) and P(price goes a further s·ATR1 beyond the fill | filled)
+           δ  P(fill) | s=1: P(stop) | s=2: P(stop) | s=3: P(stop)
+         0.5      86% |            85% |            72% |            62%
+         1.0      79% |            84% |            72% |            62%
+         1.5      73% |            85% |            73% |            62%
+         2.0      67% |            86% |            73% |            63%
+         3.0      57% |            85% |            73% |            63%
+[2y] tf 240 done 105s RSS 858 MB

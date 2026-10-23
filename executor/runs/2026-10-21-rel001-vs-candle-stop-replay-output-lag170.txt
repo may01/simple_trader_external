@@ -1,0 +1,280 @@
+trades 180995  window 1792527711754 -> 1792611793148 (23.4 h); feed gaps > 60 s: 2 [(1792551341442, 66), (1792600032027, 303)]
+events 62  live positions 58 matched 58
+book rows 80115 (snapshots 4)
+
+ACTUAL recorded (live candle stop): positions 58  net +240.37  stop 30 (-1973.91)  target 18 (+1056.46)  main_close 10 (+1157.82)  open 0
+
+placeholder release 1.0 % / live 0.2 %; fill model: stop fills at the crossing trade price; book lag 170 ms
+
+=== SIM live: candle stop (recorded) + 0.2 % placeholder  [reproduction of the running system] ===
+trades 58  net -18.51  gross profit +2215.24 (27)  gross loss -2233.74 (31)  win rate 47%  PF 0.99  avg hold 8.2 min  median 7.3
+  reversal     n= 11  pnl=+1256.83
+  stop         n= 30  pnl=-2225.93
+  target       n= 17  pnl=+950.60
+  risk/trade median 74.5 USDT (max 100.0); sum R +0.8, mean R +0.01; net bootstrap 90% CI [-1061, +1018]; P(net<0) 0.52; top-2 trades +313
+  stop distance median 0.0184 (0.149 %, 18 ticks) min 0.0096 max 0.0704; size median 4046; stop source {'candle': 58}
+  stop-outs n=30 mean -74.20 median -72.83 worst -103.85
+
+=== SIM release_001: order-book stop (rebuilt) + 1 % placeholder ===
+trades 55  net +250.44  gross profit +1012.44 (20)  gross loss -762.00 (35)  win rate 36%  PF 1.33  avg hold 7.0 min  median 3.4
+  open_at_end  n=  1  pnl=-17.75
+  reversal     n=  8  pnl=+347.12
+  stop         n= 32  pnl=-692.57
+  target       n= 14  pnl=+613.64
+  risk/trade median 26.1 USDT (max 100.0); sum R +43.4, mean R +0.79; net bootstrap 90% CI [-292, +834]; P(net<0) 0.24; top-2 trades +269
+  stop distance median 0.0065 (0.052 %, 7 ticks) min 0.0015 max 0.1268; size median 4040; stop source {'book': 42, 'placeholder': 11, 'placeholder(book:not_adverse_to_entry)': 2}
+  stop-outs n=32 mean -21.64 median -18.18 worst -78.78
+
+=== SIM book stop + 0.2 % placeholder (stop rule only) ===
+trades 59  net +273.41  gross profit +1636.06 (18)  gross loss -1362.65 (41)  win rate 31%  PF 1.20  avg hold 5.1 min  median 3.0
+  reversal     n=  6  pnl=+715.08
+  stop         n= 41  pnl=-1362.65
+  target       n= 12  pnl=+920.97
+  risk/trade median 25.7 USDT (max 100.0); sum R +64.0, mean R +1.08; net bootstrap 90% CI [-549, +1133]; P(net<0) 0.30; top-2 trades +328
+  stop distance median 0.0065 (0.051 %, 6 ticks) min 0.0015 max 0.0254; size median 4050; stop source {'book': 46, 'placeholder': 11, 'placeholder(book:not_adverse_to_entry)': 2}
+  stop-outs n=41 mean -33.24 median -18.23 worst -103.60
+
+=== SIM candle stop + 1 % placeholder (placeholder only) ===
+trades 58  net -18.51  gross profit +2215.24 (27)  gross loss -2233.74 (31)  win rate 47%  PF 0.99  avg hold 8.2 min  median 7.3
+  reversal     n= 11  pnl=+1256.83
+  stop         n= 30  pnl=-2225.93
+  target       n= 17  pnl=+950.60
+  risk/trade median 74.5 USDT (max 100.0); sum R +0.8, mean R +0.01; net bootstrap 90% CI [-1061, +1018]; P(net<0) 0.52; top-2 trades +313
+  stop distance median 0.0184 (0.149 %, 18 ticks) min 0.0096 max 0.0704; size median 4046; stop source {'candle': 58}
+  stop-outs n=30 mean -74.20 median -72.83 worst -103.85
+
+same-side fires skipped: {'live': 4, 'rel001': 7, 'book_p02': 3, 'candle_p1': 4}
+
+REPRODUCTION: actual vs sim-live per live position (stop, size, reason, pnl)
+  10-20 20:26:46 Buy  tf15  actual stop 12.1940 size    4093 exit 12.2395 pnl   +94.13 main_close | sim stop 12.1940 size    4093 exit 12.2380 pnl   +88.00 reversal  
+  10-20 20:31:50 Sell tf60  actual stop 12.2532 size    4090 exit 12.2525 pnl   -61.34 stop       | sim stop 12.2532 size    4089 exit 12.2540 pnl   -67.48 stop      
+  10-20 21:01:01 Sell tf240 actual stop 12.3286 size    4061 exit 12.3265 pnl   -40.61 stop       | sim stop 12.3286 size    4060 exit 12.3290 pnl   -50.76 stop      
+  10-20 21:26:04 Buy  tf15  actual stop 12.2880 size    4065 exit 12.2885 pnl   -40.65 stop       | sim stop 12.2880 size    4064 exit 12.2880 pnl   -42.68 stop      
+  10-20 23:03:55 Buy  tf15  actual stop 12.2931 size    4061 exit 12.2945 pnl   -48.73 stop       | sim stop 12.2931 size    4060 exit 12.2930 pnl   -54.81 stop      
+  10-20 23:09:00 Buy  tf60  actual stop 12.2736 size    4066 exit 12.3215 pnl  +146.37 main_close | sim stop 12.2736 size    4065 exit 12.3220 pnl  +148.36 reversal  
+  10-20 23:23:52 Sell tf15  actual stop 12.3481 size    3757 exit 12.3465 pnl   -93.93 stop       | sim stop 12.3481 size    3757 exit 12.3490 pnl  -103.32 stop      
+  10-20 23:47:07 Sell tf15  actual stop 12.3611 size    4050 exit 12.3100 pnl  +119.48 target     | sim stop 12.3611 size    4049 exit 12.3100 pnl  +119.44 reversal    <-- differs
+  10-21 00:02:38 Buy  tf15  actual stop 12.2921 size    4064 exit 12.3505 pnl  +154.43 main_close | sim stop 12.2921 size    4062 exit 12.3510 pnl  +156.40 reversal  
+  10-21 00:15:12 Sell tf15  actual stop 12.3669 size    4058 exit 12.3595 pnl   -36.52 stop       | sim stop 12.3669 size    4056 exit 12.3670 pnl   -66.93 stop      
+  10-21 00:19:14 Sell tf15  actual stop 12.3750 size    4055 exit 12.3725 pnl   -68.93 stop       | sim stop 12.3750 size    4052 exit 12.3750 pnl   -79.01 stop      
+  10-21 01:02:05 Buy  tf15  actual stop 12.3442 size    4050 exit 12.3455 pnl   -64.80 stop       | sim stop 12.3442 size    4047 exit 12.3440 pnl   -70.82 stop      
+  10-21 01:24:15 Sell tf15  actual stop 12.3753 size    4049 exit 12.3705 pnl   -60.74 stop       | sim stop 12.3753 size    4046 exit 12.3760 pnl   -82.94 stop      
+  10-21 02:24:04 Buy  tf15  actual stop 12.3206 size    4053 exit 12.3615 pnl  +105.38 main_close | sim stop 12.3206 size    4049 exit 12.3610 pnl  +103.25 reversal  
+  10-21 02:38:08 Sell tf15  actual stop 12.3834 size    4050 exit 12.3835 pnl   -97.19 stop       | sim stop 12.3834 size    4045 exit 12.3840 pnl   -99.11 stop      
+  10-21 02:51:05 Sell tf15  actual stop 12.3946 size    4039 exit 12.3490 pnl  +131.25 target     | sim stop 12.3946 size    4034 exit 12.3480 pnl  +135.14 target    
+  10-21 03:18:01 Buy  tf15  actual stop 12.3271 size    4057 exit 12.3315 pnl   -44.62 stop       | sim stop 12.3271 size    4052 exit 12.3270 pnl   -62.81 stop      
+  10-21 03:34:02 Sell tf15  actual stop 12.3795 size    4047 exit 12.3420 pnl  +103.19 target     | sim stop 12.3795 size    4042 exit 12.3430 pnl   +99.02 target    
+  10-21 03:52:07 Sell tf15  actual stop 12.3735 size    4054 exit 12.3370 pnl   +83.11 target     | sim stop 12.3735 size    4049 exit 12.3360 pnl   +87.05 target    
+  10-21 04:10:40 Sell tf15  actual stop 12.3683 size    4060 exit 12.3460 pnl   +18.27 target     | sim stop 12.3683 size    4055 exit 12.3450 pnl   +22.30 target    
+  10-21 05:03:21 Sell tf15  actual stop 12.3790 size    4057 exit 12.3540 pnl   +34.48 target     | sim stop 12.3790 size    4052 exit 12.3540 pnl   +34.44 target    
+  10-21 05:16:51 Buy  tf15  actual stop 12.3130 size    4068 exit 12.3430 pnl   +46.78 target     | sim stop 12.3130 size    4063 exit 12.3420 pnl   +42.66 target    
+  10-21 05:36:00 Sell tf15  actual stop 12.3587 size    4067 exit 12.3085 pnl  +130.15 main_close | sim stop 12.3587 size    4062 exit 12.3100 pnl  +123.89 reversal  
+  10-21 05:41:22 Buy  tf60  actual stop 12.2973 size    4082 exit 12.2995 pnl   -44.90 stop       | sim stop 12.2973 size    4077 exit 12.2970 pnl   -55.04 stop      
+  10-21 05:43:07 Buy  tf15  actual stop 12.2707 size    4087 exit 12.2715 pnl   -81.73 stop       | sim stop 12.2707 size    4081 exit 12.2700 pnl   -87.74 stop      
+  10-21 06:17:03 Sell tf15  actual stop 12.3124 size    4080 exit 12.3115 pnl   -44.88 stop       | sim stop 12.3124 size    4074 exit 12.3130 pnl   -50.93 stop      
+  10-21 06:35:33 Sell tf60  actual stop 12.3665 size    4062 exit 12.3185 pnl  +129.99 main_close | sim stop 12.3665 size    4056 exit 12.3190 pnl  +127.76 reversal  
+  10-21 06:54:22 Buy  tf15  actual stop 12.3059 size    4078 exit 12.3075 pnl   -48.93 stop       | sim stop 12.3059 size    4071 exit 12.3050 pnl   -59.03 stop      
+  10-21 07:12:35 Sell tf15  actual stop 12.3502 size    4070 exit 12.3505 pnl   -52.91 stop       | sim stop 12.3502 size    4063 exit 12.3510 pnl   -54.85 stop      
+  10-21 08:01:04 Buy  tf15  actual stop 12.4006 size    4042 exit 12.4005 pnl   -56.59 stop       | sim stop 12.4006 size    4036 exit 12.4000 pnl   -58.52 stop      
+  10-21 08:18:07 Buy  tf60  actual stop 12.3632 size    4052 exit 12.3645 pnl   -56.72 stop       | sim stop 12.3632 size    4045 exit 12.3630 pnl   -62.70 stop      
+  10-21 08:35:50 Buy  tf15  actual stop 12.3479 size    4053 exit 12.3890 pnl   +91.20 target     | sim stop 12.3479 size    4046 exit 12.3910 pnl   +99.14 target    
+  10-21 08:52:08 Sell tf15  actual stop 12.4519 size    1530 exit 12.3730 pnl   +20.65 target     | sim stop 12.4519 size    1530 exit 12.3720 pnl   +22.18 target    
+  10-21 09:17:34 Sell tf60  actual stop 12.4261 size    4045 exit 12.3895 pnl   +64.72 main_close | sim stop 12.4261 size    4039 exit 12.3890 pnl   +66.64 reversal  
+  10-21 09:40:42 Buy  tf15  actual stop 12.3682 size    4054 exit 12.3685 pnl   -72.97 stop       | sim stop 12.3682 size    4047 exit 12.3680 pnl   -74.88 stop      
+  10-21 10:04:13 Buy  tf60  actual stop 12.3090 size    4069 exit 12.3095 pnl   -89.52 stop       | sim stop 12.3090 size    4062 exit 12.3090 pnl   -91.40 stop      
+  10-21 10:36:12 Sell tf15  actual stop 12.3486 size    4065 exit 12.3485 pnl   -69.11 stop       | sim stop 12.3486 size    4059 exit 12.3490 pnl   -71.03 stop      
+  10-21 11:02:00 Sell tf15  actual stop 12.3661 size    4054 exit 12.3635 pnl   -28.38 stop       | sim stop 12.3661 size    4048 exit 12.3670 pnl   -42.50 stop      
+  10-21 11:06:01 Sell tf60  actual stop 12.3867 size    4050 exit 12.3865 pnl   -76.94 stop       | sim stop 12.3867 size    4042 exit 12.3870 pnl   -78.82 stop      
+  10-21 11:29:05 Sell tf15  actual stop 12.4261 size    4033 exit 12.3960 pnl   +50.42 target     | sim stop 12.4261 size    4026 exit 12.3940 pnl   +58.37 target    
+  10-21 11:39:07 Buy  tf15  actual stop 12.3732 size    4043 exit 12.4145 pnl  +121.29 main_close | sim stop 12.3732 size    4036 exit 12.4120 pnl  +110.99 reversal  
+  10-21 11:54:06 Sell tf15  actual stop 12.4327 size    4039 exit 12.3940 pnl   +70.68 target     | sim stop 12.4327 size    4032 exit 12.3950 pnl   +66.52 target    
+  10-21 12:32:02 Buy  tf15  actual stop 12.3702 size    4050 exit 12.3950 pnl   +38.48 target     | sim stop 12.3702 size    4043 exit 12.3950 pnl   +38.41 target    
+  10-21 12:51:33 Sell tf15  actual stop 12.4332 size    4042 exit 12.4275 pnl   -48.51 stop       | sim stop 12.4332 size    4035 exit 12.4340 pnl   -74.64 stop      
+  10-21 13:02:12 Sell tf240 actual stop 12.4678 size    4031 exit 12.4655 pnl   -88.69 stop       | sim stop 12.4678 size    4022 exit 12.4680 pnl   -98.55 stop      
+  10-21 13:30:12 Sell tf60  actual stop 12.4839 size    1420 exit 12.4190 pnl    -7.81 target     | sim stop 12.4839 size    1420 exit 12.4190 pnl    -7.81 target    
+  10-21 13:33:49 Buy  tf60  actual stop 12.3409 size    1903 exit 12.3415 pnl   -98.95 stop       | sim stop 12.3409 size    1903 exit 12.3400 pnl  -101.81 stop      
+  10-21 13:53:02 Sell tf15  actual stop 12.4363 size    3599 exit 12.3655 pnl  +154.77 main_close | sim stop 12.4363 size    3599 exit 12.3650 pnl  +156.57 reversal  
+  10-21 14:02:52 Buy  tf15  actual stop 12.3189 size    2461 exit 12.3650 pnl   +13.54 target     | sim stop 12.3189 size    2461 exit 12.3660 pnl   +16.00 target    
+  10-21 14:16:01 Sell tf15  actual stop 12.4240 size    3919 exit 12.4245 pnl  -101.89 stop       | sim stop 12.4240 size    3919 exit 12.4250 pnl  -103.85 stop      
+  10-21 14:38:10 Sell tf15  actual stop 12.4832 size    3057 exit 12.4390 pnl   +35.15 target     | sim stop 12.4832 size    3057 exit 12.4390 pnl   +35.15 target    
+  10-21 15:21:46 Buy  tf15  actual stop 12.5269 size    2348 exit 12.6080 pnl   +90.41 target     | sim stop 12.5269 size    2348 exit 12.6050 pnl   +83.37 target    
+  10-21 16:07:05 Buy  tf15  actual stop 12.6458 size    3959 exit 12.6990 pnl  +112.83 target     | sim stop 12.6458 size    3950 exit 12.6990 pnl  +112.56 target    
+  10-21 16:37:08 Buy  tf15  actual stop 12.6420 size    1741 exit 12.7020 pnl    +4.35 target     | sim stop 12.6420 size    1741 exit 12.7030 pnl    +6.09 target    
+  10-21 18:53:06 Buy  tf15  actual stop 12.6920 size    2987 exit 12.6925 pnl   -98.56 stop       | sim stop 12.6920 size    2987 exit 12.6920 pnl  -100.05 stop      
+  10-21 19:01:11 Buy  tf60  actual stop 12.6543 size    3959 exit 12.6575 pnl   -63.34 stop       | sim stop 12.6543 size    3949 exit 12.6540 pnl   -77.01 stop      
+  10-21 19:05:08 Buy  tf15  actual stop 12.6038 size    2096 exit 12.6785 pnl   +56.58 main_close | sim stop 12.6038 size    2096 exit 12.6780 pnl   +55.54 reversal  
+  10-21 19:17:42 Sell tf15  actual stop 12.7035 size    3846 exit 12.7015 pnl   -92.31 stop       | sim stop 12.7035 size    3846 exit 12.7040 pnl  -101.92 stop      
+  matched 58/58: stop exact 58, size within 1 % 58, same close reason 57; actual net +240.37 vs sim-live on the same positions -18.51; sim-live total -18.51
+
+BOOK GATE: rebuilt best bid/ask at each live open vs the recorded entry (paper entry = mid rounded to the grid)
+  50/58 entries within 1 tick of the rebuilt mid; |offset| median 0.00 ticks, max 6.00; rebuilt spread at fire: median 1.0 ticks
+
+RELEASE_001 STOP PER FIRE (rebuilt book walk)
+fire            side  tf strk    price       bb       ba rate/min m_left  tgt_qty lvls walk     stop src                          dist_t | live stop dist_t
+10-20 20:26:46  Buy   15    4  12.2170  12.2160  12.2170    540.0    1.0      540 1009    4  12.2130 book                              4 |   12.1940     22
+10-20 20:31:49  Sell  60    2  12.2380  12.2390  12.2400    129.1    2.0      258  977    2  12.2410 book                              3 |   12.2532     16
+10-20 21:01:00  Sell 240    2  12.3170  12.3160  12.3170   3005.4    3.0     9016  929   13  12.3290 book                             13 |   12.3286     12
+10-20 21:26:04  Buy   15    2  12.2980  12.2980  12.2990    367.9    1.0      368 1068    3  12.2960 book                              3 |   12.2880     11
+10-20 23:03:55  Buy   15    1  12.3070  12.3060  12.3070    118.5    2.0      237 1116    1  12.1834 placeholder                     123 |   12.2931     13
+10-20 23:23:51  Sell  15    2  12.3220  12.3210  12.3220   5410.1    1.0     5410 1000   15  12.3360 book                             14 |   12.3481     27
+10-20 23:47:07  Sell  15    2  12.3390  12.3390  12.3400    401.1    1.0      401  997    5  12.3440 book                              5 |   12.3611     22
+10-21 00:02:36  Buy   15    2  12.3100  12.3080  12.3090    371.1    1.0      371 1149    1  12.1894 placeholder                     123 |   12.2921     20
+10-21 00:15:10  Sell  15    1  12.3510  12.3500  12.3510   1175.1    2.0     2350  993   13  12.3630 book                             12 |   12.3669     16
+10-21 00:19:14  Sell  15    4  12.3560  12.3550  12.3560   1293.5    1.0     1294  992    5  12.3600 book                              5 |   12.3750     19
+10-21 01:02:05  Buy   15    2  12.3620  12.3610  12.3620    254.1    1.0      254 1196    1  12.2379 placeholder                     124 |   12.3442     17
+10-21 01:24:15  Sell  15    1  12.3550  12.3570  12.3580    697.5    2.0     1395 1001    6  12.3630 book                              8 |   12.3753     20
+10-21 02:24:04  Buy   15    2  12.3350  12.3350  12.3360    713.9    1.0      714 1186    5  12.3310 book                              5 |   12.3206     15
+10-21 02:26:30  Buy   60    5  12.3380  12.3390  12.3400    325.6    1.0      326 1190    3  12.3360 book                              2 |    (not opened)
+10-21 02:38:06  Sell  15    1  12.3610  12.3610  12.3620    155.2    2.0      310 1005    1  12.4831 placeholder                     124 |   12.3834     24
+10-21 03:18:01  Buy   15    2  12.3420  12.3420  12.3430   2400.9    1.0     2401 1200    6  12.3370 book                              5 |   12.3271     15
+10-21 03:34:02  Sell  15    3  12.3670  12.3670  12.3680    115.4    1.0      115 1027    1  12.4912 placeholder                     124 |   12.3795     12
+10-21 03:52:06  Sell  15    3  12.3570  12.3570  12.3580   4059.5    1.0     4059 1034    9  12.3660 book                              8 |   12.3735     16
+10-21 04:10:40  Sell  15    2  12.3480  12.3500  12.3510    173.7    1.0      174 1047    1  12.4740 placeholder                     124 |   12.3683     18
+10-21 05:03:21  Sell  15    3  12.3620  12.3620  12.3630    214.1    1.0      214 1040    1  12.4861 placeholder                     124 |   12.3790     17
+10-21 05:16:51  Buy   15    2  12.3320  12.3310  12.3320   4492.5    1.0     4493 1200    8  12.3240 book                              8 |   12.3130     18
+10-21 05:36:00  Sell  15    2  12.3410  12.3400  12.3410    236.7    1.0      237 1058    2  12.3420 book                              2 |   12.3587     18
+10-21 05:41:20  Buy   60    2  12.3100  12.3080  12.3090    951.9    2.0     1904 1180    5  12.3040 book                              6 |   12.2973     13
+10-21 05:43:07  Buy   15    3  12.2910  12.2910  12.2920   1103.0    1.0     1103 1172    4  12.2880 book                              3 |   12.2707     21
+10-21 06:17:02  Sell  15    2  12.3010  12.3000  12.3010    208.0    1.0      208 1080    4  12.3040 book                              4 |   12.3124     12
+10-21 06:35:32  Sell  60    4  12.3500  12.3500  12.3510    375.1    1.0      375 1047    2  12.3520 book                              2 |   12.3665     16
+10-21 06:54:20  Buy   15    4  12.3190  12.3180  12.3190    141.1    1.0      141 1191    1  12.1963 placeholder                     123 |   12.3059     14
+10-21 07:12:34  Sell  15    3  12.3370  12.3370  12.3380    242.1    1.0      242 1057    2  12.3390 book                              2 |   12.3502     13
+10-21 08:01:04  Buy   15    2  12.4150  12.4140  12.4150    499.4    1.0      499 1326    2  12.4130 book                              2 |   12.4006     14
+10-21 08:18:07  Buy   60    3  12.3780  12.3780  12.3790    378.7    1.0      379 1295    1  12.2547 placeholder                     124 |   12.3632     15
+10-21 08:52:08  Sell  15    4  12.3870  12.3860  12.3870   1923.4    1.0     1923 1105    7  12.3930 book                              7 |   12.4519     65
+10-21 09:17:33  Sell  60    1  12.4060  12.4050  12.4060    899.6    3.0     2699 1094    8  12.4130 book                              8 |   12.4261     21
+10-21 09:40:40  Buy   15    2  12.3890  12.3890  12.3900    462.3    1.0      462 1298    3  12.2626 placeholder(book:not_adverse_to_entry)    124 |   12.3682     18
+10-21 10:36:11  Sell  15    4  12.3290  12.3310  12.3320    372.4    1.0      372 1149    2  12.3330 book                              2 |   12.3486     17
+10-21 11:02:00  Sell  15    2  12.3560  12.3560  12.3570    791.6    1.0      792 1133    2  12.3580 book                              2 |   12.3661     10
+10-21 11:06:01  Sell  60    2  12.3680  12.3670  12.3680   1430.7    2.0     2861 1132    8  12.3750 book                              8 |   12.3867     19
+10-21 11:29:05  Sell  15    6  12.4080  12.4080  12.4090    311.0    1.0      311 1108    2  12.4100 book                              2 |   12.4261     18
+10-21 11:39:07  Buy   15    1  12.3850  12.3850  12.3860    261.3    2.0      523 1302    4  12.3820 book                              2 |   12.3732     11
+10-21 11:54:05  Sell  15    3  12.4120  12.4140  12.4150     71.5    1.0       71 1104    1  12.5356 placeholder                     124 |   12.4327     21
+10-21 12:32:02  Buy   15    3  12.3850  12.3850  12.3860    596.1    1.0      596 1300    2  12.3840 book                              2 |   12.3702     15
+10-21 12:51:33  Sell  15    3  12.4150  12.4150  12.4160   1697.6    1.0     1698 1108    7  12.4220 book                              7 |   12.4332     18
+10-21 13:02:11  Sell 240    2  12.4430  12.4430  12.4440    623.6    3.0     1871 1099    6  12.4490 book                              5 |   12.4678     24
+10-21 13:30:12  Sell  60   27  12.4100  12.4130  12.4140    376.8    1.0      377 1129    2  12.4150 book                              1 |   12.4839     70
+10-21 13:33:48  Buy   60    1  12.3940  12.3930  12.3940   3123.5    3.0     9371 1372   20  12.3740 book                             19 |   12.3409     53
+10-21 13:53:02  Sell  15    2  12.4080  12.4080  12.4090    875.6    1.0      876 1122    2  12.4100 book                              2 |   12.4363     28
+10-21 14:02:50  Buy   15    1  12.3650  12.3650  12.3660    777.0    2.0     1554 1364    5  12.2359 placeholder(book:not_adverse_to_entry)    124 |   12.3189     41
+10-21 14:16:01  Sell  15    2  12.3980  12.3980  12.3990    649.4    1.0      649 1123    5  12.4030 book                              5 |   12.4240     26
+10-21 14:38:10  Sell  15    6  12.4500  12.4500  12.4510   1256.2    1.0     1256 1104    7  12.4570 book                              7 |   12.4832     33
+10-21 15:21:46  Buy   15    4  12.5700  12.5690  12.5700   2187.7    1.0     2188 1518    8  12.5620 book                              8 |   12.5269     43
+10-21 16:07:05  Buy   15    2  12.6710  12.6700  12.6710    805.1    1.0      805 1583    4  12.6670 book                              4 |   12.6458     25
+10-21 16:37:08  Buy   15    6  12.7000  12.6990  12.7000    872.9    1.0      873 1035    5  12.6950 book                              5 |   12.6420     57
+10-21 18:53:05  Buy   15    4  12.7260  12.7250  12.7260   1300.2    1.0     1300 1174    7  12.7190 book                              7 |   12.6920     33
+10-21 19:01:11  Buy   60    2  12.6740  12.6730  12.6740    597.7    2.0     1195 1158    2  12.6720 book                              2 |   12.6543     19
+10-21 19:05:08  Buy   15    4  12.6520  12.6500  12.6510   1971.1    1.0     1971 1153    7  12.6440 book                              8 |   12.6038     48
+10-21 19:17:40  Sell  15    2  12.6780  12.6780  12.6790     92.0    1.0       92 1087    1  12.8043 placeholder                     127 |   12.7035     26
+
+TRANSITIONS live -> rel001 (same opening fire)
+  not_opened  -> stop        n= 1  pnl live    +0.00  rel001    -8.09  delta    -8.09
+  reversal    -> not_opened  n= 1  pnl live  +148.36  rel001    +0.00  delta  -148.36
+  reversal    -> reversal    n= 4  pnl live  +496.05  rel001  +370.43  delta  -125.62
+  reversal    -> stop        n= 6  pnl live  +612.41  rel001  -112.64  delta  -725.06
+  stop        -> not_opened  n= 1  pnl live   -91.40  rel001    +0.00  delta   +91.40
+  stop        -> open_at_end n= 1  pnl live  -101.92  rel001   -17.75  delta   +84.18
+  stop        -> reversal    n= 4  pnl live  -303.84  rel001   -23.32  delta  +280.52
+  stop        -> stop        n=22  pnl live -1611.26  rel001  -541.95  delta +1069.31
+  stop        -> target      n= 2  pnl live  -117.51  rel001   +37.18  delta  +154.68
+  target      -> not_opened  n= 2  pnl live  +234.28  rel001    +0.00  delta  -234.28
+  target      -> stop        n= 3  pnl live   +56.66  rel001   -29.88  delta   -86.54
+  target      -> target      n=12  pnl live  +659.66  rel001  +576.46  delta   -83.20
+  paired delta sum +268.95 over 59 fires; bootstrap 90% CI [-629, +1124]; P(delta<0) 0.30
+  first half: n=29 delta -52.30
+  second half: n=30 delta +321.25
+  tf 15: n=45 live +330.11 rel001 +361.72 delta +31.61
+  tf 60: n=12 live -199.31 rel001 -38.37 delta +160.95
+  tf 240: n=2 live -149.31 rel001 -72.92 delta +76.39
+
+TRANSITIONS live -> book_p02 (same opening fire)
+  not_opened  -> stop        n= 2  pnl live    +0.00  book_p02   -40.58  delta   -40.58
+  reversal    -> reversal    n= 5  pnl live  +644.41  book_p02  +644.06  delta    -0.35
+  reversal    -> stop        n= 6  pnl live  +612.41  book_p02  -112.81  delta  -725.22
+  stop        -> reversal    n= 1  pnl live   -59.03  book_p02   +71.03  delta  +130.06
+  stop        -> stop        n=28  pnl live -2104.20  book_p02 -1066.10  delta +1038.11
+  stop        -> target      n= 1  pnl live   -62.70  book_p02  +171.67  delta  +234.37
+  target      -> not_opened  n= 1  pnl live   +99.14  book_p02    +0.00  delta   -99.14
+  target      -> stop        n= 5  pnl live  +207.80  book_p02  -143.16  delta  -350.96
+  target      -> target      n=11  pnl live  +643.67  book_p02  +749.30  delta  +105.64
+  paired delta sum +291.92 over 60 fires; bootstrap 90% CI [-618, +1179]; P(delta<0) 0.30
+  first half: n=30 delta +119.42
+  second half: n=30 delta +172.50
+  tf 15: n=45 live +330.11 book_p02 +141.95 delta -188.16
+  tf 60: n=13 live -199.31 book_p02 +204.43 delta +403.75
+  tf 240: n=2 live -149.31 book_p02 -72.97 delta +76.33
+
+TRANSITIONS live -> candle_p1 (same opening fire)
+  reversal    -> reversal    n=11  pnl live +1256.83  candle_p1 +1256.83  delta    +0.00
+  stop        -> stop        n=30  pnl live -2225.93  candle_p1 -2225.93  delta    +0.00
+  target      -> target      n=17  pnl live  +950.60  candle_p1  +950.60  delta    +0.00
+  paired delta sum +0.00 over 58 fires; bootstrap 90% CI [+0, +0]; P(delta<0) 0.00
+  first half: n=29 delta +0.00
+  second half: n=29 delta +0.00
+  tf 15: n=45 live +330.11 candle_p1 +330.11 delta +0.00
+  tf 60: n=11 live -199.31 candle_p1 -199.31 delta +0.00
+  tf 240: n=2 live -149.31 candle_p1 -149.31 delta +0.00
+
+PER-FIRE (live sim | release_001 sim)
+open            side  tf    entry |   stop_l reason_l      pnl_l   hold |   stop_r src          reason_r      pnl_r   hold
+10-20 20:26:46  Buy   15  12.2165 |  12.1940 reversal     +88.00    5.0 |  12.2130 book         reversal     +88.00    5.0
+10-20 20:31:49  Sell  60  12.2375 |  12.2532 stop         -67.48    1.6 |  12.2410 book         stop         -14.31    0.1
+10-20 21:01:00  Sell 240  12.3165 |  12.3286 stop         -50.76   14.7 |  12.3290 book         stop         -50.78   14.7
+10-20 21:26:04  Buy   15  12.2985 |  12.2880 stop         -42.68    6.5 |  12.2960 book         stop         -10.17    0.1
+10-20 23:03:55  Buy   15  12.3065 |  12.2931 stop         -54.81    3.7 |  12.1834 placeholder  target        +2.84   12.7
+10-20 23:09:00  Buy   60  12.2855 |  12.2736 reversal    +148.36   14.9 |                                                 (skip)
+10-20 23:23:51  Sell  15  12.3215 |  12.3481 stop        -103.32   22.0 |  12.3360 book         stop         -58.85    1.6
+10-20 23:47:07  Sell  15  12.3395 |  12.3611 reversal    +119.44   15.5 |  12.3440 book         stop         -18.23    1.3
+10-21 00:02:36  Buy   15  12.3125 |  12.2921 reversal    +156.40   12.6 |  12.1894 placeholder  reversal     +31.27   12.6
+10-21 00:15:10  Sell  15  12.3505 |  12.3669 stop         -66.93    0.8 |  12.3630 book         stop         -50.59    0.8
+10-21 00:19:14  Sell  15  12.3555 |  12.3750 stop         -79.01   11.8 |  12.3600 book         stop         -18.20    1.6
+10-21 01:02:05  Buy   15  12.3615 |  12.3442 stop         -70.82    6.4 |  12.2379 placeholder  reversal      -5.26   22.2
+10-21 01:24:15  Sell  15  12.3555 |  12.3753 stop         -82.94    3.8 |  12.3630 book         stop         -30.32    3.0
+10-21 02:24:04  Buy   15  12.3355 |  12.3206 reversal    +103.25   14.0 |  12.3310 book         stop         -18.22    1.5
+10-21 02:26:30  Buy   60  12.3380 |                                    (skip) |  12.3360 book         stop          -8.09    0.0
+10-21 02:38:06  Sell  15  12.3595 |  12.3834 stop         -99.11   11.9 |  12.4831 placeholder  reversal     +14.16   39.9
+10-21 02:51:05  Sell  15  12.3815 |  12.3946 target      +135.14   12.0 |                                                 (skip)
+10-21 03:18:01  Buy   15  12.3425 |  12.3271 stop         -62.81    1.9 |  12.3370 book         stop         -22.25    1.2
+10-21 03:34:02  Sell  15  12.3675 |  12.3795 target       +99.02    6.6 |  12.4912 placeholder  target       +19.81    6.6
+10-21 03:52:06  Sell  15  12.3575 |  12.3735 target       +87.05    8.1 |  12.3660 book         target       +86.86    8.1
+10-21 04:10:40  Sell  15  12.3505 |  12.3683 target       +22.30    7.5 |  12.4740 placeholder  target        +4.45    7.5
+10-21 05:03:21  Sell  15  12.3625 |  12.3790 target       +34.44    6.3 |  12.4861 placeholder  target        +6.88    6.3
+10-21 05:16:51  Buy   15  12.3315 |  12.3130 target       +42.66    2.4 |  12.3240 book         target       +42.55    2.4
+10-21 05:36:00  Sell  15  12.3405 |  12.3587 reversal    +123.89    5.3 |  12.3420 book         reversal    +123.57    5.3
+10-21 05:41:20  Buy   60  12.3105 |  12.2973 stop         -55.04    0.2 |  12.3040 book         stop         -26.43    0.2
+10-21 05:43:07  Buy   15  12.2915 |  12.2707 stop         -87.74   18.5 |  12.2880 book         stop         -14.25    0.0
+10-21 06:17:02  Sell  15  12.3005 |  12.3124 stop         -50.93   12.0 |  12.3040 book         stop         -14.24    7.0
+10-21 06:35:32  Sell  60  12.3505 |  12.3665 reversal    +127.76   18.8 |  12.3520 book         reversal    +127.60   18.8
+10-21 06:54:20  Buy   15  12.3195 |  12.3059 stop         -59.03    5.7 |  12.1963 placeholder  reversal     +14.21   18.2
+10-21 07:12:34  Sell  15  12.3375 |  12.3502 stop         -54.85    9.3 |  12.3390 book         stop          -6.09    1.5
+10-21 08:01:04  Buy   15  12.4145 |  12.4006 stop         -58.52    1.4 |  12.4130 book         stop          -6.05    0.1
+10-21 08:18:07  Buy   60  12.3785 |  12.3632 stop         -62.70   15.9 |  12.2547 placeholder  target       +34.33   33.2
+10-21 08:35:50  Buy   15  12.3665 |  12.3479 target       +99.14    8.8 |                                                 (skip)
+10-21 08:52:08  Sell  15  12.3865 |  12.4519 target       +22.18    5.2 |  12.3930 book         target       +58.66    5.2
+10-21 09:17:33  Sell  60  12.4055 |  12.4261 reversal     +66.64   23.1 |  12.4130 book         stop         -30.31    1.8
+10-21 09:40:40  Buy   15  12.3865 |  12.3682 stop         -74.88    7.8 |  12.2626 placeholder( reversal     -46.42   55.5
+10-21 10:04:13  Buy   60  12.3315 |  12.3090 stop         -91.40   10.3 |                                                 (skip)
+10-21 10:36:11  Sell  15  12.3315 |  12.3486 stop         -71.03    8.5 |  12.3330 book         stop          -6.09    5.4
+10-21 11:02:00  Sell  15  12.3565 |  12.3661 stop         -42.50    2.5 |  12.3580 book         stop          -6.08    0.3
+10-21 11:06:01  Sell  60  12.3675 |  12.3867 stop         -78.82   16.9 |  12.3750 book         stop         -30.38    9.0
+10-21 11:29:05  Sell  15  12.4085 |  12.4261 target       +58.37    7.4 |  12.4100 book         stop          -6.05    1.1
+10-21 11:39:07  Buy   15  12.3845 |  12.3732 reversal    +110.99   15.0 |  12.3820 book         stop         -10.11    0.5
+10-21 11:54:05  Sell  15  12.4115 |  12.4327 target       +66.52    7.3 |  12.5356 placeholder  target       +13.29    7.3
+10-21 12:32:02  Buy   15  12.3855 |  12.3702 target       +38.41    2.3 |  12.3840 book         target       +38.41    2.3
+10-21 12:51:33  Sell  15  12.4155 |  12.4332 stop         -74.64    9.2 |  12.4220 book         stop         -26.23    5.0
+10-21 13:02:11  Sell 240  12.4435 |  12.4678 stop         -98.55    2.2 |  12.4490 book         stop         -22.14    0.1
+10-21 13:30:12  Sell  60  12.4135 |  12.4839 target        -7.81    1.0 |  12.4150 book         stop          -6.05    0.1
+10-21 13:33:48  Buy   60  12.3935 |  12.3409 stop        -101.81    3.1 |  12.3740 book         stop         -78.78    0.8
+10-21 13:53:02  Sell  15  12.4085 |  12.4363 reversal    +156.57    9.8 |  12.4100 book         stop          -6.05    3.8
+10-21 14:02:50  Buy   15  12.3595 |  12.3189 target       +16.00    6.9 |  12.2359 placeholder( target        +5.26    6.9
+10-21 14:16:01  Sell  15  12.3985 |  12.4240 stop        -103.85    7.7 |  12.4030 book         stop         -18.16    6.3
+10-21 14:38:10  Sell  15  12.4505 |  12.4832 target       +35.15    3.8 |  12.4570 book         target       +46.20    3.8
+10-21 15:21:46  Buy   15  12.5695 |  12.5269 target       +83.37    3.4 |  12.5620 book         target      +141.35    3.4
+10-21 16:07:05  Buy   15  12.6705 |  12.6458 target      +112.56    3.4 |  12.6670 book         target      +112.73    3.4
+10-21 16:37:08  Buy   15  12.6995 |  12.6420 target        +6.09    3.4 |  12.6950 book         stop         -17.78    0.1
+10-21 18:53:05  Buy   15  12.7255 |  12.6920 stop        -100.05    5.3 |  12.7190 book         stop         -25.62    1.0
+10-21 19:01:11  Buy   60  12.6735 |  12.6543 stop         -77.01    0.7 |  12.6720 book         stop          -5.94    0.3
+10-21 19:05:08  Buy   15  12.6515 |  12.6038 reversal     +55.54   12.5 |  12.6440 book         stop         -29.73    4.0
+10-21 19:17:40  Sell  15  12.6775 |  12.7035 stop        -101.92   13.2 |  12.8043 placeholder  open_at_end   -17.75   25.6
+
+SUMMARY net USDT: {'live': '-19', 'rel001': '+250', 'book_p02': '+273', 'candle_p1': '-19'} | release_001 - live = +269; stop rule alone (book_p02 - live) = +292; placeholder alone (candle_p1 - live) = +0

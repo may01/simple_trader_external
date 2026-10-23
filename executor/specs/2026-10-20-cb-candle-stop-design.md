@@ -205,5 +205,10 @@ distance distribution, stop-out share vs the 68 % of the book-stop day.
 
 - Replay the forward paper day with the same script (`external/executor/runs/2026-10-20-sl-15m-anchor-replay.py`,
   mode `proposed_anchor_c1_range_trail`) against the live numbers: the reproduction gate for this rule.
+  **Done 2026-10-21** the other way round ([run report](../runs/2026-10-21-rel001-vs-candle-stop-replay.md)): the
+  live run reproduces 58/58 (stops exact); the release_001 book stop rebuilt from the stored book would have made
+  ≈ +440 USDT *more* over the 23.4 h since the restart (+422 vs −19 sim-vs-sim, 90 % CI [−442, +1 267], +133 … +440
+  by book staleness) — the opposite sign of the 2026-10-20 replay (+791 for the candle stop). Both inside noise;
+  nothing to revert, nothing confirmed; the side-by-side paper stack remains the arbiter.
 - Persist / rebuild the bars from the `candle` table after a restart (today: warm-up ≤ 60 min).
 - Whether the anchor should widen to the zone's own tf (60/240) when that tf fires.

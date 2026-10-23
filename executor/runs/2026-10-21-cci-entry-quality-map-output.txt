@@ -1,0 +1,115 @@
+sim positions 171 (CCI nan: 5m 0, 15m 0); recorded 95
+
+== SIM live (171, uniform candle stop) — adv15: bins of adv15 (CCI signed into the trade's direction: + = momentum pushing into the zone)
+         bin    n  stop% tgt/rev% pair-P1%     net   mean med mae/sd mae≥1sd% tgt<stop%
+[-1000000000.0,-200)    2    50%      50%       0%      -7     -4       0.82      50%        0%
+ [-200,-140)    4    75%      25%       0%     -40    -10       1.64      75%        0%
+ [-140,-100)   16    62%      38%      25%    -161    -10       1.55      69%       31%
+    [-100,0)   59    46%      53%      27%    +748    +13       0.84      47%       44%
+     [0,100)   55    40%      60%      15%   +1908    +35       0.78      42%       45%
+   [100,140)   17    47%      53%      12%     +87     +5       1.08      53%       41%
+   [140,200)   15    60%      40%      33%     +90     +6       1.19      67%       13%
+[200,1000000000.0)    3    67%      33%       0%    -123    -41       0.49      33%        0%
+
+== RECORDED paper (114) — adv15: bins of adv15 (CCI signed into the trade's direction: + = momentum pushing into the zone)
+         bin    n  stop% tgt/rev% pair-P1%     net   mean med mae/sd mae≥1sd% tgt<stop%
+[-1000000000.0,-200)    0
+ [-200,-140)    1   100%       0%       0%     -17    -17        nan     nan%        0%
+ [-140,-100)    9    89%      11%       0%    -221    -25        nan     nan%        0%
+    [-100,0)   28    64%      36%       0%    +631    +23        nan     nan%        0%
+     [0,100)   34    50%      50%       0%    +562    +17        nan     nan%        0%
+   [100,140)   13    54%      46%       0%    +193    +15        nan     nan%        0%
+   [140,200)    8    75%      25%       0%    -140    -17        nan     nan%        0%
+[200,1000000000.0)    2   100%       0%       0%     -86    -43        nan     nan%        0%
+
+== SIM live (171, uniform candle stop) — adv5: bins of adv5 (CCI signed into the trade's direction: + = momentum pushing into the zone)
+         bin    n  stop% tgt/rev% pair-P1%     net   mean med mae/sd mae≥1sd% tgt<stop%
+[-1000000000.0,-200)    0
+ [-200,-140)    2    50%      50%       0%      -7     -4       0.82      50%        0%
+ [-140,-100)    5    80%      20%      20%    -171    -34       1.99      80%       20%
+    [-100,0)   41    54%      46%      22%    +171     +4       1.23      59%       37%
+     [0,100)   53    34%      66%      15%   +2317    +44       0.41      36%       53%
+   [100,140)   34    47%      53%      26%    +625    +18       1.23      59%       41%
+   [140,200)   27    59%      37%      26%    -457    -17       1.19      56%       22%
+[200,1000000000.0)    9    56%      44%      11%     +25     +3       0.75      33%       11%
+
+== RECORDED paper (114) — adv5: bins of adv5 (CCI signed into the trade's direction: + = momentum pushing into the zone)
+         bin    n  stop% tgt/rev% pair-P1%     net   mean med mae/sd mae≥1sd% tgt<stop%
+[-1000000000.0,-200)    0
+ [-200,-140)    0
+ [-140,-100)    2   100%       0%       0%     -38    -19        nan     nan%        0%
+    [-100,0)   18    78%      22%       0%    -183    -10        nan     nan%        0%
+     [0,100)   32    62%      38%       0%    +459    +14        nan     nan%        0%
+   [100,140)   20    50%      50%       0%    +539    +27        nan     nan%        0%
+   [140,200)   17    59%      41%       0%     -86     -5        nan     nan%        0%
+[200,1000000000.0)    6    50%      50%       0%    +231    +39        nan     nan%        0%
+
+== SIM tf15 — adv15: bins of adv15 (CCI signed into the trade's direction: + = momentum pushing into the zone)
+         bin    n  stop% tgt/rev% pair-P1%     net   mean med mae/sd mae≥1sd% tgt<stop%
+[-1000000000.0,-140)    6    67%      33%       0%     -47     -8       1.17      67%        0%
+    [-140,0)   64    50%      50%      28%    +415     +6       1.17      55%       45%
+     [0,100)   45    40%      60%      16%   +1414    +31       0.78      44%       56%
+   [100,140)    7    29%      71%      29%    +154    +22       1.21      57%       71%
+[140,1000000000.0)    7    71%      29%      43%    -355    -51       1.19      71%       29%
+
+== SIM tf60 — adv15: bins of adv15 (CCI signed into the trade's direction: + = momentum pushing into the zone)
+         bin    n  stop% tgt/rev% pair-P1%     net   mean med mae/sd mae≥1sd% tgt<stop%
+[-1000000000.0,-140)    0
+    [-140,0)   11    45%      45%      18%    +171    +16       0.43      36%       18%
+     [0,100)    7    29%      71%       0%    +378    +54       0.75      29%        0%
+   [100,140)   10    60%      40%       0%     -67     -7       0.99      50%       20%
+[140,1000000000.0)    5    80%      20%      40%    -227    -45       1.62      80%        0%
+
+== SIM tf15 — adv5: bins of adv5 (CCI signed into the trade's direction: + = momentum pushing into the zone)
+         bin    n  stop% tgt/rev% pair-P1%     net   mean med mae/sd mae≥1sd% tgt<stop%
+[-1000000000.0,-140)    2    50%      50%       0%      -7     -4       0.82      50%        0%
+    [-140,0)   45    58%      42%      22%    -104     -2       1.34      62%       33%
+     [0,100)   46    35%      65%      15%   +1705    +37       0.45      39%       61%
+   [100,140)   24    46%      54%      33%    +169     +7       1.27      62%       54%
+[140,1000000000.0)   12    58%      42%      42%    -181    -15       1.01      50%       42%
+
+== SIM tf60 — adv5: bins of adv5 (CCI signed into the trade's direction: + = momentum pushing into the zone)
+         bin    n  stop% tgt/rev% pair-P1%     net   mean med mae/sd mae≥1sd% tgt<stop%
+[-1000000000.0,-140)    0
+    [-140,0)    1     0%     100%       0%    +104   +104       0.38       0%      100%
+     [0,100)    5    40%      60%      20%    +129    +26       0.41      20%        0%
+   [100,140)    8    50%      50%      12%    +169    +21       0.89      50%       12%
+[140,1000000000.0)   19    58%      37%      11%    -148     -8       1.07      53%       11%
+
+== threshold sweep on SIM (adv ≥ X vs < X): n, stop rate, net, mean pnl; pair-P1 rate; AUC-ish = P(adv of stop > adv of non-stop)
+  adv15: AUC(stop vs not) 0.489; corr(adv, pnl) -0.008; n 171
+    X=   0: above n  90 stop 46% net  +1963 mean   +22 pairP1 17% | below n  81 stop 51% net   +540 mean    +7 pairP1 25%
+    X=  50: above n  56 stop 54% net   -327 mean    -6 pairP1 21% | below n 115 stop 45% net  +2830 mean   +25 pairP1 20%
+    X= 100: above n  35 stop 54% net    +55 mean    +2 pairP1 20% | below n 136 stop 46% net  +2448 mean   +18 pairP1 21%
+    X= 140: above n  18 stop 61% net    -33 mean    -2 pairP1 28% | below n 153 stop 46% net  +2535 mean   +17 pairP1 20%
+    X= 200: above n   3 stop 67% net   -123 mean   -41 pairP1 0% | below n 168 stop 48% net  +2626 mean   +16 pairP1 21%
+  adv5: AUC(stop vs not) 0.507; corr(adv, pnl) -0.022; n 171
+    X=   0: above n 123 stop 45% net  +2510 mean   +20 pairP1 20% | below n  48 stop 56% net     -7 mean    -0 pairP1 21%
+    X=  50: above n  96 stop 49% net   +874 mean    +9 pairP1 22% | below n  75 stop 47% net  +1629 mean   +22 pairP1 19%
+    X= 100: above n  70 stop 53% net   +193 mean    +3 pairP1 24% | below n 101 stop 45% net  +2310 mean   +23 pairP1 18%
+    X= 140: above n  36 stop 58% net   -432 mean   -12 pairP1 22% | below n 135 stop 45% net  +2935 mean   +22 pairP1 20%
+    X= 200: above n   9 stop 56% net    +25 mean    +3 pairP1 11% | below n 162 stop 48% net  +2478 mean   +15 pairP1 21%
+  permutation adv15 X=100: Δstop-rate +0.08 (null 90 % [-0.14, +0.15], P(null≥obs) 0.26); Δmean pnl -16 (P(null≤obs) 0.21)
+  permutation adv15 X=140: Δstop-rate +0.15 (null 90 % [-0.23, +0.21], P(null≥obs) 0.18); Δmean pnl -18 (P(null≤obs) 0.26)
+  permutation adv5 X=100: Δstop-rate +0.08 (null 90 % [-0.13, +0.13], P(null≥obs) 0.17); Δmean pnl -20 (P(null≤obs) 0.12)
+  permutation adv5 X=140: Δstop-rate +0.13 (null 90 % [-0.15, +0.17], P(null≥obs) 0.11); Δmean pnl -34 (P(null≤obs) 0.04)
+
+== SIM positions with adv15 ≥ 140
+  10-21 05:43 Buy  tf15  in_zone        cci15   -259 cci5   -254 stop           -88 mae/sd 0.49 pre-stop 0.49 tgt<stop False pairP1 False
+  10-19 10:29 Buy  tf240 in_zone        cci15   -239 cci5   -228 stop          -104 mae/sd 1.87 pre-stop 1.00 tgt<stop False pairP1 False
+  10-20 12:26 Sell tf240 in_zone        cci15   +234 cci5   +201 reversal       +69 mae/sd 0.36 pre-stop 0.36 tgt<stop False pairP1 False
+  10-21 05:41 Buy  tf60  zone_rejection cci15   -183 cci5   -184 stop           -54 mae/sd 2.44 pre-stop 0.94 tgt<stop False pairP1 True
+  10-20 12:21 Sell tf60  in_zone        cci15   +182 cci5   +161 stop          -102 mae/sd 1.62 pre-stop 0.99 tgt<stop False pairP1 True
+  10-20 03:50 Sell tf60  in_zone        cci15   +175 cci5   +178 stop          -103 mae/sd 1.07 pre-stop 0.99 tgt<stop False pairP1 False
+  10-19 23:05 Sell tf240 in_zone        cci15   +174 cci5    +86 reversal      +188 mae/sd -0.00 pre-stop -0.00 tgt<stop False pairP1 False
+  10-20 21:01 Sell tf240 zone_rejection cci15   +169 cci5   +128 stop           -54 mae/sd 1.46 pre-stop 0.97 tgt<stop False pairP1 False
+  10-21 00:19 Sell tf15  zone_rejection cci15   +167 cci5   +170 stop           -79 mae/sd 1.26 pre-stop 0.95 tgt<stop False pairP1 False
+  10-19 10:24 Buy  tf15  in_zone        cci15   -167 cci5   -160 stop          -100 mae/sd 4.21 pre-stop 1.00 tgt<stop False pairP1 True
+  10-20 13:55 Sell tf60  zone_rejection cci15   +166 cci5   +163 stop          -101 mae/sd 10.79 pre-stop 0.97 tgt<stop False pairP1 False
+  10-19 04:30 Buy  tf60  in_zone        cci15   -164 cci5   -159 reversal      +133 mae/sd 0.00 pre-stop 0.00 tgt<stop False pairP1 False
+  10-20 06:16 Buy  tf240 in_zone        cci15   -162 cci5   -130 reversal      +341 mae/sd 0.00 pre-stop 0.00 tgt<stop False pairP1 False
+  10-20 12:19 Sell tf15  zone_rejection cci15   +156 cci5   +124 stop           -76 mae/sd 3.49 pre-stop 0.99 tgt<stop False pairP1 True
+  10-19 07:40 Sell tf15  zone_rejection cci15   +151 cci5    +36 target         -14 mae/sd 0.31 pre-stop 0.31 tgt<stop True pairP1 False
+  10-20 12:04 Sell tf15  in_zone        cci15   +151 cci5   +114 target         +68 mae/sd 1.08 pre-stop 0.97 tgt<stop True pairP1 False
+  10-21 00:15 Sell tf15  zone_rejection cci15   +149 cci5   +148 stop           -67 mae/sd 1.19 pre-stop 0.94 tgt<stop False pairP1 True
+  10-19 02:11 Sell tf240 in_zone        cci15   +148 cci5   +164 reversal      +111 mae/sd 0.47 pre-stop 0.47 tgt<stop False pairP1 False

@@ -1,0 +1,1004 @@
+trades 748276  10-16 22:29:05 -> 10-21 10:07:36
+trade feed gaps > 60 s: 19 [('10-16 23:52:38', 138), ('10-17 00:43:46', 72), ('10-17 02:46:08', 60), ('10-17 03:48:42', 71), ('10-17 07:10:46', 73), ('10-17 10:32:51', 75), ('10-17 10:51:10', 66), ('10-17 11:26:05', 73), ('10-17 11:39:01', 62), ('10-17 19:33:42', 97), ('10-18 01:53:20', 80), ('10-18 04:26:26', 72), ('10-18 04:27:38', 101), ('10-18 04:49:44', 88), ('10-18 05:08:21', 62), ('10-19 13:01:46', 5564), ('10-19 20:01:34', 9432), ('10-20 16:13:10', 305), ('10-21 02:55:41', 66)]
+tf  15: 4315 closed klines 09-06 11:00:00 -> 10-21 09:30:00; stats N7 +0.00198/0.17060, N14 +0.00190/0.11939, N25 +0.00187/0.08855
+tf  60: 2878 closed klines 06-23 11:00:00 -> 10-21 08:00:00; stats N7 +0.00791/0.33307, N14 +0.00767/0.23355, N25 +0.00759/0.17366
+tf 240: 2398 closed klines 09-16 12:00:00 -> 10-21 00:00:00; stats N7 +0.03173/0.65677, N14 +0.03081/0.46243, N25 +0.03083/0.34433
+
+=== FLAG GATE: reconstructed forming EMA-25 flag vs the stored cb_f_trend at every trade (stored present) ===
+tf  15 long : stored present 98.2%, pass stored 0.732 e25 0.732 | agreement e25 vs stored 0.9935
+tf  15 short: stored present 98.2%, pass stored 0.779 e25 0.779 | agreement e25 vs stored 0.9911
+tf  60 long : stored present 98.2%, pass stored 0.718 e25 0.718 | agreement e25 vs stored 0.9959
+tf  60 short: stored present 98.2%, pass stored 0.769 e25 0.768 | agreement e25 vs stored 0.9916
+tf 240 long : stored present 98.2%, pass stored 0.505 e25 0.505 | agreement e25 vs stored 0.9971
+tf 240 short: stored present 98.2%, pass stored 0.994 e25 0.994 | agreement e25 vs stored 0.9992
+trend cache loaded
+
+trades from 10-17 22:00:00: 600032; trades where some (tf, side) passes geometry + 1-min class: 92497
+
+=== STORED ZONE LINES GATE: present at the window's trades; g distribution ===
+H  15 Buy : zone line present 0.979; g q05/25/50/75/95 -2.5 +0.8 +2.5 +4.2 +7.8; share 0<=g<2 0.254, g<0 0.163
+H  15 Sell: zone line present 0.979; g q05/25/50/75/95 -2.9 +0.5 +2.2 +3.8 +7.5; share 0<=g<2 0.266, g<0 0.193
+H  60 Buy : zone line present 0.979; g q05/25/50/75/95 -7.1 +2.2 +5.5 +8.7 +15.0; share 0<=g<2 0.085, g<0 0.151
+H  60 Sell: zone line present 0.979; g q05/25/50/75/95 -7.6 +1.5 +5.0 +8.3 +14.4; share 0<=g<2 0.106, g<0 0.168
+H 240 Buy : zone line present 0.979; g q05/25/50/75/95 -5.3 +4.5 +10.7 +18.2 +32.9; share 0<=g<2 0.052, g<0 0.118
+H 240 Sell: zone line present 0.979; g q05/25/50/75/95 -14.0 +3.5 +10.7 +16.9 +24.4; share 0<=g<2 0.037, g<0 0.176
+
+=== state rates at the window's trades (veto = True), per H and side ===
+H  15 Buy : gz2.0 0.254 gzb2.0 0.351 gzin 0.163 gd1.0 0.299 mr2.0 0.266 sh2.0 0.226
+H  15 Sell: gz2.0 0.266 gzb2.0 0.390 gzin 0.193 gd1.0 0.332 mr2.0 0.254 sh2.0 0.284
+H  60 Buy : gz2.0 0.085 gzb2.0 0.144 gzin 0.151 gd1.0 0.109 mr2.0 0.106 sh2.0 0.068
+H  60 Sell: gz2.0 0.106 gzb2.0 0.152 gzin 0.168 gd1.0 0.133 mr2.0 0.085 sh2.0 0.086
+H 240 Buy : gz2.0 0.052 gzb2.0 0.082 gzin 0.118 gd1.0 0.058 mr2.0 0.037 sh2.0 0.038
+H 240 Sell: gz2.0 0.037 gzb2.0 0.062 gzin 0.176 gd1.0 0.045 mr2.0 0.052 sh2.0 0.080
+
+119 variants simulated in 62 s
+=== GATE: this script's flow (no delay) vs the harness simulate on e25: positions 212 / 212, identical True; gz0 (k=0, nothing vetoed) == e25: True
+=== GATE: vectorised stop distance vs the harness candle_stop at the e25 opens: max rel diff 0.00e+00, > 1e-9 on 0.000
+
+=== VARIANTS, window 10-17 22:00:00 -> 10-21 10:07:36, paper (no fees); frozen 2y values {'gz': 2.0, 'gd': 1.0, 'dl': (2.0, 60)} ===
+     live | n 211 | net   +3732 | PF  1.47 | wr  52% | R  +56.5 | hold   7.5m | risk   83 | CI90 [ +1148, +6391] P<0 0.01 | top2  +804 | stop=99/-7822 targ=74/+7036 reve=37/+4505 open=1/+13 | fires 237 (179/46/12) skip 26
+      e25 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+     none | n 262 | net   +4751 | PF  1.49 | wr  53% | R  +66.9 | hold   7.2m | risk   85 | CI90 [ +1919, +7659] P<0 0.00 | top2  +796 | stop=120/-9558 targ=73/+6137 reve=68/+8160 open=1/+13 | fires 294 (220/58/16) skip 32
+gz2.0|15<60 | n 210 | net   +3718 | PF  1.48 | wr  51% | R  +51.1 | hold   7.5m | risk   84 | CI90 [ +1131, +6270] P<0 0.01 | top2  +805 | stop=98/-7649 targ=75/+6970 reve=36/+4384 open=1/+13 | fires 230 (172/46/12) skip 20
+gz2.0|15<240 | n 212 | net   +3660 | PF  1.46 | wr  51% | R  +54.8 | hold   7.1m | risk   82 | CI90 [ +1079, +6258] P<0 0.01 | top2  +805 | stop=100/-7819 targ=75/+7056 reve=36/+4410 open=1/+13 | fires 233 (175/46/12) skip 21
+gz2.0|60<240 | n 211 | net   +3854 | PF  1.49 | wr  51% | R  +57.3 | hold   7.5m | risk   83 | CI90 [ +1297, +6466] P<0 0.00 | top2  +805 | stop=99/-7754 targ=75/+7075 reve=37/+4533 | fires 237 (181/44/12) skip 26
+gz2.0|ladder | n 209 | net   +3692 | PF  1.48 | wr  51% | R  +51.2 | hold   7.5m | risk   84 | CI90 [ +1130, +6177] P<0 0.01 | top2  +805 | stop=97/-7580 targ=76/+6976 reve=35/+4301 open=1/-4 | fires 223 (167/44/12) skip 14
+gzb2.0|15<60 | n 209 | net   +3781 | PF  1.49 | wr  51% | R  +53.3 | hold   7.2m | risk   84 | CI90 [ +1167, +6297] P<0 0.01 | top2  +805 | stop=98/-7644 targ=73/+6990 reve=37/+4422 open=1/+13 | fires 222 (164/46/12) skip 13
+gzb2.0|15<240 | n 207 | net   +3651 | PF  1.48 | wr  52% | R  +54.8 | hold   7.1m | risk   80 | CI90 [ +1110, +6180] P<0 0.01 | top2  +803 | stop=97/-7532 targ=75/+7109 reve=34/+4061 open=1/+13 | fires 229 (171/46/12) skip 22
+gzb2.0|60<240 | n 212 | net   +3778 | PF  1.48 | wr  51% | R  +56.2 | hold   7.5m | risk   82 | CI90 [ +1210, +6350] P<0 0.01 | top2  +805 | stop=100/-7819 targ=75/+7073 reve=37/+4524 | fires 236 (181/43/12) skip 24
+gzb2.0|ladder | n 203 | net   +3585 | PF  1.48 | wr  51% | R  +51.5 | hold   7.2m | risk   83 | CI90 [ +1074, +6171] P<0 0.01 | top2  +803 | stop=95/-7353 targ=74/+7045 reve=33/+3897 open=1/-4 | fires 212 (157/43/12) skip 9
+gzin|15<60 | n 207 | net   +3368 | PF  1.44 | wr  52% | R  +49.8 | hold   7.3m | risk   83 | CI90 [  +937, +5838] P<0 0.01 | top2  +740 | stop=97/-7569 targ=70/+6618 reve=39/+4307 open=1/+13 | fires 230 (172/46/12) skip 23
+gzin|15<240 | n 207 | net   +3709 | PF  1.49 | wr  52% | R  +54.8 | hold   7.3m | risk   83 | CI90 [ +1140, +6245] P<0 0.01 | top2  +804 | stop=97/-7555 targ=74/+7060 reve=35/+4192 open=1/+13 | fires 232 (174/46/12) skip 25
+gzin|60<240 | n 211 | net   +3571 | PF  1.46 | wr  51% | R  +52.9 | hold   7.3m | risk   83 | CI90 [ +1019, +6187] P<0 0.01 | top2  +804 | stop=98/-7640 targ=74/+6938 reve=38/+4260 open=1/+13 | fires 235 (180/43/12) skip 24
+gzin|ladder | n 201 | net   +2960 | PF  1.41 | wr  51% | R  +43.8 | hold   7.1m | risk   83 | CI90 [  +651, +5366] P<0 0.02 | top2  +737 | stop=93/-7218 targ=69/+6433 reve=38/+3733 open=1/+13 | fires 222 (167/43/12) skip 21
+gd1.0|15<60 | n 197 | net   +3595 | PF  1.49 | wr  51% | R  +49.8 | hold   7.7m | risk   80 | CI90 [ +1094, +6026] P<0 0.01 | top2  +805 | stop=94/-7253 targ=65/+6396 reve=37/+4439 open=1/+13 | fires 213 (155/46/12) skip 16
+gd1.0|15<240 | n 211 | net   +3874 | PF  1.50 | wr  52% | R  +57.2 | hold   7.5m | risk   80 | CI90 [ +1326, +6553] P<0 0.00 | top2  +805 | stop=99/-7720 targ=74/+7029 reve=37/+4552 open=1/+13 | fires 233 (175/46/12) skip 22
+gd1.0|60<240 | n 210 | net   +3956 | PF  1.51 | wr  51% | R  +58.3 | hold   7.5m | risk   82 | CI90 [ +1414, +6542] P<0 0.00 | top2  +805 | stop=98/-7654 targ=75/+7076 reve=37/+4534 | fires 237 (181/44/12) skip 27
+gd1.0|ladder | n 194 | net   +3859 | PF  1.55 | wr  52% | R  +52.7 | hold   7.8m | risk   80 | CI90 [ +1277, +6353] P<0 0.00 | top2  +805 | stop=91/-6984 targ=65/+6348 reve=37/+4499 open=1/-4 | fires 206 (150/44/12) skip 12
+mr2.0|15<60 | n 208 | net   +3054 | PF  1.39 | wr  50% | R  +48.6 | hold   7.2m | risk   80 | CI90 [  +527, +5547] P<0 0.02 | top2  +805 | stop=100/-7799 targ=71/+6498 reve=36/+4342 open=1/+13 | fires 235 (177/46/12) skip 27
+mr2.0|15<240 | n 209 | net   +4012 | PF  1.53 | wr  52% | R  +58.8 | hold   7.5m | risk   83 | CI90 [ +1504, +6519] P<0 0.00 | top2  +805 | stop=97/-7580 targ=73/+6982 reve=38/+4597 open=1/+13 | fires 234 (176/46/12) skip 25
+mr2.0|60<240 | n 213 | net   +3794 | PF  1.48 | wr  52% | R  +56.6 | hold   7.4m | risk   80 | CI90 [ +1285, +6343] P<0 0.01 | top2  +805 | stop=100/-7822 targ=76/+7200 reve=36/+4403 open=1/+13 | fires 238 (180/46/12) skip 25
+mr2.0|ladder | n 204 | net   +3482 | PF  1.46 | wr  50% | R  +53.0 | hold   7.4m | risk   80 | CI90 [  +963, +5955] P<0 0.01 | top2  +805 | stop=96/-7449 targ=70/+6407 reve=37/+4512 open=1/+13 | fires 230 (172/46/12) skip 26
+sh2.0|15<60 | n 210 | net   +3902 | PF  1.51 | wr  52% | R  +57.2 | hold   7.5m | risk   82 | CI90 [ +1386, +6521] P<0 0.01 | top2  +805 | stop=98/-7652 targ=75/+7110 reve=36/+4430 open=1/+13 | fires 234 (176/46/12) skip 24
+sh2.0|15<240 | n 207 | net   +3382 | PF  1.44 | wr  51% | R  +51.9 | hold   7.3m | risk   83 | CI90 [  +840, +5948] P<0 0.01 | top2  +805 | stop=98/-7672 targ=73/+6714 reve=35/+4327 open=1/+13 | fires 233 (175/46/12) skip 26
+sh2.0|60<240 | n 211 | net   +3903 | PF  1.50 | wr  52% | R  +57.4 | hold   7.5m | risk   80 | CI90 [ +1328, +6580] P<0 0.01 | top2  +805 | stop=99/-7722 targ=74/+7079 reve=37/+4533 open=1/+13 | fires 237 (180/45/12) skip 26
+sh2.0|ladder | n 203 | net   +3528 | PF  1.47 | wr  52% | R  +53.1 | hold   7.5m | risk   80 | CI90 [ +1069, +5993] P<0 0.01 | top2  +805 | stop=95/-7401 targ=73/+6654 reve=34/+4263 open=1/+13 | fires 227 (170/45/12) skip 24
+dl2.060|15<60 | n 207 | net   +3714 | PF  1.49 | wr  50% | R  +49.7 | hold   7.2m | risk   79 | CI90 [ +1150, +6286] P<0 0.01 | top2  +805 | stop=101/-7581 targ=68/+6770 reve=37/+4512 open=1/+13 | fires 238 (180/46/12) skip 28 | pend 15: cancelled 3 filled 12; delayed pos 12 net -134
+dlc2.060|15<60 | n 204 | net   +3417 | PF  1.44 | wr  50% | R  +50.7 | hold   7.3m | risk   81 | CI90 [  +898, +6013] P<0 0.01 | top2  +805 | stop=98/-7646 targ=69/+6668 reve=36/+4382 open=1/+13 | fires 238 (180/46/12) skip 29 | pend 14: cancelled 5 filled 9; delayed pos 9 net -258
+dl2.060|15<240 | n 211 | net   +3607 | PF  1.46 | wr  51% | R  +53.0 | hold   7.3m | risk   80 | CI90 [ +1048, +6223] P<0 0.01 | top2  +805 | stop=101/-7809 targ=72/+6894 reve=37/+4509 open=1/+13 | fires 238 (180/46/12) skip 27 | pend 3: filled 3; delayed pos 3 net -178
+dlc2.060|15<240 | n 210 | net   +3611 | PF  1.46 | wr  51% | R  +54.0 | hold   7.2m | risk   81 | CI90 [ +1056, +6139] P<0 0.01 | top2  +805 | stop=100/-7806 targ=72/+6894 reve=37/+4510 open=1/+13 | fires 238 (180/46/12) skip 27 | pend 3: cancelled 1 filled 2; delayed pos 2 net -161
+dl2.060|60<240 | n 212 | net   +3822 | PF  1.49 | wr  51% | R  +56.1 | hold   7.2m | risk   80 | CI90 [ +1234, +6425] P<0 0.01 | top2  +805 | stop=100/-7769 targ=74/+7079 reve=37/+4530 open=1/-19 | fires 238 (180/46/12) skip 25 | pend 4: cancelled 1 filled 3; delayed pos 3 net -29
+dlc2.060|60<240 | n 212 | net   +3747 | PF  1.47 | wr  51% | R  +56.1 | hold   7.2m | risk   83 | CI90 [ +1154, +6359] P<0 0.01 | top2  +805 | stop=100/-7842 targ=74/+7078 reve=37/+4529 open=1/-19 | fires 238 (180/46/12) skip 25 | pend 4: cancelled 1 filled 3; delayed pos 3 net -103
+dl2.060|ladder | n 207 | net   +3590 | PF  1.47 | wr  49% | R  +47.3 | hold   7.1m | risk   78 | CI90 [  +985, +6182] P<0 0.01 | top2  +805 | stop=102/-7564 targ=67/+6647 reve=37/+4525 open=1/-19 | fires 238 (180/46/12) skip 27 | pend 20: cancelled 4 filled 16; delayed pos 16 net -251
+dlc2.060|ladder | n 203 | net   +3291 | PF  1.43 | wr  50% | R  +49.3 | hold   7.2m | risk   80 | CI90 [  +809, +5783] P<0 0.01 | top2  +805 | stop=98/-7631 targ=68/+6545 reve=36/+4396 open=1/-19 | fires 238 (180/46/12) skip 28 | pend 19: cancelled 7 filled 12; delayed pos 12 net -363
+gz0.5|15<60 | n 213 | net   +3796 | PF  1.48 | wr  52% | R  +56.3 | hold   7.5m | risk   83 | CI90 [ +1259, +6351] P<0 0.01 | top2  +805 | stop=100/-7822 targ=75/+7091 reve=37/+4514 open=1/+13 | fires 238 (180/46/12) skip 25
+gz0.5|ladder | n 213 | net   +3802 | PF  1.48 | wr  52% | R  +56.5 | hold   7.5m | risk   83 | CI90 [ +1259, +6338] P<0 0.01 | top2  +805 | stop=100/-7835 targ=75/+7091 reve=37/+4532 open=1/+13 | fires 238 (180/46/12) skip 25
+gz1.0|15<60 | n 213 | net   +3696 | PF  1.47 | wr  52% | R  +54.9 | hold   7.5m | risk   83 | CI90 [ +1166, +6251] P<0 0.01 | top2  +805 | stop=100/-7820 targ=75/+6991 reve=37/+4512 open=1/+13 | fires 237 (179/46/12) skip 24
+gz1.0|ladder | n 213 | net   +3647 | PF  1.46 | wr  51% | R  +54.7 | hold   7.5m | risk   84 | CI90 [ +1097, +6175] P<0 0.01 | top2  +805 | stop=100/-7853 targ=75/+6990 reve=37/+4509 open=1/+0 | fires 235 (177/46/12) skip 22
+gz3.0|15<60 | n 199 | net   +3008 | PF  1.41 | wr  51% | R  +39.3 | hold   7.1m | risk   85 | CI90 [  +598, +5513] P<0 0.02 | top2  +805 | stop=92/-7210 targ=72/+6355 reve=34/+3851 open=1/+13 | fires 215 (157/46/12) skip 16
+gz3.0|ladder | n 193 | net   +3307 | PF  1.48 | wr  51% | R  +42.4 | hold   7.5m | risk   85 | CI90 [  +937, +5678] P<0 0.01 | top2  +806 | stop=87/-6745 targ=71/+6154 reve=34/+3902 open=1/-4 | fires 204 (149/43/12) skip 11
+gz5.0|15<60 | n 155 | net   +2340 | PF  1.39 | wr  48% | R  +33.0 | hold   8.0m | risk   85 | CI90 [   +59, +4578] P<0 0.04 | top2  +802 | stop=73/-5918 targ=54/+5135 reve=27/+3111 open=1/+12 | fires 169 (111/46/12) skip 14
+gz5.0|ladder | n 140 | net   +1583 | PF  1.28 | wr  46% | R  +26.6 | hold   7.9m | risk   85 | CI90 [  -522, +3736] P<0 0.11 | top2  +802 | stop=67/-5461 targ=48/+4167 reve=24/+2880 open=1/-4 | fires 152 (102/38/12) skip 12
+gzb0.5|15<60 | n 213 | net   +3804 | PF  1.48 | wr  52% | R  +56.7 | hold   7.5m | risk   83 | CI90 [ +1271, +6351] P<0 0.01 | top2  +805 | stop=100/-7822 targ=75/+7091 reve=37/+4522 open=1/+13 | fires 238 (180/46/12) skip 25
+gzb0.5|ladder | n 213 | net   +3847 | PF  1.49 | wr  52% | R  +57.3 | hold   7.5m | risk   83 | CI90 [ +1297, +6398] P<0 0.01 | top2  +805 | stop=100/-7835 targ=75/+7092 reve=37/+4578 open=1/+13 | fires 238 (180/46/12) skip 25
+gzb1.0|15<60 | n 213 | net   +3683 | PF  1.47 | wr  52% | R  +53.7 | hold   7.5m | risk   84 | CI90 [ +1167, +6225] P<0 0.01 | top2  +805 | stop=100/-7807 targ=74/+6940 reve=38/+4538 open=1/+13 | fires 234 (176/46/12) skip 21
+gzb1.0|ladder | n 213 | net   +3600 | PF  1.46 | wr  51% | R  +53.4 | hold   7.3m | risk   83 | CI90 [ +1134, +6161] P<0 0.01 | top2  +804 | stop=100/-7802 targ=75/+7003 reve=37/+4400 open=1/+0 | fires 231 (173/46/12) skip 18
+gzb3.0|15<60 | n 191 | net   +2220 | PF  1.31 | wr  51% | R  +28.6 | hold   6.8m | risk   85 | CI90 [   -21, +4503] P<0 0.05 | top2  +735 | stop=89/-6973 targ=68/+5910 reve=33/+3271 open=1/+12 | fires 202 (144/46/12) skip 11
+gzb3.0|ladder | n 179 | net   +2292 | PF  1.36 | wr  51% | R  +29.7 | hold   7.0m | risk   84 | CI90 [   +80, +4463] P<0 0.04 | top2  +734 | stop=81/-6229 targ=67/+5780 reve=30/+2745 open=1/-4 | fires 187 (134/41/12) skip 8
+gzb5.0|15<60 | n 144 | net   +1622 | PF  1.28 | wr  47% | R  +23.0 | hold   7.9m | risk   85 | CI90 [  -390, +3680] P<0 0.10 | top2  +731 | stop=69/-5591 targ=49/+4685 reve=25/+2515 open=1/+12 | fires 153 (95/46/12) skip 9
+gzb5.0|ladder | n 127 | net   +1258 | PF  1.25 | wr  46% | R  +20.9 | hold   7.8m | risk   84 | CI90 [  -671, +3240] P<0 0.15 | top2  +731 | stop=61/-4950 targ=45/+4164 reve=20/+2048 open=1/-4 | fires 132 (86/34/12) skip 5
+gd0.5|15<60 | n 214 | net   +3706 | PF  1.47 | wr  52% | R  +54.9 | hold   7.4m | risk   83 | CI90 [ +1141, +6289] P<0 0.01 | top2  +805 | stop=100/-7821 targ=75/+6972 reve=38/+4543 open=1/+13 | fires 238 (180/46/12) skip 24
+gd0.5|ladder | n 214 | net   +3656 | PF  1.46 | wr  51% | R  +54.7 | hold   7.4m | risk   84 | CI90 [ +1083, +6248] P<0 0.01 | top2  +805 | stop=100/-7854 targ=75/+6971 reve=38/+4543 open=1/-4 | fires 235 (178/45/12) skip 21
+gd1.5|15<60 | n 171 | net   +2026 | PF  1.30 | wr  47% | R  +26.8 | hold   7.8m | risk   83 | CI90 [  -333, +4350] P<0 0.08 | top2  +803 | stop=88/-6738 targ=53/+5380 reve=29/+3372 open=1/+12 | fires 188 (130/46/12) skip 17
+gd1.5|ladder | n 162 | net   +2150 | PF  1.34 | wr  47% | R  +27.7 | hold   7.8m | risk   78 | CI90 [   -28, +4515] P<0 0.05 | top2  +803 | stop=84/-6319 targ=49/+5009 reve=28/+3464 open=1/-4 | fires 175 (121/42/12) skip 13
+gd2.0|15<60 | n 157 | net   +2288 | PF  1.37 | wr  46% | R  +28.7 | hold   7.9m | risk   79 | CI90 [   -23, +4660] P<0 0.05 | top2  +803 | stop=81/-6135 targ=49/+5397 reve=26/+3013 open=1/+12 | fires 173 (115/46/12) skip 16
+gd2.0|ladder | n 147 | net   +2367 | PF  1.42 | wr  47% | R  +29.0 | hold   7.8m | risk   74 | CI90 [  +150, +4606] P<0 0.04 | top2  +802 | stop=76/-5557 targ=45/+4869 reve=25/+3058 open=1/-4 | fires 158 (107/39/12) skip 11
+gd3.0|15<60 | n 129 | net   +1929 | PF  1.38 | wr  45% | R  +25.1 | hold   7.8m | risk   83 | CI90 [  -158, +4054] P<0 0.07 | top2  +749 | stop=68/-5033 targ=39/+4377 reve=21/+2572 open=1/+12 | fires 144 (86/46/12) skip 15
+gd3.0|ladder | n 109 | net   +1359 | PF  1.31 | wr  41% | R  +19.1 | hold   7.5m | risk   71 | CI90 [  -549, +3285] P<0 0.13 | top2  +749 | stop=62/-4410 targ=29/+3250 reve=17/+2522 open=1/-4 | fires 120 (73/35/12) skip 11
+mr0.5|15<60 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+mr0.5|ladder | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+mr1.0|15<60 | n 212 | net   +3787 | PF  1.48 | wr  51% | R  +56.3 | hold   7.4m | risk   82 | CI90 [ +1195, +6384] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7082 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+mr1.0|ladder | n 212 | net   +3778 | PF  1.48 | wr  51% | R  +55.6 | hold   7.4m | risk   82 | CI90 [ +1193, +6387] P<0 0.01 | top2  +805 | stop=100/-7791 targ=73/+6983 reve=38/+4574 open=1/+13 | fires 238 (180/46/12) skip 26
+mr3.0|15<60 | n 201 | net   +3281 | PF  1.43 | wr  50% | R  +51.8 | hold   7.9m | risk   80 | CI90 [  +848, +5705] P<0 0.01 | top2  +805 | stop=96/-7489 targ=72/+6631 reve=32/+4126 open=1/+13 | fires 228 (170/46/12) skip 27
+mr3.0|ladder | n 195 | net   +4094 | PF  1.58 | wr  52% | R  +61.6 | hold   8.0m | risk   80 | CI90 [ +1577, +6534] P<0 0.00 | top2  +805 | stop=89/-6940 targ=72/+6695 reve=33/+4326 open=1/+13 | fires 219 (162/45/12) skip 24
+mr5.0|15<60 | n 177 | net   +2398 | PF  1.36 | wr  49% | R  +41.9 | hold   8.0m | risk   79 | CI90 [  +149, +4699] P<0 0.04 | top2  +753 | stop=86/-6665 targ=69/+6185 reve=21/+2865 open=1/+12 | fires 205 (147/46/12) skip 28
+mr5.0|ladder | n 166 | net   +3154 | PF  1.52 | wr  51% | R  +50.4 | hold   7.9m | risk   82 | CI90 [  +803, +5430] P<0 0.01 | top2  +753 | stop=77/-5978 targ=69/+6238 reve=19/+2882 open=1/+13 | fires 189 (134/43/12) skip 23
+sh0.5|15<60 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+sh0.5|ladder | n 212 | net   +3802 | PF  1.48 | wr  51% | R  +56.4 | hold   7.4m | risk   82 | CI90 [ +1196, +6411] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4532 open=1/+13 | fires 238 (180/46/12) skip 26
+sh1.0|15<60 | n 212 | net   +3722 | PF  1.47 | wr  51% | R  +55.1 | hold   7.4m | risk   82 | CI90 [ +1136, +6308] P<0 0.01 | top2  +805 | stop=100/-7820 targ=74/+7017 reve=37/+4512 open=1/+13 | fires 238 (180/46/12) skip 26
+sh1.0|ladder | n 212 | net   +3894 | PF  1.50 | wr  52% | R  +57.3 | hold   7.4m | risk   83 | CI90 [ +1294, +6494] P<0 0.01 | top2  +805 | stop=99/-7755 targ=76/+7211 reve=36/+4426 open=1/+13 | fires 238 (180/46/12) skip 26
+sh3.0|15<60 | n 203 | net   +3749 | PF  1.50 | wr  51% | R  +50.4 | hold   7.7m | risk   83 | CI90 [ +1130, +6415] P<0 0.01 | top2  +805 | stop=96/-7462 targ=71/+6867 reve=35/+4331 open=1/+13 | fires 227 (169/46/12) skip 24
+sh3.0|ladder | n 195 | net   +3287 | PF  1.45 | wr  51% | R  +46.0 | hold   7.5m | risk   83 | CI90 [  +762, +5768] P<0 0.02 | top2  +806 | stop=93/-7235 targ=68/+6346 reve=33/+4163 open=1/+13 | fires 219 (162/45/12) skip 24
+sh5.0|15<60 | n 176 | net   +2582 | PF  1.38 | wr  49% | R  +33.5 | hold   7.6m | risk   84 | CI90 [  +185, +5058] P<0 0.03 | top2  +804 | stop=85/-6730 targ=60/+5626 reve=30/+3674 open=1/+12 | fires 198 (140/46/12) skip 22
+sh5.0|ladder | n 166 | net   +2695 | PF  1.43 | wr  50% | R  +35.1 | hold   7.3m | risk   84 | CI90 [  +326, +5075] P<0 0.03 | top2  +805 | stop=79/-6263 targ=57/+5348 reve=29/+3597 open=1/+12 | fires 188 (132/44/12) skip 22
+gz0.5|15<240 | n 212 | net   +3783 | PF  1.48 | wr  51% | R  +56.2 | hold   7.4m | risk   82 | CI90 [ +1193, +6380] P<0 0.01 | top2  +805 | stop=100/-7821 targ=74/+7078 reve=37/+4513 open=1/+13 | fires 238 (180/46/12) skip 26
+gz0.5|60<240 | n 212 | net   +3789 | PF  1.48 | wr  51% | R  +56.4 | hold   7.4m | risk   82 | CI90 [ +1185, +6400] P<0 0.01 | top2  +805 | stop=100/-7834 targ=74/+7078 reve=37/+4532 open=1/+13 | fires 238 (180/46/12) skip 26
+gz1.0|15<240 | n 212 | net   +3760 | PF  1.48 | wr  51% | R  +56.0 | hold   7.4m | risk   82 | CI90 [ +1168, +6359] P<0 0.01 | top2  +805 | stop=100/-7822 targ=74/+7078 reve=37/+4491 open=1/+13 | fires 236 (178/46/12) skip 24
+gz1.0|60<240 | n 212 | net   +3752 | PF  1.47 | wr  51% | R  +56.3 | hold   7.4m | risk   83 | CI90 [ +1151, +6351] P<0 0.01 | top2  +805 | stop=100/-7854 targ=75/+7074 reve=37/+4532 | fires 238 (181/45/12) skip 26
+gz3.0|15<240 | n 209 | net   +3680 | PF  1.48 | wr  51% | R  +54.6 | hold   7.3m | risk   83 | CI90 [ +1166, +6261] P<0 0.01 | top2  +805 | stop=98/-7622 targ=74/+6922 reve=36/+4367 open=1/+13 | fires 230 (172/46/12) skip 21
+gz3.0|60<240 | n 210 | net   +3939 | PF  1.51 | wr  51% | R  +58.1 | hold   7.4m | risk   82 | CI90 [ +1389, +6454] P<0 0.01 | top2  +805 | stop=98/-7653 targ=75/+7058 reve=37/+4534 | fires 236 (181/43/12) skip 26
+gz5.0|15<240 | n 200 | net   +2775 | PF  1.35 | wr  50% | R  +47.0 | hold   7.5m | risk   83 | CI90 [  +329, +5220] P<0 0.03 | top2  +805 | stop=98/-7774 targ=68/+6395 reve=33/+4140 open=1/+12 | fires 220 (162/46/12) skip 20
+gz5.0|60<240 | n 208 | net   +3898 | PF  1.51 | wr  51% | R  +57.7 | hold   7.4m | risk   80 | CI90 [ +1347, +6488] P<0 0.00 | top2  +804 | stop=97/-7549 targ=75/+7017 reve=36/+4430 | fires 232 (182/38/12) skip 24
+gd0.5|15<240 | n 212 | net   +3763 | PF  1.48 | wr  51% | R  +56.1 | hold   7.4m | risk   82 | CI90 [ +1174, +6359] P<0 0.01 | top2  +805 | stop=100/-7822 targ=74/+7078 reve=37/+4494 open=1/+13 | fires 236 (178/46/12) skip 24
+gd0.5|60<240 | n 212 | net   +3752 | PF  1.47 | wr  51% | R  +56.3 | hold   7.4m | risk   83 | CI90 [ +1151, +6352] P<0 0.01 | top2  +805 | stop=100/-7853 targ=75/+7074 reve=37/+4532 | fires 238 (181/45/12) skip 26
+gd1.5|15<240 | n 203 | net   +3496 | PF  1.46 | wr  51% | R  +52.7 | hold   7.3m | risk   80 | CI90 [  +944, +6002] P<0 0.01 | top2  +805 | stop=98/-7614 targ=70/+6836 reve=34/+4262 open=1/+13 | fires 223 (165/46/12) skip 20
+gd1.5|60<240 | n 209 | net   +3976 | PF  1.52 | wr  52% | R  +57.8 | hold   7.3m | risk   80 | CI90 [ +1444, +6537] P<0 0.01 | top2  +804 | stop=98/-7592 targ=75/+7017 reve=36/+4551 | fires 235 (181/42/12) skip 26
+gd2.0|15<240 | n 198 | net   +3620 | PF  1.49 | wr  51% | R  +53.4 | hold   7.4m | risk   79 | CI90 [ +1116, +6115] P<0 0.01 | top2  +805 | stop=96/-7366 targ=68/+6808 reve=33/+4165 open=1/+13 | fires 218 (160/46/12) skip 20
+gd2.0|60<240 | n 209 | net   +3912 | PF  1.51 | wr  52% | R  +57.3 | hold   7.3m | risk   80 | CI90 [ +1349, +6443] P<0 0.01 | top2  +804 | stop=98/-7592 targ=75/+7017 reve=36/+4486 | fires 232 (181/39/12) skip 23
+gd3.0|15<240 | n 187 | net   +3079 | PF  1.43 | wr  49% | R  +48.0 | hold   7.9m | risk   78 | CI90 [  +597, +5528] P<0 0.02 | top2  +806 | stop=93/-7188 targ=60/+6099 reve=33/+4156 open=1/+13 | fires 203 (145/46/12) skip 16
+gd3.0|60<240 | n 206 | net   +3807 | PF  1.51 | wr  51% | R  +55.6 | hold   7.1m | risk   79 | CI90 [ +1313, +6347] P<0 0.00 | top2  +803 | stop=97/-7444 targ=75/+6914 reve=34/+4336 | fires 229 (182/35/12) skip 23
+dl1.015|15<60 | n 211 | net   +3773 | PF  1.48 | wr  51% | R  +54.5 | hold   7.3m | risk   80 | CI90 [ +1177, +6431] P<0 0.01 | top2  +805 | stop=101/-7843 targ=72/+7089 reve=37/+4514 open=1/+13 | fires 238 (180/46/12) skip 25 | pend 5: cancelled 1 expired 1 filled 3; delayed pos 3 net +84
+dl1.060|15<60 | n 211 | net   +3771 | PF  1.48 | wr  51% | R  +55.3 | hold   7.3m | risk   80 | CI90 [ +1173, +6431] P<0 0.01 | top2  +805 | stop=101/-7843 targ=72/+7087 reve=37/+4514 open=1/+13 | fires 238 (180/46/12) skip 26 | pend 5: cancelled 1 filled 4; delayed pos 4 net +246
+dl2.015|15<60 | n 205 | net   +3813 | PF  1.51 | wr  50% | R  +51.0 | hold   7.3m | risk   80 | CI90 [ +1267, +6421] P<0 0.00 | top2  +805 | stop=99/-7492 targ=68/+6776 reve=37/+4516 open=1/+13 | fires 238 (180/46/12) skip 26 | pend 15: cancelled 1 expired 6 filled 8; delayed pos 8 net -132
+dl3.015|15<60 | n 187 | net   +3073 | PF  1.43 | wr  48% | R  +42.7 | hold   7.2m | risk   78 | CI90 [  +677, +5548] P<0 0.02 | top2  +804 | stop=95/-7017 targ=58/+6016 reve=33/+4061 open=1/+13 | fires 238 (180/46/12) skip 31 | pend 37: cancelled 10 expired 10 filled 17; delayed pos 17 net +347
+dl3.060|15<60 | n 189 | net   +2974 | PF  1.42 | wr  47% | R  +41.5 | hold   7.1m | risk   77 | CI90 [  +578, +5395] P<0 0.02 | top2  +804 | stop=97/-7106 targ=58/+6010 reve=33/+4057 open=1/+13 | fires 238 (180/46/12) skip 33 | pend 37: cancelled 16 filled 21; delayed pos 21 net +345
+dl5.015|15<60 | n 153 | net   +4155 | PF  1.79 | wr  50% | R  +60.9 | hold   7.5m | risk   78 | CI90 [ +1865, +6534] P<0 0.00 | top2  +805 | stop=74/-5231 targ=46/+5343 reve=32/+4031 open=1/+13 | fires 238 (180/46/12) skip 34 | pend 79: cancelled 18 expired 33 filled 28; delayed pos 28 net +449
+dl5.060|15<60 | n 157 | net   +3688 | PF  1.67 | wr  48% | R  +50.0 | hold   7.3m | risk   76 | CI90 [ +1362, +5935] P<0 0.00 | top2  +804 | stop=79/-5448 targ=46/+5334 reve=31/+3789 open=1/+13 | fires 238 (180/46/12) skip 36 | pend 79: cancelled 42 expired 3 filled 34; delayed pos 34 net +84
+dlc1.015|15<60 | n 210 | net   +3481 | PF  1.44 | wr  50% | R  +52.5 | hold   7.4m | risk   83 | CI90 [  +916, +6021] P<0 0.01 | top2  +805 | stop=101/-7918 targ=71/+6878 reve=37/+4508 open=1/+13 | fires 238 (180/46/12) skip 25 | pend 4: cancelled 2 expired 1 filled 1; delayed pos 1 net -103
+dlc1.060|15<60 | n 210 | net   +3479 | PF  1.44 | wr  50% | R  +53.3 | hold   7.4m | risk   81 | CI90 [  +914, +6021] P<0 0.01 | top2  +805 | stop=101/-7918 targ=71/+6876 reve=37/+4508 open=1/+13 | fires 238 (180/46/12) skip 26 | pend 4: cancelled 2 filled 2; delayed pos 2 net +59
+dlc2.015|15<60 | n 203 | net   +3438 | PF  1.45 | wr  50% | R  +50.1 | hold   7.3m | risk   83 | CI90 [  +917, +5980] P<0 0.01 | top2  +805 | stop=98/-7646 targ=67/+6563 reve=37/+4508 open=1/+13 | fires 238 (180/46/12) skip 26 | pend 14: cancelled 3 expired 6 filled 5; delayed pos 5 net -435
+dlc3.015|15<60 | n 184 | net   +2621 | PF  1.36 | wr  48% | R  +37.3 | hold   7.2m | risk   79 | CI90 [  +234, +5037] P<0 0.04 | top2  +804 | stop=93/-7177 targ=58/+5868 reve=32/+3917 open=1/+12 | fires 238 (180/46/12) skip 32 | pend 36: cancelled 12 expired 10 filled 14; delayed pos 14 net -137
+dlc3.060|15<60 | n 184 | net   +2507 | PF  1.35 | wr  48% | R  +37.0 | hold   7.3m | risk   79 | CI90 [  +120, +4907] P<0 0.04 | top2  +803 | stop=93/-7173 targ=59/+5879 reve=31/+3789 open=1/+12 | fires 238 (180/46/12) skip 35 | pend 37: cancelled 19 filled 18; delayed pos 18 net +39
+dlc5.015|15<60 | n 145 | net   +3303 | PF  1.60 | wr  51% | R  +48.1 | hold   7.7m | risk   84 | CI90 [  +966, +5636] P<0 0.01 | top2  +804 | stop=69/-5439 targ=45/+5082 reve=30/+3648 open=1/+13 | fires 238 (180/46/12) skip 32 | pend 78: cancelled 23 expired 38 filled 17; delayed pos 17 net -394
+dlc5.060|15<60 | n 148 | net   +2913 | PF  1.52 | wr  50% | R  +41.7 | hold   7.6m | risk   83 | CI90 [  +665, +5125] P<0 0.02 | top2  +802 | stop=72/-5614 targ=47/+5127 reve=28/+3388 open=1/+13 | fires 238 (180/46/12) skip 39 | pend 79: cancelled 48 expired 3 filled 28; delayed pos 28 net -263
+dl1.015|ladder | n 211 | net   +3781 | PF  1.48 | wr  50% | R  +54.3 | hold   7.3m | risk   80 | CI90 [ +1186, +6421] P<0 0.01 | top2  +805 | stop=101/-7819 targ=72/+7089 reve=37/+4530 open=1/-19 | fires 238 (180/46/12) skip 24 | pend 8: cancelled 2 expired 1 filled 5; delayed pos 5 net +127
+dl1.060|ladder | n 211 | net   +3780 | PF  1.48 | wr  50% | R  +55.1 | hold   7.3m | risk   80 | CI90 [ +1185, +6419] P<0 0.01 | top2  +805 | stop=101/-7819 targ=72/+7088 reve=37/+4530 open=1/-19 | fires 238 (180/46/12) skip 25 | pend 8: cancelled 2 filled 6; delayed pos 6 net +289
+dl2.015|ladder | n 205 | net   +3712 | PF  1.49 | wr  49% | R  +48.6 | hold   7.2m | risk   79 | CI90 [ +1221, +6336] P<0 0.00 | top2  +805 | stop=100/-7451 targ=67/+6653 reve=37/+4529 open=1/-19 | fires 238 (180/46/12) skip 25 | pend 21: cancelled 2 expired 6 filled 13; delayed pos 13 net -295
+dl3.015|ladder | n 185 | net   +3073 | PF  1.44 | wr  46% | R  +40.9 | hold   7.1m | risk   75 | CI90 [  +661, +5578] P<0 0.01 | top2  +804 | stop=95/-6853 targ=56/+5869 reve=33/+4075 open=1/-19 | fires 238 (180/46/12) skip 29 | pend 48: cancelled 12 expired 12 filled 24; delayed pos 24 net +98
+dl3.060|ladder | n 188 | net   +2911 | PF  1.41 | wr  46% | R  +38.6 | hold   6.9m | risk   74 | CI90 [  +491, +5218] P<0 0.03 | top2  +803 | stop=98/-7003 targ=56/+5861 reve=33/+4070 open=1/-19 | fires 238 (180/46/12) skip 31 | pend 47: cancelled 18 expired 1 filled 28; delayed pos 28 net +102
+dl5.015|ladder | n 148 | net   +4129 | PF  1.83 | wr  49% | R  +63.3 | hold   7.2m | risk   74 | CI90 [ +1928, +6444] P<0 0.00 | top2  +805 | stop=72/-4920 targ=44/+5366 reve=31/+3701 open=1/-19 | fires 238 (180/46/12) skip 34 | pend 91: cancelled 19 expired 37 filled 35; delayed pos 35 net +626
+dl5.060|ladder | n 153 | net   +3802 | PF  1.73 | wr  48% | R  +54.0 | hold   6.7m | risk   73 | CI90 [ +1603, +6049] P<0 0.00 | top2  +804 | stop=77/-5162 targ=45/+5521 reve=30/+3462 open=1/-19 | fires 238 (180/46/12) skip 36 | pend 89: cancelled 45 expired 4 filled 40; delayed pos 40 net +305
+dlc1.015|ladder | n 210 | net   +3432 | PF  1.43 | wr  50% | R  +52.4 | hold   7.4m | risk   83 | CI90 [  +872, +5979] P<0 0.02 | top2  +805 | stop=101/-7951 targ=71/+6878 reve=37/+4524 open=1/-19 | fires 238 (180/46/12) skip 24 | pend 7: cancelled 3 expired 1 filled 3; delayed pos 3 net -117
+dlc1.060|ladder | n 210 | net   +3430 | PF  1.43 | wr  50% | R  +53.2 | hold   7.4m | risk   83 | CI90 [  +869, +5978] P<0 0.02 | top2  +805 | stop=101/-7951 targ=71/+6876 reve=37/+4524 open=1/-19 | fires 238 (180/46/12) skip 25 | pend 7: cancelled 3 filled 4; delayed pos 4 net +45
+dlc2.015|ladder | n 202 | net   +3279 | PF  1.42 | wr  50% | R  +48.7 | hold   7.1m | risk   83 | CI90 [  +814, +5901] P<0 0.01 | top2  +805 | stop=98/-7664 targ=66/+6440 reve=37/+4521 open=1/-19 | fires 238 (180/46/12) skip 25 | pend 20: cancelled 5 expired 6 filled 9; delayed pos 9 net -642
+dlc3.015|ladder | n 182 | net   +2729 | PF  1.38 | wr  47% | R  +40.1 | hold   7.1m | risk   79 | CI90 [  +300, +5247] P<0 0.03 | top2  +804 | stop=92/-7133 targ=56/+5728 reve=33/+4153 open=1/-19 | fires 238 (180/46/12) skip 29 | pend 49: cancelled 14 expired 13 filled 22; delayed pos 22 net -383
+dlc3.060|ladder | n 183 | net   +2609 | PF  1.36 | wr  47% | R  +38.7 | hold   7.2m | risk   78 | CI90 [  +182, +5119] P<0 0.04 | top2  +803 | stop=93/-7133 targ=57/+5737 reve=32/+4023 open=1/-19 | fires 238 (180/46/12) skip 32 | pend 49: cancelled 22 expired 1 filled 26; delayed pos 26 net -144
+dlc5.015|ladder | n 139 | net   +3285 | PF  1.62 | wr  50% | R  +50.1 | hold   7.5m | risk   84 | CI90 [  +989, +5563] P<0 0.01 | top2  +804 | stop=66/-5256 targ=41/+4676 reve=31/+3883 open=1/-19 | fires 238 (180/46/12) skip 29 | pend 93: cancelled 25 expired 45 filled 23; delayed pos 23 net -458
+dlc5.060|ladder | n 144 | net   +2863 | PF  1.52 | wr  49% | R  +43.5 | hold   7.4m | risk   81 | CI90 [  +679, +5102] P<0 0.01 | top2  +802 | stop=70/-5436 targ=45/+5056 reve=28/+3261 open=1/-19 | fires 238 (180/46/12) skip 37 | pend 91: cancelled 53 expired 4 filled 34; delayed pos 34 net -180
+
+--- by the opening fire's tf: n, net, PF ---
+            live | tf15: 160, +2021, PF 1.34 | tf60: 40, +611, PF 1.39 | tf240: 11, +1100, PF 4.24
+             e25 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+            none | tf15: 197, +2374, PF 1.33 | tf60: 50, +1656, PF 1.93 | tf240: 15, +720, PF 2.15
+     gz2.0|15<60 | tf15: 156, +2063, PF 1.37 | tf60: 43, +580, PF 1.33 | tf240: 11, +1075, PF 4.17
+    gz2.0|15<240 | tf15: 161, +1973, PF 1.33 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    gz2.0|60<240 | tf15: 162, +2091, PF 1.35 | tf60: 38, +662, PF 1.44 | tf240: 11, +1101, PF 4.24
+    gz2.0|ladder | tf15: 156, +1967, PF 1.35 | tf60: 41, +654, PF 1.39 | tf240: 12, +1071, PF 4.12
+    gzb2.0|15<60 | tf15: 153, +1978, PF 1.35 | tf60: 45, +727, PF 1.42 | tf240: 11, +1075, PF 4.17
+   gzb2.0|15<240 | tf15: 156, +2058, PF 1.36 | tf60: 40, +495, PF 1.31 | tf240: 11, +1099, PF 4.24
+   gzb2.0|60<240 | tf15: 163, +2174, PF 1.36 | tf60: 38, +504, PF 1.32 | tf240: 11, +1101, PF 4.24
+   gzb2.0|ladder | tf15: 148, +1965, PF 1.37 | tf60: 43, +551, PF 1.32 | tf240: 12, +1069, PF 4.12
+      gzin|15<60 | tf15: 154, +1639, PF 1.29 | tf60: 42, +720, PF 1.46 | tf240: 11, +1009, PF 3.97
+     gzin|15<240 | tf15: 156, +2047, PF 1.36 | tf60: 40, +562, PF 1.36 | tf240: 11, +1101, PF 4.24
+     gzin|60<240 | tf15: 162, +2110, PF 1.35 | tf60: 38, +361, PF 1.25 | tf240: 11, +1100, PF 4.24
+     gzin|ladder | tf15: 150, +1484, PF 1.27 | tf60: 40, +469, PF 1.33 | tf240: 11, +1007, PF 3.98
+     gd1.0|15<60 | tf15: 143, +1914, PF 1.37 | tf60: 43, +580, PF 1.33 | tf240: 11, +1101, PF 4.24
+    gd1.0|15<240 | tf15: 160, +2185, PF 1.37 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    gd1.0|60<240 | tf15: 162, +2091, PF 1.35 | tf60: 37, +764, PF 1.54 | tf240: 11, +1101, PF 4.24
+    gd1.0|ladder | tf15: 142, +2005, PF 1.39 | tf60: 40, +757, PF 1.48 | tf240: 12, +1098, PF 4.20
+     mr2.0|15<60 | tf15: 157, +1633, PF 1.28 | tf60: 40, +320, PF 1.19 | tf240: 11, +1101, PF 4.24
+    mr2.0|15<240 | tf15: 157, +2396, PF 1.42 | tf60: 41, +520, PF 1.32 | tf240: 11, +1096, PF 4.20
+    mr2.0|60<240 | tf15: 163, +2216, PF 1.37 | tf60: 39, +477, PF 1.30 | tf240: 11, +1101, PF 4.24
+    mr2.0|ladder | tf15: 152, +2037, PF 1.37 | tf60: 41, +348, PF 1.20 | tf240: 11, +1097, PF 4.20
+     sh2.0|15<60 | tf15: 159, +2412, PF 1.42 | tf60: 40, +592, PF 1.38 | tf240: 11, +898, PF 3.08
+    sh2.0|15<240 | tf15: 156, +1838, PF 1.32 | tf60: 40, +442, PF 1.26 | tf240: 11, +1101, PF 4.24
+    sh2.0|60<240 | tf15: 161, +2095, PF 1.35 | tf60: 39, +707, PF 1.48 | tf240: 11, +1101, PF 4.24
+    sh2.0|ladder | tf15: 153, +2064, PF 1.38 | tf60: 39, +567, PF 1.36 | tf240: 11, +898, PF 3.08
+   dl2.060|15<60 | tf15: 157, +1958, PF 1.34 | tf60: 39, +655, PF 1.44 | tf240: 11, +1101, PF 4.24
+  dlc2.060|15<60 | tf15: 155, +1917, PF 1.33 | tf60: 38, +399, PF 1.25 | tf240: 11, +1100, PF 4.24
+  dl2.060|15<240 | tf15: 161, +1839, PF 1.30 | tf60: 40, +577, PF 1.36 | tf240: 10, +1192, PF 5.81
+ dlc2.060|15<240 | tf15: 160, +1855, PF 1.31 | tf60: 39, +655, PF 1.44 | tf240: 11, +1100, PF 4.24
+  dl2.060|60<240 | tf15: 161, +2095, PF 1.35 | tf60: 39, +644, PF 1.42 | tf240: 12, +1082, PF 4.02
+ dlc2.060|60<240 | tf15: 161, +2095, PF 1.35 | tf60: 39, +570, PF 1.36 | tf240: 12, +1082, PF 4.02
+  dl2.060|ladder | tf15: 157, +1807, PF 1.31 | tf60: 39, +609, PF 1.39 | tf240: 11, +1173, PF 5.40
+ dlc2.060|ladder | tf15: 154, +1795, PF 1.31 | tf60: 37, +415, PF 1.27 | tf240: 12, +1081, PF 4.02
+     gz0.5|15<60 | tf15: 162, +2108, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    gz0.5|ladder | tf15: 162, +2108, PF 1.35 | tf60: 40, +593, PF 1.37 | tf240: 11, +1101, PF 4.24
+     gz1.0|15<60 | tf15: 162, +2009, PF 1.34 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    gz1.0|ladder | tf15: 162, +1986, PF 1.33 | tf60: 40, +560, PF 1.35 | tf240: 11, +1101, PF 4.24
+     gz3.0|15<60 | tf15: 145, +1621, PF 1.31 | tf60: 43, +569, PF 1.33 | tf240: 11, +818, PF 2.90
+    gz3.0|ladder | tf15: 141, +1808, PF 1.37 | tf60: 40, +685, PF 1.44 | tf240: 12, +814, PF 2.87
+     gz5.0|15<60 | tf15: 101, +1038, PF 1.27 | tf60: 43, +485, PF 1.28 | tf240: 11, +817, PF 2.90
+    gz5.0|ladder | tf15: 94, +568, PF 1.15 | tf60: 34, +203, PF 1.14 | tf240: 12, +812, PF 2.88
+    gzb0.5|15<60 | tf15: 162, +2116, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+   gzb0.5|ladder | tf15: 162, +2116, PF 1.35 | tf60: 40, +630, PF 1.40 | tf240: 11, +1101, PF 4.24
+    gzb1.0|15<60 | tf15: 160, +1861, PF 1.31 | tf60: 42, +721, PF 1.46 | tf240: 11, +1101, PF 4.24
+   gzb1.0|ladder | tf15: 159, +1859, PF 1.32 | tf60: 43, +641, PF 1.38 | tf240: 11, +1099, PF 4.24
+    gzb3.0|15<60 | tf15: 135, +1186, PF 1.25 | tf60: 45, +712, PF 1.41 | tf240: 11, +321, PF 1.62
+   gzb3.0|ladder | tf15: 126, +1236, PF 1.29 | tf60: 41, +739, PF 1.50 | tf240: 12, +317, PF 1.61
+    gzb5.0|15<60 | tf15: 88, +673, PF 1.19 | tf60: 45, +628, PF 1.36 | tf240: 11, +321, PF 1.62
+   gzb5.0|ladder | tf15: 81, +619, PF 1.20 | tf60: 34, +322, PF 1.23 | tf240: 12, +317, PF 1.61
+     gd0.5|15<60 | tf15: 163, +2019, PF 1.34 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    gd0.5|ladder | tf15: 163, +1999, PF 1.34 | tf60: 39, +560, PF 1.35 | tf240: 12, +1097, PF 4.19
+     gd1.5|15<60 | tf15: 117, +725, PF 1.16 | tf60: 43, +484, PF 1.28 | tf240: 11, +816, PF 2.90
+    gd1.5|ladder | tf15: 112, +884, PF 1.21 | tf60: 38, +454, PF 1.29 | tf240: 12, +812, PF 2.87
+     gd2.0|15<60 | tf15: 103, +986, PF 1.25 | tf60: 43, +485, PF 1.28 | tf240: 11, +817, PF 2.90
+    gd2.0|ladder | tf15: 99, +1226, PF 1.34 | tf60: 36, +329, PF 1.22 | tf240: 12, +812, PF 2.87
+     gd3.0|15<60 | tf15: 75, +710, PF 1.25 | tf60: 43, +402, PF 1.22 | tf240: 11, +817, PF 2.90
+    gd3.0|ladder | tf15: 65, +365, PF 1.14 | tf60: 32, +180, PF 1.13 | tf240: 12, +813, PF 2.88
+     mr0.5|15<60 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    mr0.5|ladder | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+     mr1.0|15<60 | tf15: 161, +2099, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    mr1.0|ladder | tf15: 161, +2115, PF 1.36 | tf60: 40, +587, PF 1.37 | tf240: 11, +1076, PF 4.14
+     mr3.0|15<60 | tf15: 150, +1935, PF 1.35 | tf60: 40, +245, PF 1.14 | tf240: 11, +1101, PF 4.24
+    mr3.0|ladder | tf15: 144, +2640, PF 1.54 | tf60: 40, +215, PF 1.12 | tf240: 11, +1238, PF 4.61
+     mr5.0|15<60 | tf15: 126, +1253, PF 1.28 | tf60: 40, +44, PF 1.02 | tf240: 11, +1101, PF 4.25
+    mr5.0|ladder | tf15: 117, +2325, PF 1.63 | tf60: 38, -202, PF 0.89 | tf240: 11, +1031, PF 3.38
+     sh0.5|15<60 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    sh0.5|ladder | tf15: 161, +2095, PF 1.35 | tf60: 40, +606, PF 1.38 | tf240: 11, +1101, PF 4.24
+     sh1.0|15<60 | tf15: 161, +2034, PF 1.34 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    sh1.0|ladder | tf15: 161, +2153, PF 1.37 | tf60: 40, +639, PF 1.41 | tf240: 11, +1101, PF 4.24
+     sh3.0|15<60 | tf15: 151, +2315, PF 1.42 | tf60: 41, +548, PF 1.33 | tf240: 11, +886, PF 3.05
+    sh3.0|ladder | tf15: 144, +1878, PF 1.36 | tf60: 40, +523, PF 1.32 | tf240: 11, +885, PF 3.05
+     sh5.0|15<60 | tf15: 124, +1551, PF 1.34 | tf60: 41, +418, PF 1.24 | tf240: 11, +614, PF 2.18
+    sh5.0|ladder | tf15: 115, +1521, PF 1.37 | tf60: 40, +559, PF 1.34 | tf240: 11, +615, PF 2.18
+    gz0.5|15<240 | tf15: 161, +2095, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    gz0.5|60<240 | tf15: 161, +2095, PF 1.35 | tf60: 40, +593, PF 1.37 | tf240: 11, +1101, PF 4.24
+    gz1.0|15<240 | tf15: 161, +2072, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    gz1.0|60<240 | tf15: 162, +2091, PF 1.35 | tf60: 39, +560, PF 1.35 | tf240: 11, +1101, PF 4.24
+    gz3.0|15<240 | tf15: 158, +2036, PF 1.35 | tf60: 40, +543, PF 1.34 | tf240: 11, +1101, PF 4.24
+    gz3.0|60<240 | tf15: 162, +2091, PF 1.35 | tf60: 37, +746, PF 1.53 | tf240: 11, +1101, PF 4.24
+    gz5.0|15<240 | tf15: 147, +1392, PF 1.25 | tf60: 42, +283, PF 1.15 | tf240: 11, +1100, PF 4.25
+    gz5.0|60<240 | tf15: 164, +2066, PF 1.34 | tf60: 33, +731, PF 1.59 | tf240: 11, +1101, PF 4.24
+    gd0.5|15<240 | tf15: 161, +2075, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+    gd0.5|60<240 | tf15: 162, +2091, PF 1.35 | tf60: 39, +560, PF 1.35 | tf240: 11, +1101, PF 4.24
+    gd1.5|15<240 | tf15: 152, +1994, PF 1.35 | tf60: 40, +402, PF 1.24 | tf240: 11, +1100, PF 4.24
+    gd1.5|60<240 | tf15: 163, +2134, PF 1.36 | tf60: 35, +742, PF 1.56 | tf240: 11, +1101, PF 4.24
+    gd2.0|15<240 | tf15: 146, +2220, PF 1.42 | tf60: 41, +299, PF 1.17 | tf240: 11, +1100, PF 4.24
+    gd2.0|60<240 | tf15: 163, +2134, PF 1.36 | tf60: 35, +677, PF 1.51 | tf240: 11, +1101, PF 4.24
+    gd3.0|15<240 | tf15: 133, +1639, PF 1.33 | tf60: 43, +339, PF 1.18 | tf240: 11, +1101, PF 4.24
+    gd3.0|60<240 | tf15: 165, +2074, PF 1.34 | tf60: 30, +632, PF 1.57 | tf240: 11, +1100, PF 4.24
+   dl1.015|15<60 | tf15: 159, +1922, PF 1.32 | tf60: 41, +750, PF 1.48 | tf240: 11, +1101, PF 4.24
+   dl1.060|15<60 | tf15: 160, +2083, PF 1.35 | tf60: 40, +587, PF 1.37 | tf240: 11, +1101, PF 4.24
+   dl2.015|15<60 | tf15: 153, +1961, PF 1.35 | tf60: 41, +750, PF 1.48 | tf240: 11, +1102, PF 4.24
+   dl3.015|15<60 | tf15: 140, +1631, PF 1.31 | tf60: 36, +342, PF 1.23 | tf240: 11, +1100, PF 4.24
+   dl3.060|15<60 | tf15: 144, +1628, PF 1.30 | tf60: 34, +247, PF 1.17 | tf240: 11, +1099, PF 4.24
+   dl5.015|15<60 | tf15: 111, +2490, PF 1.66 | tf60: 31, +561, PF 1.48 | tf240: 11, +1104, PF 4.24
+   dl5.060|15<60 | tf15: 117, +2121, PF 1.52 | tf60: 29, +466, PF 1.42 | tf240: 11, +1102, PF 4.24
+  dlc1.015|15<60 | tf15: 157, +1734, PF 1.29 | tf60: 42, +647, PF 1.39 | tf240: 11, +1100, PF 4.24
+  dlc1.060|15<60 | tf15: 158, +1896, PF 1.32 | tf60: 41, +483, PF 1.29 | tf240: 11, +1100, PF 4.24
+  dlc2.015|15<60 | tf15: 150, +1657, PF 1.29 | tf60: 42, +681, PF 1.41 | tf240: 11, +1100, PF 4.24
+  dlc3.015|15<60 | tf15: 137, +1145, PF 1.21 | tf60: 37, +274, PF 1.18 | tf240: 10, +1203, PF 6.14
+  dlc3.060|15<60 | tf15: 141, +1313, PF 1.24 | tf60: 33, -7, PF 0.99 | tf240: 10, +1202, PF 6.14
+  dlc5.015|15<60 | tf15: 100, +1639, PF 1.42 | tf60: 35, +460, PF 1.34 | tf240: 10, +1204, PF 6.13
+  dlc5.060|15<60 | tf15: 110, +1676, PF 1.40 | tf60: 28, +35, PF 1.03 | tf240: 10, +1202, PF 6.13
+  dl1.015|ladder | tf15: 159, +1922, PF 1.32 | tf60: 40, +777, PF 1.50 | tf240: 12, +1083, PF 4.02
+  dl1.060|ladder | tf15: 160, +2084, PF 1.35 | tf60: 39, +614, PF 1.40 | tf240: 12, +1083, PF 4.02
+  dl2.015|ladder | tf15: 153, +1810, PF 1.32 | tf60: 41, +728, PF 1.46 | tf240: 11, +1174, PF 5.40
+  dl3.015|ladder | tf15: 139, +1693, PF 1.33 | tf60: 34, +299, PF 1.21 | tf240: 12, +1081, PF 4.02
+  dl3.060|ladder | tf15: 144, +1651, PF 1.31 | tf60: 32, +180, PF 1.13 | tf240: 12, +1080, PF 4.02
+  dl5.015|ladder | tf15: 108, +2484, PF 1.69 | tf60: 29, +906, PF 1.91 | tf240: 11, +739, PF 3.06
+  dl5.060|ladder | tf15: 114, +2115, PF 1.54 | tf60: 28, +949, PF 2.00 | tf240: 11, +738, PF 3.06
+ dlc1.015|ladder | tf15: 157, +1734, PF 1.29 | tf60: 41, +616, PF 1.36 | tf240: 12, +1082, PF 4.02
+ dlc1.060|ladder | tf15: 158, +1895, PF 1.32 | tf60: 40, +453, PF 1.27 | tf240: 12, +1082, PF 4.02
+ dlc2.015|ladder | tf15: 149, +1535, PF 1.27 | tf60: 41, +663, PF 1.40 | tf240: 12, +1081, PF 4.02
+ dlc3.015|ladder | tf15: 137, +1286, PF 1.23 | tf60: 34, +259, PF 1.18 | tf240: 11, +1184, PF 5.68
+ dlc3.060|ladder | tf15: 142, +1414, PF 1.25 | tf60: 30, +12, PF 1.01 | tf240: 11, +1183, PF 5.68
+ dlc5.015|ladder | tf15: 98, +1749, PF 1.45 | tf60: 30, +349, PF 1.29 | tf240: 11, +1187, PF 5.67
+ dlc5.060|ladder | tf15: 109, +1744, PF 1.42 | tf60: 25, +277, PF 1.26 | tf240: 10, +841, PF 4.32
+
+--- by side: n, net ---
+            live | Buy: 97, +1010 | Sell: 114, +2722
+             e25 | Buy: 97, +1048 | Sell: 115, +2735
+            none | Buy: 121, +1681 | Sell: 141, +3069
+     gz2.0|15<60 | Buy: 97, +974 | Sell: 113, +2744
+    gz2.0|15<240 | Buy: 97, +1023 | Sell: 115, +2637
+    gz2.0|60<240 | Buy: 96, +1119 | Sell: 115, +2735
+    gz2.0|ladder | Buy: 96, +1045 | Sell: 113, +2647
+    gzb2.0|15<60 | Buy: 97, +1053 | Sell: 112, +2727
+   gzb2.0|15<240 | Buy: 96, +931 | Sell: 111, +2720
+   gzb2.0|60<240 | Buy: 97, +1017 | Sell: 115, +2761
+   gzb2.0|ladder | Buy: 95, +847 | Sell: 108, +2739
+      gzin|15<60 | Buy: 94, +674 | Sell: 113, +2694
+     gzin|15<240 | Buy: 97, +998 | Sell: 110, +2711
+     gzin|60<240 | Buy: 97, +935 | Sell: 114, +2636
+     gzin|ladder | Buy: 94, +511 | Sell: 107, +2449
+     gd1.0|15<60 | Buy: 95, +1064 | Sell: 102, +2531
+    gd1.0|15<240 | Buy: 97, +1291 | Sell: 114, +2583
+    gd1.0|60<240 | Buy: 96, +1119 | Sell: 114, +2837
+    gd1.0|ladder | Buy: 94, +1377 | Sell: 100, +2482
+     mr2.0|15<60 | Buy: 96, +419 | Sell: 112, +2635
+    mr2.0|15<240 | Buy: 95, +1157 | Sell: 114, +2855
+    mr2.0|60<240 | Buy: 97, +1048 | Sell: 116, +2745
+    mr2.0|ladder | Buy: 93, +643 | Sell: 111, +2839
+     sh2.0|15<60 | Buy: 95, +1155 | Sell: 115, +2747
+    sh2.0|15<240 | Buy: 95, +781 | Sell: 112, +2602
+    sh2.0|60<240 | Buy: 97, +1067 | Sell: 114, +2836
+    sh2.0|ladder | Buy: 92, +814 | Sell: 111, +2714
+   dl2.060|15<60 | Buy: 93, +778 | Sell: 114, +2936
+  dlc2.060|15<60 | Buy: 92, +751 | Sell: 112, +2666
+  dl2.060|15<240 | Buy: 96, +1013 | Sell: 115, +2594
+ dlc2.060|15<240 | Buy: 96, +1000 | Sell: 114, +2611
+  dl2.060|60<240 | Buy: 97, +1087 | Sell: 115, +2735
+ dlc2.060|60<240 | Buy: 97, +1013 | Sell: 115, +2735
+  dl2.060|ladder | Buy: 93, +793 | Sell: 114, +2796
+ dlc2.060|ladder | Buy: 92, +749 | Sell: 111, +2543
+     gz0.5|15<60 | Buy: 97, +1044 | Sell: 116, +2752
+    gz0.5|ladder | Buy: 97, +1050 | Sell: 116, +2752
+     gz1.0|15<60 | Buy: 97, +980 | Sell: 116, +2716
+    gz1.0|ladder | Buy: 97, +952 | Sell: 116, +2694
+     gz3.0|15<60 | Buy: 94, +646 | Sell: 105, +2363
+    gz3.0|ladder | Buy: 92, +950 | Sell: 101, +2358
+     gz5.0|15<60 | Buy: 75, +709 | Sell: 80, +1631
+    gz5.0|ladder | Buy: 67, +45 | Sell: 73, +1538
+    gzb0.5|15<60 | Buy: 97, +1052 | Sell: 116, +2752
+   gzb0.5|ladder | Buy: 97, +1095 | Sell: 116, +2752
+    gzb1.0|15<60 | Buy: 98, +984 | Sell: 115, +2699
+   gzb1.0|ladder | Buy: 98, +949 | Sell: 115, +2651
+    gzb3.0|15<60 | Buy: 89, +208 | Sell: 102, +2012
+   gzb3.0|ladder | Buy: 84, +269 | Sell: 95, +2023
+    gzb5.0|15<60 | Buy: 68, +238 | Sell: 76, +1383
+   gzb5.0|ladder | Buy: 59, -138 | Sell: 68, +1396
+     gd0.5|15<60 | Buy: 98, +983 | Sell: 116, +2723
+    gd0.5|ladder | Buy: 98, +952 | Sell: 116, +2704
+     gd1.5|15<60 | Buy: 81, +392 | Sell: 90, +1633
+    gd1.5|ladder | Buy: 77, +576 | Sell: 85, +1573
+     gd2.0|15<60 | Buy: 74, +412 | Sell: 83, +1876
+    gd2.0|ladder | Buy: 69, +542 | Sell: 78, +1825
+     gd3.0|15<60 | Buy: 62, +710 | Sell: 67, +1219
+    gd3.0|ladder | Buy: 51, +212 | Sell: 58, +1147
+     mr0.5|15<60 | Buy: 97, +1048 | Sell: 115, +2735
+    mr0.5|ladder | Buy: 97, +1048 | Sell: 115, +2735
+     mr1.0|15<60 | Buy: 97, +1048 | Sell: 115, +2738
+    mr1.0|ladder | Buy: 97, +1048 | Sell: 115, +2730
+     mr3.0|15<60 | Buy: 94, +897 | Sell: 107, +2383
+    mr3.0|ladder | Buy: 90, +1353 | Sell: 105, +2740
+     mr5.0|15<60 | Buy: 88, +748 | Sell: 89, +1650
+    mr5.0|ladder | Buy: 81, +1461 | Sell: 85, +1693
+     sh0.5|15<60 | Buy: 97, +1048 | Sell: 115, +2735
+    sh0.5|ladder | Buy: 97, +1067 | Sell: 115, +2735
+     sh1.0|15<60 | Buy: 97, +988 | Sell: 115, +2734
+    sh1.0|ladder | Buy: 97, +1124 | Sell: 115, +2770
+     sh3.0|15<60 | Buy: 93, +1106 | Sell: 110, +2643
+    sh3.0|ladder | Buy: 90, +740 | Sell: 105, +2546
+     sh5.0|15<60 | Buy: 80, +842 | Sell: 96, +1741
+    sh5.0|ladder | Buy: 77, +729 | Sell: 89, +1965
+    gz0.5|15<240 | Buy: 97, +1048 | Sell: 115, +2735
+    gz0.5|60<240 | Buy: 97, +1054 | Sell: 115, +2735
+    gz1.0|15<240 | Buy: 97, +1047 | Sell: 115, +2713
+    gz1.0|60<240 | Buy: 97, +1018 | Sell: 115, +2734
+    gz3.0|15<240 | Buy: 97, +1117 | Sell: 112, +2563
+    gz3.0|60<240 | Buy: 95, +1222 | Sell: 115, +2717
+    gz5.0|15<240 | Buy: 94, +408 | Sell: 106, +2366
+    gz5.0|60<240 | Buy: 94, +1119 | Sell: 114, +2779
+    gd0.5|15<240 | Buy: 97, +1047 | Sell: 115, +2716
+    gd0.5|60<240 | Buy: 97, +1018 | Sell: 115, +2734
+    gd1.5|15<240 | Buy: 94, +1002 | Sell: 109, +2494
+    gd1.5|60<240 | Buy: 95, +1222 | Sell: 114, +2755
+    gd2.0|15<240 | Buy: 90, +1203 | Sell: 108, +2418
+    gd2.0|60<240 | Buy: 95, +1157 | Sell: 114, +2755
+    gd3.0|15<240 | Buy: 84, +648 | Sell: 103, +2431
+    gd3.0|60<240 | Buy: 94, +1158 | Sell: 112, +2648
+   dl1.015|15<60 | Buy: 96, +966 | Sell: 115, +2806
+   dl1.060|15<60 | Buy: 96, +965 | Sell: 115, +2806
+   dl2.015|15<60 | Buy: 92, +786 | Sell: 113, +3026
+   dl3.015|15<60 | Buy: 86, +1115 | Sell: 101, +1958
+   dl3.060|15<60 | Buy: 87, +1105 | Sell: 102, +1869
+   dl5.015|15<60 | Buy: 71, +1827 | Sell: 82, +2328
+   dl5.060|15<60 | Buy: 73, +1496 | Sell: 84, +2192
+  dlc1.015|15<60 | Buy: 96, +967 | Sell: 114, +2514
+  dlc1.060|15<60 | Buy: 96, +965 | Sell: 114, +2514
+  dlc2.015|15<60 | Buy: 92, +769 | Sell: 111, +2669
+  dlc3.015|15<60 | Buy: 85, +1100 | Sell: 99, +1521
+  dlc3.060|15<60 | Buy: 84, +990 | Sell: 100, +1517
+  dlc5.015|15<60 | Buy: 68, +1413 | Sell: 77, +1890
+  dlc5.060|15<60 | Buy: 68, +1324 | Sell: 80, +1589
+  dl1.015|ladder | Buy: 96, +975 | Sell: 115, +2806
+  dl1.060|ladder | Buy: 96, +974 | Sell: 115, +2806
+  dl2.015|ladder | Buy: 92, +826 | Sell: 113, +2886
+  dl3.015|ladder | Buy: 86, +1176 | Sell: 99, +1897
+  dl3.060|ladder | Buy: 87, +1143 | Sell: 101, +1768
+  dl5.015|ladder | Buy: 67, +1745 | Sell: 81, +2384
+  dl5.060|ladder | Buy: 70, +1553 | Sell: 83, +2249
+ dlc1.015|ladder | Buy: 96, +918 | Sell: 114, +2514
+ dlc1.060|ladder | Buy: 96, +916 | Sell: 114, +2514
+ dlc2.015|ladder | Buy: 92, +733 | Sell: 110, +2545
+ dlc3.015|ladder | Buy: 85, +1087 | Sell: 97, +1642
+ dlc3.060|ladder | Buy: 84, +1011 | Sell: 99, +1598
+ dlc5.015|ladder | Buy: 64, +1271 | Sell: 75, +2014
+ dlc5.060|ladder | Buy: 65, +1191 | Sell: 79, +1672
+
+--- paired vs e25: trades matched by (open trade, side); unmatched enter as (pnl − 0) ---
+            live | shared 201 | only-var  10 | only-e25  11 | Δnet     -51 | CI90 [  -717,   +590] | P(Δ<0) 0.55
+             e25 | shared 212 | only-var   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+            none | shared 201 | only-var  61 | only-e25  11 | Δnet    +968 | CI90 [  -586,  +2568] | P(Δ<0) 0.16
+     gz2.0|15<60 | shared 194 | only-var  16 | only-e25  18 | Δnet     -64 | CI90 [  -998,   +853] | P(Δ<0) 0.53
+    gz2.0|15<240 | shared 208 | only-var   4 | only-e25   4 | Δnet    -123 | CI90 [  -574,   +294] | P(Δ<0) 0.68
+    gz2.0|60<240 | shared 209 | only-var   2 | only-e25   3 | Δnet     +71 | CI90 [  -246,   +396] | P(Δ<0) 0.38
+    gz2.0|ladder | shared 187 | only-var  22 | only-e25  25 | Δnet     -91 | CI90 [ -1133,   +986] | P(Δ<0) 0.55
+    gzb2.0|15<60 | shared 188 | only-var  21 | only-e25  24 | Δnet      -2 | CI90 [ -1241,  +1234] | P(Δ<0) 0.50
+   gzb2.0|15<240 | shared 204 | only-var   3 | only-e25   8 | Δnet    -132 | CI90 [  -667,   +377] | P(Δ<0) 0.66
+   gzb2.0|60<240 | shared 207 | only-var   5 | only-e25   5 | Δnet      -5 | CI90 [  -433,   +459] | P(Δ<0) 0.49
+   gzb2.0|ladder | shared 175 | only-var  28 | only-e25  37 | Δnet    -197 | CI90 [ -1586,  +1225] | P(Δ<0) 0.58
+      gzin|15<60 | shared 201 | only-var   6 | only-e25  11 | Δnet    -415 | CI90 [ -1206,   +319] | P(Δ<0) 0.80
+     gzin|15<240 | shared 206 | only-var   1 | only-e25   6 | Δnet     -74 | CI90 [  -536,   +343] | P(Δ<0) 0.61
+     gzin|60<240 | shared 207 | only-var   4 | only-e25   5 | Δnet    -212 | CI90 [  -787,   +278] | P(Δ<0) 0.74
+     gzin|ladder | shared 191 | only-var  10 | only-e25  21 | Δnet    -823 | CI90 [ -1830,   +130] | P(Δ<0) 0.92
+     gd1.0|15<60 | shared 191 | only-var   6 | only-e25  21 | Δnet    -188 | CI90 [  -980,   +604] | P(Δ<0) 0.64
+    gd1.0|15<240 | shared 209 | only-var   2 | only-e25   3 | Δnet     +91 | CI90 [  -305,   +522] | P(Δ<0) 0.37
+    gd1.0|60<240 | shared 209 | only-var   1 | only-e25   3 | Δnet    +173 | CI90 [   -86,   +465] | P(Δ<0) 0.14
+    gd1.0|ladder | shared 184 | only-var  10 | only-e25  28 | Δnet     +77 | CI90 [  -875,  +1006] | P(Δ<0) 0.45
+     mr2.0|15<60 | shared 204 | only-var   4 | only-e25   8 | Δnet    -729 | CI90 [ -1576,     -3] | P(Δ<0) 0.95
+    mr2.0|15<240 | shared 203 | only-var   6 | only-e25   9 | Δnet    +229 | CI90 [  -290,   +774] | P(Δ<0) 0.23
+    mr2.0|60<240 | shared 211 | only-var   2 | only-e25   1 | Δnet     +11 | CI90 [  -221,   +234] | P(Δ<0) 0.42
+    mr2.0|ladder | shared 195 | only-var   9 | only-e25  17 | Δnet    -301 | CI90 [ -1329,   +653] | P(Δ<0) 0.68
+     sh2.0|15<60 | shared 203 | only-var   7 | only-e25   9 | Δnet    +119 | CI90 [  -536,   +766] | P(Δ<0) 0.37
+    sh2.0|15<240 | shared 204 | only-var   3 | only-e25   8 | Δnet    -401 | CI90 [ -1202,   +300] | P(Δ<0) 0.81
+    sh2.0|60<240 | shared 210 | only-var   1 | only-e25   2 | Δnet    +120 | CI90 [  -115,   +386] | P(Δ<0) 0.18
+    sh2.0|ladder | shared 193 | only-var  10 | only-e25  19 | Δnet    -254 | CI90 [ -1325,   +703] | P(Δ<0) 0.66
+   dl2.060|15<60 | shared 195 | only-var  12 | only-e25  17 | Δnet     -69 | CI90 [  -816,   +730] | P(Δ<0) 0.56
+  dlc2.060|15<60 | shared 192 | only-var  12 | only-e25  20 | Δnet    -366 | CI90 [ -1199,   +477] | P(Δ<0) 0.77
+  dl2.060|15<240 | shared 207 | only-var   4 | only-e25   5 | Δnet    -176 | CI90 [  -580,   +226] | P(Δ<0) 0.76
+ dlc2.060|15<240 | shared 208 | only-var   2 | only-e25   4 | Δnet    -172 | CI90 [  -532,   +172] | P(Δ<0) 0.79
+  dl2.060|60<240 | shared 208 | only-var   4 | only-e25   4 | Δnet     +39 | CI90 [  -261,   +362] | P(Δ<0) 0.42
+ dlc2.060|60<240 | shared 208 | only-var   4 | only-e25   4 | Δnet     -36 | CI90 [  -391,   +325] | P(Δ<0) 0.56
+  dl2.060|ladder | shared 189 | only-var  18 | only-e25  23 | Δnet    -193 | CI90 [ -1127,   +692] | P(Δ<0) 0.64
+ dlc2.060|ladder | shared 187 | only-var  16 | only-e25  25 | Δnet    -491 | CI90 [ -1455,   +441] | P(Δ<0) 0.81
+     gz0.5|15<60 | shared 211 | only-var   2 | only-e25   1 | Δnet     +13 | CI90 [  -262,   +288] | P(Δ<0) 0.41
+    gz0.5|ladder | shared 209 | only-var   4 | only-e25   3 | Δnet     +19 | CI90 [  -378,   +424] | P(Δ<0) 0.47
+     gz1.0|15<60 | shared 207 | only-var   6 | only-e25   5 | Δnet     -87 | CI90 [  -553,   +366] | P(Δ<0) 0.60
+    gz1.0|ladder | shared 203 | only-var  10 | only-e25   9 | Δnet    -136 | CI90 [  -760,   +444] | P(Δ<0) 0.64
+     gz3.0|15<60 | shared 169 | only-var  30 | only-e25  43 | Δnet    -775 | CI90 [ -2097,   +556] | P(Δ<0) 0.83
+    gz3.0|ladder | shared 158 | only-var  35 | only-e25  54 | Δnet    -476 | CI90 [ -2066,  +1036] | P(Δ<0) 0.69
+     gz5.0|15<60 | shared 126 | only-var  29 | only-e25  86 | Δnet   -1443 | CI90 [ -3082,   +176] | P(Δ<0) 0.93
+    gz5.0|ladder | shared 110 | only-var  30 | only-e25 102 | Δnet   -2200 | CI90 [ -4045,   -381] | P(Δ<0) 0.98
+    gzb0.5|15<60 | shared 210 | only-var   3 | only-e25   2 | Δnet     +21 | CI90 [  -363,   +405] | P(Δ<0) 0.44
+   gzb0.5|ladder | shared 208 | only-var   5 | only-e25   4 | Δnet     +64 | CI90 [  -433,   +574] | P(Δ<0) 0.43
+    gzb1.0|15<60 | shared 204 | only-var   9 | only-e25   8 | Δnet     -99 | CI90 [  -669,   +442] | P(Δ<0) 0.62
+   gzb1.0|ladder | shared 198 | only-var  15 | only-e25  14 | Δnet    -183 | CI90 [  -929,   +558] | P(Δ<0) 0.67
+    gzb3.0|15<60 | shared 160 | only-var  31 | only-e25  52 | Δnet   -1563 | CI90 [ -3323,   +122] | P(Δ<0) 0.94
+   gzb3.0|ladder | shared 144 | only-var  35 | only-e25  68 | Δnet   -1491 | CI90 [ -3427,   +341] | P(Δ<0) 0.91
+    gzb5.0|15<60 | shared 117 | only-var  27 | only-e25  95 | Δnet   -2161 | CI90 [ -4048,   -222] | P(Δ<0) 0.97
+   gzb5.0|ladder | shared 102 | only-var  25 | only-e25 110 | Δnet   -2525 | CI90 [ -4671,   -478] | P(Δ<0) 0.98
+     gd0.5|15<60 | shared 208 | only-var   6 | only-e25   4 | Δnet     -77 | CI90 [  -490,   +276] | P(Δ<0) 0.63
+    gd0.5|ladder | shared 204 | only-var  10 | only-e25   8 | Δnet    -127 | CI90 [  -665,   +406] | P(Δ<0) 0.63
+     gd1.5|15<60 | shared 163 | only-var   8 | only-e25  49 | Δnet   -1757 | CI90 [ -2991,   -540] | P(Δ<0) 0.99
+    gd1.5|ladder | shared 151 | only-var  11 | only-e25  61 | Δnet   -1633 | CI90 [ -3040,   -192] | P(Δ<0) 0.97
+     gd2.0|15<60 | shared 146 | only-var  11 | only-e25  66 | Δnet   -1495 | CI90 [ -2967,    -45] | P(Δ<0) 0.96
+    gd2.0|ladder | shared 131 | only-var  16 | only-e25  81 | Δnet   -1416 | CI90 [ -3124,   +144] | P(Δ<0) 0.93
+     gd3.0|15<60 | shared 108 | only-var  21 | only-e25 104 | Δnet   -1854 | CI90 [ -3726,    +54] | P(Δ<0) 0.95
+    gd3.0|ladder | shared  82 | only-var  27 | only-e25 130 | Δnet   -2424 | CI90 [ -4588,   -255] | P(Δ<0) 0.97
+     mr0.5|15<60 | shared 212 | only-var   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+    mr0.5|ladder | shared 212 | only-var   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+     mr1.0|15<60 | shared 211 | only-var   1 | only-e25   1 | Δnet      +4 | CI90 [   -46,    +58] | P(Δ<0) 0.44
+    mr1.0|ladder | shared 206 | only-var   6 | only-e25   6 | Δnet      -5 | CI90 [  -427,   +406] | P(Δ<0) 0.50
+     mr3.0|15<60 | shared 193 | only-var   8 | only-e25  19 | Δnet    -502 | CI90 [ -1738,   +670] | P(Δ<0) 0.75
+    mr3.0|ladder | shared 181 | only-var  14 | only-e25  31 | Δnet    +311 | CI90 [ -1104,  +1641] | P(Δ<0) 0.36
+     mr5.0|15<60 | shared 170 | only-var   7 | only-e25  42 | Δnet   -1385 | CI90 [ -2994,   +133] | P(Δ<0) 0.93
+    mr5.0|ladder | shared 151 | only-var  15 | only-e25  61 | Δnet    -629 | CI90 [ -2347,   +997] | P(Δ<0) 0.74
+     sh0.5|15<60 | shared 212 | only-var   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+    sh0.5|ladder | shared 211 | only-var   1 | only-e25   1 | Δnet     +19 | CI90 [  -144,   +200] | P(Δ<0) 0.37
+     sh1.0|15<60 | shared 210 | only-var   2 | only-e25   2 | Δnet     -61 | CI90 [  -414,   +267] | P(Δ<0) 0.61
+    sh1.0|ladder | shared 208 | only-var   4 | only-e25   4 | Δnet    +111 | CI90 [  -318,   +536] | P(Δ<0) 0.33
+     sh3.0|15<60 | shared 193 | only-var  10 | only-e25  19 | Δnet     -34 | CI90 [  -971,   +919] | P(Δ<0) 0.51
+    sh3.0|ladder | shared 181 | only-var  14 | only-e25  31 | Δnet    -496 | CI90 [ -1788,   +783] | P(Δ<0) 0.72
+     sh5.0|15<60 | shared 160 | only-var  16 | only-e25  52 | Δnet   -1200 | CI90 [ -2639,   +297] | P(Δ<0) 0.91
+    sh5.0|ladder | shared 146 | only-var  20 | only-e25  66 | Δnet   -1088 | CI90 [ -2720,   +484] | P(Δ<0) 0.87
+    gz0.5|15<240 | shared 212 | only-var   0 | only-e25   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+    gz0.5|60<240 | shared 210 | only-var   2 | only-e25   2 | Δnet      +6 | CI90 [  -238,   +256] | P(Δ<0) 0.48
+    gz1.0|15<240 | shared 211 | only-var   1 | only-e25   1 | Δnet     -23 | CI90 [  -250,   +204] | P(Δ<0) 0.66
+    gz1.0|60<240 | shared 210 | only-var   2 | only-e25   2 | Δnet     -31 | CI90 [  -308,   +233] | P(Δ<0) 0.57
+    gz3.0|15<240 | shared 203 | only-var   6 | only-e25   9 | Δnet    -103 | CI90 [  -788,   +579] | P(Δ<0) 0.58
+    gz3.0|60<240 | shared 208 | only-var   2 | only-e25   4 | Δnet    +156 | CI90 [  -189,   +512] | P(Δ<0) 0.23
+    gz5.0|15<240 | shared 187 | only-var  13 | only-e25  25 | Δnet   -1008 | CI90 [ -2204,   +135] | P(Δ<0) 0.93
+    gz5.0|60<240 | shared 205 | only-var   3 | only-e25   7 | Δnet    +115 | CI90 [  -341,   +554] | P(Δ<0) 0.34
+    gd0.5|15<240 | shared 211 | only-var   1 | only-e25   1 | Δnet     -20 | CI90 [  -243,   +204] | P(Δ<0) 0.65
+    gd0.5|60<240 | shared 210 | only-var   2 | only-e25   2 | Δnet     -31 | CI90 [  -317,   +246] | P(Δ<0) 0.58
+    gd1.5|15<240 | shared 201 | only-var   2 | only-e25  11 | Δnet    -287 | CI90 [ -1065,   +415] | P(Δ<0) 0.74
+    gd1.5|60<240 | shared 206 | only-var   3 | only-e25   6 | Δnet    +193 | CI90 [  -177,   +583] | P(Δ<0) 0.21
+    gd2.0|15<240 | shared 194 | only-var   4 | only-e25  18 | Δnet    -163 | CI90 [ -1017,   +656] | P(Δ<0) 0.63
+    gd2.0|60<240 | shared 205 | only-var   4 | only-e25   7 | Δnet    +129 | CI90 [  -273,   +548] | P(Δ<0) 0.30
+    gd3.0|15<240 | shared 176 | only-var  11 | only-e25  36 | Δnet    -704 | CI90 [ -1859,   +440] | P(Δ<0) 0.83
+    gd3.0|60<240 | shared 199 | only-var   7 | only-e25  13 | Δnet     +24 | CI90 [  -579,   +646] | P(Δ<0) 0.46
+   dl1.015|15<60 | shared 207 | only-var   4 | only-e25   5 | Δnet     -10 | CI90 [  -583,   +591] | P(Δ<0) 0.52
+   dl1.060|15<60 | shared 207 | only-var   4 | only-e25   5 | Δnet     -11 | CI90 [  -546,   +595] | P(Δ<0) 0.51
+   dl2.015|15<60 | shared 196 | only-var   9 | only-e25  16 | Δnet     +30 | CI90 [  -710,   +782] | P(Δ<0) 0.48
+   dl3.015|15<60 | shared 169 | only-var  18 | only-e25  43 | Δnet    -710 | CI90 [ -1958,   +514] | P(Δ<0) 0.83
+   dl3.060|15<60 | shared 168 | only-var  21 | only-e25  44 | Δnet    -809 | CI90 [ -2122,   +406] | P(Δ<0) 0.85
+   dl5.015|15<60 | shared 124 | only-var  29 | only-e25  88 | Δnet    +372 | CI90 [ -1281,  +1985] | P(Δ<0) 0.34
+   dl5.060|15<60 | shared 123 | only-var  34 | only-e25  89 | Δnet     -95 | CI90 [ -1748,  +1443] | P(Δ<0) 0.55
+  dlc1.015|15<60 | shared 207 | only-var   3 | only-e25   5 | Δnet    -302 | CI90 [  -811,   +193] | P(Δ<0) 0.84
+  dlc1.060|15<60 | shared 207 | only-var   3 | only-e25   5 | Δnet    -304 | CI90 [  -802,   +194] | P(Δ<0) 0.84
+  dlc2.015|15<60 | shared 195 | only-var   8 | only-e25  17 | Δnet    -345 | CI90 [ -1113,   +411] | P(Δ<0) 0.77
+  dlc3.015|15<60 | shared 168 | only-var  16 | only-e25  44 | Δnet   -1161 | CI90 [ -2403,    +28] | P(Δ<0) 0.95
+  dlc3.060|15<60 | shared 164 | only-var  20 | only-e25  48 | Δnet   -1276 | CI90 [ -2554,    -16] | P(Δ<0) 0.95
+  dlc5.015|15<60 | shared 126 | only-var  19 | only-e25  86 | Δnet    -479 | CI90 [ -2025,  +1003] | P(Δ<0) 0.70
+  dlc5.060|15<60 | shared 119 | only-var  29 | only-e25  93 | Δnet    -870 | CI90 [ -2492,   +741] | P(Δ<0) 0.81
+  dl1.015|ladder | shared 204 | only-var   7 | only-e25   8 | Δnet      -2 | CI90 [  -589,   +652] | P(Δ<0) 0.52
+  dl1.060|ladder | shared 204 | only-var   7 | only-e25   8 | Δnet      -3 | CI90 [  -608,   +646] | P(Δ<0) 0.53
+  dl2.015|ladder | shared 189 | only-var  16 | only-e25  23 | Δnet     -71 | CI90 [  -947,   +849] | P(Δ<0) 0.55
+  dl3.015|ladder | shared 159 | only-var  26 | only-e25  53 | Δnet    -710 | CI90 [ -2095,   +582] | P(Δ<0) 0.82
+  dl3.060|ladder | shared 159 | only-var  29 | only-e25  53 | Δnet    -872 | CI90 [ -2207,   +486] | P(Δ<0) 0.85
+  dl5.015|ladder | shared 112 | only-var  36 | only-e25 100 | Δnet    +346 | CI90 [ -1471,  +2164] | P(Δ<0) 0.37
+  dl5.060|ladder | shared 112 | only-var  41 | only-e25 100 | Δnet     +19 | CI90 [ -1815,  +1866] | P(Δ<0) 0.50
+ dlc1.015|ladder | shared 204 | only-var   6 | only-e25   8 | Δnet    -351 | CI90 [  -936,   +209] | P(Δ<0) 0.85
+ dlc1.060|ladder | shared 204 | only-var   6 | only-e25   8 | Δnet    -353 | CI90 [  -954,   +203] | P(Δ<0) 0.85
+ dlc2.015|ladder | shared 189 | only-var  13 | only-e25  23 | Δnet    -504 | CI90 [ -1393,   +412] | P(Δ<0) 0.82
+ dlc3.015|ladder | shared 158 | only-var  24 | only-e25  54 | Δnet   -1054 | CI90 [ -2446,   +331] | P(Δ<0) 0.89
+ dlc3.060|ladder | shared 155 | only-var  28 | only-e25  57 | Δnet   -1174 | CI90 [ -2617,   +177] | P(Δ<0) 0.92
+ dlc5.015|ladder | shared 115 | only-var  24 | only-e25  97 | Δnet    -498 | CI90 [ -2166,  +1125] | P(Δ<0) 0.69
+ dlc5.060|ladder | shared 109 | only-var  35 | only-e25 103 | Δnet    -920 | CI90 [ -2713,   +924] | P(Δ<0) 0.79
+
+--- paired vs live: trades matched by (open trade, side); unmatched enter as (pnl − 0) ---
+            live | shared 211 | only-var   0 | only-live   0 | Δnet      +0 | CI90 [    +0,     +0] | P(Δ<0) 0.00
+             e25 | shared 201 | only-var  11 | only-live  10 | Δnet     +51 | CI90 [  -606,   +725] | P(Δ<0) 0.45
+            none | shared 200 | only-var  62 | only-live  11 | Δnet   +1019 | CI90 [  -559,  +2579] | P(Δ<0) 0.15
+     gz2.0|15<60 | shared 184 | only-var  26 | only-live  27 | Δnet     -13 | CI90 [ -1117,  +1090] | P(Δ<0) 0.51
+    gz2.0|15<240 | shared 197 | only-var  15 | only-live  14 | Δnet     -72 | CI90 [  -817,   +706] | P(Δ<0) 0.56
+    gz2.0|60<240 | shared 198 | only-var  13 | only-live  13 | Δnet    +122 | CI90 [  -606,   +879] | P(Δ<0) 0.39
+    gz2.0|ladder | shared 177 | only-var  32 | only-live  34 | Δnet     -40 | CI90 [ -1271,  +1189] | P(Δ<0) 0.51
+    gzb2.0|15<60 | shared 178 | only-var  31 | only-live  33 | Δnet     +49 | CI90 [ -1347,  +1479] | P(Δ<0) 0.48
+   gzb2.0|15<240 | shared 194 | only-var  13 | only-live  17 | Δnet     -81 | CI90 [  -879,   +721] | P(Δ<0) 0.57
+   gzb2.0|60<240 | shared 196 | only-var  16 | only-live  15 | Δnet     +46 | CI90 [  -756,   +833] | P(Δ<0) 0.45
+   gzb2.0|ladder | shared 166 | only-var  37 | only-live  45 | Δnet    -146 | CI90 [ -1645,  +1363] | P(Δ<0) 0.55
+      gzin|15<60 | shared 190 | only-var  17 | only-live  21 | Δnet    -364 | CI90 [ -1374,   +637] | P(Δ<0) 0.71
+     gzin|15<240 | shared 197 | only-var  10 | only-live  14 | Δnet     -23 | CI90 [  -722,   +649] | P(Δ<0) 0.52
+     gzin|60<240 | shared 196 | only-var  15 | only-live  15 | Δnet    -161 | CI90 [ -1005,   +677] | P(Δ<0) 0.61
+     gzin|ladder | shared 182 | only-var  19 | only-live  29 | Δnet    -772 | CI90 [ -1884,   +305] | P(Δ<0) 0.88
+     gd1.0|15<60 | shared 182 | only-var  15 | only-live  29 | Δnet    -137 | CI90 [ -1160,   +852] | P(Δ<0) 0.60
+    gd1.0|15<240 | shared 198 | only-var  13 | only-live  13 | Δnet    +142 | CI90 [  -619,   +965] | P(Δ<0) 0.38
+    gd1.0|60<240 | shared 198 | only-var  12 | only-live  13 | Δnet    +224 | CI90 [  -483,   +940] | P(Δ<0) 0.31
+    gd1.0|ladder | shared 175 | only-var  19 | only-live  36 | Δnet    +128 | CI90 [  -999,  +1249] | P(Δ<0) 0.41
+     mr2.0|15<60 | shared 193 | only-var  15 | only-live  18 | Δnet    -678 | CI90 [ -1701,   +305] | P(Δ<0) 0.86
+    mr2.0|15<240 | shared 192 | only-var  17 | only-live  19 | Δnet    +280 | CI90 [  -579,  +1143] | P(Δ<0) 0.31
+    mr2.0|60<240 | shared 200 | only-var  13 | only-live  11 | Δnet     +62 | CI90 [  -618,   +778] | P(Δ<0) 0.44
+    mr2.0|ladder | shared 184 | only-var  20 | only-live  27 | Δnet    -250 | CI90 [ -1438,   +900] | P(Δ<0) 0.64
+     sh2.0|15<60 | shared 192 | only-var  18 | only-live  19 | Δnet    +170 | CI90 [  -730,  +1086] | P(Δ<0) 0.38
+    sh2.0|15<240 | shared 193 | only-var  14 | only-live  18 | Δnet    -350 | CI90 [ -1367,   +647] | P(Δ<0) 0.72
+    sh2.0|60<240 | shared 199 | only-var  12 | only-live  12 | Δnet    +171 | CI90 [  -550,   +859] | P(Δ<0) 0.36
+    sh2.0|ladder | shared 182 | only-var  21 | only-live  29 | Δnet    -203 | CI90 [ -1401,  +1017] | P(Δ<0) 0.59
+   dl2.060|15<60 | shared 185 | only-var  22 | only-live  26 | Δnet     -18 | CI90 [  -999,  +1005] | P(Δ<0) 0.52
+  dlc2.060|15<60 | shared 182 | only-var  22 | only-live  29 | Δnet    -315 | CI90 [ -1345,   +719] | P(Δ<0) 0.70
+  dl2.060|15<240 | shared 196 | only-var  15 | only-live  15 | Δnet    -125 | CI90 [  -884,   +618] | P(Δ<0) 0.62
+ dlc2.060|15<240 | shared 197 | only-var  13 | only-live  14 | Δnet    -121 | CI90 [  -872,   +626] | P(Δ<0) 0.61
+  dl2.060|60<240 | shared 197 | only-var  15 | only-live  14 | Δnet     +90 | CI90 [  -653,   +818] | P(Δ<0) 0.42
+ dlc2.060|60<240 | shared 197 | only-var  15 | only-live  14 | Δnet     +15 | CI90 [  -719,   +769] | P(Δ<0) 0.48
+  dl2.060|ladder | shared 179 | only-var  28 | only-live  32 | Δnet    -142 | CI90 [ -1177,   +974] | P(Δ<0) 0.59
+ dlc2.060|ladder | shared 177 | only-var  26 | only-live  34 | Δnet    -440 | CI90 [ -1576,   +647] | P(Δ<0) 0.74
+     gz0.5|15<60 | shared 200 | only-var  13 | only-live  11 | Δnet     +64 | CI90 [  -660,   +791] | P(Δ<0) 0.44
+    gz0.5|ladder | shared 198 | only-var  15 | only-live  13 | Δnet     +70 | CI90 [  -713,   +826] | P(Δ<0) 0.46
+     gz1.0|15<60 | shared 196 | only-var  17 | only-live  15 | Δnet     -36 | CI90 [  -865,   +764] | P(Δ<0) 0.53
+    gz1.0|ladder | shared 192 | only-var  21 | only-live  19 | Δnet     -85 | CI90 [  -977,   +776] | P(Δ<0) 0.57
+     gz3.0|15<60 | shared 164 | only-var  35 | only-live  47 | Δnet    -724 | CI90 [ -2156,   +633] | P(Δ<0) 0.80
+    gz3.0|ladder | shared 154 | only-var  39 | only-live  57 | Δnet    -425 | CI90 [ -2051,  +1195] | P(Δ<0) 0.66
+     gz5.0|15<60 | shared 123 | only-var  32 | only-live  88 | Δnet   -1392 | CI90 [ -3079,   +316] | P(Δ<0) 0.91
+    gz5.0|ladder | shared 108 | only-var  32 | only-live 103 | Δnet   -2149 | CI90 [ -4056,   -368] | P(Δ<0) 0.98
+    gzb0.5|15<60 | shared 199 | only-var  14 | only-live  12 | Δnet     +72 | CI90 [  -696,   +862] | P(Δ<0) 0.44
+   gzb0.5|ladder | shared 197 | only-var  16 | only-live  14 | Δnet    +115 | CI90 [  -703,   +952] | P(Δ<0) 0.42
+    gzb1.0|15<60 | shared 193 | only-var  20 | only-live  18 | Δnet     -48 | CI90 [  -912,   +795] | P(Δ<0) 0.53
+   gzb1.0|ladder | shared 188 | only-var  25 | only-live  23 | Δnet    -132 | CI90 [ -1092,   +826] | P(Δ<0) 0.58
+    gzb3.0|15<60 | shared 155 | only-var  36 | only-live  56 | Δnet   -1512 | CI90 [ -3261,   +206] | P(Δ<0) 0.93
+   gzb3.0|ladder | shared 140 | only-var  39 | only-live  71 | Δnet   -1440 | CI90 [ -3408,   +460] | P(Δ<0) 0.89
+    gzb5.0|15<60 | shared 114 | only-var  30 | only-live  97 | Δnet   -2110 | CI90 [ -4139,   -205] | P(Δ<0) 0.96
+   gzb5.0|ladder | shared 100 | only-var  27 | only-live 111 | Δnet   -2474 | CI90 [ -4591,   -414] | P(Δ<0) 0.98
+     gd0.5|15<60 | shared 197 | only-var  17 | only-live  14 | Δnet     -26 | CI90 [  -795,   +720] | P(Δ<0) 0.53
+    gd0.5|ladder | shared 193 | only-var  21 | only-live  18 | Δnet     -76 | CI90 [  -922,   +766] | P(Δ<0) 0.56
+     gd1.5|15<60 | shared 157 | only-var  14 | only-live  54 | Δnet   -1706 | CI90 [ -2978,   -399] | P(Δ<0) 0.99
+    gd1.5|ladder | shared 145 | only-var  17 | only-live  66 | Δnet   -1582 | CI90 [ -3077,    -99] | P(Δ<0) 0.96
+     gd2.0|15<60 | shared 141 | only-var  16 | only-live  70 | Δnet   -1444 | CI90 [ -3033,    +65] | P(Δ<0) 0.94
+    gd2.0|ladder | shared 126 | only-var  21 | only-live  85 | Δnet   -1365 | CI90 [ -3074,   +325] | P(Δ<0) 0.91
+     gd3.0|15<60 | shared 106 | only-var  23 | only-live 105 | Δnet   -1803 | CI90 [ -3696,    +87] | P(Δ<0) 0.94
+    gd3.0|ladder | shared  81 | only-var  28 | only-live 130 | Δnet   -2373 | CI90 [ -4523,   -267] | P(Δ<0) 0.97
+     mr0.5|15<60 | shared 201 | only-var  11 | only-live  10 | Δnet     +51 | CI90 [  -613,   +693] | P(Δ<0) 0.45
+    mr0.5|ladder | shared 201 | only-var  11 | only-live  10 | Δnet     +51 | CI90 [  -604,   +708] | P(Δ<0) 0.46
+     mr1.0|15<60 | shared 200 | only-var  12 | only-live  11 | Δnet     +55 | CI90 [  -588,   +706] | P(Δ<0) 0.46
+    mr1.0|ladder | shared 195 | only-var  17 | only-live  16 | Δnet     +46 | CI90 [  -732,   +865] | P(Δ<0) 0.46
+     mr3.0|15<60 | shared 182 | only-var  19 | only-live  29 | Δnet    -451 | CI90 [ -1835,   +909] | P(Δ<0) 0.72
+    mr3.0|ladder | shared 170 | only-var  25 | only-live  41 | Δnet    +362 | CI90 [ -1142,  +1870] | P(Δ<0) 0.34
+     mr5.0|15<60 | shared 159 | only-var  18 | only-live  52 | Δnet   -1334 | CI90 [ -3135,   +338] | P(Δ<0) 0.90
+    mr5.0|ladder | shared 140 | only-var  26 | only-live  71 | Δnet    -578 | CI90 [ -2402,  +1165] | P(Δ<0) 0.70
+     sh0.5|15<60 | shared 201 | only-var  11 | only-live  10 | Δnet     +51 | CI90 [  -613,   +721] | P(Δ<0) 0.44
+    sh0.5|ladder | shared 200 | only-var  12 | only-live  11 | Δnet     +70 | CI90 [  -643,   +751] | P(Δ<0) 0.44
+     sh1.0|15<60 | shared 199 | only-var  13 | only-live  12 | Δnet     -10 | CI90 [  -738,   +756] | P(Δ<0) 0.51
+    sh1.0|ladder | shared 197 | only-var  15 | only-live  14 | Δnet    +162 | CI90 [  -575,   +937] | P(Δ<0) 0.37
+     sh3.0|15<60 | shared 182 | only-var  21 | only-live  29 | Δnet     +17 | CI90 [ -1115,  +1122] | P(Δ<0) 0.49
+    sh3.0|ladder | shared 170 | only-var  25 | only-live  41 | Δnet    -445 | CI90 [ -1835,   +977] | P(Δ<0) 0.70
+     sh5.0|15<60 | shared 152 | only-var  24 | only-live  59 | Δnet   -1149 | CI90 [ -2820,   +417] | P(Δ<0) 0.89
+    sh5.0|ladder | shared 138 | only-var  28 | only-live  73 | Δnet   -1037 | CI90 [ -2729,   +655] | P(Δ<0) 0.85
+    gz0.5|15<240 | shared 201 | only-var  11 | only-live  10 | Δnet     +51 | CI90 [  -624,   +708] | P(Δ<0) 0.47
+    gz0.5|60<240 | shared 199 | only-var  13 | only-live  12 | Δnet     +57 | CI90 [  -635,   +765] | P(Δ<0) 0.45
+    gz1.0|15<240 | shared 200 | only-var  12 | only-live  11 | Δnet     +28 | CI90 [  -678,   +753] | P(Δ<0) 0.47
+    gz1.0|60<240 | shared 199 | only-var  13 | only-live  12 | Δnet     +20 | CI90 [  -705,   +743] | P(Δ<0) 0.50
+    gz3.0|15<240 | shared 193 | only-var  16 | only-live  18 | Δnet     -52 | CI90 [ -1006,   +915] | P(Δ<0) 0.53
+    gz3.0|60<240 | shared 197 | only-var  13 | only-live  14 | Δnet    +207 | CI90 [  -540,   +974] | P(Δ<0) 0.33
+    gz5.0|15<240 | shared 177 | only-var  23 | only-live  34 | Δnet    -957 | CI90 [ -2307,   +403] | P(Δ<0) 0.88
+    gz5.0|60<240 | shared 194 | only-var  14 | only-live  17 | Δnet    +166 | CI90 [  -628,   +988] | P(Δ<0) 0.37
+    gd0.5|15<240 | shared 200 | only-var  12 | only-live  11 | Δnet     +31 | CI90 [  -672,   +722] | P(Δ<0) 0.47
+    gd0.5|60<240 | shared 199 | only-var  13 | only-live  12 | Δnet     +20 | CI90 [  -670,   +752] | P(Δ<0) 0.50
+    gd1.5|15<240 | shared 191 | only-var  12 | only-live  20 | Δnet    -236 | CI90 [ -1227,   +730] | P(Δ<0) 0.65
+    gd1.5|60<240 | shared 195 | only-var  14 | only-live  16 | Δnet    +244 | CI90 [  -516,  +1043] | P(Δ<0) 0.30
+    gd2.0|15<240 | shared 184 | only-var  14 | only-live  27 | Δnet    -112 | CI90 [ -1124,   +963] | P(Δ<0) 0.57
+    gd2.0|60<240 | shared 194 | only-var  15 | only-live  17 | Δnet    +180 | CI90 [  -595,   +968] | P(Δ<0) 0.36
+    gd3.0|15<240 | shared 168 | only-var  19 | only-live  43 | Δnet    -653 | CI90 [ -1957,   +637] | P(Δ<0) 0.79
+    gd3.0|60<240 | shared 188 | only-var  18 | only-live  23 | Δnet     +75 | CI90 [  -802,   +958] | P(Δ<0) 0.45
+   dl1.015|15<60 | shared 196 | only-var  15 | only-live  15 | Δnet     +41 | CI90 [  -822,   +945] | P(Δ<0) 0.46
+   dl1.060|15<60 | shared 196 | only-var  15 | only-live  15 | Δnet     +40 | CI90 [  -840,   +933] | P(Δ<0) 0.48
+   dl2.015|15<60 | shared 186 | only-var  19 | only-live  25 | Δnet     +81 | CI90 [  -906,  +1081] | P(Δ<0) 0.45
+   dl3.015|15<60 | shared 161 | only-var  26 | only-live  50 | Δnet    -659 | CI90 [ -2010,   +726] | P(Δ<0) 0.79
+   dl3.060|15<60 | shared 160 | only-var  29 | only-live  51 | Δnet    -758 | CI90 [ -2172,   +589] | P(Δ<0) 0.83
+   dl5.015|15<60 | shared 119 | only-var  34 | only-live  92 | Δnet    +423 | CI90 [ -1289,  +2108] | P(Δ<0) 0.34
+   dl5.060|15<60 | shared 118 | only-var  39 | only-live  93 | Δnet     -44 | CI90 [ -1686,  +1624] | P(Δ<0) 0.53
+  dlc1.015|15<60 | shared 196 | only-var  14 | only-live  15 | Δnet    -251 | CI90 [ -1090,   +576] | P(Δ<0) 0.69
+  dlc1.060|15<60 | shared 196 | only-var  14 | only-live  15 | Δnet    -253 | CI90 [ -1109,   +567] | P(Δ<0) 0.70
+  dlc2.015|15<60 | shared 185 | only-var  18 | only-live  26 | Δnet    -294 | CI90 [ -1277,   +700] | P(Δ<0) 0.69
+  dlc3.015|15<60 | shared 160 | only-var  24 | only-live  51 | Δnet   -1110 | CI90 [ -2425,   +154] | P(Δ<0) 0.92
+  dlc3.060|15<60 | shared 157 | only-var  27 | only-live  54 | Δnet   -1225 | CI90 [ -2610,   +120] | P(Δ<0) 0.94
+  dlc5.015|15<60 | shared 121 | only-var  24 | only-live  90 | Δnet    -428 | CI90 [ -2024,  +1182] | P(Δ<0) 0.66
+  dlc5.060|15<60 | shared 115 | only-var  33 | only-live  96 | Δnet    -819 | CI90 [ -2567,   +828] | P(Δ<0) 0.79
+  dl1.015|ladder | shared 193 | only-var  18 | only-live  18 | Δnet     +49 | CI90 [  -850,   +986] | P(Δ<0) 0.48
+  dl1.060|ladder | shared 193 | only-var  18 | only-live  18 | Δnet     +48 | CI90 [  -831,   +974] | P(Δ<0) 0.47
+  dl2.015|ladder | shared 179 | only-var  26 | only-live  32 | Δnet     -20 | CI90 [ -1085,  +1096] | P(Δ<0) 0.52
+  dl3.015|ladder | shared 152 | only-var  33 | only-live  59 | Δnet    -659 | CI90 [ -2072,   +820] | P(Δ<0) 0.77
+  dl3.060|ladder | shared 152 | only-var  36 | only-live  59 | Δnet    -821 | CI90 [ -2260,   +573] | P(Δ<0) 0.84
+  dl5.015|ladder | shared 108 | only-var  40 | only-live 103 | Δnet    +397 | CI90 [ -1500,  +2258] | P(Δ<0) 0.36
+  dl5.060|ladder | shared 108 | only-var  45 | only-live 103 | Δnet     +70 | CI90 [ -1824,  +1991] | P(Δ<0) 0.47
+ dlc1.015|ladder | shared 193 | only-var  17 | only-live  18 | Δnet    -300 | CI90 [ -1194,   +579] | P(Δ<0) 0.71
+ dlc1.060|ladder | shared 193 | only-var  17 | only-live  18 | Δnet    -302 | CI90 [ -1173,   +567] | P(Δ<0) 0.71
+ dlc2.015|ladder | shared 179 | only-var  23 | only-live  32 | Δnet    -453 | CI90 [ -1560,   +602] | P(Δ<0) 0.76
+ dlc3.015|ladder | shared 151 | only-var  31 | only-live  60 | Δnet   -1003 | CI90 [ -2522,   +433] | P(Δ<0) 0.87
+ dlc3.060|ladder | shared 149 | only-var  34 | only-live  62 | Δnet   -1123 | CI90 [ -2620,   +363] | P(Δ<0) 0.89
+ dlc5.015|ladder | shared 111 | only-var  28 | only-live 100 | Δnet    -447 | CI90 [ -2207,  +1242] | P(Δ<0) 0.67
+ dlc5.060|ladder | shared 106 | only-var  38 | only-live 105 | Δnet    -869 | CI90 [ -2725,  +1013] | P(Δ<0) 0.78
+
+--- fees: net after f %/side ---
+            live | gross   +3732 | 0.01%   +1737 | 0.02%    -257 | 0.05%   -6241 | breakeven 0.019 %
+             e25 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+            none | gross   +4751 | 0.01%   +2308 | 0.02%    -135 | 0.05%   -7464 | breakeven 0.019 %
+     gz2.0|15<60 | gross   +3718 | 0.01%   +1734 | 0.02%    -251 | 0.05%   -6204 | breakeven 0.019 %
+    gz2.0|15<240 | gross   +3660 | 0.01%   +1657 | 0.02%    -347 | 0.05%   -6357 | breakeven 0.018 %
+    gz2.0|60<240 | gross   +3854 | 0.01%   +1858 | 0.02%    -137 | 0.05%   -6122 | breakeven 0.019 %
+    gz2.0|ladder | gross   +3692 | 0.01%   +1725 | 0.02%    -242 | 0.05%   -6143 | breakeven 0.019 %
+    gzb2.0|15<60 | gross   +3781 | 0.01%   +1805 | 0.02%    -171 | 0.05%   -6098 | breakeven 0.019 %
+   gzb2.0|15<240 | gross   +3651 | 0.01%   +1699 | 0.02%    -253 | 0.05%   -6109 | breakeven 0.019 %
+   gzb2.0|60<240 | gross   +3778 | 0.01%   +1777 | 0.02%    -224 | 0.05%   -6229 | breakeven 0.019 %
+   gzb2.0|ladder | gross   +3585 | 0.01%   +1681 | 0.02%    -224 | 0.05%   -5938 | breakeven 0.019 %
+      gzin|15<60 | gross   +3368 | 0.01%   +1413 | 0.02%    -543 | 0.05%   -6409 | breakeven 0.017 %
+     gzin|15<240 | gross   +3709 | 0.01%   +1752 | 0.02%    -205 | 0.05%   -6077 | breakeven 0.019 %
+     gzin|60<240 | gross   +3571 | 0.01%   +1590 | 0.02%    -392 | 0.05%   -6336 | breakeven 0.018 %
+     gzin|ladder | gross   +2960 | 0.01%   +1084 | 0.02%    -791 | 0.05%   -6418 | breakeven 0.016 %
+     gd1.0|15<60 | gross   +3595 | 0.01%   +1720 | 0.02%    -155 | 0.05%   -5780 | breakeven 0.019 %
+    gd1.0|15<240 | gross   +3874 | 0.01%   +1873 | 0.02%    -127 | 0.05%   -6128 | breakeven 0.019 %
+    gd1.0|60<240 | gross   +3956 | 0.01%   +1964 | 0.02%     -27 | 0.05%   -6002 | breakeven 0.020 %
+    gd1.0|ladder | gross   +3859 | 0.01%   +2009 | 0.02%    +158 | 0.05%   -5395 | breakeven 0.021 %
+     mr2.0|15<60 | gross   +3054 | 0.01%   +1090 | 0.02%    -874 | 0.05%   -6766 | breakeven 0.016 %
+    mr2.0|15<240 | gross   +4012 | 0.01%   +2032 | 0.02%     +52 | 0.05%   -5888 | breakeven 0.020 %
+    mr2.0|60<240 | gross   +3794 | 0.01%   +1776 | 0.02%    -241 | 0.05%   -6293 | breakeven 0.019 %
+    mr2.0|ladder | gross   +3482 | 0.01%   +1549 | 0.02%    -384 | 0.05%   -6182 | breakeven 0.018 %
+     sh2.0|15<60 | gross   +3902 | 0.01%   +1915 | 0.02%     -72 | 0.05%   -6033 | breakeven 0.020 %
+    sh2.0|15<240 | gross   +3382 | 0.01%   +1419 | 0.02%    -544 | 0.05%   -6433 | breakeven 0.017 %
+    sh2.0|60<240 | gross   +3903 | 0.01%   +1904 | 0.02%     -95 | 0.05%   -6092 | breakeven 0.020 %
+    sh2.0|ladder | gross   +3528 | 0.01%   +1598 | 0.02%    -332 | 0.05%   -6124 | breakeven 0.018 %
+   dl2.060|15<60 | gross   +3714 | 0.01%   +1741 | 0.02%    -232 | 0.05%   -6152 | breakeven 0.019 %
+  dlc2.060|15<60 | gross   +3417 | 0.01%   +1481 | 0.02%    -454 | 0.05%   -6261 | breakeven 0.018 %
+  dl2.060|15<240 | gross   +3607 | 0.01%   +1605 | 0.02%    -398 | 0.05%   -6405 | breakeven 0.018 %
+ dlc2.060|15<240 | gross   +3611 | 0.01%   +1619 | 0.02%    -372 | 0.05%   -6346 | breakeven 0.018 %
+  dl2.060|60<240 | gross   +3822 | 0.01%   +1816 | 0.02%    -190 | 0.05%   -6208 | breakeven 0.019 %
+ dlc2.060|60<240 | gross   +3747 | 0.01%   +1746 | 0.02%    -256 | 0.05%   -6260 | breakeven 0.019 %
+  dl2.060|ladder | gross   +3590 | 0.01%   +1613 | 0.02%    -364 | 0.05%   -6295 | breakeven 0.018 %
+ dlc2.060|ladder | gross   +3291 | 0.01%   +1363 | 0.02%    -565 | 0.05%   -6349 | breakeven 0.017 %
+     gz0.5|15<60 | gross   +3796 | 0.01%   +1778 | 0.02%    -240 | 0.05%   -6293 | breakeven 0.019 %
+    gz0.5|ladder | gross   +3802 | 0.01%   +1783 | 0.02%    -236 | 0.05%   -6292 | breakeven 0.019 %
+     gz1.0|15<60 | gross   +3696 | 0.01%   +1683 | 0.02%    -330 | 0.05%   -6370 | breakeven 0.018 %
+    gz1.0|ladder | gross   +3647 | 0.01%   +1637 | 0.02%    -373 | 0.05%   -6403 | breakeven 0.018 %
+     gz3.0|15<60 | gross   +3008 | 0.01%   +1152 | 0.02%    -704 | 0.05%   -6272 | breakeven 0.016 %
+    gz3.0|ladder | gross   +3307 | 0.01%   +1512 | 0.02%    -283 | 0.05%   -5667 | breakeven 0.018 %
+     gz5.0|15<60 | gross   +2340 | 0.01%    +921 | 0.02%    -498 | 0.05%   -4756 | breakeven 0.016 %
+    gz5.0|ladder | gross   +1583 | 0.01%    +313 | 0.02%    -957 | 0.05%   -4767 | breakeven 0.012 %
+    gzb0.5|15<60 | gross   +3804 | 0.01%   +1786 | 0.02%    -231 | 0.05%   -6285 | breakeven 0.019 %
+   gzb0.5|ladder | gross   +3847 | 0.01%   +1827 | 0.02%    -194 | 0.05%   -6255 | breakeven 0.019 %
+    gzb1.0|15<60 | gross   +3683 | 0.01%   +1670 | 0.02%    -343 | 0.05%   -6383 | breakeven 0.018 %
+   gzb1.0|ladder | gross   +3600 | 0.01%   +1594 | 0.02%    -412 | 0.05%   -6430 | breakeven 0.018 %
+    gzb3.0|15<60 | gross   +2220 | 0.01%    +454 | 0.02%   -1313 | 0.05%   -6613 | breakeven 0.013 %
+   gzb3.0|ladder | gross   +2292 | 0.01%    +649 | 0.02%    -995 | 0.05%   -5925 | breakeven 0.014 %
+    gzb5.0|15<60 | gross   +1622 | 0.01%    +306 | 0.02%   -1010 | 0.05%   -4957 | breakeven 0.012 %
+   gzb5.0|ladder | gross   +1258 | 0.01%    +110 | 0.02%   -1038 | 0.05%   -4481 | breakeven 0.011 %
+     gd0.5|15<60 | gross   +3706 | 0.01%   +1683 | 0.02%    -339 | 0.05%   -6407 | breakeven 0.018 %
+    gd0.5|ladder | gross   +3656 | 0.01%   +1638 | 0.02%    -380 | 0.05%   -6435 | breakeven 0.018 %
+     gd1.5|15<60 | gross   +2026 | 0.01%    +412 | 0.02%   -1202 | 0.05%   -6043 | breakeven 0.013 %
+    gd1.5|ladder | gross   +2150 | 0.01%    +617 | 0.02%    -916 | 0.05%   -5516 | breakeven 0.014 %
+     gd2.0|15<60 | gross   +2288 | 0.01%    +793 | 0.02%    -702 | 0.05%   -5187 | breakeven 0.015 %
+    gd2.0|ladder | gross   +2367 | 0.01%    +960 | 0.02%    -446 | 0.05%   -4666 | breakeven 0.017 %
+     gd3.0|15<60 | gross   +1929 | 0.01%    +708 | 0.02%    -512 | 0.05%   -4173 | breakeven 0.016 %
+    gd3.0|ladder | gross   +1359 | 0.01%    +319 | 0.02%    -721 | 0.05%   -3840 | breakeven 0.013 %
+     mr0.5|15<60 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+    mr0.5|ladder | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+     mr1.0|15<60 | gross   +3787 | 0.01%   +1779 | 0.02%    -228 | 0.05%   -6251 | breakeven 0.019 %
+    mr1.0|ladder | gross   +3778 | 0.01%   +1772 | 0.02%    -234 | 0.05%   -6252 | breakeven 0.019 %
+     mr3.0|15<60 | gross   +3281 | 0.01%   +1384 | 0.02%    -512 | 0.05%   -6201 | breakeven 0.017 %
+    mr3.0|ladder | gross   +4094 | 0.01%   +2248 | 0.02%    +402 | 0.05%   -5137 | breakeven 0.022 %
+     mr5.0|15<60 | gross   +2398 | 0.01%    +730 | 0.02%    -938 | 0.05%   -5943 | breakeven 0.014 %
+    mr5.0|ladder | gross   +3154 | 0.01%   +1592 | 0.02%     +30 | 0.05%   -4655 | breakeven 0.020 %
+     sh0.5|15<60 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+    sh0.5|ladder | gross   +3802 | 0.01%   +1793 | 0.02%    -215 | 0.05%   -6240 | breakeven 0.019 %
+     sh1.0|15<60 | gross   +3722 | 0.01%   +1715 | 0.02%    -291 | 0.05%   -6310 | breakeven 0.019 %
+    sh1.0|ladder | gross   +3894 | 0.01%   +1885 | 0.02%    -124 | 0.05%   -6152 | breakeven 0.019 %
+     sh3.0|15<60 | gross   +3749 | 0.01%   +1829 | 0.02%     -91 | 0.05%   -5851 | breakeven 0.020 %
+    sh3.0|ladder | gross   +3287 | 0.01%   +1433 | 0.02%    -420 | 0.05%   -5981 | breakeven 0.018 %
+     sh5.0|15<60 | gross   +2582 | 0.01%    +940 | 0.02%    -702 | 0.05%   -5630 | breakeven 0.016 %
+    sh5.0|ladder | gross   +2695 | 0.01%   +1136 | 0.02%    -423 | 0.05%   -5100 | breakeven 0.017 %
+    gz0.5|15<240 | gross   +3783 | 0.01%   +1775 | 0.02%    -232 | 0.05%   -6254 | breakeven 0.019 %
+    gz0.5|60<240 | gross   +3789 | 0.01%   +1780 | 0.02%    -228 | 0.05%   -6253 | breakeven 0.019 %
+    gz1.0|15<240 | gross   +3760 | 0.01%   +1756 | 0.02%    -249 | 0.05%   -6262 | breakeven 0.019 %
+    gz1.0|60<240 | gross   +3752 | 0.01%   +1744 | 0.02%    -264 | 0.05%   -6288 | breakeven 0.019 %
+    gz3.0|15<240 | gross   +3680 | 0.01%   +1707 | 0.02%    -266 | 0.05%   -6185 | breakeven 0.019 %
+    gz3.0|60<240 | gross   +3939 | 0.01%   +1950 | 0.02%     -38 | 0.05%   -6002 | breakeven 0.020 %
+    gz5.0|15<240 | gross   +2775 | 0.01%    +896 | 0.02%    -982 | 0.05%   -6616 | breakeven 0.015 %
+    gz5.0|60<240 | gross   +3898 | 0.01%   +1929 | 0.02%     -40 | 0.05%   -5947 | breakeven 0.020 %
+    gd0.5|15<240 | gross   +3763 | 0.01%   +1759 | 0.02%    -246 | 0.05%   -6260 | breakeven 0.019 %
+    gd0.5|60<240 | gross   +3752 | 0.01%   +1745 | 0.02%    -262 | 0.05%   -6283 | breakeven 0.019 %
+    gd1.5|15<240 | gross   +3496 | 0.01%   +1565 | 0.02%    -366 | 0.05%   -6159 | breakeven 0.018 %
+    gd1.5|60<240 | gross   +3976 | 0.01%   +1993 | 0.02%     +10 | 0.05%   -5940 | breakeven 0.020 %
+    gd2.0|15<240 | gross   +3620 | 0.01%   +1732 | 0.02%    -155 | 0.05%   -5819 | breakeven 0.019 %
+    gd2.0|60<240 | gross   +3912 | 0.01%   +1928 | 0.02%     -56 | 0.05%   -6008 | breakeven 0.020 %
+    gd3.0|15<240 | gross   +3079 | 0.01%   +1296 | 0.02%    -488 | 0.05%   -5838 | breakeven 0.017 %
+    gd3.0|60<240 | gross   +3807 | 0.01%   +1851 | 0.02%    -104 | 0.05%   -5971 | breakeven 0.019 %
+   dl1.015|15<60 | gross   +3773 | 0.01%   +1769 | 0.02%    -234 | 0.05%   -6244 | breakeven 0.019 %
+   dl1.060|15<60 | gross   +3771 | 0.01%   +1767 | 0.02%    -237 | 0.05%   -6250 | breakeven 0.019 %
+   dl2.015|15<60 | gross   +3813 | 0.01%   +1859 | 0.02%     -95 | 0.05%   -5957 | breakeven 0.020 %
+   dl3.015|15<60 | gross   +3073 | 0.01%   +1297 | 0.02%    -479 | 0.05%   -5807 | breakeven 0.017 %
+   dl3.060|15<60 | gross   +2974 | 0.01%   +1179 | 0.02%    -617 | 0.05%   -6003 | breakeven 0.017 %
+   dl5.015|15<60 | gross   +4155 | 0.01%   +2698 | 0.02%   +1240 | 0.05%   -3133 | breakeven 0.029 %
+   dl5.060|15<60 | gross   +3688 | 0.01%   +2192 | 0.02%    +696 | 0.05%   -3792 | breakeven 0.025 %
+  dlc1.015|15<60 | gross   +3481 | 0.01%   +1492 | 0.02%    -497 | 0.05%   -6464 | breakeven 0.018 %
+  dlc1.060|15<60 | gross   +3479 | 0.01%   +1489 | 0.02%    -500 | 0.05%   -6470 | breakeven 0.017 %
+  dlc2.015|15<60 | gross   +3438 | 0.01%   +1512 | 0.02%    -414 | 0.05%   -6191 | breakeven 0.018 %
+  dlc3.015|15<60 | gross   +2621 | 0.01%    +890 | 0.02%    -841 | 0.05%   -6035 | breakeven 0.015 %
+  dlc3.060|15<60 | gross   +2507 | 0.01%    +777 | 0.02%    -954 | 0.05%   -6145 | breakeven 0.014 %
+  dlc5.015|15<60 | gross   +3303 | 0.01%   +1946 | 0.02%    +588 | 0.05%   -3486 | breakeven 0.024 %
+  dlc5.060|15<60 | gross   +2913 | 0.01%   +1526 | 0.02%    +139 | 0.05%   -4022 | breakeven 0.021 %
+  dl1.015|ladder | gross   +3781 | 0.01%   +1780 | 0.02%    -222 | 0.05%   -6227 | breakeven 0.019 %
+  dl1.060|ladder | gross   +3780 | 0.01%   +1778 | 0.02%    -225 | 0.05%   -6232 | breakeven 0.019 %
+  dl2.015|ladder | gross   +3712 | 0.01%   +1755 | 0.02%    -203 | 0.05%   -6076 | breakeven 0.019 %
+  dl3.015|ladder | gross   +3073 | 0.01%   +1315 | 0.02%    -444 | 0.05%   -5720 | breakeven 0.017 %
+  dl3.060|ladder | gross   +2911 | 0.01%   +1123 | 0.02%    -664 | 0.05%   -6026 | breakeven 0.016 %
+  dl5.015|ladder | gross   +4129 | 0.01%   +2720 | 0.02%   +1312 | 0.05%   -2913 | breakeven 0.029 %
+  dl5.060|ladder | gross   +3802 | 0.01%   +2345 | 0.02%    +888 | 0.05%   -3483 | breakeven 0.026 %
+ dlc1.015|ladder | gross   +3432 | 0.01%   +1449 | 0.02%    -534 | 0.05%   -6483 | breakeven 0.017 %
+ dlc1.060|ladder | gross   +3430 | 0.01%   +1447 | 0.02%    -537 | 0.05%   -6488 | breakeven 0.017 %
+ dlc2.015|ladder | gross   +3279 | 0.01%   +1364 | 0.02%    -550 | 0.05%   -6293 | breakeven 0.017 %
+ dlc3.015|ladder | gross   +2729 | 0.01%   +1017 | 0.02%    -696 | 0.05%   -5833 | breakeven 0.016 %
+ dlc3.060|ladder | gross   +2609 | 0.01%    +884 | 0.02%    -841 | 0.05%   -6017 | breakeven 0.015 %
+ dlc5.015|ladder | gross   +3285 | 0.01%   +1991 | 0.02%    +697 | 0.05%   -3183 | breakeven 0.025 %
+ dlc5.060|ladder | gross   +2863 | 0.01%   +1517 | 0.02%    +172 | 0.05%   -3863 | breakeven 0.021 %
+
+--- stability: net by half (split 10-19 16:03:48) and by UTC day, no fees ---
+         variant |      H1   n |      H2   n |  10-17 n |  10-18 n |  10-19 n |  10-20 n |  10-21 n
+            live |   +1733 101 |   +1999 110 |    +69  5 |  +1463 64 |   +334 40 |  +1692 74 |   +173 28
+             e25 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+            none |   +1919 132 |   +2832 130 |   +328  7 |  +1157 80 |   +674 60 |  +1920 82 |   +672 33
+     gz2.0|15<60 |   +1768 101 |   +1950 109 |   +130  5 |  +1419 64 |   +307 40 |  +1750 73 |   +112 28
+    gz2.0|15<240 |   +1758 101 |   +1902 111 |   +130  5 |  +1400 64 |   +366 40 |  +1643 75 |   +121 28
+    gz2.0|60<240 |   +1821 101 |   +2032 110 |   +130  5 |  +1464 64 |   +366 40 |  +1790 74 |   +104 28
+    gz2.0|ladder |   +1704 101 |   +1988 108 |   +130  5 |  +1355 64 |   +307 40 |  +1805 72 |    +96 28
+    gzb2.0|15<60 |   +1739 100 |   +2042 109 |   +130  5 |  +1390 63 |   +307 40 |  +1816 73 |   +138 28
+   gzb2.0|15<240 |   +1544  98 |   +2107 109 |    -81  2 |  +1398 64 |   +366 40 |  +1849 73 |   +121 28
+   gzb2.0|60<240 |   +1747 102 |   +2031 110 |   +130  5 |  +1390 65 |   +366 40 |  +1788 74 |   +104 28
+   gzb2.0|ladder |   +1386  98 |   +2199 105 |    -81  2 |  +1249 64 |   +305 40 |  +1991 69 |   +121 28
+      gzin|15<60 |   +1728 100 |   +1640 107 |   +130  5 |  +1417 64 |   +320 39 |  +1405 73 |    +96 26
+     gzin|15<240 |   +1787  98 |   +1922 109 |    +55  5 |  +1504 61 |   +366 40 |  +1662 73 |   +121 28
+     gzin|60<240 |   +1450 101 |   +2121 110 |   +130  5 |  +1274 64 |   +184 40 |  +1863 74 |   +121 28
+     gzin|ladder |   +1200  97 |   +1760 104 |    +55  5 |  +1145 61 |   +138 39 |  +1527 70 |    +96 26
+     gd1.0|15<60 |   +1850  96 |   +1745 101 |   +230  4 |  +1274 62 |   +484 38 |  +1435 67 |   +171 26
+    gd1.0|15<240 |   +1702 100 |   +2172 111 |   +130  5 |  +1344 63 |   +366 40 |  +1913 75 |   +121 28
+    gd1.0|60<240 |   +1822 101 |   +2134 109 |   +130  5 |  +1464 64 |   +366 40 |  +1892 73 |   +104 28
+    gd1.0|ladder |   +1730  95 |   +2130  99 |   +230  4 |  +1154 61 |   +484 38 |  +1836 65 |   +155 26
+     mr2.0|15<60 |   +1818 100 |   +1236 108 |   +130  5 |  +1460 63 |   +366 40 |   +992 72 |   +105 28
+    mr2.0|15<240 |   +1847 100 |   +2165 109 |   +130  5 |  +1489 63 |   +401 40 |  +1871 73 |   +121 28
+    mr2.0|60<240 |   +1833 102 |   +1961 111 |   +140  6 |  +1464 64 |   +367 40 |  +1702 75 |   +121 28
+    mr2.0|ladder |   +1938  99 |   +1544 105 |   +211  5 |  +1499 62 |   +401 40 |  +1265 69 |   +106 28
+     sh2.0|15<60 |   +1947  99 |   +1954 111 |   +130  5 |  +1626 64 |   +330 38 |  +1694 75 |   +121 28
+    sh2.0|15<240 |   +1871  99 |   +1511 108 |   +130  5 |  +1692 63 |   +188 39 |  +1252 72 |   +121 28
+    sh2.0|60<240 |   +1822 101 |   +2082 110 |   +130  5 |  +1464 64 |   +366 40 |  +1822 74 |   +121 28
+    sh2.0|ladder |   +1997  97 |   +1532 106 |   +130  5 |  +1854 63 |   +151 37 |  +1272 70 |   +121 28
+   dl2.060|15<60 |   +1830  98 |   +1884 109 |   +143  5 |  +1569 62 |   +258 39 |  +1577 73 |   +168 28
+  dlc2.060|15<60 |   +1621  96 |   +1795 108 |   +228  5 |  +1274 60 |   +257 39 |  +1489 72 |   +168 28
+  dl2.060|15<240 |   +1650 101 |   +1957 110 |   +130  5 |  +1292 64 |   +366 40 |  +1698 74 |   +121 28
+ dlc2.060|15<240 |   +1702 100 |   +1909 110 |   +130  5 |  +1344 63 |   +366 40 |  +1650 74 |   +121 28
+  dl2.060|60<240 |   +1852 101 |   +1970 111 |   +130  5 |  +1464 64 |   +396 40 |  +1742 75 |    +90 28
+ dlc2.060|60<240 |   +1835 101 |   +1913 111 |   +130  5 |  +1464 64 |   +379 40 |  +1684 75 |    +90 28
+  dl2.060|ladder |   +1688  98 |   +1901 109 |   +143  5 |  +1397 62 |   +287 39 |  +1626 73 |   +137 28
+ dlc2.060|ladder |   +1514  95 |   +1777 108 |   +228  5 |  +1154 59 |   +270 39 |  +1503 72 |   +137 28
+     gz0.5|15<60 |   +1839 102 |   +1957 111 |   +130  5 |  +1481 65 |   +367 40 |  +1698 75 |   +121 28
+    gz0.5|ladder |   +1839 102 |   +1963 111 |   +130  5 |  +1481 65 |   +367 40 |  +1704 75 |   +121 28
+     gz1.0|15<60 |   +1812 102 |   +1884 111 |   +130  5 |  +1455 65 |   +366 40 |  +1625 75 |   +121 28
+    gz1.0|ladder |   +1812 102 |   +1834 111 |   +130  5 |  +1455 65 |   +366 40 |  +1588 75 |   +108 28
+     gz3.0|15<60 |   +1667  95 |   +1341 104 |   +202  4 |  +1353 59 |   -214 39 |  +1397 71 |   +270 26
+    gz3.0|ladder |   +1732  91 |   +1575 102 |   +202  4 |  +1363 57 |   -158 37 |  +1646 69 |   +255 26
+     gz5.0|15<60 |   +1179  71 |   +1161  84 |    +19  1 |   +887 47 |   -129 30 |  +1358 55 |   +205 22
+    gz5.0|ladder |   +1338  66 |    +245  74 |    +19  1 |   +990 44 |    -73 28 |   +486 45 |   +161 22
+    gzb0.5|15<60 |   +1839 102 |   +1965 111 |   +130  5 |  +1481 65 |   +367 40 |  +1698 75 |   +129 28
+   gzb0.5|ladder |   +1839 102 |   +2008 111 |   +130  5 |  +1481 65 |   +367 40 |  +1740 75 |   +129 28
+    gzb1.0|15<60 |   +1812 102 |   +1871 111 |   +130  5 |  +1455 65 |   +366 40 |  +1625 75 |   +108 28
+   gzb1.0|ladder |   +1602 103 |   +1998 110 |     -5  5 |  +1379 66 |   +366 40 |  +1764 74 |    +96 28
+    gzb3.0|15<60 |   +1137  89 |   +1083 102 |   +202  4 |   +823 53 |   -212 39 |  +1163 71 |   +244 24
+   gzb3.0|ladder |    +945  83 |   +1347  96 |    +19  1 |   +759 52 |   -157 37 |  +1442 65 |   +229 24
+    gzb5.0|15<60 |    +750  64 |    +871  80 |    +19  1 |   +460 40 |   -130 30 |  +1092 53 |   +181 20
+   gzb5.0|ladder |    +808  60 |    +449  67 |    +19  1 |   +463 38 |    -75 28 |   +686 40 |   +165 20
+     gd0.5|15<60 |   +1849 103 |   +1857 111 |   +130  5 |  +1492 66 |   +367 40 |  +1597 75 |   +121 28
+    gd0.5|ladder |   +1849 103 |   +1807 111 |   +130  5 |  +1492 66 |   +367 40 |  +1564 75 |   +104 28
+     gd1.5|15<60 |   +1262  79 |    +763  92 |    +19  1 |   +974 51 |    -55 34 |  +1121 62 |    -33 23
+    gd1.5|ladder |   +1386  74 |    +763  88 |    +19  1 |  +1042 48 |     +1 32 |  +1138 58 |    -50 23
+     gd2.0|15<60 |   +1145  74 |   +1143  83 |    +19  1 |   +976 47 |   -175 33 |  +1520 54 |    -53 22
+    gd2.0|ladder |   +1316  70 |   +1051  77 |    +19  1 |  +1092 45 |   -120 31 |  +1394 48 |    -19 22
+     gd3.0|15<60 |   +1107  62 |    +821  67 |    +19  1 |  +1037 39 |   -143 26 |  +1043 44 |    -28 19
+    gd3.0|ladder |   +1209  53 |    +150  56 |    +19  1 |   +980 33 |    +37 23 |   +406 34 |    -85 18
+     mr0.5|15<60 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+    mr0.5|ladder |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+     mr1.0|15<60 |   +1822 101 |   +1965 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +125 28
+    mr1.0|ladder |   +1796 101 |   +1981 111 |   +130  5 |  +1439 64 |   +366 40 |  +1719 75 |   +125 28
+     mr3.0|15<60 |   +1721  98 |   +1560 103 |   +130  5 |  +1515 61 |   +240 40 |  +1142 71 |   +254 24
+    mr3.0|ladder |   +1829  98 |   +2265  97 |   +111  5 |  +1641 61 |   +318 39 |  +1768 66 |   +255 24
+     mr5.0|15<60 |   +1767  89 |    +631  88 |   +130  5 |  +1316 55 |   +563 36 |   +319 60 |    +70 21
+    mr5.0|ladder |   +1790  84 |   +1364  82 |    +94  3 |  +1432 54 |   +505 34 |  +1052 54 |    +70 21
+     sh0.5|15<60 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+    sh0.5|ladder |   +1822 101 |   +1980 111 |   +130  5 |  +1464 64 |   +366 40 |  +1721 75 |   +121 28
+     sh1.0|15<60 |   +1801 101 |   +1921 111 |   +130  5 |  +1464 64 |   +345 40 |  +1662 75 |   +121 28
+    sh1.0|ladder |   +1952 101 |   +1942 111 |   +130  5 |  +1616 64 |   +346 40 |  +1682 75 |   +121 28
+     sh3.0|15<60 |   +2045  97 |   +1704 106 |   +130  5 |  +1787 63 |   +242 37 |  +1474 72 |   +117 26
+    sh3.0|ladder |   +2031  94 |   +1256 101 |   +130  5 |  +2015 62 |     -1 35 |  +1052 67 |    +91 26
+     sh5.0|15<60 |   +1765  84 |    +818  92 |   +130  5 |  +1583 54 |   -273 32 |   +939 60 |   +204 25
+    sh5.0|ladder |   +1702  81 |    +993  85 |   +130  5 |  +1712 54 |   -465 29 |  +1222 54 |    +97 24
+    gz0.5|15<240 |   +1822 101 |   +1961 111 |   +130  5 |  +1464 64 |   +366 40 |  +1702 75 |   +121 28
+    gz0.5|60<240 |   +1822 101 |   +1967 111 |   +130  5 |  +1464 64 |   +366 40 |  +1708 75 |   +121 28
+    gz1.0|15<240 |   +1822 101 |   +1938 111 |   +130  5 |  +1464 64 |   +366 40 |  +1679 75 |   +121 28
+    gz1.0|60<240 |   +1822 101 |   +1930 111 |   +130  5 |  +1464 64 |   +366 40 |  +1688 75 |   +104 28
+    gz3.0|15<240 |   +1731  98 |   +1949 111 |   +130  5 |  +1420 62 |   +320 39 |  +1689 75 |   +121 28
+    gz3.0|60<240 |   +1905 100 |   +2033 110 |   +130  5 |  +1446 64 |   +469 39 |  +1790 74 |   +104 28
+    gz5.0|15<240 |   +1660  95 |   +1114 105 |   +130  5 |  +1352 59 |   +317 39 |   +883 69 |    +93 28
+    gz5.0|60<240 |   +1866 100 |   +2032 108 |   +130  5 |  +1406 64 |   +469 39 |  +1789 72 |   +104 28
+    gd0.5|15<240 |   +1822 101 |   +1941 111 |   +130  5 |  +1464 64 |   +366 40 |  +1682 75 |   +121 28
+    gd0.5|60<240 |   +1822 101 |   +1930 111 |   +130  5 |  +1464 64 |   +366 40 |  +1688 75 |   +104 28
+    gd1.5|15<240 |   +1800  95 |   +1696 108 |   +130  5 |  +1472 60 |   +337 38 |  +1437 72 |   +121 28
+    gd1.5|60<240 |   +1841 100 |   +2135 109 |   +130  5 |  +1382 64 |   +469 39 |  +1892 73 |   +104 28
+    gd2.0|15<240 |   +1824  93 |   +1796 105 |   +130  5 |  +1395 59 |   +438 37 |  +1486 69 |   +171 28
+    gd2.0|60<240 |   +1880 101 |   +2032 108 |   +130  5 |  +1420 65 |   +469 39 |  +1789 72 |   +104 28
+    gd3.0|15<240 |   +1989  91 |   +1090  96 |   +130  5 |  +1560 57 |   +439 37 |   +896 62 |    +55 26
+    gd3.0|60<240 |   +1754  98 |   +2053 108 |   +130  5 |  +1192 63 |   +593 38 |  +1788 72 |   +104 28
+   dl1.015|15<60 |   +1975 101 |   +1798 110 |   +130  5 |  +1617 64 |   +367 40 |  +1538 74 |   +121 28
+   dl1.060|15<60 |   +1975 101 |   +1797 110 |   +130  5 |  +1617 64 |   +367 40 |  +1537 74 |   +121 28
+   dl2.015|15<60 |   +1951  96 |   +1862 109 |   +230  4 |  +1602 61 |   +258 39 |  +1555 73 |   +168 28
+   dl3.015|15<60 |   +1631  87 |   +1442 100 |   +230  4 |  +1233 54 |   +306 37 |  +1170 65 |   +134 27
+   dl3.060|15<60 |   +1511  89 |   +1463 100 |   +143  5 |  +1200 55 |   +306 37 |  +1191 65 |   +134 27
+   dl5.015|15<60 |   +1851  73 |   +2304  80 |   +230  4 |  +1303 46 |   +765 28 |  +1888 54 |    -31 21
+   dl5.060|15<60 |   +1687  76 |   +2002  81 |   +143  5 |  +1270 47 |   +721 29 |  +1586 55 |    -31 21
+  dlc1.015|15<60 |   +1745 100 |   +1736 110 |   +130  5 |  +1387 63 |   +366 40 |  +1477 74 |   +121 28
+  dlc1.060|15<60 |   +1745 100 |   +1734 110 |   +130  5 |  +1387 63 |   +366 40 |  +1475 74 |   +121 28
+  dlc2.015|15<60 |   +1639  95 |   +1799 108 |   +230  4 |  +1289 60 |   +257 39 |  +1493 72 |   +168 28
+  dlc3.015|15<60 |   +1243  85 |   +1379  99 |   +230  4 |   +803 53 |   +347 36 |  +1107 64 |   +134 27
+  dlc3.060|15<60 |   +1134  85 |   +1373  99 |   +137  4 |   +787 53 |   +347 36 |  +1102 64 |   +134 27
+  dlc5.015|15<60 |   +1452  69 |   +1852  76 |   +230  4 |   +828 44 |   +662 26 |  +1562 52 |    +21 19
+  dlc5.060|15<60 |   +1155  69 |   +1758  79 |    +53  3 |   +812 44 |   +558 27 |  +1525 53 |    -35 21
+  dl1.015|ladder |   +1975 101 |   +1807 110 |   +130  5 |  +1617 64 |   +367 40 |  +1578 74 |    +90 28
+  dl1.060|ladder |   +1975 101 |   +1805 110 |   +130  5 |  +1617 64 |   +367 40 |  +1577 74 |    +90 28
+  dl2.015|ladder |   +1809  96 |   +1903 109 |   +230  4 |  +1430 61 |   +288 39 |  +1628 73 |   +137 28
+  dl3.015|ladder |   +1567  85 |   +1506 100 |   +230  4 |  +1185 53 |   +290 36 |  +1265 65 |   +103 27
+  dl3.060|ladder |   +1407  88 |   +1503 100 |   +143  5 |  +1113 55 |   +290 36 |  +1262 65 |   +103 27
+  dl5.015|ladder |   +1888  72 |   +2241  76 |   +230  4 |  +1356 46 |   +749 27 |  +1868 52 |    -75 19
+  dl5.060|ladder |   +1724  75 |   +2078  78 |   +143  5 |  +1323 47 |   +705 28 |  +1705 54 |    -74 19
+ dlc1.015|ladder |   +1745 100 |   +1687 110 |   +130  5 |  +1387 63 |   +366 40 |  +1459 74 |    +89 28
+ dlc1.060|ladder |   +1745 100 |   +1685 110 |   +130  5 |  +1387 63 |   +366 40 |  +1457 74 |    +89 28
+ dlc2.015|ladder |   +1532  94 |   +1747 108 |   +230  4 |  +1169 59 |   +270 39 |  +1472 72 |   +137 28
+ dlc3.015|ladder |   +1452  83 |   +1278  99 |   +230  4 |  +1044 52 |   +315 35 |  +1037 64 |   +103 27
+ dlc3.060|ladder |   +1303  84 |   +1306  99 |   +137  4 |   +989 53 |   +315 35 |  +1066 64 |   +103 27
+ dlc5.015|ladder |   +1661  67 |   +1623  72 |   +230  4 |  +1070 43 |   +630 25 |  +1375 50 |    -22 17
+ dlc5.060|ladder |   +1325  68 |   +1538  76 |    +53  3 |  +1014 44 |   +525 26 |  +1347 52 |    -78 19
+
+--- e25 POSITIONS by opening tf, split by the signed gap g to the higher tf's SAME-side zone line at the open (u = mean 1-min range): n, net, PF, stop share, mean; reach = price touched H's line within 60 min ---
+tf  15 by H  60: n 161, g finite 1.00, g q05/25/50/75/95 -0.6 +2.5 +4.5 +6.5 +10.4
+   g [-99,-2): n   4, net   +263, PF 3.63, stop 25%, mean   +66, reach 1.00
+   g [-2,-1): n   4, net   +272, PF 3.42, stop 25%, mean   +68, reach 1.00
+   g [-1,0): n   3, net   +114, PF 3.08, stop 33%, mean   +38, reach 1.00
+   g [0,0.5): n   1, net   +131, PF  inf, stop 0%, mean  +131, reach 1.00
+   g [0.5,1): n   4, net   +126, PF 2.24, stop 25%, mean   +31, reach 1.00
+   g [1,2): n  12, net   +112, PF 1.22, stop 50%, mean    +9, reach 0.83
+   g [2,3): n  26, net   +994, PF 2.70, stop 31%, mean   +38, reach 0.81
+   g [3,5): n  41, net   -591, PF 0.67, stop 59%, mean   -14, reach 0.54
+   g [5,8): n  43, net   +896, PF 1.51, stop 49%, mean   +21, reach 0.16
+   g [8,999): n  23, net   -222, PF 0.77, stop 61%, mean   -10, reach 0.13
+   gd [-99,0) stop-dist: n  11, net   +649, PF 3.43, stop 27%, mean   +59, reach 1.00
+   gd [0,0.5) stop-dist: n   4, net   +359, PF  inf, stop 0%, mean   +90, reach 1.00
+   gd [0.5,1) stop-dist: n  16, net   -115, PF 0.84, stop 50%, mean    -7, reach 0.62
+   gd [1,1.5) stop-dist: n  26, net  +1069, PF 2.81, stop 27%, mean   +41, reach 0.88
+   gd [1.5,2) stop-dist: n  18, net   +111, PF 1.17, stop 50%, mean    +6, reach 0.61
+   gd [2,3) stop-dist: n  38, net    +67, PF 1.04, stop 55%, mean    +2, reach 0.29
+   gd [3,5) stop-dist: n  34, net   -133, PF 0.92, stop 59%, mean    -4, reach 0.21
+   gd [5,999) stop-dist: n  14, net    +89, PF 1.16, stop 64%, mean    +6, reach 0.14
+   sh2.0 = True : n   9, net   +124, PF 1.39, stop 44%, mean   +14
+   sh2.0 = False: n 152, net  +1971, PF 1.35, stop 48%, mean   +13
+   mr2.0 = True : n   7, net   +130, PF 1.52, stop 43%, mean   +19
+   mr2.0 = False: n 154, net  +1965, PF 1.34, stop 48%, mean   +13
+tf  15 by H 240: n 161, g finite 1.00, g q05/25/50/75/95 +1.7 +5.8 +12.0 +17.0 +26.8
+   g [-99,-2): n   4, net   +101, PF 1.64, stop 50%, mean   +25, reach 1.00
+   g [-1,0): n   2, net    -13, PF 0.88, stop 50%, mean    -6, reach 1.00
+   g [0.5,1): n   1, net   -102, PF 0.00, stop 100%, mean  -102, reach 1.00
+   g [1,2): n   3, net    +78, PF 1.76, stop 33%, mean   +26, reach 1.00
+   g [2,3): n   6, net   +323, PF 3.57, stop 33%, mean   +54, reach 0.67
+   g [3,5): n  15, net   -397, PF 0.49, stop 60%, mean   -26, reach 0.53
+   g [5,8): n  16, net   +661, PF 3.52, stop 19%, mean   +41, reach 0.38
+   g [8,999): n 114, net  +1445, PF 1.33, stop 51%, mean   +13, reach 0.06
+   gd [-99,0) stop-dist: n   6, net    +88, PF 1.34, stop 50%, mean   +15, reach 1.00
+   gd [0,0.5) stop-dist: n   1, net   -102, PF 0.00, stop 100%, mean  -102, reach 1.00
+   gd [0.5,1) stop-dist: n   2, net    +18, PF 1.18, stop 50%, mean    +9, reach 1.00
+   gd [1,1.5) stop-dist: n   8, net   +190, PF 1.78, stop 25%, mean   +24, reach 0.62
+   gd [1.5,2) stop-dist: n   6, net   -163, PF 0.44, stop 50%, mean   -27, reach 0.67
+   gd [2,3) stop-dist: n  18, net   +121, PF 1.23, stop 39%, mean    +7, reach 0.44
+   gd [3,5) stop-dist: n  26, net   +363, PF 1.35, stop 46%, mean   +14, reach 0.15
+   gd [5,999) stop-dist: n  94, net  +1579, PF 1.46, stop 51%, mean   +17, reach 0.05
+   sh2.0 = True : n   7, net   +212, PF 1.85, stop 43%, mean   +30
+   sh2.0 = False: n 154, net  +1883, PF 1.33, stop 48%, mean   +12
+   mr2.0 = True : n   8, net   -382, PF 0.28, stop 75%, mean   -48
+   mr2.0 = False: n 153, net  +2477, PF 1.46, stop 46%, mean   +16
+tf  60 by H 240: n 40, g finite 1.00, g q05/25/50/75/95 -2.2 +3.5 +7.2 +11.9 +18.3
+   g [-99,-2): n   2, net   +361, PF  inf, stop 0%, mean  +181, reach 1.00
+   g [-2,-1): n   2, net   -169, PF 0.00, stop 100%, mean   -85, reach 1.00
+   g [0,0.5): n   2, net     +3, PF 1.05, stop 50%, mean    +2, reach 1.00
+   g [0.5,1): n   1, net    +13, PF  inf, stop 0%, mean   +13, reach 1.00
+   g [1,2): n   1, net   -102, PF 0.00, stop 100%, mean  -102, reach 1.00
+   g [2,3): n   1, net   +100, PF  inf, stop 0%, mean  +100, reach 1.00
+   g [3,5): n   3, net    -67, PF 0.60, stop 67%, mean   -22, reach 0.67
+   g [5,8): n  11, net   -105, PF 0.80, stop 55%, mean   -10, reach 0.36
+   g [8,999): n  17, net   +553, PF 2.04, stop 41%, mean   +33, reach 0.06
+   gd [-99,0) stop-dist: n   4, net   +192, PF 2.13, stop 50%, mean   +48, reach 1.00
+   gd [0,0.5) stop-dist: n   3, net    +16, PF 1.23, stop 33%, mean    +5, reach 1.00
+   gd [0.5,1) stop-dist: n   1, net   -102, PF 0.00, stop 100%, mean  -102, reach 1.00
+   gd [1,1.5) stop-dist: n   3, net    -20, PF 0.83, stop 33%, mean    -7, reach 1.00
+   gd [1.5,2) stop-dist: n   1, net   +102, PF  inf, stop 0%, mean  +102, reach 0.00
+   gd [2,3) stop-dist: n   6, net   -146, PF 0.60, stop 67%, mean   -24, reach 0.50
+   gd [3,5) stop-dist: n  10, net   -132, PF 0.72, stop 60%, mean   -13, reach 0.20
+   gd [5,999) stop-dist: n  12, net   +677, PF 3.43, stop 33%, mean   +56, reach 0.00
+   sh2.0 = True : n   2, net    -29, PF 0.71, stop 50%, mean   -14
+   sh2.0 = False: n  38, net   +616, PF 1.42, stop 47%, mean   +16
+   mr2.0 = True : n   1, net   +110, PF  inf, stop 0%, mean  +110
+   mr2.0 = False: n  39, net   +477, PF 1.30, stop 49%, mean   +12
+
+--- delay variants: pended fires → outcome; the e25 position at the same fire (open_ts) for comparison ---
+   dl2.060|15<60: cancelled: n 3 (e25 pos at fire 3) e25 pnl +292 → delayed pnl +0; filled: n 12 (e25 pos at fire 12) e25 pnl -236 → delayed pnl -134; fill delay min q25/50/75 3.4/5.2/18.3
+  dlc2.060|15<60: cancelled: n 5 (e25 pos at fire 5) e25 pnl +293 → delayed pnl +0; filled: n 9 (e25 pos at fire 9) e25 pnl -135 → delayed pnl -258; fill delay min q25/50/75 5.8/6.8/25.4
+  dl2.060|15<240: filled: n 3 (e25 pos at fire 3) e25 pnl +78 → delayed pnl -178; fill delay min q25/50/75 8.1/13.4/19.0
+ dlc2.060|15<240: cancelled: n 1 (e25 pos at fire 1) e25 pnl +120 → delayed pnl +0; filled: n 2 (e25 pos at fire 2) e25 pnl -42 → delayed pnl -161; fill delay min q25/50/75 9.1/14.6/20.1
+  dl2.060|60<240: cancelled: n 1 (e25 pos at fire 1) e25 pnl +13 → delayed pnl +0; filled: n 3 (e25 pos at fire 3) e25 pnl -99 → delayed pnl -29; fill delay min q25/50/75 1.3/2.4/6.9
+ dlc2.060|60<240: cancelled: n 1 (e25 pos at fire 1) e25 pnl +13 → delayed pnl +0; filled: n 3 (e25 pos at fire 3) e25 pnl -99 → delayed pnl -103; fill delay min q25/50/75 2.7/5.2/8.5
+  dl2.060|ladder: cancelled: n 4 (e25 pos at fire 4) e25 pnl +305 → delayed pnl +0; filled: n 16 (e25 pos at fire 16) e25 pnl -248 → delayed pnl -251; fill delay min q25/50/75 3.3/5.2/14.1
+ dlc2.060|ladder: cancelled: n 7 (e25 pos at fire 7) e25 pnl +426 → delayed pnl +0; filled: n 12 (e25 pos at fire 12) e25 pnl -267 → delayed pnl -363; fill delay min q25/50/75 4.3/6.6/18.5
+   dl1.015|15<60: cancelled: n 1 (e25 pos at fire 1) e25 pnl +131 → delayed pnl +0; expired: n 1 (e25 pos at fire 1) e25 pnl +113 → delayed pnl +0; filled: n 3 (e25 pos at fire 3) e25 pnl +13 → delayed pnl +84; fill delay min q25/50/75 4.2/5.1/5.7
+   dl1.060|15<60: cancelled: n 1 (e25 pos at fire 1) e25 pnl +131 → delayed pnl +0; filled: n 4 (e25 pos at fire 4) e25 pnl +126 → delayed pnl +246; fill delay min q25/50/75 4.6/5.7/8.7
+   dl2.015|15<60: cancelled: n 1 (e25 pos at fire 1) e25 pnl +131 → delayed pnl +0; expired: n 6 (e25 pos at fire 6) e25 pnl +326 → delayed pnl +0; filled: n 8 (e25 pos at fire 8) e25 pnl -401 → delayed pnl -132; fill delay min q25/50/75 3.3/3.6/5.2
+   dl3.015|15<60: cancelled: n 10 (e25 pos at fire 10) e25 pnl +1074 → delayed pnl +0; expired: n 10 (e25 pos at fire 10) e25 pnl +673 → delayed pnl +0; filled: n 17 (e25 pos at fire 17) e25 pnl -883 → delayed pnl +347; fill delay min q25/50/75 3.2/3.7/5.7
+   dl3.060|15<60: cancelled: n 16 (e25 pos at fire 16) e25 pnl +1581 → delayed pnl +0; filled: n 21 (e25 pos at fire 21) e25 pnl -718 → delayed pnl +345; fill delay min q25/50/75 3.3/5.1/8.8
+   dl5.015|15<60: cancelled: n 18 (e25 pos at fire 18) e25 pnl +1004 → delayed pnl +0; expired: n 33 (e25 pos at fire 33) e25 pnl +401 → delayed pnl +0; filled: n 28 (e25 pos at fire 25) e25 pnl -1423 → delayed pnl +449; fill delay min q25/50/75 3.6/5.9/10.0
+   dl5.060|15<60: cancelled: n 42 (e25 pos at fire 42) e25 pnl +1585 → delayed pnl +0; expired: n 3 (e25 pos at fire 3) e25 pnl -110 → delayed pnl +0; filled: n 34 (e25 pos at fire 31) e25 pnl -1303 → delayed pnl +84; fill delay min q25/50/75 3.7/7.3/14.3
+  dlc1.015|15<60: cancelled: n 2 (e25 pos at fire 2) e25 pnl +207 → delayed pnl +0; expired: n 1 (e25 pos at fire 1) e25 pnl +113 → delayed pnl +0; filled: n 1 (e25 pos at fire 1) e25 pnl +39 → delayed pnl -103; fill delay min q25/50/75 6.8/6.8/6.8
+  dlc1.060|15<60: cancelled: n 2 (e25 pos at fire 2) e25 pnl +207 → delayed pnl +0; filled: n 2 (e25 pos at fire 2) e25 pnl +152 → delayed pnl +59; fill delay min q25/50/75 9.2/11.5/13.8
+  dlc2.015|15<60: cancelled: n 3 (e25 pos at fire 3) e25 pnl +132 → delayed pnl +0; expired: n 6 (e25 pos at fire 6) e25 pnl +326 → delayed pnl +0; filled: n 5 (e25 pos at fire 5) e25 pnl -300 → delayed pnl -435; fill delay min q25/50/75 4.6/5.8/6.5
+  dlc3.015|15<60: cancelled: n 12 (e25 pos at fire 12) e25 pnl +1074 → delayed pnl +0; expired: n 10 (e25 pos at fire 10) e25 pnl +673 → delayed pnl +0; filled: n 14 (e25 pos at fire 14) e25 pnl -782 → delayed pnl -137; fill delay min q25/50/75 4.6/5.4/6.8
+  dlc3.060|15<60: cancelled: n 19 (e25 pos at fire 19) e25 pnl +1673 → delayed pnl +0; filled: n 18 (e25 pos at fire 18) e25 pnl -617 → delayed pnl +39; fill delay min q25/50/75 4.8/6.6/13.3
+  dlc5.015|15<60: cancelled: n 23 (e25 pos at fire 22) e25 pnl +832 → delayed pnl +0; expired: n 38 (e25 pos at fire 38) e25 pnl +107 → delayed pnl +0; filled: n 17 (e25 pos at fire 15) e25 pnl -841 → delayed pnl -394; fill delay min q25/50/75 4.7/6.5/7.8
+  dlc5.060|15<60: cancelled: n 48 (e25 pos at fire 46) e25 pnl +1372 → delayed pnl +0; expired: n 3 (e25 pos at fire 3) e25 pnl -110 → delayed pnl +0; filled: n 28 (e25 pos at fire 26) e25 pnl -1014 → delayed pnl -263; fill delay min q25/50/75 5.6/8.8/15.9
+  dl1.015|ladder: cancelled: n 2 (e25 pos at fire 2) e25 pnl +144 → delayed pnl +0; expired: n 1 (e25 pos at fire 1) e25 pnl +113 → delayed pnl +0; filled: n 5 (e25 pos at fire 5) e25 pnl +16 → delayed pnl +127; fill delay min q25/50/75 2.4/3.2/5.1
+  dl1.060|ladder: cancelled: n 2 (e25 pos at fire 2) e25 pnl +144 → delayed pnl +0; filled: n 6 (e25 pos at fire 6) e25 pnl +129 → delayed pnl +289; fill delay min q25/50/75 2.6/4.2/5.9
+  dl2.015|ladder: cancelled: n 2 (e25 pos at fire 2) e25 pnl +144 → delayed pnl +0; expired: n 6 (e25 pos at fire 6) e25 pnl +326 → delayed pnl +0; filled: n 13 (e25 pos at fire 13) e25 pnl -482 → delayed pnl -295; fill delay min q25/50/75 2.8/3.5/5.3
+  dl3.015|ladder: cancelled: n 12 (e25 pos at fire 12) e25 pnl +1186 → delayed pnl +0; expired: n 12 (e25 pos at fire 11) e25 pnl +719 → delayed pnl +0; filled: n 24 (e25 pos at fire 24) e25 pnl -1312 → delayed pnl +98; fill delay min q25/50/75 2.2/3.4/5.4
+  dl3.060|ladder: cancelled: n 18 (e25 pos at fire 18) e25 pnl +1694 → delayed pnl +0; expired: n 1 (e25 pos at fire 1) e25 pnl +46 → delayed pnl +0; filled: n 28 (e25 pos at fire 27) e25 pnl -1078 → delayed pnl +102; fill delay min q25/50/75 2.6/4.0/9.4
+  dl5.015|ladder: cancelled: n 19 (e25 pos at fire 19) e25 pnl +1017 → delayed pnl +0; expired: n 37 (e25 pos at fire 36) e25 pnl +459 → delayed pnl +0; filled: n 35 (e25 pos at fire 32) e25 pnl -1817 → delayed pnl +626; fill delay min q25/50/75 2.9/5.3/10.0
+  dl5.060|ladder: cancelled: n 45 (e25 pos at fire 45) e25 pnl +1609 → delayed pnl +0; expired: n 4 (e25 pos at fire 4) e25 pnl -63 → delayed pnl +0; filled: n 40 (e25 pos at fire 37) e25 pnl -1628 → delayed pnl +305; fill delay min q25/50/75 3.4/7.1/14.2
+ dlc1.015|ladder: cancelled: n 3 (e25 pos at fire 3) e25 pnl +220 → delayed pnl +0; expired: n 1 (e25 pos at fire 1) e25 pnl +113 → delayed pnl +0; filled: n 3 (e25 pos at fire 3) e25 pnl +42 → delayed pnl -117; fill delay min q25/50/75 2.7/5.2/6.0
+ dlc1.060|ladder: cancelled: n 3 (e25 pos at fire 3) e25 pnl +220 → delayed pnl +0; filled: n 4 (e25 pos at fire 4) e25 pnl +155 → delayed pnl +45; fill delay min q25/50/75 3.9/6.0/9.2
+ dlc2.015|ladder: cancelled: n 5 (e25 pos at fire 5) e25 pnl +264 → delayed pnl +0; expired: n 6 (e25 pos at fire 6) e25 pnl +326 → delayed pnl +0; filled: n 9 (e25 pos at fire 9) e25 pnl -501 → delayed pnl -642; fill delay min q25/50/75 3.6/5.2/6.5
+ dlc3.015|ladder: cancelled: n 14 (e25 pos at fire 14) e25 pnl +1187 → delayed pnl +0; expired: n 13 (e25 pos at fire 11) e25 pnl +719 → delayed pnl +0; filled: n 22 (e25 pos at fire 22) e25 pnl -1312 → delayed pnl -383; fill delay min q25/50/75 3.2/5.0/6.6
+ dlc3.060|ladder: cancelled: n 22 (e25 pos at fire 21) e25 pnl +1785 → delayed pnl +0; expired: n 1 (e25 pos at fire 1) e25 pnl +46 → delayed pnl +0; filled: n 26 (e25 pos at fire 25) e25 pnl -1078 → delayed pnl -144; fill delay min q25/50/75 3.8/6.0/11.3
+ dlc5.015|ladder: cancelled: n 25 (e25 pos at fire 24) e25 pnl +944 → delayed pnl +0; expired: n 45 (e25 pos at fire 42) e25 pnl +97 → delayed pnl +0; filled: n 23 (e25 pos at fire 21) e25 pnl -1167 → delayed pnl -458; fill delay min q25/50/75 4.5/5.8/7.5
+ dlc5.060|ladder: cancelled: n 53 (e25 pos at fire 50) e25 pnl +1496 → delayed pnl +0; expired: n 4 (e25 pos at fire 4) e25 pnl -63 → delayed pnl +0; filled: n 34 (e25 pos at fire 31) e25 pnl -1412 → delayed pnl -180; fill delay min q25/50/75 5.2/8.8/15.8
+
+--- fire-level vs e25: lost / new fires per frozen veto (pair 15<60 and ladder) ---
+     gz2.0|15<60: e25 fires 238, lost 26 (by tf {15: 26, 60: 0, 240: 0}), new 18
+    gz2.0|ladder: e25 fires 238, lost 38 (by tf {15: 33, 60: 4, 240: 1}), new 23
+    gzb2.0|15<60: e25 fires 238, lost 37 (by tf {15: 36, 60: 1, 240: 0}), new 21
+   gzb2.0|ladder: e25 fires 238, lost 54 (by tf {15: 45, 60: 8, 240: 1}), new 28
+      gzin|15<60: e25 fires 238, lost 16 (by tf {15: 15, 60: 1, 240: 0}), new 8
+     gzin|ladder: e25 fires 238, lost 30 (by tf {15: 24, 60: 6, 240: 0}), new 14
+     gd1.0|15<60: e25 fires 238, lost 30 (by tf {15: 30, 60: 0, 240: 0}), new 5
+    gd1.0|ladder: e25 fires 238, lost 41 (by tf {15: 36, 60: 4, 240: 1}), new 9
+     mr2.0|15<60: e25 fires 238, lost 7 (by tf {15: 7, 60: 0, 240: 0}), new 4
+    mr2.0|ladder: e25 fires 238, lost 18 (by tf {15: 16, 60: 2, 240: 0}), new 10
+     sh2.0|15<60: e25 fires 238, lost 13 (by tf {15: 13, 60: 0, 240: 0}), new 9
+    sh2.0|ladder: e25 fires 238, lost 24 (by tf {15: 21, 60: 3, 240: 0}), new 13

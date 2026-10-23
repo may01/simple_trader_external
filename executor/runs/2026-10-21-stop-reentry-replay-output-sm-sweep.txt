@@ -1,0 +1,61 @@
+trades 753117 (10-16 22:29:05 -> 10-21 11:16:04); replay 10-18 11:41:10 -> 10-21 11:16:04: 532852 trades; indicator names 42, rows 470989, expiry non-monotone steps 0
+trade feed gaps > 60 s in the replay window: 4 [('10-19 13:01:46', 5564), ('10-19 20:01:34', 9432), ('10-20 16:13:10', 305), ('10-21 02:55:41', 66)]
+pre-candidate trades (filters pass, zone+target present, inzone or rejection): {'15_long': 38319, '15_short': 44058, '60_long': 37240, '60_short': 19175, '240_long': 24248, '240_short': 27028} any: 160614
+simulated live: 186 fires, 171 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 179902
+simulated sm15: 186 fires, 166 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 181306
+simulated sm20: 186 fires, 160 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 182348
+simulated sm25: 186 fires, 155 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 182356
+simulated sm30: 186 fires, 150 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, trend cache 182406
+
+REPRODUCTION (live variant vs recorded fires, same side+tf within 60 s): recorded 191, simulated 186, matched 184, missed 7, extra 2
+  candle-stop port: 39/40 recorded stops reproduced within half a tick
+  candle-stop era: recorded positions 38 net +169, pairs W15 4 (P1 -273, P2 +312); sim-live positions 37 net -40, pairs W15 8 (P1 -536, P2 +485)
+
+SUMMARY (same simulator, same window for every variant; pairs = stop -> same side better re-entry within 15 min)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 171 | +2503 | -13522 | 1.38 | 51% | 82 / -80 | 61 | 27 | 7.5 | 84 | [+236, +4841] | 0.03 | 35 (43%) | -2795 | +226 |
+| sm15 | 166 | +3051 | -11443 | 1.51 | 59% | 66 / -91 | 64 | 35 | 9.1 | 100 | [+879, +5267] | 0.01 | 33 (50%) | -3022 | +591 |
+| sm20 | 160 | +3108 | -9488 | 1.58 | 64% | 54 / -98 | 66 | 39 | 10.0 | 100 | [+1074, +5223] | 0.01 | 30 (56%) | -2961 | +307 |
+| sm25 | 155 | +3139 | -7619 | 1.71 | 69% | 43 / -101 | 68 | 43 | 10.7 | 100 | [+1315, +4964] | 0.00 | 25 (58%) | -2538 | +565 |
+| sm30 | 150 | +2340 | -6803 | 1.56 | 70% | 40 / -101 | 67 | 42 | 11.3 | 100 | [+672, +4035] | 0.01 | 23 (57%) | -2338 | +485 |
+
+PAIR STATS ON LIVE SIM BY WINDOW
+  W<= 5: pairs 28 of 82 stop-outs (34%); P1 -2293 (mean -82), P2 +311 (mean +11), P2 outcomes {'stop': 13, 'reversal': 7, 'target': 7, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.06, P2 beyond P1 stop 17/28; gap median 1.6 min; P2 rule {'zone_rejection': 10, 'in_zone': 18}, P2 tf {15: 14, 60: 12, 240: 2}
+  W<=15: pairs 35 of 82 stop-outs (43%); P1 -2795 (mean -80), P2 +226 (mean +6), P2 outcomes {'stop': 17, 'reversal': 9, 'target': 8, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.19, P2 beyond P1 stop 23/35; gap median 1.9 min; P2 rule {'zone_rejection': 13, 'in_zone': 22}, P2 tf {15: 17, 60: 16, 240: 2}
+  W<=30: pairs 45 of 82 stop-outs (55%); P1 -3572 (mean -79), P2 +544 (mean +12), P2 outcomes {'stop': 22, 'reversal': 12, 'target': 10, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.35, P2 beyond P1 stop 31/45; gap median 2.4 min; P2 rule {'zone_rejection': 18, 'in_zone': 27}, P2 tf {15: 23, 60: 19, 240: 3}
+  W<=60: pairs 49 of 82 stop-outs (60%); P1 -3966 (mean -81), P2 +606 (mean +12), P2 outcomes {'stop': 24, 'reversal': 12, 'target': 12, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.35, P2 beyond P1 stop 33/49; gap median 3.0 min; P2 rule {'zone_rejection': 19, 'in_zone': 30}, P2 tf {15: 27, 60: 19, 240: 3}
+  live sim: re-entry-flagged positions 67, pnl +644; others 104, pnl +1859
+
+PAIRED 6-H BLOCK BOOTSTRAP vs live (13 blocks, 5000 resamples)
+  sm15    - live: delta   +548, 90 % CI [  -720,  +1955], P(delta<0) 0.26; blocks > 3, < 10, = 0
+  sm20    - live: delta   +605, 90 % CI [  -582,  +1799], P(delta<0) 0.21; blocks > 7, < 6, = 0
+  sm25    - live: delta   +636, 90 % CI [  -228,  +1518], P(delta<0) 0.11; blocks > 7, < 6, = 0
+  sm30    - live: delta   -163, 90 % CI [ -1125,   +752], P(delta<0) 0.61; blocks > 7, < 6, = 0
+
+PER-DAY NET (UTC day of the opening fire)
+| day | live | sm15 | sm20 | sm25 | sm30 |
+|---|---|---|---|---|---|
+| 10-18 | 26 / +542 | 25 / +987 | 24 / +773 | 23 / +764 | 22 / +533 |
+| 10-19 | 40 / +330 | 38 / +671 | 37 / +864 | 37 / +943 | 37 / +758 |
+| 10-20 | 74 / +1684 | 74 / +1253 | 71 / +1209 | 68 / +1292 | 64 / +1059 |
+| 10-21 | 31 / -53 | 29 / +140 | 28 / +262 | 27 / +140 | 27 / -10 |
+
+PER-TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf15 | 129 | +1581 | -10476 | 1.33 | 51% | 61 / -79 | 57 | 11 | 6.7 | 82 | [-281, +3523] | 0.09 | 14 (23%) | -1085 | +173 |
+| live tf60 | 33 | +255 | -2849 | 1.18 | 48% | 17 / -85 | 3 | 12 | 10.1 | 86 | [-667, +1180] | 0.33 | 0 (0%) | +0 | +0 |
+| live tf240 | 9 | +667 | -197 | 2.98 | 56% | 4 / -84 | 1 | 4 | 11.4 | 88 | [-150, +1493] | 0.09 | 0 (0%) | +0 | +0 |
+| sm15 tf15 | 124 | +2223 | -8632 | 1.52 | 60% | 47 / -90 | 60 | 17 | 8.6 | 100 | [+424, +4032] | 0.02 | 10 (21%) | -889 | +151 |
+| sm15 tf60 | 33 | +318 | -2549 | 1.23 | 55% | 15 / -93 | 3 | 14 | 10.7 | 100 | [-604, +1226] | 0.29 | 0 (0%) | +0 | +0 |
+| sm15 tf240 | 9 | +511 | -262 | 2.35 | 56% | 4 / -94 | 1 | 4 | 11.4 | 100 | [-252, +1294] | 0.14 | 0 (0%) | +0 | +0 |
+| sm20 tf15 | 120 | +2261 | -7261 | 1.60 | 66% | 38 / -97 | 61 | 21 | 8.9 | 100 | [+630, +3947] | 0.01 | 8 (21%) | -803 | -24 |
+| sm20 tf60 | 31 | +331 | -2081 | 1.25 | 58% | 13 / -100 | 4 | 13 | 13.3 | 100 | [-571, +1284] | 0.27 | 1 (8%) | -97 | +101 |
+| sm20 tf240 | 9 | +516 | -146 | 2.70 | 67% | 3 / -101 | 1 | 5 | 11.4 | 100 | [-155, +1161] | 0.10 | 0 (0%) | +0 | +0 |
+| sm25 tf15 | 119 | +2130 | -6159 | 1.64 | 69% | 32 / -101 | 63 | 24 | 10.0 | 100 | [+599, +3714] | 0.01 | 7 (22%) | -713 | +3 |
+| sm25 tf60 | 27 | +606 | -1290 | 1.75 | 70% | 8 / -101 | 4 | 14 | 15.0 | 100 | [-155, +1361] | 0.09 | 1 (12%) | -101 | +86 |
+| sm25 tf240 | 9 | +403 | -171 | 2.33 | 67% | 3 / -101 | 1 | 5 | 11.4 | 100 | [-204, +981] | 0.14 | 0 (0%) | +0 | +0 |
+| sm30 tf15 | 116 | +1756 | -5353 | 1.58 | 71% | 29 / -101 | 62 | 25 | 10.9 | 100 | [+352, +3204] | 0.02 | 4 (14%) | -406 | +71 |
+| sm30 tf60 | 25 | +271 | -1263 | 1.33 | 68% | 8 / -101 | 4 | 12 | 15.0 | 100 | [-405, +939] | 0.24 | 1 (12%) | -102 | +75 |
+| sm30 tf240 | 9 | +313 | -187 | 2.03 | 67% | 3 / -101 | 1 | 5 | 11.4 | 100 | [-244, +842] | 0.18 | 0 (0%) | +0 | +0 |

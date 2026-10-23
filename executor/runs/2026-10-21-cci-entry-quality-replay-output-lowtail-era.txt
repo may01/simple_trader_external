@@ -1,0 +1,107 @@
+trades 753117 (10-16 22:29:05 -> 10-21 11:16:04); replay 10-20 20:25:00 -> 10-21 11:16:04: 87416 trades; indicator names 42, rows 470989, expiry non-monotone steps 0
+trade feed gaps > 60 s in the replay window: 1 [('10-21 02:55:41', 66)]
+pre-candidate trades (filters pass, zone+target present, inzone or rejection): {'15_long': 8295, '15_short': 7243, '60_long': 8164, '60_short': 1820, '240_long': 2553, '240_short': 11964} any: 34460
+simulated live: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/0/0/0, trend cache 37338
+simulated cci5_skip_lowtail: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/0/0/0, trend cache 37338
+simulated cci5_skip_below140: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/0/0/0, trend cache 37338
+simulated cci15_skip_lowtail: 41 fires, 34 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 4/0/0/0, trend cache 37338
+simulated cci15_skip_below140: 41 fires, 38 positions, cooled 0, depth-blocked ticks 0, skip-blocked ticks 0, cci skip/wait/fill/expire 0/0/0/0, trend cache 37338
+
+REPRODUCTION (live variant vs recorded fires, same side+tf within 60 s): recorded 42, simulated 41, matched 40, missed 2, extra 1
+  candle-stop port: 39/40 recorded stops reproduced within half a tick
+  candle-stop era: recorded positions 38 net +169, pairs W15 4 (P1 -273, P2 +312); sim-live positions 38 net +237, pairs W15 8 (P1 -526, P2 +474)
+
+SUMMARY (same simulator, same window for every variant; pairs = stop -> same side better re-entry within 15 min)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live | 38 | +237 | -3508 | 1.17 | 45% | 21 / -68 | 9 | 7 | 8.6 | 71 | [-709, +1219] | 0.35 | 8 (38%) | -526 | +474 |
+| cci5_skip_lowtail | 38 | +237 | -3508 | 1.17 | 45% | 21 / -68 | 9 | 7 | 8.6 | 71 | [-709, +1219] | 0.35 | 8 (38%) | -526 | +474 |
+| cci5_skip_below140 | 38 | +237 | -3508 | 1.17 | 45% | 21 / -68 | 9 | 7 | 8.6 | 71 | [-709, +1219] | 0.35 | 8 (38%) | -526 | +474 |
+| cci15_skip_lowtail | 34 | +469 | -2877 | 1.39 | 50% | 17 / -71 | 9 | 7 | 9.0 | 72 | [-437, +1431] | 0.21 | 7 (41%) | -478 | +349 |
+| cci15_skip_below140 | 38 | +237 | -3508 | 1.17 | 45% | 21 / -68 | 9 | 7 | 8.6 | 71 | [-709, +1219] | 0.35 | 8 (38%) | -526 | +474 |
+
+PAIR STATS ON LIVE SIM BY WINDOW
+  W<= 5: pairs 7 of 21 stop-outs (33%); P1 -477 (mean -68), P2 +348 (mean +50), P2 outcomes {'reversal': 2, 'stop': 2, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 0.94, P2 beyond P1 stop 3/7; gap median 1.5 min; P2 rule {'zone_rejection': 4, 'in_zone': 3}, P2 tf {60: 2, 15: 5}
+  W<=15: pairs 8 of 21 stop-outs (38%); P1 -526 (mean -66), P2 +474 (mean +59), P2 outcomes {'reversal': 3, 'stop': 2, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.06, P2 beyond P1 stop 4/8; gap median 1.5 min; P2 rule {'zone_rejection': 4, 'in_zone': 4}, P2 tf {60: 3, 15: 5}
+  W<=30: pairs 11 of 21 stop-outs (52%); P1 -754 (mean -69), P2 +275 (mean +25), P2 outcomes {'reversal': 3, 'stop': 5, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.38, P2 beyond P1 stop 7/11; gap median 1.8 min; P2 rule {'zone_rejection': 7, 'in_zone': 4}, P2 tf {60: 5, 15: 6}
+  W<=60: pairs 11 of 21 stop-outs (52%); P1 -754 (mean -69), P2 +275 (mean +25), P2 outcomes {'reversal': 3, 'stop': 5, 'target': 2, 'open_at_end': 1}; Δentry/P1 stop-dist median 1.38, P2 beyond P1 stop 7/11; gap median 1.8 min; P2 rule {'zone_rejection': 7, 'in_zone': 4}, P2 tf {60: 5, 15: 6}
+  live sim: re-entry-flagged positions 14, pnl +250; others 24, pnl -13
+
+PAIRED 6-H BLOCK BOOTSTRAP vs live (3 blocks, 5000 resamples)
+  cci5_skip_lowtail - live: delta     +0, 90 % CI [    +0,     +0], P(delta<0) 0.00; blocks > 0, < 0, = 3
+  cci5_skip_below140 - live: delta     +0, 90 % CI [    +0,     +0], P(delta<0) 0.00; blocks > 0, < 0, = 3
+  cci15_skip_lowtail - live: delta   +232, 90 % CI [   +41,   +423], P(delta<0) 0.00; blocks > 3, < 0, = 0
+  cci15_skip_below140 - live: delta     +0, 90 % CI [    +0,     +0], P(delta<0) 0.00; blocks > 0, < 0, = 3
+
+PER-DAY NET (UTC day of the opening fire)
+| day | live | cci5_skip_lowtail | cci5_skip_below140 | cci15_skip_lowtail | cci15_skip_below140 |
+|---|---|---|---|---|---|
+| 10-20 | 7 / +289 | 7 / +289 | 7 / +289 | 6 / +330 | 7 / +289 |
+| 10-21 | 31 / -52 | 31 / -52 | 31 / -52 | 28 / +139 | 31 / -52 |
+
+PER-TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live tf15 | 30 | +144 | -2798 | 1.12 | 43% | 17 / -69 | 9 | 4 | 7.7 | 72 | [-695, +1073] | 0.40 | 3 (18%) | -262 | +178 |
+| live tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| live tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| cci5_skip_lowtail tf15 | 30 | +144 | -2798 | 1.12 | 43% | 17 / -69 | 9 | 4 | 7.7 | 72 | [-695, +1073] | 0.40 | 3 (18%) | -262 | +178 |
+| cci5_skip_lowtail tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| cci5_skip_lowtail tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| cci5_skip_below140 tf15 | 30 | +144 | -2798 | 1.12 | 43% | 17 / -69 | 9 | 4 | 7.7 | 72 | [-695, +1073] | 0.40 | 3 (18%) | -262 | +178 |
+| cci5_skip_below140 tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| cci5_skip_below140 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| cci15_skip_lowtail tf15 | 26 | +376 | -2166 | 1.40 | 50% | 13 / -73 | 9 | 4 | 7.7 | 73 | [-425, +1236] | 0.22 | 3 (23%) | -262 | +178 |
+| cci15_skip_lowtail tf60 | 7 | +146 | -557 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| cci15_skip_lowtail tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+| cci15_skip_below140 tf15 | 30 | +144 | -2798 | 1.12 | 43% | 17 / -69 | 9 | 4 | 7.7 | 72 | [-695, +1073] | 0.40 | 3 (18%) | -262 | +178 |
+| cci15_skip_below140 tf60 | 7 | +146 | -556 | 1.70 | 57% | 3 / -69 | 0 | 3 | 14.9 | 67 | [-225, +537] | 0.27 | 0 (0%) | +0 | +0 |
+| cci15_skip_below140 tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 | 0 (0%) | +0 | +0 |
+
+PER-SIDE (positions by side)
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live Buy | 17 | +108 | -1599 | 1.15 | 35% | 11 / -66 | 3 | 3 | 7.8 | 61 | [-575, +878] | 0.42 | 3 (27%) | -171 | +158 |
+| live Sell | 21 | +130 | -1909 | 1.18 | 52% | 10 / -71 | 6 | 4 | 9.3 | 72 | [-479, +762] | 0.36 | 5 (50%) | -355 | +316 |
+| cci5_skip_lowtail Buy | 17 | +108 | -1599 | 1.15 | 35% | 11 / -66 | 3 | 3 | 7.8 | 61 | [-575, +878] | 0.42 | 3 (27%) | -171 | +158 |
+| cci5_skip_lowtail Sell | 21 | +130 | -1909 | 1.18 | 52% | 10 / -71 | 6 | 4 | 9.3 | 72 | [-479, +762] | 0.36 | 5 (50%) | -355 | +316 |
+| cci5_skip_below140 Buy | 17 | +108 | -1599 | 1.15 | 35% | 11 / -66 | 3 | 3 | 7.8 | 61 | [-575, +878] | 0.42 | 3 (27%) | -171 | +158 |
+| cci5_skip_below140 Sell | 21 | +130 | -1909 | 1.18 | 52% | 10 / -71 | 6 | 4 | 9.3 | 72 | [-479, +762] | 0.36 | 5 (50%) | -355 | +316 |
+| cci15_skip_lowtail Buy | 15 | +209 | -1298 | 1.33 | 40% | 9 / -70 | 3 | 3 | 8.8 | 72 | [-478, +970] | 0.33 | 3 (33%) | -171 | +158 |
+| cci15_skip_lowtail Sell | 19 | +260 | -1579 | 1.45 | 58% | 8 / -72 | 6 | 4 | 9.3 | 72 | [-323, +863] | 0.23 | 4 (50%) | -307 | +190 |
+| cci15_skip_below140 Buy | 17 | +108 | -1599 | 1.15 | 35% | 11 / -66 | 3 | 3 | 7.8 | 61 | [-575, +878] | 0.42 | 3 (27%) | -171 | +158 |
+| cci15_skip_below140 Sell | 21 | +130 | -1909 | 1.18 | 52% | 10 / -71 | 6 | 4 | 9.3 | 72 | [-479, +762] | 0.36 | 5 (50%) | -355 | +316 |
+
+PER-SIDE x TF
+| variant | trades | net | net −0.1 %/side fee | PF | win rate | stop-outs n / mean | targets | reversals | median hold min | median risk | 90 % CI | P(net<0) | pairs W15 (of stops) | P1 loss | P2 pnl |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| live Buy tf15 | 13 | +169 | -1136 | 1.32 | 38% | 8 / -65 | 3 | 2 | 6.5 | 72 | [-463, +860] | 0.34 |
+| live Buy tf60 | 4 | -61 | -462 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-309, +187] | 0.74 |
+| live Buy tf240 | 0 |
+| live Sell tf15 | 17 | -24 | -1662 | 0.96 | 47% | 9 / -73 | 6 | 2 | 8.1 | 72 | [-567, +557] | 0.53 |
+| live Sell tf60 | 3 | +207 | -94 | inf | 100% | 0 / +0 | 0 | 2 | 18.8 | 76 | [+93, +321] | 0.00 |
+| live Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| cci5_skip_lowtail Buy tf15 | 13 | +169 | -1136 | 1.32 | 38% | 8 / -65 | 3 | 2 | 6.5 | 72 | [-463, +860] | 0.34 |
+| cci5_skip_lowtail Buy tf60 | 4 | -61 | -462 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-309, +187] | 0.74 |
+| cci5_skip_lowtail Buy tf240 | 0 |
+| cci5_skip_lowtail Sell tf15 | 17 | -24 | -1662 | 0.96 | 47% | 9 / -73 | 6 | 2 | 8.1 | 72 | [-567, +557] | 0.53 |
+| cci5_skip_lowtail Sell tf60 | 3 | +207 | -94 | inf | 100% | 0 / +0 | 0 | 2 | 18.8 | 76 | [+93, +321] | 0.00 |
+| cci5_skip_lowtail Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| cci5_skip_below140 Buy tf15 | 13 | +169 | -1136 | 1.32 | 38% | 8 / -65 | 3 | 2 | 6.5 | 72 | [-463, +860] | 0.34 |
+| cci5_skip_below140 Buy tf60 | 4 | -61 | -462 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-309, +187] | 0.74 |
+| cci5_skip_below140 Buy tf240 | 0 |
+| cci5_skip_below140 Sell tf15 | 17 | -24 | -1662 | 0.96 | 47% | 9 / -73 | 6 | 2 | 8.1 | 72 | [-567, +557] | 0.53 |
+| cci5_skip_below140 Sell tf60 | 3 | +207 | -94 | inf | 100% | 0 / +0 | 0 | 2 | 18.8 | 76 | [+93, +321] | 0.00 |
+| cci5_skip_below140 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| cci15_skip_lowtail Buy tf15 | 11 | +270 | -835 | 1.64 | 45% | 6 / -70 | 3 | 2 | 7.8 | 73 | [-338, +944] | 0.26 |
+| cci15_skip_lowtail Buy tf60 | 4 | -61 | -463 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-309, +187] | 0.74 |
+| cci15_skip_lowtail Buy tf240 | 0 |
+| cci15_skip_lowtail Sell tf15 | 15 | +106 | -1332 | 1.20 | 53% | 7 / -75 | 6 | 2 | 7.5 | 72 | [-425, +637] | 0.37 |
+| cci15_skip_lowtail Sell tf60 | 3 | +207 | -94 | inf | 100% | 0 / +0 | 0 | 2 | 18.8 | 76 | [+93, +321] | 0.00 |
+| cci15_skip_lowtail Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
+| cci15_skip_below140 Buy tf15 | 13 | +169 | -1136 | 1.32 | 38% | 8 / -65 | 3 | 2 | 6.5 | 72 | [-463, +860] | 0.34 |
+| cci15_skip_below140 Buy tf60 | 4 | -61 | -462 | 0.71 | 25% | 3 / -69 | 0 | 1 | 12.6 | 56 | [-309, +187] | 0.74 |
+| cci15_skip_below140 Buy tf240 | 0 |
+| cci15_skip_below140 Sell tf15 | 17 | -24 | -1662 | 0.96 | 47% | 9 / -73 | 6 | 2 | 8.1 | 72 | [-567, +557] | 0.53 |
+| cci15_skip_below140 Sell tf60 | 3 | +207 | -94 | inf | 100% | 0 / +0 | 0 | 2 | 18.8 | 76 | [+93, +321] | 0.00 |
+| cci15_skip_below140 Sell tf240 | 1 | -53 | -153 | 0.00 | 0% | 1 / -53 | 0 | 0 | 14.7 | 50 | [-53, -53] | 1.00 |
